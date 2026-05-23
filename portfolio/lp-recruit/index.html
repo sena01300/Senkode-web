@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>採用情報 — ミドリロジ株式会社</title>
+  <meta name="description" content="月間残業8時間・DX推進中・3PL特化。ミドリロジで、物流の常識を書き換えませんか。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;300;400;700;900&family=Noto+Serif+JP:wght@300;600&family=Bebas+Neue&display=swap" rel="stylesheet">
+  <style>
+    [class*="grid"] > *, [class*="inner"] > *, [class*="wrap"] > * { min-width: 0; }
+
+    img, video, iframe { max-width: 100%; height: auto; }
+
+    html { overflow-x: hidden; }
+
+    :root {
+      --orange:        #F97316;
+      --orange-light:  #FB923C;
+      --orange-dim:    #C2410C;
+      --orange-bg:     rgba(249,115,22,0.08);
+      --orange-border: rgba(249,115,22,0.25);
+      --amber:         #F59E0B;
+      --black:         #080808;
+      --off-black:     #0F0F0F;
+      --card:          #131313;
+      --card-alt:      #161616;
+      --white:         #F5F0EB;
+      --muted:         rgba(245,240,235,0.4);
+      --dim:           rgba(245,240,235,0.15);
+      --border:        rgba(249,115,22,0.1);
+      --border-soft:   rgba(245,240,235,0.06);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ===== NAV ===== */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      height: 64px;
+      background: rgba(8,8,8,0.9);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-soft);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .nav-logo-mark {
+      width: 32px;
+      height: 32px;
+      background: var(--orange);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-logo-text { font-size: 15px; font-weight: 700; color: var(--white); letter-spacing: 0.05em; }
+    .nav-logo-sub  { font-size: 9px; color: var(--muted); letter-spacing: 0.2em; margin-top: 1px; }
+
+    .nav-right { display: flex; align-items: center; gap: 32px; }
+
+    .nav-link {
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-link:hover { color: var(--orange-light); }
+
+    .nav-apply {
+      background: var(--orange);
+      color: var(--black);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      padding: 10px 24px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .nav-apply:hover { background: var(--orange-light); }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 120px 48px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 100% 50%, rgba(249,115,22,0.08) 0%, transparent 70%),
+        linear-gradient(180deg, rgba(249,115,22,0.03) 0%, transparent 50%);
+    }
+
+    .hero-grid-bg {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border-soft) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border-soft) 1px, transparent 1px);
+      background-size: 64px 64px;
+    }
+
+    .hero-inner {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .hero-eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.5em;
+      color: var(--orange);
+      text-transform: uppercase;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .hero-eyebrow::before { content: ''; width: 40px; height: 2px; background: var(--orange); }
+
+    .hero-title {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 900;
+      font-size: clamp(42px, 6vw, 80px);
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      margin-bottom: 12px;
+    }
+
+    .hero-title .accent { color: var(--orange); }
+    .hero-title .thin   { font-weight: 100; }
+
+    .hero-catch {
+      font-family: 'Noto Serif JP', serif;
+      font-weight: 300;
+      font-size: clamp(14px, 1.8vw, 20px);
+      color: var(--muted);
+      letter-spacing: 0.15em;
+      margin-bottom: 48px;
+      line-height: 1.8;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 40px;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+    }
+
+    .hero-stat { border-left: 2px solid var(--orange); padding-left: 20px; }
+
+    .hero-stat-num {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 48px;
+      letter-spacing: 0.05em;
+      color: var(--white);
+      line-height: 1;
+    }
+
+    .hero-stat-num .unit { font-size: 24px; color: var(--orange); }
+    .hero-stat-label     { font-size: 11px; color: var(--muted); letter-spacing: 0.15em; margin-top: 4px; }
+
+    .hero-actions { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+
+    .btn-primary {
+      background: var(--orange);
+      color: var(--black);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      padding: 18px 40px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.2s;
+      display: inline-block;
+    }
+
+    .btn-primary:hover { background: var(--orange-light); transform: translateY(-2px); }
+
+    .btn-ghost {
+      border: 1px solid var(--border);
+      color: var(--orange);
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      padding: 17px 32px;
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .btn-ghost:hover { border-color: var(--orange); color: var(--orange-light); }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 40px;
+      left: 48px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 10px;
+      letter-spacing: 0.35em;
+      color: var(--dim);
+    }
+
+    .hero-scroll::after {
+      content: '';
+      width: 60px;
+      height: 1px;
+      background: var(--dim);
+    }
+
+    /* ===== SECTION BASE ===== */
+    .section { padding: 120px 48px; }
+    .section-inner { max-width: 1200px;
+      width: 100%; margin: 0 auto; }
+
+    .section-label {
+      font-size: 10px;
+      letter-spacing: 0.5em;
+      color: var(--orange);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-label::before { content: ''; width: 32px; height: 2px; background: var(--orange); }
+
+    .section-title {
+      font-weight: 900;
+      font-size: clamp(28px, 4vw, 48px);
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+      margin-bottom: 16px;
+    }
+
+    .section-sub {
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 640px;
+      line-height: 1.8;
+    }
+
+    /* ===== MISSION ===== */
+    .mission { background: var(--off-black); }
+
+    .mission-body {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 80px;
+      align-items: center;
+      margin-top: 64px;
+    }
+
+    .mission-text {
+      font-family: 'Noto Serif JP', serif;
+      font-size: clamp(18px, 2.5vw, 28px);
+      font-weight: 300;
+      line-height: 2;
+      letter-spacing: 0.05em;
+    }
+
+    .mission-text strong { color: var(--orange); font-weight: 600; }
+
+    .mission-right {}
+
+    .mission-stat-big {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 120px;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      color: rgba(249,115,22,0.12);
+      margin-bottom: -20px;
+    }
+
+    .mission-fact {
+      padding: 24px 28px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      margin-bottom: 12px;
+    }
+
+    .mission-fact-label {
+      font-size: 9px;
+      letter-spacing: 0.35em;
+      color: var(--orange);
+      margin-bottom: 8px;
+    }
+
+    .mission-fact-text { font-size: 14px; line-height: 1.7; color: var(--muted); }
+    .mission-fact-text strong { color: var(--white); }
+
+    /* ===== REASONS ===== */
+    .reasons { background: var(--black); }
+
+    .reasons-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 2px;
+      margin-top: 64px;
+    }
+
+    .reason-card {
+      padding: 48px 36px;
+      background: var(--card);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .reason-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--orange);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s;
+    }
+
+    .reason-card:hover::before { transform: scaleX(1); }
+
+    .reason-num {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 80px;
+      color: rgba(249,115,22,0.1);
+      line-height: 1;
+      margin-bottom: 24px;
+      letter-spacing: -0.02em;
+    }
+
+    .reason-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--orange-bg);
+      border: 1px solid var(--orange-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      color: var(--orange);
+    }
+
+    .reason-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+
+    .reason-desc { font-size: 13px; color: var(--muted); line-height: 1.9; }
+    .reason-desc strong { color: var(--orange-light); }
+
+    .reason-tag {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 4px 14px;
+      border: 1px solid var(--orange-border);
+      color: var(--orange);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+    }
+
+    /* ===== A DAY ===== */
+    .day { background: var(--off-black); }
+
+    .day-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 2fr;
+      gap: 64px;
+      align-items: start;
+      margin-top: 64px;
+    }
+
+    .day-persona {
+      position: sticky;
+      top: 100px;
+    }
+
+    .day-persona-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 32px;
+    }
+
+    .day-persona-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: var(--orange-bg);
+      border: 2px solid var(--orange-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      color: var(--orange);
+    }
+
+    .day-persona-name { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+    .day-persona-role { font-size: 11px; color: var(--orange); letter-spacing: 0.15em; margin-bottom: 16px; }
+    .day-persona-bio  { font-size: 12px; color: var(--muted); line-height: 1.8; }
+
+    .day-timeline {}
+
+    .day-item {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 2px;
+    }
+
+    .day-time-col {
+      width: 80px;
+      flex-shrink: 0;
+      padding-top: 20px;
+    }
+
+    .day-time {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 20px;
+      letter-spacing: 0.05em;
+      color: var(--orange);
+    }
+
+    .day-content {
+      flex: 1;
+      padding: 20px 24px;
+      background: var(--card);
+      border-left: 2px solid var(--border);
+    }
+
+    .day-item:hover .day-content { border-left-color: var(--orange); }
+
+    .day-content-title { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+    .day-content-desc  { font-size: 12px; color: var(--muted); line-height: 1.7; }
+
+    .day-tag {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 2px 8px;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      border-radius: 2px;
+    }
+
+    .tag-dx     { background: rgba(59,130,246,0.1); color: #93C5FD; border: 1px solid rgba(59,130,246,0.2); }
+    .tag-ops    { background: rgba(249,115,22,0.1); color: var(--orange-light); border: 1px solid var(--orange-border); }
+    .tag-collab { background: rgba(34,197,94,0.1); color: #86EFAC; border: 1px solid rgba(34,197,94,0.2); }
+
+    /* ===== VOICE ===== */
+    .voice { background: var(--black); }
+
+    .voice-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 2px;
+      margin-top: 64px;
+    }
+
+    .voice-card {
+      background: var(--card);
+      padding: 40px 32px;
+    }
+
+    .voice-quote {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 14px;
+      line-height: 2;
+      color: var(--white);
+      margin-bottom: 28px;
+      position: relative;
+    }
+
+    .voice-quote::before {
+      content: '"';
+      font-size: 80px;
+      color: rgba(249,115,22,0.15);
+      font-family: 'Noto Serif JP', serif;
+      line-height: 1;
+      position: absolute;
+      top: -16px;
+      left: -8px;
+    }
+
+    .voice-person { display: flex; align-items: center; gap: 14px; }
+
+    .voice-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--orange-bg);
+      border: 1px solid var(--orange-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--orange);
+      flex-shrink: 0;
+    }
+
+    .voice-name { font-size: 14px; font-weight: 700; }
+    .voice-meta { font-size: 11px; color: var(--muted); margin-top: 2px; letter-spacing: 0.05em; }
+
+    /* ===== JOBS ===== */
+    .jobs { background: var(--off-black); }
+
+    .jobs-list { margin-top: 64px; }
+
+    .job-card {
+      border: 1px solid var(--border-soft);
+      background: var(--card);
+      margin-bottom: 2px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 40px;
+      padding: 36px 40px;
+      transition: border-color 0.3s;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .job-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 4px;
+      background: var(--orange);
+      transform: scaleY(0);
+      transition: transform 0.3s;
+    }
+
+    .job-card:hover { border-color: var(--orange-border); }
+    .job-card:hover::before { transform: scaleY(1); }
+
+    .job-tags { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+
+    .job-tag {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      padding: 3px 10px;
+      border: 1px solid var(--border-soft);
+      color: var(--muted);
+    }
+
+    .job-tag.full { border-color: var(--orange-border); color: var(--orange); }
+
+    .job-title { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+    .job-desc  { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+    .job-salary {
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .job-salary-label { font-size: 10px; letter-spacing: 0.2em; color: var(--muted); margin-bottom: 4px; }
+
+    .job-salary-num {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 32px;
+      color: var(--orange);
+      letter-spacing: 0.03em;
+    }
+
+    .job-apply {
+      margin-top: 12px;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      color: var(--orange);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      justify-content: flex-end;
+    }
+
+    /* ===== BENEFITS ===== */
+    .benefits { background: var(--black); }
+
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 2px;
+      margin-top: 64px;
+    }
+
+    .benefit-item {
+      background: var(--card);
+      padding: 32px 24px;
+    }
+
+    .benefit-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--orange-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--orange);
+      margin-bottom: 16px;
+    }
+
+    .benefit-title { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+    .benefit-desc  { font-size: 12px; color: var(--muted); line-height: 1.7; }
+
+    /* ===== PROCESS ===== */
+    .process { background: var(--off-black); }
+
+    .process-steps {
+      display: flex;
+      margin-top: 64px;
+      position: relative;
+    }
+
+    .process-steps::before {
+      content: '';
+      position: absolute;
+      top: 28px;
+      left: 0; right: 0;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .process-step {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 0 16px;
+      position: relative;
+    }
+
+    .process-circle {
+      width: 56px;
+      height: 56px;
+      background: var(--card);
+      border: 2px solid var(--orange-border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Bebas Neue', cursive;
+      font-size: 20px;
+      color: var(--orange);
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .process-step:first-child .process-circle { background: var(--orange); color: var(--black); border-color: var(--orange); }
+
+    .process-title { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+    .process-desc  { font-size: 11px; color: var(--muted); line-height: 1.6; }
+    .process-period { font-size: 10px; color: var(--orange); letter-spacing: 0.1em; margin-top: 8px; }
+
+    /* ===== CTA ===== */
+    .cta {
+      background: var(--orange);
+      padding: 120px 48px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    .cta-inner { position: relative; }
+
+    .cta-label { font-size: 10px; letter-spacing: 0.5em; color: rgba(0,0,0,0.5); margin-bottom: 24px; }
+
+    .cta-title {
+      font-weight: 900;
+      font-size: clamp(32px, 5vw, 64px);
+      color: var(--black);
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+
+    .cta-sub { font-size: 16px; color: rgba(0,0,0,0.55); margin-bottom: 48px; line-height: 1.7; }
+
+    .cta-form {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      max-width: 560px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .cta-input {
+      flex: 1;
+      padding: 18px 24px;
+      border: none;
+      background: rgba(0,0,0,0.1);
+      color: var(--black);
+      font-size: 14px;
+      font-family: 'Noto Sans JP', sans-serif;
+      outline: none;
+      border-bottom: 2px solid rgba(0,0,0,0.2);
+    }
+
+    .cta-input::placeholder { color: rgba(0,0,0,0.35); }
+    .cta-input:focus { border-bottom-color: var(--black); }
+
+    .cta-submit {
+      background: var(--black);
+      color: var(--white);
+      border: none;
+      padding: 18px 36px;
+      font-size: 13px;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      white-space: nowrap;
+    }
+
+    .cta-submit:hover { opacity: 0.85; }
+    .cta-note { font-size: 11px; color: rgba(0,0,0,0.4); margin-top: 12px; }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      background: var(--black);
+      border-top: 1px solid var(--border-soft);
+      padding: 40px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-logo { display: flex; align-items: center; gap: 10px; }
+    .footer-copy { font-size: 11px; color: var(--dim); }
+
+    .back-link {
+      position: fixed;
+      top: 80px;
+      left: 20px;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      text-decoration: none;
+      background: rgba(8,8,8,0.85);
+      border: 1px solid var(--border-soft);
+      padding: 7px 14px;
+      z-index: 50;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .back-link:hover { color: var(--orange); border-color: var(--orange-border); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .nav { padding: 0 20px; }
+      .nav-right .nav-link { display: none; }
+      .section { padding: 80px 20px; }
+      .hero { padding: 100px 20px 60px; }
+      .hero-stats { gap: 24px; }
+      .mission-body,
+      .day-grid,
+      .reasons-grid,
+      .voice-grid { grid-template-columns: minmax(0, 1fr); }
+      .jobs-list .job-card { grid-template-columns: minmax(0, 1fr); }
+      .job-salary { text-align: left; }
+      .benefits-grid { grid-template-columns: repeat(2,minmax(0, 1fr)); }
+      .process-steps { flex-direction: column; gap: 24px; }
+      .process-steps::before { display: none; }
+      .process-step { flex-direction: row; text-align: left; gap: 20px; }
+      .process-circle { flex-shrink: 0; margin-bottom: 0; }
+      .cta-form { flex-direction: column; }
+      .footer { flex-direction: column; gap: 16px; text-align: center; }
+      .back-link { top: 68px; }
+    }
+  </style>
+</head>
+<body>
+
+<a href="../../works.html" class="back-link">← WORKS</a>
+
+<!-- ===== NAV ===== -->
+<header class="nav">
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-mark">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <path d="M2 14L6 8L10 11L14 5L16 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div>
+      <div class="nav-logo-text">ミドリロジ株式会社</div>
+      <div class="nav-logo-sub">MIDORI LOGISTICS</div>
+    </div>
+  </a>
+  <div class="nav-right">
+    <a href="#mission" class="nav-link">MISSION</a>
+    <a href="#reasons" class="nav-link">3つの理由</a>
+    <a href="#jobs"    class="nav-link">募集職種</a>
+    <a href="#apply"   class="nav-apply">エントリー →</a>
+  </div>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="top">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow">CAREERS — ミドリロジ 採用情報 2026</div>
+    <h1 class="hero-title">
+      物流を、<span class="accent">もっと</span><br>
+      <span class="thin">あたらしくしていく人が、</span><br>
+      いる。
+    </h1>
+    <p class="hero-catch">
+      AI導入で月間残業を42時間から8時間に削減した。<br>
+      でも私たちが本当に手に入れたのは、「考える時間」だった。
+    </p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num">8<span class="unit">時間</span></div>
+        <div class="hero-stat-label">月間平均残業時間</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">92<span class="unit">%</span></div>
+        <div class="hero-stat-label">社員定着率（3年平均）</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">14<span class="unit">年</span></div>
+        <div class="hero-stat-label">創業からの歴史</div>
+      </div>
+    </div>
+    <div class="hero-actions">
+      <a href="#apply" class="btn-primary">今すぐエントリーする →</a>
+      <a href="#jobs" class="btn-ghost">募集職種を見る</a>
+    </div>
+  </div>
+  <div class="hero-scroll">SCROLL</div>
+</section>
+
+<!-- ===== MISSION ===== -->
+<section class="section mission" id="mission">
+  <div class="section-inner">
+    <div class="section-label">MISSION</div>
+    <h2 class="section-title">なぜ、私たちは<br>物流にこだわるのか。</h2>
+
+    <div class="mission-body">
+      <div>
+        <p class="mission-text">
+          物流は、<strong>誰も見ていない場所で</strong>、<br>
+          日本の生活を支えている。<br><br>
+          コンビニに商品が並ぶのも、<br>
+          Amazonで翌日届くのも、<br>
+          病院に薬が届くのも——<br><br>
+          <strong>すべて、物流の人間がやっている。</strong><br><br>
+          なのに「物流は地味な仕事」と言われる。<br>
+          それを変えるのが、私たちの仕事だ。
+        </p>
+      </div>
+      <div class="mission-right">
+        <div class="mission-stat-big">DX</div>
+        <div class="mission-fact">
+          <div class="mission-fact-label">FACT 01 — 残業削減の真実</div>
+          <div class="mission-fact-text">
+            2024年、AI導入前の月間残業は<strong>平均42時間</strong>。当時「物流は残業が多い」は業界の常識だった。
+            GASとAIを使った業務自動化を徹底した結果、<strong>1年で月8時間まで削減</strong>。
+            削減できたのは「やらなくていいこと」だった。
+          </div>
+        </div>
+        <div class="mission-fact">
+          <div class="mission-fact-label">FACT 02 — なぜ辞めないのか</div>
+          <div class="mission-fact-text">
+            社員定着率92%の理由は「アットホームな雰囲気」ではない。
+            <strong>「自分の仕事が改善されていく実感」</strong>がある職場だから。
+            入社1年目でも、業務改善提案を出せる文化がある。
+          </div>
+        </div>
+        <div class="mission-fact">
+          <div class="mission-fact-label">FACT 03 — 3PLとは何か</div>
+          <div class="mission-fact-text">
+            当社は食品・日用品メーカーの<strong>物流機能をまるごと受託</strong>する3PL（3者物流）専門会社。
+            倉庫管理・在庫最適化・配送ルート設計まで、クライアントの「物流参謀」として機能する。
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== REASONS ===== -->
+<section class="section reasons" id="reasons">
+  <div class="section-inner">
+    <div class="section-label">WHY JOIN US</div>
+    <h2 class="section-title">他の物流会社と、<br>3つだけ違う話をする。</h2>
+
+    <div class="reasons-grid">
+      <div class="reason-card">
+        <div class="reason-num">01</div>
+        <div class="reason-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <path d="M11 2L13.5 8.5H20L14.5 12.5L16.5 19L11 15.5L5.5 19L7.5 12.5L2 8.5H8.5L11 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="reason-title">「残業ゼロ」は<br>目標ではなく、結果だ。</div>
+        <div class="reason-desc">
+          残業を減らすために仕事を減らしたのではない。<strong>「AIにできること」と「人間がすべきこと」を分けた</strong>だけだ。
+          配車シミュレーション・在庫アラート・日報作成——これらはすべて今、自動化されている。
+          だから人間は「考える仕事」だけに集中できる。
+        </div>
+        <span class="reason-tag">月間残業 平均8時間</span>
+      </div>
+      <div class="reason-card">
+        <div class="reason-num">02</div>
+        <div class="reason-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <rect x="2" y="5" width="18" height="12" rx="1" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M7 9L10 12L15 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="reason-title">「物流経験」より<br>「改善意欲」を採る。</div>
+        <div class="reason-desc">
+          物流の知識は入社後に身につく。しかし、<strong>「なぜこの作業が必要か」を疑える人間</strong>は、どこかから連れてくることはできない。
+          未経験採用率67%。前職はIT、飲食、医療——バックグラウンドは関係ない。
+          入社1年で業務改善提案を通した社員が、直近3年で9名いる。
+        </div>
+        <span class="reason-tag">未経験採用率 67%</span>
+      </div>
+      <div class="reason-card">
+        <div class="reason-num">03</div>
+        <div class="reason-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <path d="M4 14C4 14 6 12 9 12C12 12 13 14 16 14C19 14 20 12 20 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M4 10C4 10 6 8 9 8C12 8 13 10 16 10C19 10 20 8 20 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="11" cy="5" r="2" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div class="reason-title">「管理職」は<br>えらくない。</div>
+        <div class="reason-desc">
+          当社に「偉いから何もしない管理職」は存在しない。現場を離れた管理職は、<strong>3年以内に現場に戻す</strong>ルールがある。
+          だから管理職も、自分でツールを触り、改善案を出し、数字を動かす。
+          「上が現場を知らない」という最悪の状況を、構造的に防いでいる。
+        </div>
+        <span class="reason-tag">フラット組織・全社発言制度あり</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== A DAY ===== -->
+<section class="section day">
+  <div class="section-inner">
+    <div class="section-label">A DAY IN THE LIFE</div>
+    <h2 class="section-title">物流DXリーダーの、<br>ある1日。</h2>
+
+    <div class="day-grid">
+      <div class="day-persona">
+        <div class="day-persona-card">
+          <div class="day-persona-avatar">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <circle cx="16" cy="11" r="6" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M4 28C4 22.477 9.373 18 16 18C22.627 18 28 22.477 28 28" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="day-persona-name">田中 翔太</div>
+          <div class="day-persona-role">物流DXリーダー / 入社4年目</div>
+          <div class="day-persona-bio">
+            前職は中堅SIerのシステムエンジニア。「物流の知識ゼロ」で入社。
+            現在はGAS・Python・Claude APIを活用し、在庫管理システムの内製化を担当。
+            得意：「現場の人間が使える」システムを作ること。
+          </div>
+        </div>
+      </div>
+
+      <div class="day-timeline">
+        <div class="day-item">
+          <div class="day-time-col"><div class="day-time">08:30</div></div>
+          <div class="day-content">
+            <div class="day-content-title">AIが作った日報を確認する</div>
+            <div class="day-content-desc">前日の入出荷データをもとに、GASが自動生成した日報メールが届いている。異常値（欠品予兆・遅延リスク）に自動でフラグが立つ仕組みを自分で実装した。確認時間：15分。</div>
+            <span class="day-tag tag-dx">AI活用</span>
+          </div>
+        </div>
+        <div class="day-item">
+          <div class="day-time-col"><div class="day-time">09:00</div></div>
+          <div class="day-content">
+            <div class="day-content-title">クライアントと在庫最適化MTG</div>
+            <div class="day-content-desc">食品メーカーの担当者と週次会議。シミュレーションモデルの数字をもとに、安全在庫水準の見直しを提案。データが議論の軸になるので、感覚論になりにくい。</div>
+            <span class="day-tag tag-collab">クライアント折衝</span>
+          </div>
+        </div>
+        <div class="day-item">
+          <div class="day-time-col"><div class="day-time">10:30</div></div>
+          <div class="day-content">
+            <div class="day-content-title">新しい業務改善ツールの設計</div>
+            <div class="day-content-desc">配車担当からの相談：「手書きの配車表をデジタル化したい」。要件をヒアリングし、Googleスプレッドシート＋GASで構築する設計を始める。完成まで約2週間の見立て。</div>
+            <span class="day-tag tag-dx">ツール開発</span>
+          </div>
+        </div>
+        <div class="day-item">
+          <div class="day-time-col"><div class="day-time">13:00</div></div>
+          <div class="day-content">
+            <div class="day-content-title">ランチ後、現場に降りる</div>
+            <div class="day-content-desc">週2回は必ず倉庫に入る。システムが「机上では正しく動く」のに「現場で使われない」ケースをゼロにするため。今日はピッキングスタッフが感じている「使いにくさ」をヒアリング。</div>
+            <span class="day-tag tag-ops">現場</span>
+          </div>
+        </div>
+        <div class="day-item">
+          <div class="day-time-col"><div class="day-time">15:00</div></div>
+          <div class="day-content">
+            <div class="day-content-title">改善提案書を書く</div>
+            <div class="day-content-desc">現場で発見した課題をドキュメント化。Claudeを使って文章の構造を整える。提案書は月1回、全社MTGで発表できる。採用されれば実装まで自分が担当する。</div>
+            <span class="day-tag tag-dx">AI活用</span>
+          </div>
+        </div>
+        <div class="day-item">
+          <div class="day-time-col"><div class="day-time">17:30</div></div>
+          <div class="day-content">
+            <div class="day-content-title">退勤</div>
+            <div class="day-content-desc">今日の残業はゼロ。「残業があたりまえだったSI時代と比べると、信じられない」と田中は言う。その分、勉強と副業（DX支援コンサル）に時間を使っている。副業は会社公認。</div>
+            <span class="day-tag tag-ops">定時退勤</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== VOICE ===== -->
+<section class="section voice">
+  <div class="section-inner">
+    <div class="section-label">EMPLOYEE VOICE</div>
+    <h2 class="section-title">「ミドリロジを選んだ理由」を、<br>本人に聞いた。</h2>
+
+    <div class="voice-grid">
+      <div class="voice-card">
+        <div class="voice-quote">
+          「物流業界って、正直なめてました。でも入ってみたら、課題だらけで逆においしい。改善したいことが毎日出てくる。飽きないですよ。」
+        </div>
+        <div class="voice-person">
+          <div class="voice-avatar">中</div>
+          <div>
+            <div class="voice-name">中村 彩花</div>
+            <div class="voice-meta">在庫管理リーダー / 入社3年目 / 前職：アパレル販売</div>
+          </div>
+        </div>
+      </div>
+      <div class="voice-card">
+        <div class="voice-quote">
+          「管理職になっても現場に入れというルールが最初は不思議だったけど、今は一番大事だと思ってる。机上の空論になりたくないから。」
+        </div>
+        <div class="voice-person">
+          <div class="voice-avatar">佐</div>
+          <div>
+            <div class="voice-name">佐藤 健一</div>
+            <div class="voice-meta">配送管理部 マネージャー / 入社8年目 / 前職：運送会社ドライバー</div>
+          </div>
+        </div>
+      </div>
+      <div class="voice-card">
+        <div class="voice-quote">
+          「AIに仕事を奪われると思ってた。でもここでは、AIを自分で作る側になった。怖いより、おもしろい、が先に来た。」
+        </div>
+        <div class="voice-person">
+          <div class="voice-avatar">山</div>
+          <div>
+            <div class="voice-name">山口 美咲</div>
+            <div class="voice-meta">DX推進室 / 入社2年目 / 前職：一般事務（未経験入社）</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== JOBS ===== -->
+<section class="section jobs" id="jobs">
+  <div class="section-inner">
+    <div class="section-label">OPEN POSITIONS</div>
+    <h2 class="section-title">募集職種</h2>
+    <p class="section-sub">現在3職種を募集中。全職種で未経験応募可。物流知識より「なぜ？」と問い続ける姿勢を重視します。</p>
+
+    <div class="jobs-list">
+      <div class="job-card">
+        <div>
+          <div class="job-tags">
+            <span class="job-tag full">正社員</span>
+            <span class="job-tag">未経験可</span>
+            <span class="job-tag">DX推進室</span>
+          </div>
+          <div class="job-title">物流DXエンジニア（業務改善・自動化）</div>
+          <div class="job-desc">現場の業務課題をヒアリングし、GAS・Python・AIを使って自動化・効率化ツールを作る。コードを書けなくても「論理的に問題を分解できる人」なら一から教える。</div>
+        </div>
+        <div class="job-salary">
+          <div class="job-salary-label">SALARY</div>
+          <div class="job-salary-num">¥320万〜</div>
+          <div class="job-apply">詳細を見る →</div>
+        </div>
+      </div>
+
+      <div class="job-card">
+        <div>
+          <div class="job-tags">
+            <span class="job-tag full">正社員</span>
+            <span class="job-tag">未経験可</span>
+            <span class="job-tag">在庫管理部</span>
+          </div>
+          <div class="job-title">在庫管理プランナー（クライアント物流の参謀役）</div>
+          <div class="job-desc">食品・日用品メーカーの在庫水準設計・欠品予防・過剰在庫削減を担う。担当クライアントの「物流部門長」として動く感覚。数字を読むのが好きな人に向いている。</div>
+        </div>
+        <div class="job-salary">
+          <div class="job-salary-label">SALARY</div>
+          <div class="job-salary-num">¥290万〜</div>
+          <div class="job-apply">詳細を見る →</div>
+        </div>
+      </div>
+
+      <div class="job-card">
+        <div>
+          <div class="job-tags">
+            <span class="job-tag full">正社員</span>
+            <span class="job-tag">未経験可</span>
+            <span class="job-tag">営業部</span>
+          </div>
+          <div class="job-title">3PLソリューション営業（提案型・新規開拓）</div>
+          <div class="job-desc">新規クライアントの物流課題をヒアリングし、当社の3PLサービスを提案する。「商品を売る」のではなく「物流の設計を売る」コンサル型営業。受注後もチームで伴走する。</div>
+        </div>
+        <div class="job-salary">
+          <div class="job-salary-label">SALARY</div>
+          <div class="job-salary-num">¥300万〜</div>
+          <div class="job-apply">詳細を見る →</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BENEFITS ===== -->
+<section class="section benefits">
+  <div class="section-inner">
+    <div class="section-label">BENEFITS</div>
+    <h2 class="section-title">働く環境</h2>
+
+    <div class="benefits-grid">
+      <div class="benefit-item">
+        <div class="benefit-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M10 6V10L13 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="benefit-title">月間残業8時間</div>
+        <div class="benefit-desc">AI・自動化による業務効率化の結果。有給取得率88%。週休2日（土日）＋祝日。</div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M4 10H16M10 4L16 10L10 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="benefit-title">副業・複業 公認</div>
+        <div class="benefit-desc">「ここで得た知識を外でも使え」が方針。DXコンサル・ライター・フリーランス副業可（事前申告制）。</div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <rect x="3" y="5" width="14" height="10" rx="1" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M7 9L10 12L13 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="benefit-title">学習費用 全額補助</div>
+        <div class="benefit-desc">書籍・オンライン講座・資格取得費用は年間上限なし（全額会社負担）。使った実績：Udemy・AWS・PMP等。</div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M10 2L12 7H18L13 11L15 17L10 13L5 17L7 11L2 7H8L10 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="benefit-title">業務改善ボーナス</div>
+        <div class="benefit-desc">提案した改善が月5万円以上のコスト削減を生んだ場合、削減額の10%を一時金として支給。</div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="8" r="4" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M3 18C3 14.686 6.134 12 10 12C13.866 12 17 14.686 17 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="benefit-title">テレワーク 週2〜3日</div>
+        <div class="benefit-desc">業務内容に応じてテレワーク可。DX推進室は週3日リモート。現場業務は対面必須。</div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M10 2C10 2 4 6 4 11C4 14.314 6.686 17 10 17C13.314 17 16 14.314 16 11C16 6 10 2 10 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="benefit-title">社内AIツール 全員利用可</div>
+        <div class="benefit-desc">Claude・ChatGPT等のAPIを会社費用で全社員に提供。「AIを使えない社員は採用しない」が将来方針。</div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M5 10H15M5 6H15M5 14H11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="benefit-title">フルフレックス制</div>
+        <div class="benefit-desc">コアタイムなし（9〜16時は推奨）。子育て・介護・体調管理に応じて自由に時間調整可。</div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M2 10L10 3L18 10V18H13V13H7V18H2V10Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="benefit-title">引越し補助 最大30万円</div>
+        <div class="benefit-desc">転居が必要な採用の場合、引越し費用を最大30万円補助。新神奈川本社への通勤圏外からの採用も積極的に行う。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PROCESS ===== -->
+<section class="section process">
+  <div class="section-inner">
+    <div class="section-label">SELECTION PROCESS</div>
+    <h2 class="section-title">選考の流れ</h2>
+    <p class="section-sub">内定まで最短3週間。選考中は何でも質問してください。「正直に答えること」が私たちの方針です。</p>
+
+    <div class="process-steps">
+      <div class="process-step">
+        <div class="process-circle">1</div>
+        <div class="process-title">書類選考</div>
+        <div class="process-desc">職務経歴書・志望動機。特定のスキルより「なぜ物流か」を重視。</div>
+        <div class="process-period">3〜5営業日</div>
+      </div>
+      <div class="process-step">
+        <div class="process-circle">2</div>
+        <div class="process-title">カジュアル面談</div>
+        <div class="process-desc">現場社員とオンラインで30分。評価なし。疑問をぶつけてください。</div>
+        <div class="process-period">Zoom / 30分</div>
+      </div>
+      <div class="process-step">
+        <div class="process-circle">3</div>
+        <div class="process-title">一次面接</div>
+        <div class="process-desc">現場マネージャーと対面。業務経験・改善提案事例を中心に聞く。</div>
+        <div class="process-period">対面 / 60分</div>
+      </div>
+      <div class="process-step">
+        <div class="process-circle">4</div>
+        <div class="process-title">職場見学</div>
+        <div class="process-desc">倉庫・オフィスをひととおり見学。社員と自由に話せる時間あり。</div>
+        <div class="process-period">半日</div>
+      </div>
+      <div class="process-step">
+        <div class="process-circle">5</div>
+        <div class="process-title">最終面接・内定</div>
+        <div class="process-desc">代表との面接後、内定。条件・疑問は納得できるまで話し合う。</div>
+        <div class="process-period">対面 / 60分</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="cta" id="apply">
+  <div class="cta-inner">
+    <div class="cta-label">ENTRY</div>
+    <h2 class="cta-title">
+      物流を、変えに来てください。
+    </h2>
+    <p class="cta-sub">
+      メールアドレスを入力して、エントリーしてください。<br>
+      3営業日以内に、採用担当から連絡します。
+    </p>
+    <form class="cta-form" onsubmit="return false;">
+      <input type="email" class="cta-input" placeholder="your@email.com">
+      <button type="submit" class="cta-submit">エントリーする →</button>
+    </form>
+    <p class="cta-note">個人情報は採用目的以外に使用しません。</p>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="footer-logo">
+    <div class="nav-logo-mark">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <path d="M2 14L6 8L10 11L14 5L16 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:700;">ミドリロジ株式会社</div>
+      <div style="font-size:9px;color:var(--dim);letter-spacing:0.15em;">神奈川県横浜市 / 設立2012年 / 従業員55名</div>
+    </div>
+  </div>
+  <div class="footer-copy">© 2026 ミドリロジ株式会社 — このページはSenkodeが制作したシミュレーション作品です</div>
+</footer>
+
+</body>
+</html>

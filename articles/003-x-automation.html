@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>X投稿を自動化したら、「何を言いたいか」が一番難しかった — Senkode Articles</title>
+  <meta name="description" content="GAS×Claude API で3ルートのX投稿自動化システムを構築した。技術的には1週間で動いた。でも一番詰まったのは「自分の言葉」を定義することだった。">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital@1&family=Noto+Sans+JP:wght@100;200;300;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold:       #C9A84C;
+      --gold-light: #E8C97A;
+      --gold-dim:   #6B5420;
+      --black:      #080808;
+      --off-black:  #0F0F0F;
+      --card:       #111111;
+      --white:      #F4F1EC;
+      --muted:      rgba(244,241,236,0.35);
+      --border:     rgba(201,168,76,0.1);
+      --gold-hover:    rgba(201,168,76,0.1);
+      --gold-alpha-40: rgba(201,168,76,0.4);
+      --gold-alpha-30: rgba(201,168,76,0.3);
+      --gold-alpha-50: rgba(201,168,76,0.5);
+      --white-dim:     rgba(244,241,236,0.4);
+      --white-faint:   rgba(244,241,236,0.2);
+      --gold-grid:     rgba(201,168,76,0.03);
+      --nav-bg:        rgba(15,15,15,0.85);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dim); }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(var(--gold-grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--gold-grid) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none; z-index: 0;
+    }
+
+    /* CURSOR */
+    .cursor-dot {
+      position: fixed; width: 8px; height: 8px; background: var(--gold);
+      border-radius: 50%; transform: translate(-50%,-50%);
+      pointer-events: none; z-index: 9999; mix-blend-mode: difference;
+    }
+    .cursor-ring {
+      position: fixed; width: 32px; height: 32px;
+      border: 1px solid var(--gold-alpha-50); border-radius: 50%;
+      transform: translate(-50%,-50%); pointer-events: none;
+      z-index: 9998; transition: width 0.3s, height 0.3s;
+    }
+    .cursor-ring.expanded { width: 48px; height: 48px; }
+
+    .noise {
+      position: fixed; inset: 0; pointer-events: none; z-index: 500; opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat: repeat; background-size: 200px 200px;
+    }
+
+    /* NAV */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 60px;
+      background: var(--nav-bg); backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-wordmark { font-family: 'Bebas Neue', cursive; font-size: 22px; letter-spacing: 0.25em; color: var(--white); }
+    .nav-links { display: flex; align-items: center; gap: 32px; }
+    .nav-link { font-size: 11px; letter-spacing: 0.2em; color: var(--muted); text-decoration: none; transition: color 0.3s; }
+    .nav-link:hover, .nav-link.active { color: var(--white); }
+    .nav-cta {
+      font-size: 10px; letter-spacing: 0.2em; color: var(--gold);
+      text-decoration: none; border: 1px solid var(--gold-alpha-40);
+      padding: 8px 16px; transition: background 0.3s;
+    }
+    .nav-cta:hover { background: var(--gold-hover); }
+
+    /* ARTICLE LAYOUT */
+    .article-hero {
+      padding: 100px 60px 60px;
+      position: relative; z-index: 1;
+      border-bottom: 1px solid var(--border);
+      max-width: 860px; margin: 0 auto;
+      animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.1s both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .article-meta {
+      display: flex; align-items: center; gap: 16px; margin-bottom: 24px;
+    }
+    .article-tag {
+      font-size: 9px; letter-spacing: 0.15em; color: var(--gold);
+      border: 1px solid var(--gold-alpha-30); padding: 3px 10px;
+    }
+    .article-date { font-size: 10px; color: var(--muted); letter-spacing: 0.15em; }
+    .article-read-time { font-size: 10px; color: var(--muted); letter-spacing: 0.1em; }
+
+    .article-title {
+      font-size: clamp(24px, 4vw, 40px);
+      font-weight: 700; color: var(--white);
+      line-height: 1.5; margin-bottom: 20px;
+    }
+    .article-lead {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-size: 16px;
+      color: var(--muted); line-height: 1.9; letter-spacing: 0.03em;
+    }
+
+    /* ARTICLE BODY */
+    .article-body {
+      max-width: 860px; margin: 0 auto;
+      padding: 60px 60px 120px;
+      position: relative; z-index: 1;
+    }
+
+    .article-body h2 {
+      font-size: 20px; font-weight: 700; color: var(--white);
+      margin: 56px 0 20px;
+      padding-left: 16px;
+      border-left: 2px solid var(--gold);
+    }
+    .article-body h3 {
+      font-size: 15px; font-weight: 700; color: var(--white);
+      margin: 36px 0 12px;
+    }
+    .article-body p {
+      font-size: 14px; color: var(--muted); line-height: 2.1;
+      margin-bottom: 20px;
+    }
+    .article-body strong { color: var(--white); font-weight: 700; }
+    .article-body ul, .article-body ol {
+      margin: 16px 0 24px 20px;
+    }
+    .article-body li {
+      font-size: 14px; color: var(--muted); line-height: 2; margin-bottom: 6px;
+    }
+
+    /* CODE BLOCK */
+    .code-block {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-left: 2px solid var(--gold-dim);
+      padding: 20px 24px; margin: 24px 0;
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+      font-size: 12px; color: var(--gold-light);
+      line-height: 1.8; overflow-x: auto;
+    }
+    .code-block .comment { color: var(--muted); }
+    .code-block .key { color: var(--gold); }
+
+    /* TABLE */
+    .article-table {
+      width: 100%; border-collapse: collapse;
+      margin: 28px 0; font-size: 12px;
+    }
+    .article-table th {
+      font-size: 9px; letter-spacing: 0.2em; color: var(--gold);
+      border-bottom: 1px solid var(--gold-alpha-40);
+      padding: 10px 16px; text-align: left; font-weight: 300;
+    }
+    .article-table td {
+      padding: 12px 16px; color: var(--muted);
+      border-bottom: 1px solid var(--border); line-height: 1.7;
+    }
+    .article-table tr:hover td { color: var(--white); }
+
+    /* CALLOUT */
+    .callout {
+      border: 1px solid var(--gold-alpha-40);
+      background: var(--gold-hover);
+      padding: 24px 28px; margin: 32px 0;
+    }
+    .callout-label {
+      font-size: 9px; letter-spacing: 0.2em; color: var(--gold);
+      margin-bottom: 10px; display: block;
+    }
+    .callout p { font-size: 13px; color: var(--white); margin-bottom: 0; }
+
+    /* ROUTE CARD */
+    .route-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 16px; margin: 28px 0;
+    }
+    .route-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 20px;
+    }
+    .route-number {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 28px; color: var(--gold); line-height: 1;
+      margin-bottom: 8px;
+    }
+    .route-name {
+      font-size: 11px; font-weight: 700; color: var(--white);
+      letter-spacing: 0.05em; margin-bottom: 10px;
+    }
+    .route-desc {
+      font-size: 11px; color: var(--muted); line-height: 1.8;
+    }
+    .route-arrow {
+      font-size: 10px; color: var(--gold-dim); margin-top: 12px;
+      letter-spacing: 0.1em;
+    }
+
+    /* FLOW DIAGRAM */
+    .flow-diagram {
+      display: flex; align-items: center; gap: 0;
+      flex-wrap: wrap; margin: 24px 0;
+    }
+    .flow-step {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 10px 16px;
+      font-size: 11px; color: var(--white);
+      text-align: center; min-width: 100px;
+    }
+    .flow-arrow {
+      font-size: 14px; color: var(--gold-dim);
+      padding: 0 8px;
+    }
+
+    /* DIVIDER */
+    .article-divider {
+      border: none; border-top: 1px solid var(--border);
+      margin: 48px 0;
+    }
+
+    /* BACK LINK */
+    .back-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 10px; letter-spacing: 0.2em; color: var(--muted);
+      text-decoration: none; margin-bottom: 40px;
+      transition: color 0.3s;
+    }
+    .back-link:hover { color: var(--gold); }
+
+    /* NEXT ARTICLE */
+    .next-article {
+      border-top: 1px solid var(--border);
+      padding: 40px 0 0; margin-top: 80px;
+    }
+    .next-label { font-size: 9px; letter-spacing: 0.25em; color: var(--gold); margin-bottom: 12px; display: block; }
+    .next-title { font-size: 15px; font-weight: 700; color: var(--muted); line-height: 1.6; transition: color 0.3s; }
+    .next-article:hover .next-title { color: var(--white); }
+
+    /* FOOTER */
+    .footer {
+      padding: 24px 60px; background: var(--black);
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      position: relative; z-index: 1;
+    }
+    .footer-copy { font-size: 10px; letter-spacing: 0.25em; color: var(--muted); }
+    .footer-tag  { font-size: 9px;  letter-spacing: 0.15em; color: var(--white-faint); }
+
+    @media (max-width: 768px) {
+      body { cursor: auto; }
+      .cursor-dot, .cursor-ring { display: none; }
+      .nav { padding: 16px 24px; }
+      .nav-link { display: none; }
+      .article-hero { padding: 80px 24px 48px; }
+      .article-body { padding: 40px 24px 80px; }
+      .route-grid { grid-template-columns: 1fr; }
+      .flow-diagram { flex-direction: column; align-items: flex-start; gap: 4px; }
+      .flow-arrow { transform: rotate(90deg); padding: 4px 0; }
+      .footer { padding: 20px 24px; flex-direction: column; gap: 8px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+  <div class="noise"></div>
+
+  <nav class="nav">
+    <a href="/index.html" class="nav-logo">
+      <svg width="44" height="44" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="logoGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#6B5420"/>
+            <stop offset="50%" stop-color="#E8C97A"/>
+            <stop offset="100%" stop-color="#C9A84C"/>
+          </linearGradient>
+          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <path id="logoCircle" d="M30,5 A25,25,0,1,1,29.999,5" fill="none"/>
+        </defs>
+        <circle cx="30" cy="30" r="28" fill="none" stroke="#C9A84C" stroke-width="0.5" opacity="0.4"/>
+        <circle cx="30" cy="30" r="20" fill="none" stroke="#C9A84C" stroke-width="0.3" opacity="0.2"/>
+        <g transform="translate(-6,-4.4) scale(0.36)">
+          <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="url(#logoGrad)" style="filter: url(#glow)"/>
+        </g>
+        <text font-family="'Bebas Neue','Noto Sans JP',sans-serif" font-size="5" fill="#C9A84C" opacity="0.78">
+          <textPath href="#logoCircle" startOffset="0%" letter-spacing="2.5">Senkode · 閃光 · Senkode · 閃光 ·</textPath>
+        </text>
+      </svg>
+      <span class="nav-wordmark">Senkode</span>
+    </a>
+    <div class="nav-links">
+      <a href="/services.html" class="nav-link">SERVICES</a>
+      <a href="/works.html" class="nav-link">WORKS</a>
+      <a href="/articles/index.html" class="nav-link active">ARTICLES</a>
+      <a href="/about.html" class="nav-link">ABOUT</a>
+      <a href="/contact.html" class="nav-cta">CONTACT</a>
+    </div>
+  </nav>
+
+  <!-- Article Hero -->
+  <div class="article-hero">
+    <a href="/articles/index.html" class="back-link">← ARTICLES</a>
+    <div class="article-meta">
+      <span class="article-tag">自動化</span>
+      <span class="article-date">2026.05.09</span>
+      <span class="article-read-time">読了 約8分</span>
+    </div>
+    <h1 class="article-title">X投稿を自動化したら、「何を言いたいか」が一番難しかった——GAS×Claude API 3ルート構築の全記録</h1>
+    <p class="article-lead">システムは1週間で動いた。でも、AIに「自分らしく書け」と指示するために、自分が何者で何を言いたいのかを定義しなければならなかった。それが想像以上に難しかった。</p>
+  </div>
+
+  <!-- Article Body -->
+  <article class="article-body">
+
+    <h2>完成した翌朝、違和感があった</h2>
+
+    <p>3ルートのX投稿自動化システムが本番稼働した翌朝、Notionに届いた投稿案を読んだ。文章は流暢だった。構成も悪くなかった。でも読み終えて、こう思った。</p>
+
+    <p><strong>「これ、俺の言葉じゃない。」</strong></p>
+
+    <p>システムは機能していた。GASのトリガーは毎朝8時に発火し、Claude APIは30秒以内に5パターンの投稿文を返し、Notionに整然と保存された。技術的には完璧だった。なのに、その文章を投稿する気になれなかった。</p>
+
+    <p>この記事は、自動化の技術的な手順だけでなく、その過程で気づいた「想定外の難しさ」も含めて書く。</p>
+
+    <h2>なぜ自動化が必要だったか</h2>
+
+    <p>もともとX（旧Twitter）での発信は、Senkodeのブランド認知を高めるための柱として位置づけていた。だが、実態は週1〜2件しか投稿できていなかった。理由は単純だ。</p>
+
+    <ul>
+      <li>1投稿あたり15〜20分かかっていた（ネタ選び・文章・絵文字・ハッシュタグ）</li>
+      <li>本業（管理職）の隙間時間にやるには、あまりにも認知負荷が高い</li>
+      <li>「今日は忙しいから明日」が積み重なり、1週間が消えた</li>
+    </ul>
+
+    <p>継続こそが最大の武器なのに、継続できない構造になっていた。<strong>「やる気の問題」ではなく「設計の問題」だ</strong>と判断して、自動化を決めた。</p>
+
+    <h2>3ルートの設計</h2>
+
+    <p>一口に「自動化」といっても、発信のシチュエーションによってトリガーが異なる。そこで3つのルートを設計した。</p>
+
+    <div class="route-grid">
+      <div class="route-card">
+        <div class="route-number">01</div>
+        <div class="route-name">フォーム入力ルート</div>
+        <div class="route-desc">「今日こんなことあった」を30秒で入力 → 5パターンの投稿文を生成 → Notionに保存</div>
+        <div class="route-arrow">手動トリガー · コンテンツ有り時</div>
+      </div>
+      <div class="route-card">
+        <div class="route-number">02</div>
+        <div class="route-name">スクショ引用ルート</div>
+        <div class="route-desc">他者のツイートや記事をスクショ → 画像解析 → 自分の意見を加えた引用投稿を生成</div>
+        <div class="route-arrow">手動トリガー · リアクション型</div>
+      </div>
+      <div class="route-card">
+        <div class="route-number">03</div>
+        <div class="route-name">朝の自動起動ルート</div>
+        <div class="route-desc">毎朝8時に自動発火 → 前日の活動ログを取得 → 「今日の抱負」系投稿を生成</div>
+        <div class="route-arrow">自動トリガー · ゼロ入力</div>
+      </div>
+    </div>
+
+    <h3>技術スタック</h3>
+
+    <table class="article-table">
+      <thead>
+        <tr>
+          <th>レイヤー</th>
+          <th>使用技術</th>
+          <th>役割</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>トリガー</td>
+          <td>Google Forms / 時間ベーストリガー</td>
+          <td>入力受付・定時起動</td>
+        </tr>
+        <tr>
+          <td>オーケストレーション</td>
+          <td>Google Apps Script (GAS)</td>
+          <td>データ整形・API呼び出し・Notion書き込み</td>
+        </tr>
+        <tr>
+          <td>生成AI</td>
+          <td>Claude API (claude-haiku-4-5)</td>
+          <td>投稿文5パターン生成（JSON形式で返却）</td>
+        </tr>
+        <tr>
+          <td>ストレージ</td>
+          <td>Notion API</td>
+          <td>生成結果のアーカイブ・レビュー用UI</td>
+        </tr>
+        <tr>
+          <td>通知</td>
+          <td>LINE Notify</td>
+          <td>生成完了をスマホへプッシュ通知</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Claude APIへのリクエスト構造</h3>
+
+    <p>投稿文の生成には、Claude APIに構造化されたJSONで返してもらう形式を採用した。「5パターン」それぞれに投稿文・文字数・トーン・推奨時間帯を含む配列で返すよう指示している。</p>
+
+    <div class="code-block">
+<span class="comment">// GASからClaude APIを呼び出すコアロジック（概要）</span>
+
+<span class="key">const</span> payload = {
+  model: <span class="key">"claude-haiku-4-5-20251001"</span>,
+  max_tokens: 1500,
+  messages: [{
+    role: <span class="key">"user"</span>,
+    content: buildPrompt(inputData)  <span class="comment">// 入力内容 + スタイルガイド</span>
+  }]
+};
+
+<span class="comment">// レスポンスはJSON配列で受け取る</span>
+<span class="comment">// [{ text, charCount, tone, bestTime }, ...]</span>
+    </div>
+
+    <p>Haikuモデルを選んだ理由はコストだ。1投稿あたりの生成コストは約¥0.003前後。月30〜50投稿でも<strong>月額¥100〜150</strong>に収まる。「APIは高い」というイメージは、少なくともこの用途では完全に間違っている。</p>
+
+    <h2>想定外だった壁：「自分の言葉」を定義する作業</h2>
+
+    <p>技術的な実装は、検索とデバッグを繰り返せば1〜2週間で動く。本当に詰まったのは、プロンプトの中に書く「発信スタイルガイド」の作成だった。</p>
+
+    <p>AIに「自分らしく書いてください」と言うためには、「自分らしさ」を言語化しなければならない。具体的に書かないといけないのだ。</p>
+
+    <div class="callout">
+      <span class="callout-label">実際にプロンプトに書かなければならなかったこと</span>
+      <p>「絵文字は使わない」「語尾に『ですね』は避ける」「物流・AI・副業の文脈で書く」「読者は35〜50代のビジネスパーソン」「弱みも書く（成功話だけにしない）」「1投稿に結論を1つだけ入れる」「ハッシュタグは2つ以下」……</p>
+    </div>
+
+    <p>書けば書くほど、「自分が何を大切にしているか」が浮かびあがってきた。同時に、「自分でもよくわかっていなかったことがある」という事実にも直面した。</p>
+
+    <p>たとえば「何について発信するか」という問いに対して、最初は「AI副業、物流、Web制作」と書いた。だが実際に投稿文が生成されると、どれも表面的で薄く感じた。「何について発信するか」ではなく、<strong>「何のために発信するか」</strong>を定義していなかったのだ。</p>
+
+    <p>自動化を構築するとき、人は必然的に「なぜ発信するのか」という問いと向き合う。それが、X自動化の「本当の難しさ」だった。</p>
+
+    <h2>ビフォーアフター：数字で見ると明確だ</h2>
+
+    <table class="article-table">
+      <thead>
+        <tr>
+          <th>指標</th>
+          <th>導入前</th>
+          <th>導入後（稼働1ヶ月）</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>週間投稿数</td>
+          <td>0〜1件</td>
+          <td>7件以上（ほぼ毎日）</td>
+        </tr>
+        <tr>
+          <td>1投稿あたりの作業時間</td>
+          <td>15〜20分</td>
+          <td>30秒（フォーム入力のみ）</td>
+        </tr>
+        <tr>
+          <td>月間API費用</td>
+          <td>—</td>
+          <td>¥100〜150（Claude Haiku）</td>
+        </tr>
+        <tr>
+          <td>Notionストック</td>
+          <td>0件</td>
+          <td>140件以上（未使用含む）</td>
+        </tr>
+        <tr>
+          <td>「今日は投稿できなかった」の頻度</td>
+          <td>週4〜5日</td>
+          <td>ほぼゼロ（Route 03が自動で補填）</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>量的な問題は完全に解決した。「継続できない」という構造的な欠陥は修正された。</p>
+
+    <h2>まだ解決できていないこと</h2>
+
+    <p>自動化で「投稿する」という行動のハードルは下げられた。しかし以下はまだ課題として残っている。</p>
+
+    <h3>1. エンゲージメントの質</h3>
+    <p>投稿数は増えたが、反応（いいね・返信・フォロー）が量に比例して増えているかどうかはまだ検証中だ。量と質はイコールではない。</p>
+
+    <h3>2. プロンプトの精度</h3>
+    <p>スタイルガイドは随時更新しているが、「これは自分の言葉だ」と感じる投稿文の生成率はまだ50〜60%程度だ。残りの40%はNotionに眠ったまま使われない。</p>
+
+    <h3>3. Route 02の活用率</h3>
+    <p>スクリーンショット引用ルートは、技術的には動いている。だが「引用する価値のある他者の投稿を見つける」作業自体がボトルネックになっており、実際の使用頻度は低い。</p>
+
+    <hr class="article-divider">
+
+    <p>自動化の最大の価値は、「やらない理由をなくすこと」だ。15分かかるから投稿しない、のではなく、30秒で済むから投稿する。その差が、1ヶ月後・1年後の積み上げを根本から変える。</p>
+
+    <p>同時に、AIに「自分らしく書かせる」ことは、自分を言語化する作業でもある。<strong>プロンプトを書くことは、自己定義だ。</strong>それが面倒だと感じるなら、発信の目的がまだ曖昧なのかもしれない。</p>
+
+    <p>システムは手段だ。「何を言いたいか」は、自分で考えるしかない。</p>
+
+    <!-- Next Article -->
+    <div class="next-article">
+      <span class="next-label">NEXT ARTICLE</span>
+      <p class="next-title">Claude Codeで副業サイトを一晩で作った話（近日公開）</p>
+    </div>
+
+  </article>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <span class="footer-copy">Senkode © 2026</span>
+    <span class="footer-tag">閃光 — Flash of Light</span>
+  </footer>
+
+  <script>
+    const cursorDot  = document.querySelector('.cursor-dot');
+    const cursorRing = document.querySelector('.cursor-ring');
+    let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX; mouseY = e.clientY;
+      cursorDot.style.left = mouseX + 'px';
+      cursorDot.style.top  = mouseY + 'px';
+    });
+
+    (function animateCursor() {
+      const dx = mouseX - ringX, dy = mouseY - ringY;
+      ringX += dx * 0.15; ringY += dy * 0.15;
+      cursorRing.style.left = ringX + 'px';
+      cursorRing.style.top  = ringY + 'px';
+      requestAnimationFrame(animateCursor);
+    })();
+
+    document.querySelectorAll('a, .nav-cta').forEach(el => {
+      el.addEventListener('mouseenter', () => cursorRing.classList.add('expanded'));
+      el.addEventListener('mouseleave', () => cursorRing.classList.remove('expanded'));
+    });
+  </script>
+</body>
+</html>

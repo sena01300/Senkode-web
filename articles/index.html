@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Articles — Senkode | AI副業実践ブログ</title>
+  <meta name="description" content="副業×AI×Webの実践記録。クラウドワークス挑戦・Claude Code活用・業務自動化の試行錯誤をリアルに書いています。">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital@1&family=Noto+Sans+JP:wght@100;200;300;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold:       #C9A84C;
+      --gold-light: #E8C97A;
+      --gold-dim:   #6B5420;
+      --black:      #080808;
+      --off-black:  #0F0F0F;
+      --card:       #111111;
+      --white:      #F4F1EC;
+      --muted:      rgba(244,241,236,0.35);
+      --border:     rgba(201,168,76,0.1);
+      --gold-hover:    rgba(201,168,76,0.1);
+      --gold-alpha-40: rgba(201,168,76,0.4);
+      --gold-alpha-30: rgba(201,168,76,0.3);
+      --gold-alpha-50: rgba(201,168,76,0.5);
+      --white-dim:     rgba(244,241,236,0.4);
+      --white-faint:   rgba(244,241,236,0.2);
+      --gold-grid:     rgba(201,168,76,0.03);
+      --nav-bg:        rgba(15,15,15,0.85);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    p, li, h1, h2, h3, h4, span, div, td, dt, dd, label {
+      word-break: keep-all;
+      overflow-wrap: break-word;
+      line-break: strict;
+    }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: none;
+      word-break: keep-all;
+      overflow-wrap: break-word;
+      line-break: strict;
+    }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dim); }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(var(--gold-grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--gold-grid) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none; z-index: 0;
+    }
+
+    .reveal {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* CURSOR */
+    .cursor-dot {
+      position: fixed; width: 8px; height: 8px; background: var(--gold);
+      border-radius: 50%; transform: translate(-50%,-50%);
+      pointer-events: none; z-index: 9999; mix-blend-mode: difference;
+    }
+    .cursor-ring {
+      position: fixed; width: 32px; height: 32px;
+      border: 1px solid var(--gold-alpha-50); border-radius: 50%;
+      transform: translate(-50%,-50%); pointer-events: none;
+      z-index: 9998; transition: width 0.3s, height 0.3s;
+    }
+    .cursor-ring.expanded { width: 48px; height: 48px; }
+
+    /* NOISE */
+    .noise {
+      position: fixed; inset: 0; pointer-events: none; z-index: 500; opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat: repeat; background-size: 200px 200px;
+    }
+
+    /* NAV */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 60px;
+      background: var(--nav-bg); backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-wordmark { font-family: 'Bebas Neue', cursive; font-size: 22px; letter-spacing: 0.25em; color: var(--white); }
+    .nav-links { display: flex; align-items: center; gap: 32px; }
+    .nav-link { font-size: 11px; letter-spacing: 0.2em; color: var(--muted); text-decoration: none; transition: color 0.3s; }
+    .nav-link:hover, .nav-link.active { color: var(--white); }
+    .nav-cta {
+      font-size: 10px; letter-spacing: 0.2em; color: var(--gold);
+      text-decoration: none; border: 1px solid var(--gold-alpha-40);
+      padding: 8px 16px; transition: background 0.3s;
+    }
+    .nav-cta:hover { background: var(--gold-hover); }
+
+    /* PAGE HERO */
+    .page-hero {
+      padding: 120px 60px 80px;
+      position: relative; z-index: 1;
+      border-bottom: 1px solid var(--border);
+    }
+    .page-hero-inner {
+      max-width: 1100px; margin: 0 auto;
+      animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.1s both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .page-label { font-size: 10px; letter-spacing: 0.35em; color: var(--gold); margin-bottom: 16px; font-weight: 100; }
+    .page-title {
+      font-family: 'Bebas Neue', cursive;
+      font-size: clamp(56px, 8vw, 96px);
+      letter-spacing: 0.08em; color: var(--white); line-height: 1; margin-bottom: 20px;
+    }
+    .page-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-size: 16px;
+      color: var(--muted); letter-spacing: 0.05em; max-width: 600px; line-height: 1.8;
+    }
+
+    /* FILTER TABS */
+    .filter-bar {
+      padding: 40px 60px 0;
+      position: relative; z-index: 1;
+      max-width: 1220px; margin: 0 auto;
+    }
+    .filter-tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+    .filter-tab {
+      font-size: 10px; letter-spacing: 0.2em; color: var(--muted);
+      border: 1px solid var(--border); padding: 6px 16px;
+      cursor: pointer; transition: color 0.3s, border-color 0.3s, background 0.3s;
+      background: none;
+    }
+    .filter-tab:hover { color: var(--white); border-color: var(--gold-alpha-40); }
+    .filter-tab.active { color: var(--gold); border-color: var(--gold-alpha-40); background: var(--gold-hover); }
+
+    /* ARTICLES GRID */
+    .articles-section {
+      padding: 60px 60px 120px;
+      position: relative; z-index: 1;
+    }
+    .articles-inner { max-width: 1100px; margin: 0 auto; }
+
+    .articles-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+
+    .article-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      text-decoration: none;
+      display: flex; flex-direction: column;
+      position: relative; overflow: hidden;
+      transition: border-color 0.3s;
+    }
+    .article-card::before {
+      content: '';
+      position: absolute; top: 0; left: -100%;
+      width: 100%; height: 2px;
+      background: var(--gold);
+      transition: left 0.5s;
+    }
+    .article-card:hover::before { left: 100%; }
+    .article-card:hover { border-color: var(--gold-alpha-40); }
+
+    .article-card-body { padding: 32px 28px; flex: 1; display: flex; flex-direction: column; }
+
+    .article-meta {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 16px;
+    }
+    .article-tag {
+      font-size: 9px; letter-spacing: 0.15em; color: var(--gold);
+      border: 1px solid var(--gold-alpha-30); padding: 2px 8px;
+    }
+    .article-date { font-size: 10px; color: var(--muted); letter-spacing: 0.1em; }
+
+    .article-title {
+      font-size: 15px; font-weight: 700; color: var(--white);
+      line-height: 1.6; margin-bottom: 12px;
+      flex: 1;
+    }
+    .article-excerpt {
+      font-size: 11px; color: var(--muted); line-height: 1.9;
+      margin-bottom: 24px;
+    }
+    .article-read-more {
+      font-size: 10px; letter-spacing: 0.2em; color: var(--gold);
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    /* FEATURED (first card spans 2 cols) */
+    .article-card.featured {
+      grid-column: span 2;
+    }
+    .article-card.featured .article-title { font-size: 20px; }
+    .article-card.featured .article-excerpt { font-size: 12px; }
+
+    /* COMING SOON */
+    .article-card.coming-soon {
+      opacity: 0.4; pointer-events: none;
+      border-style: dashed;
+    }
+    .coming-label {
+      font-size: 9px; letter-spacing: 0.2em; color: var(--muted);
+      border: 1px solid var(--border); padding: 2px 8px;
+    }
+
+    /* CTA */
+    .cta {
+      padding: 120px 60px;
+      background: var(--off-black);
+      position: relative; z-index: 1; text-align: center;
+    }
+    .cta-content { max-width: 560px; margin: 0 auto; }
+    .section-label { font-size: 10px; letter-spacing: 0.35em; color: var(--gold); margin-bottom: 12px; font-weight: 100; display: block; }
+    .cta-title {
+      font-family: 'Bebas Neue', cursive;
+      font-size: clamp(28px, 4vw, 48px);
+      letter-spacing: 0.1em; color: var(--white); margin-bottom: 16px;
+    }
+    .cta-sub { font-size: 12px; color: var(--muted); line-height: 1.9; margin-bottom: 36px; }
+    .btn-primary {
+      display: inline-block; padding: 14px 32px;
+      border: 1px solid var(--gold); color: var(--gold);
+      text-decoration: none; font-size: 11px;
+      letter-spacing: 0.2em; transition: background 0.3s;
+    }
+    .btn-primary:hover { background: var(--gold-hover); }
+
+    /* FOOTER */
+    .footer {
+      padding: 24px 60px; background: var(--black);
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      position: relative; z-index: 1;
+    }
+    .footer-copy { font-size: 10px; letter-spacing: 0.25em; color: var(--muted); }
+    .footer-tag  { font-size: 9px;  letter-spacing: 0.15em; color: var(--white-faint); }
+
+    /* TABLET */
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .nav { padding: 20px 40px; }
+      .articles-section { padding: 80px 40px; }
+      .articles-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer { padding: 24px 40px; }
+    }
+
+    /* MOBILE */
+    @media (max-width: 768px) {
+      body { cursor: auto; }
+      .cursor-dot, .cursor-ring { display: none; }
+      .nav { padding: 16px 24px; }
+      .nav-link { display: none; }
+      .page-hero { padding: 80px 24px 60px; }
+      .filter-bar { padding: 32px 24px 0; }
+      .articles-section { padding: 40px 24px 80px; }
+      .articles-grid { grid-template-columns: 1fr; }
+      .article-card.featured { grid-column: span 1; }
+      .cta { padding: 80px 24px; }
+      .footer { padding: 20px 24px; flex-direction: column; gap: 8px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+  <div class="noise"></div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <a href="/index.html" class="nav-logo">
+      <svg width="44" height="44" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="logoGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#6B5420"/>
+            <stop offset="50%" stop-color="#E8C97A"/>
+            <stop offset="100%" stop-color="#C9A84C"/>
+          </linearGradient>
+          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <path id="logoCircle" d="M30,5 A25,25,0,1,1,29.999,5" fill="none"/>
+        </defs>
+        <circle cx="30" cy="30" r="28" fill="none" stroke="#C9A84C" stroke-width="0.5" opacity="0.4"/>
+        <circle cx="30" cy="30" r="20" fill="none" stroke="#C9A84C" stroke-width="0.3" opacity="0.2"/>
+        <g transform="translate(-6,-4.4) scale(0.36)">
+          <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="url(#logoGrad)" style="filter: url(#glow)"/>
+        </g>
+        <text font-family="'Bebas Neue','Noto Sans JP',sans-serif" font-size="5" fill="#C9A84C" opacity="0.78">
+          <textPath href="#logoCircle" startOffset="0%" letter-spacing="2.5">Senkode · 閃光 · Senkode · 閃光 ·</textPath>
+        </text>
+      </svg>
+      <span class="nav-wordmark">Senkode</span>
+    </a>
+    <div class="nav-links">
+      <a href="/services.html" class="nav-link">SERVICES</a>
+      <a href="/works.html" class="nav-link">WORKS</a>
+      <a href="/articles/index.html" class="nav-link active">ARTICLES</a>
+      <a href="/about.html" class="nav-link">ABOUT</a>
+      <a href="/contact.html" class="nav-cta">CONTACT</a>
+    </div>
+  </nav>
+
+  <!-- Page Hero -->
+  <section class="page-hero">
+    <div class="page-hero-inner">
+      <p class="page-label">AI FREELANCE JOURNAL</p>
+      <h1 class="page-title">Articles</h1>
+      <p class="page-sub">副業×AI×Webの実践記録。うまくいったことも、失敗したことも、そのまま書いています。</p>
+    </div>
+  </section>
+
+  <!-- Filter -->
+  <div class="filter-bar">
+    <div class="filter-tabs">
+      <button class="filter-tab active" data-filter="all">ALL</button>
+      <button class="filter-tab" data-filter="ai">AI活用</button>
+      <button class="filter-tab" data-filter="freelance">副業・案件</button>
+      <button class="filter-tab" data-filter="web">Web制作</button>
+      <button class="filter-tab" data-filter="automation">自動化</button>
+    </div>
+  </div>
+
+  <!-- Articles -->
+  <section class="articles-section">
+    <div class="articles-inner">
+      <div class="articles-grid" id="articlesGrid">
+
+        <!-- Article 01 — Featured -->
+        <a href="/articles/001-crowdworks-lessons.html" class="article-card featured reveal" data-category="freelance" style="--delay:0s">
+          <div class="article-card-body">
+            <div class="article-meta">
+              <span class="article-tag">副業・案件</span>
+              <span class="article-date">2026.05.09</span>
+            </div>
+            <h2 class="article-title">クラウドワークスに30件以上応募して気づいたこと——AI副業の「本当の壁」</h2>
+            <p class="article-excerpt">ライティング・AI活用コンサル・Web制作を片っ端から応募してみた。単価・年齢制限・クライアントの質……案件が取れない本当の理由と、そこから見えてきた戦略を書く。</p>
+            <span class="article-read-more">READ MORE →</span>
+          </div>
+        </a>
+
+        <!-- Article 02 -->
+        <a href="/articles/002-amazon-ai-guide.html" class="article-card reveal" data-category="ai" style="--delay:0.1s">
+          <div class="article-card-body">
+            <div class="article-meta">
+              <span class="article-tag">AI活用</span>
+              <span class="article-date">2026.05.09</span>
+            </div>
+            <h2 class="article-title">「AIで物販が楽になる」は半分ウソだ——本当に使えた場面・使えなかった場面を全部書く</h2>
+            <p class="article-excerpt">レビュー分析は最強、でも商品説明文の全自動生成は売上が下がった。AI活用の「光と影」を忖度なしに書いた正直レポート。</p>
+            <span class="article-read-more">READ MORE →</span>
+          </div>
+        </a>
+
+        <!-- Article 03 -->
+        <a href="/articles/003-x-automation.html" class="article-card reveal" data-category="automation" style="--delay:0.15s">
+          <div class="article-card-body">
+            <div class="article-meta">
+              <span class="article-tag">自動化</span>
+              <span class="article-date">2026.05.09</span>
+            </div>
+            <h2 class="article-title">X投稿を自動化したら、「何を言いたいか」が一番難しかった——GAS×Claude API 3ルート構築の全記録</h2>
+            <p class="article-excerpt">システムは1週間で動いた。でも「AIに自分らしく書かせる」ためにプロンプトを書いたとき、自分が何者で何を言いたいのかを定義しなければならなかった。それが想像以上に難しかった。</p>
+            <span class="article-read-more">READ MORE →</span>
+          </div>
+        </a>
+
+        <!-- Article 04 -->
+        <a href="/articles/004-logistics-ai-roi.html" class="article-card reveal" data-category="ai" style="--delay:0.2s">
+          <div class="article-card-body">
+            <div class="article-meta">
+              <span class="article-tag">物流×DX</span>
+              <span class="article-date">2026.05.10</span>
+            </div>
+            <h2 class="article-title">物流現場のAI導入、管理職が見た本当のROIと3つの失敗パターン</h2>
+            <p class="article-excerpt">「DX推進」の号令で現場にAIを入れた管理職が直面した現実。月23時間削減を実現するまでの失敗と、機能した「正しい順番」を現場目線で公開する。</p>
+            <span class="article-read-more">READ MORE →</span>
+          </div>
+        </a>
+
+        <!-- Article 05 -->
+        <a href="/articles/005-ai-failure-report.html" class="article-card reveal" data-category="ai" style="--delay:0.25s">
+          <div class="article-card-body">
+            <div class="article-meta">
+              <span class="article-tag">AI活用</span>
+              <span class="article-date">2026.05.10</span>
+            </div>
+            <h2 class="article-title">AI導入失敗白書2026——中小企業の63%が1年以内に活用を止めた。その理由と、止めなかった企業の共通点</h2>
+            <p class="article-excerpt">「導入=ゴール」「ROIを測らない」「現場を巻き込まない」——300社のデータが示す失敗の共通構造と、定着させた企業だけが実践した3つのこと。</p>
+            <span class="article-read-more">READ MORE →</span>
+          </div>
+        </a>
+
+        <!-- Article 06 -->
+        <a href="/articles/006-construction-recruit.html" class="article-card reveal" data-category="freelance" style="--delay:0.3s">
+          <div class="article-card-body">
+            <div class="article-meta">
+              <span class="article-tag">採用・HR</span>
+              <span class="article-date">2026.05.10</span>
+            </div>
+            <h2 class="article-title">若手が来ない、来ても辞める——中小建設業の採用危機に、現場を知る管理職が本音で答える</h2>
+            <p class="article-excerpt">有効求人倍率6.4倍の建設業で採用に勝つ企業は何が違うのか。「SNS正直発信」「入社前ロードマップ」「DX宣言採用」——実際に機能した3つの施策を現場管理職目線で解説。</p>
+            <span class="article-read-more">READ MORE →</span>
+          </div>
+        </a>
+
+        <!-- Article 07 -->
+        <a href="/articles/007-logistics-2024-followup.html" class="article-card reveal" data-category="automation" style="--delay:0.35s">
+          <div class="article-card-body">
+            <div class="article-meta">
+              <span class="article-tag">物流×DX</span>
+              <span class="article-date">2026.05.10</span>
+            </div>
+            <h2 class="article-title">「物流2024年問題」から1年——変わったこと、変わらなかったこと。現役管理職が現場から報告する</h2>
+            <p class="article-excerpt">残業上限規制が施行されて1年。「物流が止まる」は杞憂だったのか？深夜残業の置き換え・荷主との力関係変化・デジタル化の二極化——現場の肌感覚でファクトチェックする。</p>
+            <span class="article-read-more">READ MORE →</span>
+          </div>
+        </a>
+
+        <!-- Article 08 -->
+        <a href="/articles/008-care-staff-retention.html" class="article-card reveal" data-category="freelance" style="--delay:0.4s">
+          <div class="article-card-body">
+            <div class="article-meta">
+              <span class="article-tag">HR・介護</span>
+              <span class="article-date">2026.05.10</span>
+            </div>
+            <h2 class="article-title">介護職員の離職率を3年で22%→9%に下げた施設が、密かにやっていた3つのこと</h2>
+            <p class="article-excerpt">給料を上げずに定着率を改善できるのか？「不満の見える化」「成長の可視化」「管理職の関わり方の変化」——実際に機能した現場の施策を、人手不足が深刻化する介護業界のHR担当者向けに解説。</p>
+            <span class="article-read-more">READ MORE →</span>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="cta-content reveal">
+      <span class="section-label">NEWSLETTER</span>
+      <h2 class="cta-title">実践ノウハウを先取りする</h2>
+      <p class="cta-sub">記事の更新情報・未公開の実践メモをお届けします。AIで副業を加速させたい方へ。</p>
+      <a href="/contact.html" class="btn-primary">お問い合わせ・情報登録 →</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <span class="footer-copy">Senkode © 2026</span>
+    <span class="footer-tag">閃光 — Flash of Light</span>
+  </footer>
+
+  <script>
+    // Cursor
+    const cursorDot  = document.querySelector('.cursor-dot');
+    const cursorRing = document.querySelector('.cursor-ring');
+    let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX; mouseY = e.clientY;
+      cursorDot.style.left = mouseX + 'px';
+      cursorDot.style.top  = mouseY + 'px';
+    });
+
+    (function animateCursor() {
+      const dx = mouseX - ringX, dy = mouseY - ringY;
+      ringX += dx * 0.15; ringY += dy * 0.15;
+      cursorRing.style.left = ringX + 'px';
+      cursorRing.style.top  = ringY + 'px';
+      requestAnimationFrame(animateCursor);
+    })();
+
+    document.querySelectorAll('.article-card, .btn-primary, .nav-cta').forEach(el => {
+      el.addEventListener('mouseenter', () => cursorRing.classList.add('expanded'));
+      el.addEventListener('mouseleave', () => cursorRing.classList.remove('expanded'));
+    });
+
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const delay = parseFloat(entry.target.style.getPropertyValue('--delay')) || 0;
+          setTimeout(() => entry.target.classList.add('visible'), delay * 1000);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Filter tabs
+    document.querySelectorAll('.filter-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const filter = tab.dataset.filter;
+        document.querySelectorAll('.article-card').forEach(card => {
+          if (filter === 'all' || card.dataset.category === filter) {
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

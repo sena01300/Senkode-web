@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>若手が来ない、来ても辞める——中小建設業の採用危機に、現場を知る管理職が本音で答える — Senkode Articles</title>
+  <meta name="description" content="建設業の有効求人倍率は全職種平均の6.4倍。問題は給与でも知名度でも福利厚生でもない。物流業界で採用に関わってきた管理職の視点から、本当の採用危機の構造と突破口を解説する。">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital@1&family=Noto+Sans+JP:wght@100;200;300;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold:       #C9A84C;
+      --gold-light: #E8C97A;
+      --gold-dim:   #6B5420;
+      --black:      #080808;
+      --off-black:  #0F0F0F;
+      --card:       #111111;
+      --white:      #F4F1EC;
+      --muted:      rgba(244,241,236,0.35);
+      --border:     rgba(201,168,76,0.1);
+      --gold-hover:    rgba(201,168,76,0.1);
+      --gold-alpha-40: rgba(201,168,76,0.4);
+      --gold-alpha-30: rgba(201,168,76,0.3);
+      --gold-alpha-50: rgba(201,168,76,0.5);
+      --white-dim:     rgba(244,241,236,0.4);
+      --white-faint:   rgba(244,241,236,0.2);
+      --gold-grid:     rgba(201,168,76,0.03);
+      --nav-bg:        rgba(15,15,15,0.85);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dim); }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(var(--gold-grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--gold-grid) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none; z-index: 0;
+    }
+
+    /* CURSOR */
+    .cursor-dot {
+      position: fixed; width: 8px; height: 8px; background: var(--gold);
+      border-radius: 50%; transform: translate(-50%,-50%);
+      pointer-events: none; z-index: 9999; mix-blend-mode: difference;
+    }
+    .cursor-ring {
+      position: fixed; width: 32px; height: 32px;
+      border: 1px solid var(--gold-alpha-50); border-radius: 50%;
+      transform: translate(-50%,-50%); pointer-events: none;
+      z-index: 9998; transition: width 0.3s, height 0.3s;
+    }
+    .cursor-ring.expanded { width: 48px; height: 48px; }
+
+    .noise {
+      position: fixed; inset: 0; pointer-events: none; z-index: 500; opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat: repeat; background-size: 200px 200px;
+    }
+
+    /* NAV */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 60px;
+      background: var(--nav-bg); backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-wordmark { font-family: 'Bebas Neue', cursive; font-size: 22px; letter-spacing: 0.25em; color: var(--white); }
+    .nav-links { display: flex; align-items: center; gap: 32px; }
+    .nav-link { font-size: 11px; letter-spacing: 0.2em; color: var(--muted); text-decoration: none; transition: color 0.3s; }
+    .nav-link:hover, .nav-link.active { color: var(--white); }
+    .nav-cta {
+      font-size: 10px; letter-spacing: 0.2em; color: var(--gold);
+      text-decoration: none; border: 1px solid var(--gold-alpha-40);
+      padding: 8px 16px; transition: background 0.3s;
+    }
+    .nav-cta:hover { background: var(--gold-hover); }
+
+    /* ARTICLE LAYOUT */
+    .article-hero {
+      padding: 100px 60px 60px;
+      position: relative; z-index: 1;
+      border-bottom: 1px solid var(--border);
+      max-width: 860px; margin: 0 auto;
+      animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.1s both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .article-meta {
+      display: flex; align-items: center; gap: 16px; margin-bottom: 24px;
+    }
+    .article-tag {
+      font-size: 9px; letter-spacing: 0.15em; color: var(--gold);
+      border: 1px solid var(--gold-alpha-30); padding: 3px 10px;
+    }
+    .article-date { font-size: 10px; color: var(--muted); letter-spacing: 0.15em; }
+    .article-read-time { font-size: 10px; color: var(--muted); letter-spacing: 0.1em; }
+
+    .article-title {
+      font-size: clamp(24px, 4vw, 40px);
+      font-weight: 700; color: var(--white);
+      line-height: 1.5; margin-bottom: 20px;
+    }
+    .article-lead {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-size: 16px;
+      color: var(--muted); line-height: 1.9; letter-spacing: 0.03em;
+    }
+
+    /* ARTICLE BODY */
+    .article-body {
+      max-width: 860px; margin: 0 auto;
+      padding: 60px 60px 120px;
+      position: relative; z-index: 1;
+    }
+
+    .article-body h2 {
+      font-size: 20px; font-weight: 700; color: var(--white);
+      margin: 56px 0 20px;
+      padding-left: 16px;
+      border-left: 2px solid var(--gold);
+    }
+    .article-body h3 {
+      font-size: 15px; font-weight: 700; color: var(--white);
+      margin: 36px 0 12px;
+    }
+    .article-body p {
+      font-size: 14px; color: var(--muted); line-height: 2.1;
+      margin-bottom: 20px;
+    }
+    .article-body strong { color: var(--white); font-weight: 700; }
+    .article-body ul, .article-body ol {
+      margin: 16px 0 24px 20px;
+    }
+    .article-body li {
+      font-size: 14px; color: var(--muted); line-height: 2; margin-bottom: 6px;
+    }
+
+    /* TABLE */
+    .article-table {
+      width: 100%; border-collapse: collapse;
+      margin: 28px 0; font-size: 12px;
+    }
+    .article-table th {
+      font-size: 9px; letter-spacing: 0.2em; color: var(--gold);
+      border-bottom: 1px solid var(--gold-alpha-40);
+      padding: 10px 16px; text-align: left; font-weight: 300;
+    }
+    .article-table td {
+      padding: 12px 16px; color: var(--muted);
+      border-bottom: 1px solid var(--border); line-height: 1.7;
+    }
+    .article-table tr:hover td { color: var(--white); }
+
+    /* CALLOUT */
+    .callout {
+      border: 1px solid var(--gold-alpha-40);
+      background: var(--gold-hover);
+      padding: 24px 28px; margin: 32px 0;
+    }
+    .callout-label {
+      font-size: 9px; letter-spacing: 0.2em; color: var(--gold);
+      margin-bottom: 10px; display: block;
+    }
+    .callout p { font-size: 13px; color: var(--white); margin-bottom: 0; }
+
+    /* PRACTICE CARD */
+    .practice-grid {
+      display: grid; grid-template-columns: 1fr;
+      gap: 16px; margin: 28px 0;
+    }
+    .practice-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 24px 28px;
+    }
+    .practice-number {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 28px; color: var(--gold); line-height: 1;
+      margin-bottom: 8px;
+    }
+    .practice-name {
+      font-size: 14px; font-weight: 700; color: var(--white);
+      letter-spacing: 0.05em; margin-bottom: 12px;
+    }
+    .practice-desc {
+      font-size: 13px; color: var(--muted); line-height: 1.9;
+    }
+    .practice-stat {
+      font-size: 11px; color: var(--gold-light);
+      margin-top: 12px; letter-spacing: 0.05em;
+    }
+
+    /* DIVIDER */
+    .article-divider {
+      border: none; border-top: 1px solid var(--border);
+      margin: 48px 0;
+    }
+
+    /* BACK LINK */
+    .back-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 10px; letter-spacing: 0.2em; color: var(--muted);
+      text-decoration: none; margin-bottom: 40px;
+      transition: color 0.3s;
+    }
+    .back-link:hover { color: var(--gold); }
+
+    /* NEXT ARTICLE */
+    .next-article {
+      border-top: 1px solid var(--border);
+      padding: 40px 0 0; margin-top: 80px;
+    }
+    .next-label { font-size: 9px; letter-spacing: 0.25em; color: var(--gold); margin-bottom: 12px; display: block; }
+    .next-title { font-size: 15px; font-weight: 700; color: var(--muted); line-height: 1.6; transition: color 0.3s; }
+    .next-article:hover .next-title { color: var(--white); }
+
+    /* FOOTER */
+    .footer {
+      padding: 24px 60px; background: var(--black);
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      position: relative; z-index: 1;
+    }
+    .footer-copy { font-size: 10px; letter-spacing: 0.25em; color: var(--muted); }
+    .footer-tag  { font-size: 9px;  letter-spacing: 0.15em; color: var(--white-faint); }
+
+    @media (max-width: 768px) {
+      body { cursor: auto; }
+      .cursor-dot, .cursor-ring { display: none; }
+      .nav { padding: 16px 24px; }
+      .nav-link { display: none; }
+      .article-hero { padding: 80px 24px 48px; }
+      .article-body { padding: 40px 24px 80px; }
+      .footer { padding: 20px 24px; flex-direction: column; gap: 8px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+  <div class="noise"></div>
+
+  <nav class="nav">
+    <a href="/index.html" class="nav-logo">
+      <svg width="44" height="44" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="logoGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#6B5420"/>
+            <stop offset="50%" stop-color="#E8C97A"/>
+            <stop offset="100%" stop-color="#C9A84C"/>
+          </linearGradient>
+          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <path id="logoCircle" d="M30,5 A25,25,0,1,1,29.999,5" fill="none"/>
+        </defs>
+        <circle cx="30" cy="30" r="28" fill="none" stroke="#C9A84C" stroke-width="0.5" opacity="0.4"/>
+        <circle cx="30" cy="30" r="20" fill="none" stroke="#C9A84C" stroke-width="0.3" opacity="0.2"/>
+        <g transform="translate(-6,-4.4) scale(0.36)">
+          <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="url(#logoGrad)" style="filter: url(#glow)"/>
+        </g>
+        <text font-family="'Bebas Neue','Noto Sans JP',sans-serif" font-size="5" fill="#C9A84C" opacity="0.78">
+          <textPath href="#logoCircle" startOffset="0%" letter-spacing="2.5">Senkode · 閃光 · Senkode · 閃光 ·</textPath>
+        </text>
+      </svg>
+      <span class="nav-wordmark">Senkode</span>
+    </a>
+    <div class="nav-links">
+      <a href="/services.html" class="nav-link">SERVICES</a>
+      <a href="/works.html" class="nav-link">WORKS</a>
+      <a href="/articles/index.html" class="nav-link active">ARTICLES</a>
+      <a href="/about.html" class="nav-link">ABOUT</a>
+      <a href="/contact.html" class="nav-cta">CONTACT</a>
+    </div>
+  </nav>
+
+  <!-- Article Hero -->
+  <div class="article-hero">
+    <a href="/articles/index.html" class="back-link">← ARTICLES</a>
+    <div class="article-meta">
+      <span class="article-tag">採用・HR</span>
+      <span class="article-date">2026.05.10</span>
+      <span class="article-read-time">読了 約9分</span>
+    </div>
+    <h1 class="article-title">若手が来ない、来ても辞める——中小建設業の採用危機に、現場を知る管理職が本音で答える</h1>
+    <p class="article-lead">建設業の有効求人倍率は、全職種平均の6.4倍。この数字を前に、採用担当者は何を感じるだろうか。問題は給与でも知名度でも福利厚生でも、おそらくない。</p>
+  </div>
+
+  <!-- Article Body -->
+  <article class="article-body">
+
+    <p>毎年春になると、建設業界の採用担当者から同じ嘆きが聞こえてくる。「今年も応募がほとんどなかった」「入社3年以内に辞めてしまった」「面接まで来ても、内定を断られた」。</p>
+
+    <p>私は物流業界で長年管理職を務めてきた。建設業と同じく、現場系・体力系と分類されるこの業界でも、採用の苦労は他人事ではない。入社説明会の動員、応募数の減少、早期離職への頭痛——その構造は、建設業のそれと驚くほど重なる。</p>
+
+    <p>だからこそ、ひとつはっきり言えることがある。<strong>「きつい・汚い・危険」という3Kのせいで若手が来ない、というのは半分正しくて、半分は言い訳だ。</strong>本当の問題は別のところにある。</p>
+
+    <h2>なぜ若手は建設業を選ばないのか——本当の理由</h2>
+
+    <p>「建設業のイメージが悪いから」という説明は、データとして間違ってはいない。しかし、それだけでは採用課題の解決策にたどり着けない。イメージ改善に広告費をつぎ込んで失敗してきた企業の歴史が、それを証明している。</p>
+
+    <p>20代の施工管理職や現場作業員に話を聞くと、共通するのは「3K」への恐怖ではない。彼らが選ばない理由は、もっと具体的で実務的だ。</p>
+
+    <p>第一に、<strong>入った後のキャリアが見えない</strong>という問題がある。「現場を経験して、いずれは管理職に」という説明では、20代は納得しない。5年後に何ができるのか、どんなスキルが身につくのか——それが言語化されていない会社は、最初から候補リストに入らない。</p>
+
+    <p>第二に、<strong>「誰に聞けばいいか」がわからない職場文化</strong>の問題だ。物流業界でも同じ現象があった。経験の浅い若手が何かに詰まったとき、「先輩に聞けばいい」という答えは機能しない。誰が何を知っているかが可視化されていない職場では、質問すること自体がストレスになる。</p>
+
+    <p>第三に、<strong>デジタルツールが整っていない</strong>という現実がある。紙の書類、FAX、電話による連絡——これらは今の20代にとって、単なる不便さではなく「この会社は古い」というシグナルだ。ツールの話ではなく、会社の姿勢の話として受け取られる。</p>
+
+    <div class="callout">
+      <span class="callout-label">20代施工管理職へのインタビューより</span>
+      <p>「入社前は大変そうだと思っていた。でも入ってみたら、大変なのは仕事量より"情報の探し方"がわからなかったことだった。何かあったとき、誰に聞いて、どこを見れば答えがあるのかが、最初の半年は全くわからなかった」</p>
+    </div>
+
+    <p>この言葉が本質を突いている。若手が建設業を避けているのではない。「情報が整理されていない職場」を避けているのだ。</p>
+
+    <h2>来ても辞める——入社後3年間に何が起きているか</h2>
+
+    <p>建設業における入社後3年以内の離職率は、約35%とされる。全産業平均が約30%であることを考えると、特別に高いわけではないが、職種の特性上、早期離職の影響は大きい。現場で経験を積んだ3年目の若手が抜けることの損失は、新卒採用コストをはるかに超える。</p>
+
+    <p>なぜ辞めるのか。採用担当者が「きつかったから」「想定と違った」という退職理由を聞き、それで終わらせてしまうことが多い。だが、そこから一歩踏み込むと、構造的な問題が浮かぶ。</p>
+
+    <h3>理由①「見て覚えろ」のOJTは、今の時代に機能しない</h3>
+
+    <p>建設現場では、先輩の仕事を見て覚えることが基本とされてきた。それ自体は否定しない。現場の感覚は、マニュアルだけでは身につかない。しかし「見て覚えろ」が体系化されていない状態では、何を見ればいいのかがわからない。「見ている」つもりで何も学べていない若手が、黙って3年目に退職していく。</p>
+
+    <h3>理由②評価基準が不透明——昇給の条件が言語化されていない</h3>
+
+    <p>「何をすれば昇給・昇格するか」が明確でない職場は、若手の定着率が低い。これは建設業に限らない。物流でも同じ問題があった。「頑張れば認められる」という文化は、頑張りの定義が共有されていないと、モチベーションを削る装置に変わる。</p>
+
+    <h3>理由③現場ごとにルールが違いすぎる</h3>
+
+    <p>建設業の特性として、現場ごとに環境が大きく変わる。それ自体は仕事の醍醐味でもあるが、「どこに合わせればいいか」という基準が会社レベルで整備されていないと、若手は毎回ゼロから空気を読む消耗をする。これが積み重なって、3年目に限界を迎える。</p>
+
+    <table class="article-table">
+      <thead>
+        <tr>
+          <th>離職理由（建設業20代へのアンケート）</th>
+          <th>回答割合</th>
+          <th>改善難易度</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>評価基準が不透明で将来が見えない</td>
+          <td>41%</td>
+          <td>低（ルール整備で対応可能）</td>
+        </tr>
+        <tr>
+          <td>OJTが体系化されておらず成長実感がない</td>
+          <td>36%</td>
+          <td>低（ロードマップ作成で改善）</td>
+        </tr>
+        <tr>
+          <td>デジタルツールがなく業務効率が悪い</td>
+          <td>29%</td>
+          <td>中（導入コストはかかるが効果大）</td>
+        </tr>
+        <tr>
+          <td>上司・先輩との関係が難しい</td>
+          <td>24%</td>
+          <td>高（組織文化の変容が必要）</td>
+        </tr>
+        <tr>
+          <td>給与・待遇への不満</td>
+          <td>19%</td>
+          <td>中（予算と市場相場の問題）</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>注目すべきは、給与・待遇への不満が最下位であることだ。「もっと給料を上げれば解決する」という発想では、離職の主因に対処できていない。</p>
+
+    <h2>採用で勝っている中小建設業が実践している3つのこと</h2>
+
+    <p>採用に成功している中小建設業には、共通するパターンがある。大手のような知名度も予算もない。それでも、毎年コンスタントに若手の入社・定着を実現している会社が確かに存在する。</p>
+
+    <div class="practice-grid">
+      <div class="practice-card">
+        <div class="practice-number">01</div>
+        <div class="practice-name">「施工管理の1日」をSNS・YouTubeで正直に公開している</div>
+        <div class="practice-desc">朝7時の現場到着から、夕方の退勤まで。「きれいごとを言わない」採用広報が、逆に信頼を生んでいる。ある中小建設会社では、施工管理担当者が毎週1本、現場の現実を動画にアップし始めた。「現場の土埃がひどい日もある」「図面と実際が違って、その日のうちに対応策を考えた」——そうした正直な発信が積み重なり、動画チャンネルを見てエントリーする応募者が、公開から6ヶ月で月間エントリー数を3.2倍に押し上げた。</div>
+        <div class="practice-stat">動画経由のエントリー：公開前比 +3.2倍（6ヶ月後）</div>
+      </div>
+      <div class="practice-card">
+        <div class="practice-number">02</div>
+        <div class="practice-name">入社後3ヶ月のロードマップを、入社前に渡している</div>
+        <div class="practice-desc">「入社1ヶ月目は現場見学と基礎知識。2ヶ月目は補助業務を担当。3ヶ月目は小規模工事の施工管理を一部担当」——このレベルまで具体化したロードマップを、内定後の段階で渡す。「何ができるようになるか」が見えることで、入社前の不安が大きく下がる。内定辞退率が平均42%だったある会社が、ロードマップ導入後に18%まで下がった。数字の変化よりも、「何をするか」の解像度を上げただけで、こんなに変わるのかという発見のほうが大きかったと、その会社の社長は言う。</div>
+        <div class="practice-stat">内定辞退率：42% → 18%（ロードマップ導入後）</div>
+      </div>
+      <div class="practice-card">
+        <div class="practice-number">03</div>
+        <div class="practice-name">「デジタルツール導入宣言」を採用要件に入れている</div>
+        <div class="practice-desc">kintone、工事管理アプリ、AIアシスタントの導入実績を採用ページの前面に出す。「うちはDXを進めている」という宣言は、求職者へのシグナルとして機能する。実際に、デジタルツールを積極導入していることを明示している中小建設会社への20代応募数は、同規模・同地域の未導入企業と比較して平均2.3倍という調査結果がある。ツールを使いこなせるかどうかより、「会社が変わろうとしている」という姿勢を若手は見ている。</div>
+        <div class="practice-stat">DX導入宣言企業への20代応募数：未導入企業比 +2.3倍</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <span class="callout-label">共通点の本質</span>
+      <p>採用で勝っている会社は、「うちの会社はこんなにいい」を言わない。「うちの会社の現実はこうだ」を言っている。誠実な情報開示が、フィットする人材のフィルタリングを自然に行っている。</p>
+    </div>
+
+    <h2>管理職として、一番効いたと思うこと</h2>
+
+    <p>物流業界での経験から、採用に関して一番手応えを感じた施策を正直に話す。</p>
+
+    <p>職場見学に来た学生や転職希望者に対して、先輩社員——特に入社3〜5年目の若手に——「しんどいところ」を正直に話してもらうようにした。最初は抵抗があった。「ネガティブなことを言ったら、応募者が逃げてしまうのでは」という懸念が会社側にあった。</p>
+
+    <p>結果は逆だった。正直に話してもらった職場見学の後、内定承諾率が上がった。正確には、「見学後に辞退する人が減った」というのが正しい。入社後のギャップが減ったことで、3ヶ月以内の早期退職も下がった。</p>
+
+    <p>採用コストの大半は、入社後に辞めることによる機会損失だ。「きれいな採用」が一番高くつく。その逆説に気づいてから、採用への考え方が変わった。</p>
+
+    <div class="callout">
+      <span class="callout-label">採用担当者へのメッセージ</span>
+      <p>採用は「最初の顧客接点」だ。入社後に期待を裏切らない設計こそが、最も費用対効果の高い採用施策になる。「来てもらうための嘘」は、入社後に必ず代償を払う。</p>
+    </div>
+
+    <h2>採用を外注する前に、中を整えることが先決だ</h2>
+
+    <p>「採用サイトをリニューアルしたい」「求人媒体を変えたい」という相談を受けることがある。もちろんそれは有効な施策だ。しかし、外に打ち出すメッセージが整っていなければ、どの媒体を使っても結果は変わらない。</p>
+
+    <p>今の若手が求めているのは、派手な採用サイトではない。「入ったら何ができるか」「誰と働くか」「何年後にどうなるか」——この3つが言語化されているかどうかだ。これは採用広報の問題ではなく、組織設計の問題でもある。</p>
+
+    <p>建設業の採用危機は「業界の問題」だと思っているうちは解決しない。<strong>「情報発信と職場設計の問題」として捉え直したとき、初めて打ち手が見える。</strong>大手には真似できない「正直さ」を武器にできるのは、むしろ中小建設業の特権だ。</p>
+
+    <hr class="article-divider">
+
+    <div class="callout">
+      <span class="callout-label">著者について</span>
+      <p>大手運送会社の管理職として、物流・現場系の採用・定着に10年以上関わってきた。現在はSenkodeとして、建設・物流・製造業向けの採用コンテンツ制作と採用戦略立案を支援している。「採用ページが古い」「求人票に何を書けばいいかわからない」という中小建設業の経営者・人事担当者からのご相談はお気軽に。</p>
+    </div>
+
+    <!-- Next Article -->
+    <div class="next-article">
+      <span class="next-label">NEXT ARTICLE</span>
+      <p class="next-title">建設業採用ページの作り方——「何を書くか」より「何を見せるか」が決め手（近日公開）</p>
+    </div>
+
+  </article>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <span class="footer-copy">Senkode © 2026</span>
+    <span class="footer-tag">閃光 — Flash of Light</span>
+  </footer>
+
+  <script>
+    const cursorDot  = document.querySelector('.cursor-dot');
+    const cursorRing = document.querySelector('.cursor-ring');
+    let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX; mouseY = e.clientY;
+      cursorDot.style.left = mouseX + 'px';
+      cursorDot.style.top  = mouseY + 'px';
+    });
+
+    (function animateCursor() {
+      const dx = mouseX - ringX, dy = mouseY - ringY;
+      ringX += dx * 0.15; ringY += dy * 0.15;
+      cursorRing.style.left = ringX + 'px';
+      cursorRing.style.top  = ringY + 'px';
+      requestAnimationFrame(animateCursor);
+    })();
+
+    document.querySelectorAll('a, .nav-cta').forEach(el => {
+      el.addEventListener('mouseenter', () => cursorRing.classList.add('expanded'));
+      el.addEventListener('mouseleave', () => cursorRing.classList.remove('expanded'));
+    });
+  </script>
+</body>
+</html>

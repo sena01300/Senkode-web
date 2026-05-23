@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ACCESS — CAFÉ MATIN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,300;1,400&family=Noto+Sans+JP:wght@300;400&family=Playfair+Display:ital,wght@1,400;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    :root {
+      --border-soft: rgba(61,43,31,0.1);
+    }
+
+    .access-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: start;
+    }
+    .map-wrap {
+      aspect-ratio: 4/3;
+      background: var(--bg-soft);
+      overflow: hidden;
+    }
+    .map-wrap iframe {
+      width: 100%; height: 100%; border: none;
+    }
+    .access-info-title {
+      font-family: 'Playfair Display', serif; font-style: italic;
+      font-size: 28px; margin-bottom: 40px;
+    }
+    .info-block { margin-bottom: 36px; }
+    .info-label {
+      font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--terra); margin-bottom: 10px;
+    }
+    .info-value { font-size: 14px; line-height: 2; color: var(--brown); }
+    .info-muted { color: var(--brown-mid); font-size: 13px; }
+    .divider {
+      border: none; border-top: 1px solid var(--border-soft);
+      margin: 36px 0;
+    }
+    .sns-links { display: flex; gap: 16px; margin-top: 16px; }
+    .sns-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      border: 1px solid var(--border-soft);
+      padding: 10px 20px; font-size: 11px; letter-spacing: 1px;
+      color: var(--brown-mid); transition: border-color 0.3s, color 0.3s;
+    }
+    .sns-btn:hover { border-color: var(--terra); color: var(--terra); }
+
+    @media (max-width: 768px) {
+      .access-grid { grid-template-columns: 1fr; gap: 40px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor-dot" id="cursor"></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">CAFÉ <span>MATIN</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">TOP</a></li>
+    <li><a href="menu.html">MENU</a></li>
+    <li><a href="concept.html">CONCEPT</a></li>
+    <li><a href="gallery.html">GALLERY</a></li>
+    <li><a href="access.html" aria-current="page">ACCESS</a></li>
+  </ul>
+</nav>
+
+<div class="page-hero">
+  <p class="page-hero-label">Access</p>
+  <h1 class="page-hero-title">おいしい朝に、会いに来てください。</h1>
+</div>
+
+<section class="section-pad">
+  <div class="access-grid reveal">
+    <div class="map-wrap">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3242.0!2d139.4680!3d35.6614!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6018f34d3a2c5a0b%3A0x1234567890!2z5LiL5YyX5rKZ!5e0!3m2!1sja!2sjp!4v1234567890"
+        allowfullscreen
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        title="CAFÉ MATIN 地図">
+      </iframe>
+    </div>
+
+    <div>
+      <h2 class="access-info-title">店舗情報</h2>
+
+      <div class="info-block">
+        <p class="info-label">住所</p>
+        <p class="info-value">〒155-0031<br>東京都世田谷区北沢2-XX-XX<br>下北沢駅東口より徒歩3分</p>
+      </div>
+
+      <hr class="divider">
+
+      <div class="info-block">
+        <p class="info-label">営業時間</p>
+        <p class="info-value">8:00 — 15:00</p>
+        <p class="info-muted">月曜定休（祝日の場合は翌火曜）</p>
+      </div>
+
+      <hr class="divider">
+
+      <div class="info-block">
+        <p class="info-label">電話</p>
+        <p class="info-value">03-XXXX-XXXX</p>
+        <p class="info-muted">営業時間内のみ対応</p>
+      </div>
+
+      <hr class="divider">
+
+      <div class="info-block">
+        <p class="info-label">SNS</p>
+        <div class="sns-links">
+          <a href="#" class="sns-btn">Instagram</a>
+          <a href="#" class="sns-btn">X (Twitter)</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="footer-logo">CAFÉ MATIN</span>
+  <ul class="footer-links">
+    <li><a href="menu.html">MENU</a></li>
+    <li><a href="concept.html">CONCEPT</a></li>
+    <li><a href="gallery.html">GALLERY</a></li>
+    <li><a href="access.html">ACCESS</a></li>
+  </ul>
+  <span>© 2026 CAFÉ MATIN</span>
+</footer>
+
+<script>
+  const cursor = document.getElementById('cursor');
+  if (cursor) {
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+  }
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

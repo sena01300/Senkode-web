@@ -1,0 +1,1451 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ECカスタマーサポート AIチャットボット 要件定義書 | Senkode Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@100;200;300&display=swap" rel="stylesheet">
+  <style>
+    [class*="grid"] > *, [class*="inner"] > *, [class*="wrap"] > * { min-width: 0; }
+
+    img, video, iframe { max-width: 100%; height: auto; }
+
+    html { overflow-x: hidden; }
+
+    :root {
+      --bg:           #040A08;
+      --bg-sub:       #070F0B;
+      --card:         #0B1510;
+      --emerald:      #10B981;
+      --emerald-lt:   #34D399;
+      --emerald-bd:   rgba(16,185,129,0.25);
+      --emerald-glow: rgba(16,185,129,0.1);
+      --blue:         #3B82F6;
+      --yellow:       #F59E0B;
+      --red:          #EF4444;
+      --text:         #ECFDF5;
+      --text-mid:     rgba(236,253,245,0.55);
+      --text-faint:   rgba(236,253,245,0.22);
+      --bd:           rgba(16,185,129,0.12);
+      --nav-bg:       rgba(4,10,8,0.92);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      scroll-behavior: smooth;
+      cursor: none;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 200;
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+
+    /* ─── Custom cursor ─── */
+    #cursor {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background: var(--emerald);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width .2s, height .2s, opacity .2s;
+    }
+    #cursor-ring {
+      position: fixed;
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--emerald-bd);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: transform .12s ease-out, width .2s, height .2s;
+    }
+
+    /* ─── Navigation ─── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: var(--nav-bg);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--bd);
+      padding: 0 48px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      color: var(--emerald);
+      letter-spacing: .1em;
+    }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--text-mid);
+      text-decoration: none;
+      font-size: .75rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--emerald); }
+
+    /* ─── Scroll reveal ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity .7s ease, transform .7s ease;
+      will-change: opacity, transform;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── Layout ─── */
+    .container {
+      max-width: 1100px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 48px;
+    }
+
+    section {
+      padding: 96px 0;
+      border-top: 1px solid var(--bd);
+    }
+
+    /* ─── HERO ─── */
+    #hero {
+      padding: 160px 0 96px;
+      border-top: none;
+      position: relative;
+      overflow: hidden;
+    }
+    #hero::before {
+      content: '';
+      position: absolute;
+      top: -200px;
+      right: -200px;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, var(--emerald-glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    #hero::after {
+      content: '';
+      position: absolute;
+      bottom: -100px;
+      left: -100px;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(59,130,246,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--emerald-bd);
+      background: var(--emerald-glow);
+      color: var(--emerald-lt);
+      font-size: .7rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 2px;
+      margin-bottom: 32px;
+    }
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--emerald);
+      border-radius: 50%;
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .3; }
+    }
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      line-height: 1.05;
+      letter-spacing: .04em;
+      color: var(--text);
+      margin-bottom: 40px;
+    }
+    .hero-title span { color: var(--emerald); }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      background: var(--bd);
+      border: 1px solid var(--bd);
+      margin-bottom: 48px;
+    }
+    .info-item {
+      background: var(--bg-sub);
+      padding: 20px 24px;
+    }
+    .info-label {
+      font-size: .65rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--emerald);
+      margin-bottom: 6px;
+    }
+    .info-value {
+      font-size: .9rem;
+      font-weight: 300;
+      color: var(--text);
+    }
+    .hero-summary {
+      background: var(--card);
+      border-left: 3px solid var(--emerald);
+      padding: 24px 32px;
+      font-size: .95rem;
+      color: var(--text-mid);
+      max-width: 860px;
+    }
+    .hero-summary strong { color: var(--emerald-lt); font-weight: 300; }
+
+    /* ─── Section heading ─── */
+    .section-label {
+      font-size: .65rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--emerald);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.4rem;
+      letter-spacing: .06em;
+      color: var(--text);
+      margin-bottom: 40px;
+    }
+
+    /* ─── Cards grid ─── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--bd);
+      padding: 28px;
+      transition: border-color .3s, transform .3s;
+    }
+    .card:hover {
+      border-color: var(--emerald-bd);
+      transform: translateY(-4px);
+    }
+    .card-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.4rem;
+      color: var(--emerald);
+      line-height: 1;
+      margin-bottom: 12px;
+      opacity: .35;
+    }
+    .card-title {
+      font-size: .8rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--emerald);
+      margin-bottom: 10px;
+    }
+    .card-body {
+      font-size: .85rem;
+      color: var(--text-mid);
+      line-height: 1.7;
+    }
+
+    /* ─── Approach list ─── */
+    .approach-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 32px 0;
+    }
+    .approach-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      background: var(--card);
+      border: 1px solid var(--bd);
+      padding: 20px 24px;
+      transition: border-color .3s;
+    }
+    .approach-item:hover { border-color: var(--emerald-bd); }
+    .approach-arrow {
+      color: var(--emerald);
+      font-size: 1rem;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+    .approach-text {
+      font-size: .88rem;
+      color: var(--text-mid);
+    }
+    .approach-text strong { color: var(--text); font-weight: 300; }
+
+    /* ─── KPI ─── */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 40px;
+    }
+    .kpi-box {
+      background: var(--bg-sub);
+      border: 1px solid var(--bd);
+      padding: 28px 20px;
+      text-align: center;
+    }
+    .kpi-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.6rem;
+      color: var(--emerald);
+      line-height: 1;
+    }
+    .kpi-unit {
+      font-size: .75rem;
+      color: var(--emerald-lt);
+      letter-spacing: .1em;
+    }
+    .kpi-label {
+      font-size: .75rem;
+      color: var(--text-mid);
+      margin-top: 8px;
+    }
+
+    /* ─── Callout ─── */
+    .callout {
+      background: var(--emerald-glow);
+      border: 1px solid var(--emerald-bd);
+      border-left: 3px solid var(--emerald);
+      padding: 20px 28px;
+      margin: 24px 0;
+      font-size: .875rem;
+      color: var(--text-mid);
+    }
+    .callout strong { color: var(--emerald-lt); font-weight: 300; }
+
+    /* ─── System diagram ─── */
+    .diagram-wrap {
+      background: var(--bg-sub);
+      border: 1px solid var(--bd);
+      padding: 40px 48px;
+      font-weight: 200;
+      font-size: .85rem;
+      overflow-x: auto;
+    }
+    .diagram-node {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 10px 0;
+    }
+    .node-box {
+      border: 1px solid var(--emerald-bd);
+      background: var(--card);
+      color: var(--emerald-lt);
+      padding: 8px 20px;
+      font-size: .82rem;
+      letter-spacing: .06em;
+      white-space: nowrap;
+      min-width: 280px;
+    }
+    .node-box.node-blue {
+      border-color: rgba(59,130,246,0.3);
+      color: var(--blue);
+    }
+    .node-box.node-yellow {
+      border-color: rgba(245,158,11,0.3);
+      color: var(--yellow);
+    }
+    .node-box.node-red {
+      border-color: rgba(239,68,68,0.3);
+      color: var(--red);
+    }
+    .node-desc {
+      color: var(--text-faint);
+      font-size: .78rem;
+    }
+    .node-arrow {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 0 4px 32px;
+      color: var(--emerald);
+      font-size: .75rem;
+    }
+    .node-arrow::before {
+      content: '↓';
+      font-size: 1rem;
+    }
+    .node-note { color: var(--text-faint); }
+    .node-branch {
+      display: flex;
+      gap: 12px;
+      padding: 4px 0 4px 32px;
+      align-items: flex-start;
+    }
+    .branch-item {
+      flex: 1;
+      border: 1px solid var(--bd);
+      background: var(--card);
+      padding: 10px 14px;
+      font-size: .75rem;
+      color: var(--text-mid);
+    }
+    .branch-item .branch-title {
+      font-size: .65rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--emerald);
+      margin-bottom: 4px;
+    }
+    .diagram-log {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--bd);
+      display: flex;
+      gap: 12px;
+    }
+    .log-box {
+      flex: 1;
+      background: var(--card);
+      border: 1px solid var(--bd);
+      padding: 10px 16px;
+      font-size: .75rem;
+      color: var(--text-mid);
+    }
+    .log-box .log-title {
+      font-size: .6rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      margin-bottom: 4px;
+    }
+
+    /* ─── Tables ─── */
+    .tbl-wrap { overflow-x: auto; margin: 24px 0; }
+    table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+    thead th {
+      background: var(--card);
+      color: var(--emerald);
+      font-weight: 300;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      font-size: .7rem;
+      padding: 14px 20px;
+      text-align: left;
+      border-bottom: 1px solid var(--emerald-bd);
+    }
+    tbody tr {
+      border-bottom: 1px solid var(--bd);
+      transition: background .2s;
+    }
+    tbody tr:hover { background: var(--emerald-glow); }
+    tbody td {
+      padding: 14px 20px;
+      color: var(--text-mid);
+      vertical-align: top;
+    }
+    tbody td:first-child { color: var(--text); font-weight: 300; }
+    .tag {
+      display: inline-block;
+      font-size: .65rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 2px;
+    }
+    .tag-high   { background: rgba(239,68,68,0.12); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
+    .tag-med    { background: rgba(245,158,11,0.12); color: var(--yellow); border: 1px solid rgba(245,158,11,0.3); }
+    .tag-low    { background: rgba(16,185,129,0.12); color: var(--emerald); border: 1px solid var(--emerald-bd); }
+    .tag-ph     { background: rgba(59,130,246,0.12); color: var(--blue); border: 1px solid rgba(59,130,246,0.3); }
+
+    /* ─── Chat mockup ─── */
+    .chat-frame {
+      border: 1px solid var(--emerald-bd);
+      background: var(--bg-sub);
+      overflow: hidden;
+      max-width: 720px;
+      width: 100%;
+      margin: 0 auto;
+    }
+    .chat-header {
+      background: var(--card);
+      border-bottom: 1px solid var(--bd);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .chat-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--emerald-glow);
+      border: 1px solid var(--emerald-bd);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .65rem;
+      color: var(--emerald);
+      letter-spacing: .05em;
+      flex-shrink: 0;
+    }
+    .chat-header-info .chat-name {
+      font-size: .82rem;
+      color: var(--text);
+      font-weight: 300;
+    }
+    .chat-header-info .chat-status {
+      font-size: .65rem;
+      color: var(--emerald);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .chat-status-dot {
+      width: 5px;
+      height: 5px;
+      background: var(--emerald);
+      border-radius: 50%;
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    .chat-body {
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      min-height: 360px;
+    }
+    .msg {
+      display: flex;
+      gap: 10px;
+      max-width: 85%;
+    }
+    .msg.msg-ai { align-self: flex-start; }
+    .msg.msg-user { align-self: flex-end; flex-direction: row-reverse; }
+    .msg-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .55rem;
+      font-weight: 300;
+      letter-spacing: .04em;
+      margin-top: 4px;
+    }
+    .msg-ai .msg-icon {
+      background: var(--emerald-glow);
+      border: 1px solid var(--emerald-bd);
+      color: var(--emerald);
+    }
+    .msg-user .msg-icon {
+      background: rgba(59,130,246,0.1);
+      border: 1px solid rgba(59,130,246,0.25);
+      color: var(--blue);
+    }
+    .msg-bubble {
+      padding: 12px 16px;
+      font-size: .83rem;
+      line-height: 1.65;
+      border-radius: 2px;
+    }
+    .msg-ai .msg-bubble {
+      background: var(--card);
+      border: 1px solid var(--emerald-bd);
+      color: var(--text-mid);
+    }
+    .msg-user .msg-bubble {
+      background: rgba(59,130,246,0.1);
+      border: 1px solid rgba(59,130,246,0.25);
+      color: var(--text);
+    }
+    .msg-bubble .msg-link {
+      color: var(--emerald);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      font-size: .78rem;
+    }
+    .msg-meta {
+      font-size: .62rem;
+      color: var(--text-faint);
+      margin-top: 4px;
+      padding: 0 4px;
+    }
+    .msg-ai .msg-meta { text-align: left; }
+    .msg-user .msg-meta { text-align: right; }
+    .chat-input-bar {
+      background: var(--card);
+      border-top: 1px solid var(--bd);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .chat-input-mock {
+      flex: 1;
+      height: 38px;
+      background: var(--bg-sub);
+      border: 1px solid var(--bd);
+      padding: 0 14px;
+      display: flex;
+      align-items: center;
+      font-size: .78rem;
+      color: var(--text-faint);
+    }
+    .chat-send-btn {
+      height: 38px;
+      width: 80px;
+      background: var(--emerald);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .72rem;
+      letter-spacing: .08em;
+      color: var(--bg);
+      font-weight: 300;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+    .chat-escalate {
+      background: rgba(245,158,11,0.08);
+      border: 1px solid rgba(245,158,11,0.25);
+      color: var(--yellow);
+      font-size: .7rem;
+      padding: 8px 16px;
+      letter-spacing: .08em;
+      text-align: center;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    /* ─── Prompt block ─── */
+    .prompt-block {
+      background: var(--bg);
+      border: 1px solid var(--bd);
+      padding: 32px 36px;
+      font-family: 'Noto Sans JP', monospace;
+      font-weight: 100;
+      font-size: .82rem;
+      line-height: 1.9;
+      color: var(--text-mid);
+      position: relative;
+      overflow-x: auto;
+    }
+    .prompt-block::before {
+      content: 'PROMPT DESIGN';
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      font-size: .6rem;
+      letter-spacing: .15em;
+      color: var(--text-faint);
+    }
+    .prompt-key     { color: var(--emerald-lt); }
+    .prompt-val     { color: var(--yellow); }
+    .prompt-comment { color: var(--text-faint); }
+    .prompt-rule    { color: var(--blue); }
+
+    /* ─── Phase timeline ─── */
+    .phase-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .phase-card {
+      background: var(--card);
+      border: 1px solid var(--bd);
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+    .phase-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+    }
+    .phase-1::before { background: var(--emerald); }
+    .phase-2::before { background: var(--blue); }
+    .phase-3::before { background: var(--yellow); }
+    .phase-label {
+      font-size: .6rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 8px;
+    }
+    .phase-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: .05em;
+      margin-bottom: 16px;
+    }
+    .phase-1 .phase-name { color: var(--emerald); }
+    .phase-2 .phase-name { color: var(--blue); }
+    .phase-3 .phase-name { color: var(--yellow); }
+    .phase-scope {
+      font-size: .8rem;
+      color: var(--text-mid);
+      margin-bottom: 20px;
+      line-height: 1.7;
+    }
+    .phase-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: .75rem;
+    }
+    .phase-weeks { color: var(--text-mid); }
+    .phase-cost {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: .05em;
+    }
+    .phase-1 .phase-cost { color: var(--emerald); }
+    .phase-2 .phase-cost { color: var(--blue); }
+    .phase-3 .phase-cost { color: var(--yellow); }
+
+    /* ─── Tech stack ─── */
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 32px;
+    }
+    .tech-item {
+      background: var(--card);
+      border: 1px solid var(--bd);
+      padding: 20px 16px;
+      text-align: center;
+      transition: border-color .3s;
+    }
+    .tech-item:hover { border-color: var(--emerald-bd); }
+    .tech-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: .06em;
+      color: var(--emerald);
+      margin-bottom: 6px;
+    }
+    .tech-role { font-size: .68rem; color: var(--text-faint); }
+
+    /* ─── Sub headings ─── */
+    .sub-heading {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: .06em;
+      margin-bottom: 16px;
+      margin-top: 40px;
+    }
+
+    /* ─── Footer ─── */
+    footer {
+      background: var(--bg-sub);
+      border-top: 1px solid var(--bd);
+      padding: 48px;
+      text-align: center;
+    }
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      color: var(--emerald);
+      letter-spacing: .1em;
+      margin-bottom: 12px;
+    }
+    .footer-tagline {
+      font-size: .75rem;
+      color: var(--text-faint);
+      letter-spacing: .12em;
+    }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .container { padding: 0 20px; }
+      section { padding: 64px 0; }
+      #hero { padding: 120px 0 64px; }
+      .info-bar { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+      .card-grid { grid-template-columns: minmax(0, 1fr); }
+      .kpi-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .phase-grid { grid-template-columns: minmax(0, 1fr); }
+      .tech-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .chat-frame { max-width: 100%; }
+      .node-branch { flex-direction: column; }
+      .diagram-log { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- Navigation -->
+<nav>
+  <div class="nav-logo">SENKODE</div>
+  <ul class="nav-links">
+    <li><a href="#overview">概要</a></li>
+    <li><a href="#architecture">構成図</a></li>
+    <li><a href="#requirements">機能要件</a></li>
+    <li><a href="#mockup">チャットUI</a></li>
+    <li><a href="#prompt">プロンプト設計</a></li>
+    <li><a href="#phases">フェーズ</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="container">
+    <div class="badge reveal">
+      <span class="badge-dot"></span>
+      APP REQUIREMENTS / EC × AI Customer Support
+    </div>
+    <h1 class="hero-title reveal">
+      ECカスタマーサポート<br><span>AIチャットボット</span><br>要件定義書
+    </h1>
+    <div class="info-bar reveal">
+      <div class="info-item">
+        <div class="info-label">クライアント種別</div>
+        <div class="info-value">アパレル系EC</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">対象規模</div>
+        <div class="info-value">年商 3億円</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">問い合わせ件数</div>
+        <div class="info-value">1日 80〜120件</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">作成日</div>
+        <div class="info-value">2026-05-10</div>
+      </div>
+    </div>
+    <div class="hero-summary reveal">
+      1日<strong>120件</strong>の問い合わせの<strong>65%</strong>をAIが即時対応。CSチームの工数を月<strong>220時間削減</strong>し、人的コスト<strong>月30万円</strong>の削減を目指す。
+    </div>
+  </div>
+</section>
+
+<!-- OVERVIEW -->
+<section id="overview">
+  <div class="container">
+    <div class="section-label reveal">01 — PROJECT OVERVIEW</div>
+    <h2 class="section-title reveal">プロジェクト概要</h2>
+
+    <!-- 課題 -->
+    <div class="card-grid">
+      <div class="card reveal">
+        <div class="card-num">01</div>
+        <div class="card-title">問い合わせの65%は繰り返し</div>
+        <div class="card-body">サイズ・在庫・配送・返品の4パターンが全体の65%を占める。同じ質問に毎日何十件も個別返信しているのが現状。</div>
+      </div>
+      <div class="card reveal">
+        <div class="card-num">02</div>
+        <div class="card-title">営業時間外に24時間対応できない</div>
+        <div class="card-body">問い合わせの約30%が夜間・休日に発生。翌営業日までの返信遅延が購買機会の損失につながっている。</div>
+      </div>
+      <div class="card reveal">
+        <div class="card-num">03</div>
+        <div class="card-title">CS担当者がルーティン対応に疲弊</div>
+        <div class="card-body">定型質問への返信にリソースが集中し、クレーム・複雑案件への対応品質が低下。離職リスクも高まっている。</div>
+      </div>
+    </div>
+
+    <!-- 解決アプローチ -->
+    <div class="section-label reveal" style="margin-top: 8px;">SOLUTION APPROACH</div>
+    <div class="approach-list">
+      <div class="approach-item reveal">
+        <div class="approach-arrow">→</div>
+        <div class="approach-text"><strong>Claude APIを使った自然言語理解で「意図を読んで回答」</strong>——「Mサイズって在庫ありますか？」のように曖昧な表現でも意図を分類し、Shopify APIからリアルタイムデータを取得して回答する。</div>
+      </div>
+      <div class="approach-item reveal">
+        <div class="approach-arrow">→</div>
+        <div class="approach-text"><strong>FAQデータベースとの連携で正確な情報を提供</strong>——サイズガイド・返品ポリシー・配送エリア等の構造化データをSupabaseで管理。AIが毎回最新の情報を参照して回答する。</div>
+      </div>
+      <div class="approach-item reveal">
+        <div class="approach-arrow">→</div>
+        <div class="approach-text"><strong>人間エスカレーションの自動判定</strong>——顧客の怒り感情検出・3回以上の解決失敗・返金交渉の発生を検知し、Slack経由でCS担当者に即時通知。対応漏れをゼロにする。</div>
+      </div>
+    </div>
+
+    <!-- KPI -->
+    <div class="kpi-row">
+      <div class="kpi-box reveal">
+        <div class="kpi-number">78<span class="kpi-unit">%</span></div>
+        <div class="kpi-label">一次解決率の目標</div>
+      </div>
+      <div class="kpi-box reveal">
+        <div class="kpi-number">2<span class="kpi-unit">秒</span></div>
+        <div class="kpi-label">平均応答時間</div>
+      </div>
+      <div class="kpi-box reveal">
+        <div class="kpi-number">220<span class="kpi-unit">h</span></div>
+        <div class="kpi-label">月間CS工数削減時間</div>
+      </div>
+      <div class="kpi-box reveal">
+        <div class="kpi-number">4.2<span class="kpi-unit">↑</span></div>
+        <div class="kpi-label">顧客満足度スコア目標（5.0満点）</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ARCHITECTURE -->
+<section id="architecture">
+  <div class="container">
+    <div class="section-label reveal">02 — SYSTEM ARCHITECTURE</div>
+    <h2 class="section-title reveal">システム構成図</h2>
+
+    <div class="diagram-wrap reveal">
+      <div class="diagram-node">
+        <div class="node-box">顧客 — サイト上のチャットウィジェット</div>
+        <div class="node-desc">サイト右下に固定表示。クリックで展開</div>
+      </div>
+      <div class="node-arrow">
+        <span class="node-note">WebSocket接続（リアルタイム双方向通信）</span>
+      </div>
+      <div class="diagram-node">
+        <div class="node-box">フロントエンド — React チャットUI</div>
+        <div class="node-desc">メッセージ送受信・タイピングインジケーター・エスカレーションボタン</div>
+      </div>
+      <div class="node-arrow">
+        <span class="node-note">API呼び出し — POST /api/chat</span>
+      </div>
+      <div class="diagram-node">
+        <div class="node-box">バックエンド — Next.js API Routes（Vercel）</div>
+        <div class="node-desc">意図分類・コンテキスト管理・セッション維持・エスカレーション判定</div>
+      </div>
+      <div class="node-arrow">
+        <span class="node-note">構造化プロンプト送信</span>
+      </div>
+      <div class="diagram-node">
+        <div class="node-box">Claude API — claude-sonnet-4-6</div>
+        <div class="node-desc">自然言語理解・カテゴリ判定・回答文生成・感情検出</div>
+      </div>
+      <div class="node-arrow">
+        <span class="node-note">カテゴリ判定結果に応じて並列データ取得</span>
+      </div>
+      <div class="node-branch">
+        <div class="branch-item">
+          <div class="branch-title">FAQ DB</div>
+          Supabase — サイズガイド・返品ポリシー・配送情報
+        </div>
+        <div class="branch-item">
+          <div class="branch-title">注文DB</div>
+          Shopify API — 注文状況・追跡番号・配送予定
+        </div>
+        <div class="branch-item">
+          <div class="branch-title">在庫DB</div>
+          Shopify — SKU別在庫数・入荷予定日
+        </div>
+      </div>
+      <div class="node-arrow">
+        <span class="node-note">回答生成 + 返答</span>
+      </div>
+      <div class="diagram-log">
+        <div class="log-box">
+          <div class="log-title">ログ・分析</div>
+          Supabase + ダッシュボード — 会話ログ・カテゴリ分布・解決率
+        </div>
+        <div class="log-box">
+          <div class="log-title">エスカレーション通知</div>
+          Slack Webhook — CS担当者への即時アラート・会話サマリー添付
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FUNCTIONAL REQUIREMENTS -->
+<section id="requirements">
+  <div class="container">
+    <div class="section-label reveal">03 — FUNCTIONAL REQUIREMENTS</div>
+    <h2 class="section-title reveal">機能要件</h2>
+
+    <!-- A: 顧客向け -->
+    <h3 class="sub-heading reveal" style="color: var(--emerald);">A. 顧客向け機能</h3>
+    <div class="tbl-wrap reveal">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:30%">機能</th>
+            <th style="width:40%">詳細仕様</th>
+            <th style="width:15%">優先度</th>
+            <th style="width:15%">フェーズ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>チャットウィジェット</td>
+            <td>サイト右下に固定表示（position: fixed）。クリックで展開・最小化。モバイル対応（min 48px タッチターゲット）</td>
+            <td><span class="tag tag-high">HIGH</span></td>
+            <td><span class="tag tag-ph">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>テキスト入力・送信</td>
+            <td>Enterキー送信・Shift+Enterで改行。最大500文字制限。送信中はローディング表示（タイピングインジケーター）</td>
+            <td><span class="tag tag-high">HIGH</span></td>
+            <td><span class="tag tag-ph">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>チャット履歴の表示</td>
+            <td>セッション内の会話履歴を保持・表示。タイムスタンプ付き。ページリロードでは消去（セッションストレージ活用）</td>
+            <td><span class="tag tag-high">HIGH</span></td>
+            <td><span class="tag tag-ph">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>よく使われる質問のクイック選択</td>
+            <td>「在庫確認」「注文状況」「返品方法」「サイズガイド」のチップを初回表示。タップで即送信</td>
+            <td><span class="tag tag-med">MED</span></td>
+            <td><span class="tag tag-ph">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>「人間のCSに繋ぐ」ボタン</td>
+            <td>チャット画面内に常時表示。クリックでエスカレーション開始。Slack通知が即座に発火する</td>
+            <td><span class="tag tag-high">HIGH</span></td>
+            <td><span class="tag tag-ph">Phase 1</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- B: AI処理 -->
+    <h3 class="sub-heading reveal" style="color: var(--blue);">B. AI処理 — Claude API統合</h3>
+    <div class="tbl-wrap reveal">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:30%">機能</th>
+            <th style="width:40%">詳細仕様</th>
+            <th style="width:15%">優先度</th>
+            <th style="width:15%">フェーズ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>問い合わせ意図の分類</td>
+            <td>サイズ / 在庫 / 配送 / 返品 / その他 の5カテゴリ。分類結果に応じてデータ取得先を切り替える</td>
+            <td><span class="tag tag-high">HIGH</span></td>
+            <td><span class="tag tag-ph">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>Shopify APIとのリアルタイム連携</td>
+            <td>注文番号・SKUを抽出し、Shopify APIから在庫数・注文状況・追跡番号を取得。回答に埋め込む</td>
+            <td><span class="tag tag-high">HIGH</span></td>
+            <td><span class="tag tag-ph">Phase 2</span></td>
+          </tr>
+          <tr>
+            <td>FAQ DBからの回答生成</td>
+            <td>Supabaseのfaq_itemsテーブルから関連エントリを検索（ベクトル検索 or キーワードマッチ）。Claudeが自然文に組み立て直して返答する</td>
+            <td><span class="tag tag-high">HIGH</span></td>
+            <td><span class="tag tag-ph">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>エスカレーション判定ロジック</td>
+            <td>（1）3回以上「理解できません」と応答 / （2）返金・キャンセル交渉の発生 / （3）怒り・失望感情の検出 — のいずれかでSlack通知を発火</td>
+            <td><span class="tag tag-high">HIGH</span></td>
+            <td><span class="tag tag-ph">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>多言語対応</td>
+            <td>日本語・英語・中国語（簡体）の自動言語検出と返答。ウィジェット上部に言語切り替えボタンも設置</td>
+            <td><span class="tag tag-low">LOW</span></td>
+            <td><span class="tag tag-ph">Phase 3</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- C: CS管理ダッシュボード -->
+    <h3 class="sub-heading reveal" style="color: var(--yellow);">C. CS管理ダッシュボード</h3>
+    <div class="tbl-wrap reveal">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:30%">機能</th>
+            <th style="width:40%">詳細仕様</th>
+            <th style="width:15%">優先度</th>
+            <th style="width:15%">フェーズ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>リアルタイムチャット監視</td>
+            <td>Supabase Realtimeで進行中の会話をリアルタイム表示。CS担当者はいつでも割り込み可能</td>
+            <td><span class="tag tag-high">HIGH</span></td>
+            <td><span class="tag tag-ph">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>エスカレーション通知</td>
+            <td>Slack Webhookで担当者のチャンネルに会話サマリー＋顧客名を送信。ダッシュボードにも赤枠で表示</td>
+            <td><span class="tag tag-high">HIGH</span></td>
+            <td><span class="tag tag-ph">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>FAQ・回答テンプレートの編集</td>
+            <td>CS担当者がノーコードでFAQを追加・編集・削除できる管理画面。変更は即座にAI回答に反映される</td>
+            <td><span class="tag tag-med">MED</span></td>
+            <td><span class="tag tag-ph">Phase 2</span></td>
+          </tr>
+          <tr>
+            <td>会話ログ・分析レポート</td>
+            <td>カテゴリ別の問い合わせ分布・一次解決率・平均応答時間・エスカレーション率を週次・月次で集計</td>
+            <td><span class="tag tag-med">MED</span></td>
+            <td><span class="tag tag-ph">Phase 3</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- D: 非機能要件 -->
+    <h3 class="sub-heading reveal" style="color: var(--text);">D. 非機能要件</h3>
+    <div class="tbl-wrap reveal">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:20%">項目</th>
+            <th style="width:30%">要件</th>
+            <th style="width:50%">対応方法</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>応答速度</td>
+            <td>2秒以内（Claude API呼び出し含む）</td>
+            <td>ストリーミングレスポンスでトークンを逐次表示。Shopify API並列取得でレイテンシを最小化</td>
+          </tr>
+          <tr>
+            <td>同時接続</td>
+            <td>最大500セッション</td>
+            <td>Vercelのサーバーレス関数による自動スケーリング。WebSocket接続はSupabase Realtimeが管理</td>
+          </tr>
+          <tr>
+            <td>稼働率</td>
+            <td>99.9%（月間停止8.7分以内）</td>
+            <td>Vercelの冗長構成。Claude API障害時はFAQ DBのみで簡易回答するフォールバックを実装</td>
+          </tr>
+          <tr>
+            <td>個人情報</td>
+            <td>会話ログの暗号化・90日後自動削除</td>
+            <td>Supabase RLSで行レベルアクセス制御。TLS 1.3通信。90日経過後の自動削除ジョブをcronで管理</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- CHAT MOCKUP -->
+<section id="mockup">
+  <div class="container">
+    <div class="section-label reveal">04 — UI MOCKUP</div>
+    <h2 class="section-title reveal">チャット画面モックアップ</h2>
+
+    <div class="callout reveal">
+      <strong>実装イメージ：</strong>サイト右下に固定されたウィジェットを展開した状態。AIの返答はストリーミングで逐次表示される。Shopify APIから取得した在庫数・配送情報をリアルタイムで埋め込んで返答する。
+    </div>
+
+    <div class="chat-frame reveal">
+      <!-- Header -->
+      <div class="chat-header">
+        <div class="chat-avatar">AI</div>
+        <div class="chat-header-info">
+          <div class="chat-name">カスタマーサポート AI</div>
+          <div class="chat-status">
+            <span class="chat-status-dot"></span>
+            オンライン — 24時間対応
+          </div>
+        </div>
+      </div>
+
+      <!-- Conversation -->
+      <div class="chat-body">
+
+        <!-- AI greeting -->
+        <div class="msg msg-ai">
+          <div class="msg-icon">AI</div>
+          <div>
+            <div class="msg-bubble">こんにちは。ご不明な点はお気軽にどうぞ。在庫・注文状況・返品など、何でもお答えします。</div>
+            <div class="msg-meta">10:42</div>
+          </div>
+        </div>
+
+        <!-- Customer 1 -->
+        <div class="msg msg-user">
+          <div class="msg-icon">お客様</div>
+          <div>
+            <div class="msg-bubble">Mサイズを注文したいのですが在庫はありますか？</div>
+            <div class="msg-meta">10:43</div>
+          </div>
+        </div>
+
+        <!-- AI response 1 -->
+        <div class="msg msg-ai">
+          <div class="msg-icon">AI</div>
+          <div>
+            <div class="msg-bubble">ただいま確認いたします... SKU: AP-SHIRTS-WHT-M の在庫は残り<strong style="color: var(--emerald-lt);">8点</strong>ございます。こちらのページからご注文いただけます: <span class="msg-link">商品ページを開く →</span></div>
+            <div class="msg-meta">10:43 — 在庫DB参照済み</div>
+          </div>
+        </div>
+
+        <!-- Customer 2 -->
+        <div class="msg msg-user">
+          <div class="msg-icon">お客様</div>
+          <div>
+            <div class="msg-bubble">注文番号 #12345 の配送状況を教えてください</div>
+            <div class="msg-meta">10:45</div>
+          </div>
+        </div>
+
+        <!-- AI response 2 -->
+        <div class="msg msg-ai">
+          <div class="msg-icon">AI</div>
+          <div>
+            <div class="msg-bubble">ご注文番号 #12345 を確認しました。現在ヤマト運輸で配送中で、本日<strong style="color: var(--emerald-lt);">18時〜20時</strong>にお届け予定です。追跡番号: <span class="msg-link">1234-5678-9012 →</span></div>
+            <div class="msg-meta">10:45 — Shopify API参照済み</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Input bar -->
+      <div class="chat-input-bar">
+        <div class="chat-input-mock">メッセージを入力...</div>
+        <div class="chat-escalate">CSに繋ぐ</div>
+        <div class="chat-send-btn">送信</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROMPT DESIGN -->
+<section id="prompt">
+  <div class="container">
+    <div class="section-label reveal">05 — PROMPT ENGINEERING</div>
+    <h2 class="section-title reveal">プロンプト設計</h2>
+
+    <div class="callout reveal">
+      <strong>設計方針：</strong>
+      顧客の感情状態を常時モニタリングし、エスカレーション判定を最優先ルールとして定義する。
+      Shopify APIから取得したリアルタイムデータはsystem promptのコンテキストに注入し、Claudeが誤情報を生成しないよう「必ず提供データのみを回答に使用する」ルールを明記する。
+    </div>
+
+    <div class="prompt-block reveal">
+      <span class="prompt-key">system</span>: <span class="prompt-comment">|</span>
+      あなたは[ブランド名]のカスタマーサポートAIです。
+
+      <span class="prompt-comment">【役割】</span>
+      - 顧客の問い合わせに親切・簡潔・正確に回答する
+      - 在庫・注文・配送に関してはShopify APIの最新データを参照する
+      - 感情的なクレームには謝罪を先に、解決策を後に提示する
+      - 以下の場合は必ず人間CSへエスカレーション:
+        <span class="prompt-rule">(1) 3回以上「理解できません」と応答した場合</span>
+        <span class="prompt-rule">(2) 返金・キャンセル交渉が発生した場合</span>
+        <span class="prompt-rule">(3) 顧客が怒り・失望の感情を表現した場合</span>
+
+      <span class="prompt-comment">【口調】</span>
+      - 丁寧だが堅すぎない。親しみやすく、でも正確に。
+      - 「〜でございます」は使わない。「〜です/ます」で統一。
+
+      <span class="prompt-comment">【現在のコンテキスト】</span>
+      在庫情報: <span class="prompt-val">{inventory_data}</span>
+      注文情報: <span class="prompt-val">{order_data}</span>
+      過去の会話: <span class="prompt-val">{conversation_history}</span>
+      エスカレーション回数: <span class="prompt-val">{escalation_count}</span>
+
+      ---
+
+      <span class="prompt-key">user</span>: <span class="prompt-comment">|</span>
+      <span class="prompt-val">{customer_message}</span>
+
+      ---
+
+      <span class="prompt-comment"># 期待する出力形式（JSON）</span>
+      {
+        <span class="prompt-key">"intent"</span>: <span class="prompt-val">"size | stock | shipping | return | other"</span>,
+        <span class="prompt-key">"sentiment"</span>: <span class="prompt-val">"positive | neutral | negative | angry"</span>,
+        <span class="prompt-key">"should_escalate"</span>: <span class="prompt-val">true | false</span>,
+        <span class="prompt-key">"response_text"</span>: <span class="prompt-val">"顧客への返答テキスト"</span>,
+        <span class="prompt-key">"shopify_query"</span>: <span class="prompt-val">"必要な場合のみ: order_id または sku"</span>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- PHASES -->
+<section id="phases">
+  <div class="container">
+    <div class="section-label reveal">06 — DEVELOPMENT ROADMAP</div>
+    <h2 class="section-title reveal">開発フェーズ・工数</h2>
+
+    <div class="phase-grid">
+      <div class="phase-card phase-1 reveal">
+        <div class="phase-label">PHASE 01 / MVP</div>
+        <div class="phase-name">コア機能</div>
+        <div class="phase-scope">チャットUI実装（React）。FAQ DB連携によるAI回答。エスカレーション判定ロジック。Slack Webhook通知。CS監視ダッシュボード基本版。</div>
+        <div class="phase-meta">
+          <span class="phase-weeks">8 週間</span>
+          <span class="phase-cost">¥1,600,000</span>
+        </div>
+      </div>
+      <div class="phase-card phase-2 reveal">
+        <div class="phase-label">PHASE 02 / GROWTH</div>
+        <div class="phase-name">Shopify連携</div>
+        <div class="phase-scope">Shopify APIリアルタイム連携（注文状況・在庫数）。注文番号・SKUの自動抽出。配送追跡番号の直接返答機能。</div>
+        <div class="phase-meta">
+          <span class="phase-weeks">4 週間</span>
+          <span class="phase-cost">¥800,000</span>
+        </div>
+      </div>
+      <div class="phase-card phase-3 reveal">
+        <div class="phase-label">PHASE 03 / SCALE</div>
+        <div class="phase-name">多言語・分析</div>
+        <div class="phase-scope">多言語対応（英語・中国語）。会話ログ分析ダッシュボード（カテゴリ分布・解決率グラフ）。プロンプト管理画面（ノーコード編集）。</div>
+        <div class="phase-meta">
+          <span class="phase-weeks">4 週間</span>
+          <span class="phase-cost">¥800,000</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout reveal" style="margin-top: 32px;">
+      <strong>合計：</strong> 16 週間 / ¥3,200,000（税抜）。Phase 1のMVPのみの先行着手も可能。各フェーズは独立しており、進捗に応じてスコープを調整できる。
+    </div>
+
+    <!-- Tech stack -->
+    <div class="section-label reveal" style="margin-top: 64px;">TECHNOLOGY STACK</div>
+    <div class="tech-grid">
+      <div class="tech-item reveal">
+        <div class="tech-name">Next.js</div>
+        <div class="tech-role">フロント / API Routes</div>
+      </div>
+      <div class="tech-item reveal">
+        <div class="tech-name">React</div>
+        <div class="tech-role">チャットUI / WebSocket</div>
+      </div>
+      <div class="tech-item reveal">
+        <div class="tech-name">Supabase</div>
+        <div class="tech-role">DB / Realtime / RLS</div>
+      </div>
+      <div class="tech-item reveal">
+        <div class="tech-name">Claude API</div>
+        <div class="tech-role">AI回答エンジン</div>
+      </div>
+      <div class="tech-item reveal">
+        <div class="tech-name">Shopify</div>
+        <div class="tech-role">注文・在庫API</div>
+      </div>
+      <div class="tech-item reveal">
+        <div class="tech-name">Vercel</div>
+        <div class="tech-role">ホスティング</div>
+      </div>
+      <div class="tech-item reveal">
+        <div class="tech-name">TypeScript</div>
+        <div class="tech-role">型安全開発</div>
+      </div>
+      <div class="tech-item reveal">
+        <div class="tech-name">Slack</div>
+        <div class="tech-role">Webhook 通知</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-logo">SENKODE</div>
+  <div class="footer-tagline">ONE FLASH OF INSIGHT. ENCODED FOREVER.</div>
+  <div style="margin-top: 24px; font-size: .72rem; color: var(--text-faint);">
+    This document is a portfolio specimen by Senkode. &nbsp;|&nbsp; 2026-05-10
+  </div>
+</footer>
+
+<script>
+  // ─── Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring   = document.getElementById('cursor-ring');
+  let mouseX = 0, mouseY = 0;
+  let ringX  = 0, ringY  = 0;
+
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    cursor.style.left = mouseX + 'px';
+    cursor.style.top  = mouseY + 'px';
+  });
+
+  function animateRing() {
+    ringX += (mouseX - ringX) * 0.14;
+    ringY += (mouseY - ringY) * 0.14;
+    ring.style.left = ringX + 'px';
+    ring.style.top  = ringY + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  document.querySelectorAll('a, button, .card, .approach-item, .tech-item, .chat-send-btn, .chat-escalate').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.width  = '18px';
+      cursor.style.height = '18px';
+      ring.style.width    = '56px';
+      ring.style.height   = '56px';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.width  = '10px';
+      cursor.style.height = '10px';
+      ring.style.width    = '36px';
+      ring.style.height   = '36px';
+    });
+  });
+
+  // ─── Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer  = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  revealEls.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

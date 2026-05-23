@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>みらい学習塾 | 成績を上げる前に、勉強が嫌いになった理由を取り除く</title>
+  <meta name="description" content="成績を上げる前に、勉強が嫌いになった理由を取り除く。つまずき診断から始める、地域密着型の中学・高校受験対応学習塾。無料体験授業受付中。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@100;200;300;400&display=swap" rel="stylesheet">
+  <style>
+    [class*="grid"] > *, [class*="inner"] > *, [class*="wrap"] > * { min-width: 0; }
+
+    img, video, iframe { max-width: 100%; height: auto; }
+
+    html { overflow-x: hidden; }
+
+    :root {
+      --bg:          #070912;
+      --bg-sub:      #0A0D1A;
+      --card:        #0F1225;
+      --indigo:      #6366F1;
+      --indigo-lt:   #818CF8;
+      --indigo-bd:   rgba(99,102,241,0.25);
+      --indigo-glow: rgba(99,102,241,0.1);
+      --yellow:      #FBBF24;
+      --yellow-bd:   rgba(251,191,36,0.3);
+      --green:       #34D399;
+      --green-bd:    rgba(52,211,153,0.25);
+      --text:        #EEF0F8;
+      --text-mid:    rgba(238,240,248,0.55);
+      --text-faint:  rgba(238,240,248,0.22);
+      --bd:          rgba(99,102,241,0.12);
+      --nav-bg:      rgba(7,9,18,0.9);
+      --card-hover:  #131630;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--indigo); }
+
+    /* CURSOR */
+    .cursor-dot  { position:fixed;width:6px;height:6px;background:var(--indigo-lt);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%); }
+    .cursor-ring { position:fixed;width:28px;height:28px;border:1px solid rgba(99,102,241,0.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width 0.25s,height 0.25s; }
+    .cursor-ring.big { width:44px;height:44px; }
+
+    /* GRID BG */
+    body::before {
+      content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+      background-image:linear-gradient(rgba(99,102,241,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,0.025) 1px,transparent 1px);
+      background-size:60px 60px;
+    }
+
+    /* NAV */
+    nav {
+      position:fixed;top:0;left:0;right:0;z-index:100;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:18px 60px;
+      background:var(--nav-bg);backdrop-filter:blur(12px);
+      border-bottom:1px solid var(--bd);
+    }
+    .nav-logo { display:flex;align-items:center;gap:10px;text-decoration:none; }
+    .nav-brand { font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:0.15em;color:var(--indigo-lt); }
+    .nav-sub   { font-size:9px;letter-spacing:0.2em;color:var(--text-faint); }
+    .nav-links { display:flex;align-items:center;gap:28px; }
+    .nav-link  { font-size:11px;letter-spacing:0.15em;color:var(--text-mid);text-decoration:none;transition:color 0.2s; }
+    .nav-link:hover { color:var(--text); }
+    .nav-cta {
+      font-size:11px;letter-spacing:0.1em;padding:9px 22px;
+      background:var(--indigo);color:var(--text);text-decoration:none;font-weight:400;
+      transition:background 0.2s;
+    }
+    .nav-cta:hover { background:var(--indigo-lt); }
+
+    /* REVEAL */
+    .reveal { opacity:0;transform:translateY(24px);transition:opacity 0.7s,transform 0.7s;   will-change: opacity, transform;
+    }
+    .reveal.visible { opacity:1;transform:none; }
+
+    /* ── HERO ── */
+    .hero {
+      position:relative;z-index:2;
+      min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+      padding:120px 60px 80px;text-align:center;
+    }
+    .hero::after {
+      content:'';position:absolute;inset:0;z-index:-1;
+      background:radial-gradient(ellipse 60% 55% at 50% 58%, rgba(99,102,241,0.08) 0%, transparent 70%);
+    }
+    .hero-badge {
+      display:inline-flex;align-items:center;gap:8px;
+      border:1px solid var(--indigo-bd);padding:6px 18px;margin-bottom:40px;
+      font-size:10px;letter-spacing:0.22em;color:var(--indigo-lt);
+    }
+    .hero-badge::before { content:'';width:6px;height:6px;background:var(--indigo-lt);border-radius:50%;animation:blink 1.4s ease-in-out infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.15} }
+
+    .hero-title {
+      font-family:'Bebas Neue',sans-serif;
+      font-size:clamp(48px,8.5vw,104px);line-height:1.05;
+      letter-spacing:0.04em;margin-bottom:24px;
+    }
+    .hero-title .accent-indigo { color:var(--indigo-lt); }
+    .hero-title .accent-yellow { color:var(--yellow); }
+
+    .hero-sub {
+      font-size:clamp(13px,1.8vw,16px);font-weight:200;
+      color:var(--text-mid);max-width:640px;
+      width: 100%;line-height:2.2;margin:0 auto 52px;
+    }
+
+    .hero-stat-row {
+      display:flex;gap:64px;justify-content:center;flex-wrap:wrap;margin-bottom:52px;
+    }
+    .hero-stat { text-align:center;position:relative; }
+    .hero-stat + .hero-stat::before {
+      content:'';position:absolute;left:-32px;top:50%;transform:translateY(-50%);
+      width:1px;height:40px;background:var(--bd);
+    }
+    .hero-stat-num {
+      font-family:'Bebas Neue',sans-serif;font-size:56px;line-height:1;
+      color:var(--indigo-lt);letter-spacing:0.02em;display:block;
+    }
+    .hero-stat-unit { font-size:18px;color:var(--text-mid); }
+    .hero-stat-label { font-size:10px;letter-spacing:0.15em;color:var(--text-faint);margin-top:6px;display:block; }
+
+    .hero-cta-row { display:flex;gap:16px;justify-content:center;flex-wrap:wrap; }
+    .btn-primary {
+      font-size:12px;letter-spacing:0.15em;padding:16px 44px;
+      background:var(--indigo);color:var(--text);text-decoration:none;font-weight:400;
+      transition:background 0.2s,transform 0.2s;display:inline-block;
+    }
+    .btn-primary:hover { background:var(--indigo-lt);transform:translateY(-2px); }
+    .btn-ghost {
+      font-size:12px;letter-spacing:0.15em;padding:16px 44px;
+      border:1px solid var(--indigo-bd);color:var(--indigo-lt);text-decoration:none;
+      transition:background 0.2s;display:inline-block;
+    }
+    .btn-ghost:hover { background:var(--indigo-glow); }
+    .hero-note { font-size:10px;letter-spacing:0.1em;color:var(--text-faint);margin-top:20px; }
+
+    /* ── SECTION BASE ── */
+    .section { position:relative;z-index:2;padding:100px 60px; }
+    .section-inner { max-width:1100px;
+      width: 100%;margin:0 auto; }
+    .section-label { font-size:10px;letter-spacing:0.3em;color:var(--indigo-lt);margin-bottom:16px; }
+    .section-title {
+      font-family:'Bebas Neue',sans-serif;
+      font-size:clamp(30px,5vw,56px);letter-spacing:0.04em;
+      line-height:1.1;margin-bottom:48px;
+    }
+    .section-title .sub {
+      font-family:'Noto Sans JP',sans-serif;font-size:0.45em;font-weight:200;
+      display:block;color:var(--text-mid);letter-spacing:0.05em;margin-top:10px;
+    }
+
+    /* ── PROBLEM ── */
+    .problem-grid { display:grid;grid-template-columns:repeat(3,minmax(0, 1fr));gap:2px; }
+    .problem-card {
+      background:var(--card);padding:36px 28px;position:relative;overflow:hidden;
+      border-bottom:2px solid transparent;transition:border-color 0.3s,background 0.3s;
+    }
+    .problem-card:hover { background:var(--card-hover);border-bottom-color:var(--yellow); }
+    .problem-num {
+      font-family:'Bebas Neue',sans-serif;font-size:72px;
+      color:rgba(251,191,36,0.06);line-height:1;position:absolute;top:16px;right:20px;
+    }
+    .problem-icon { font-size:28px;margin-bottom:18px;display:block; }
+    .problem-title { font-size:15px;font-weight:400;margin-bottom:12px;letter-spacing:0.02em; }
+    .problem-body  { font-size:13px;line-height:2;color:var(--text-mid); }
+    .problem-quote {
+      margin-top:16px;padding:12px 16px;
+      background:rgba(251,191,36,0.04);border-left:2px solid var(--yellow-bd);
+      font-size:12px;color:var(--text-mid);font-style:italic;line-height:1.9;
+    }
+
+    /* ── METHOD ── */
+    .method-wrap { background:var(--bg-sub);padding:100px 60px; }
+    .method-list { display:flex;flex-direction:column;gap:2px;margin-top:48px; }
+    .method-item {
+      background:var(--card);padding:44px 48px;
+      display:grid;grid-template-columns:72px minmax(0, 1fr);gap:32px;align-items:flex-start;
+      border-left:3px solid transparent;transition:border-color 0.3s,background 0.3s;
+    }
+    .method-item:hover { background:var(--card-hover);border-left-color:var(--indigo); }
+    .method-num-wrap { text-align:center;padding-top:4px; }
+    .method-num {
+      font-family:'Bebas Neue',sans-serif;font-size:44px;line-height:1;
+      color:var(--indigo-lt);display:block;
+    }
+    .method-num-label { font-size:8px;letter-spacing:0.2em;color:var(--text-faint);display:block;margin-top:2px; }
+    .method-badge {
+      display:inline-block;margin-bottom:14px;
+      font-size:9px;letter-spacing:0.2em;padding:4px 12px;
+      border:1px solid var(--indigo-bd);color:var(--indigo-lt);
+    }
+    .method-content h3 { font-size:19px;font-weight:300;margin-bottom:12px;letter-spacing:0.02em; }
+    .method-content p  { font-size:13px;line-height:2.1;color:var(--text-mid); }
+    .method-tip {
+      margin-top:14px;padding:10px 14px;
+      background:var(--indigo-glow);border:1px solid var(--bd);
+      font-size:11px;color:var(--indigo-lt);letter-spacing:0.04em;line-height:1.8;
+      display:inline-block;
+    }
+
+    /* ── COURSES ── */
+    .course-grid { display:grid;grid-template-columns:repeat(3,minmax(0, 1fr));gap:2px;margin-top:48px; }
+    .course-card {
+      background:var(--card);padding:36px 28px;
+      border-top:2px solid transparent;transition:border-top-color 0.3s,background 0.3s;
+    }
+    .course-card:hover { background:var(--card-hover);border-top-color:var(--green); }
+    .course-badge {
+      display:inline-block;font-size:9px;letter-spacing:0.2em;padding:4px 12px;
+      border:1px solid var(--green-bd);color:var(--green);margin-bottom:18px;
+    }
+    .course-grade { font-size:12px;letter-spacing:0.1em;color:var(--text-faint);margin-bottom:6px; }
+    .course-name { font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:0.04em;color:var(--text);margin-bottom:18px;line-height:1.15; }
+    .course-desc { font-size:13px;line-height:2;color:var(--text-mid);margin-bottom:24px; }
+    .course-table { width:100%;border-collapse:collapse; }
+    .course-table td { font-size:11px;padding:8px 0;border-bottom:1px solid var(--bd);color:var(--text-mid); }
+    .course-table td:first-child { color:var(--text-faint);letter-spacing:0.08em;width:40%; }
+    .course-table td strong { color:var(--text);font-weight:400; }
+    .course-price {
+      margin-top:20px;padding:12px 0;border-top:1px solid var(--bd);
+      font-size:11px;color:var(--text-faint);letter-spacing:0.06em;
+    }
+    .course-price strong { font-size:18px;color:var(--indigo-lt);font-weight:300;font-family:'Bebas Neue',sans-serif;letter-spacing:0.04em; }
+
+    /* ── TEACHERS ── */
+    .teacher-grid { display:grid;grid-template-columns:repeat(2,minmax(0, 1fr));gap:2px;margin-top:48px; }
+    .teacher-card {
+      background:var(--card);padding:44px 40px;
+      border-bottom:2px solid transparent;transition:border-color 0.3s,background 0.3s;
+    }
+    .teacher-card:hover { background:var(--card-hover);border-bottom-color:var(--indigo); }
+    .teacher-initial {
+      font-family:'Bebas Neue',sans-serif;font-size:64px;line-height:1;
+      color:var(--indigo-bd);letter-spacing:0.04em;margin-bottom:20px;
+    }
+    .teacher-tag { font-size:9px;letter-spacing:0.2em;color:var(--indigo-lt);margin-bottom:10px;display:block; }
+    .teacher-name { font-size:20px;font-weight:300;letter-spacing:0.04em;margin-bottom:6px; }
+    .teacher-role { font-size:11px;letter-spacing:0.12em;color:var(--text-faint);margin-bottom:20px; }
+    .teacher-bio  { font-size:13px;line-height:2.1;color:var(--text-mid); }
+    .teacher-keyword {
+      display:inline-block;margin-top:18px;font-size:10px;letter-spacing:0.12em;
+      padding:4px 12px;background:var(--indigo-glow);border:1px solid var(--bd);color:var(--indigo-lt);
+    }
+
+    /* ── VOICE ── */
+    .voice-grid { display:grid;grid-template-columns:repeat(3,minmax(0, 1fr));gap:2px;margin-top:48px; }
+    .voice-card { background:var(--card);padding:36px 28px;position:relative;overflow:hidden; }
+    .voice-card::before {
+      content:'\201C';position:absolute;top:-10px;right:16px;
+      font-family:'Bebas Neue',sans-serif;font-size:120px;line-height:1;
+      color:rgba(99,102,241,0.05);pointer-events:none;
+    }
+    .voice-tag { font-size:9px;letter-spacing:0.22em;color:var(--indigo-lt);margin-bottom:14px;display:block; }
+    .voice-text { font-size:13px;line-height:2.1;color:var(--text-mid);margin-bottom:20px; }
+    .voice-meta { font-size:10px;letter-spacing:0.1em;color:var(--text-faint);padding-top:16px;border-top:1px solid var(--bd); }
+    .voice-change {
+      display:inline-block;margin-top:12px;font-size:11px;letter-spacing:0.08em;
+      padding:5px 12px;background:rgba(52,211,153,0.08);border:1px solid var(--green-bd);color:var(--green);
+    }
+
+    /* ── FAQ ── */
+    .faq-list { max-width:760px;
+      width: 100%;margin:0 auto; }
+    .faq-item { border-bottom:1px solid var(--bd);padding:28px 0; }
+    .faq-q {
+      font-size:15px;font-weight:300;cursor:pointer;
+      display:flex;justify-content:space-between;align-items:center;gap:16px;
+    }
+    .faq-q::after { content:'＋';color:var(--indigo-lt);flex-shrink:0;transition:transform 0.3s; }
+    .faq-item.open .faq-q::after { transform:rotate(45deg); }
+    .faq-a {
+      max-height:0;overflow:hidden;transition:max-height 0.4s ease,padding 0.3s;
+      font-size:14px;color:var(--text-mid);line-height:2.1;
+    }
+    .faq-item.open .faq-a { max-height:320px;padding-top:16px; }
+
+    /* ── CTA ── */
+    .cta-section {
+      position:relative;z-index:2;padding:100px 60px;text-align:center;
+      background:var(--bg-sub);border-top:1px solid var(--bd);
+    }
+    .cta-section::before {
+      content:'';position:absolute;inset:0;z-index:0;
+      background:radial-gradient(ellipse 50% 60% at 50% 100%, rgba(99,102,241,0.06) 0%, transparent 70%);
+      pointer-events:none;
+    }
+    .cta-section > * { position:relative;z-index:1; }
+    .cta-title {
+      font-family:'Bebas Neue',sans-serif;
+      font-size:clamp(28px,5vw,64px);letter-spacing:0.04em;margin-bottom:24px;line-height:1.1;
+    }
+    .cta-honest {
+      margin:32px auto;max-width:640px;padding:24px 32px;
+      background:var(--card);border:1px solid var(--indigo-bd);
+      font-size:14px;line-height:2.1;color:var(--text-mid);
+    }
+    .cta-honest strong { color:var(--text);font-weight:400; }
+    .cta-options {
+      display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:36px;margin-top:28px;
+    }
+    .cta-option-tag {
+      font-size:11px;letter-spacing:0.1em;padding:6px 18px;
+      border:1px solid var(--bd);color:var(--text-mid);
+    }
+    .cta-note { font-size:11px;color:var(--text-faint);margin-top:20px;letter-spacing:0.05em; }
+
+    /* FOOTER */
+    footer {
+      position:relative;z-index:2;
+      padding:28px 60px;background:var(--bg);border-top:1px solid var(--bd);
+      display:flex;align-items:center;justify-content:space-between;
+    }
+    .footer-brand { font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:0.15em;color:var(--indigo-lt); }
+    .footer-copy  { font-size:10px;letter-spacing:0.1em;color:var(--text-faint); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width:768px) {
+      body { cursor:auto; }
+      .cursor-dot,.cursor-ring { display:none; }
+      nav { padding:14px 20px; }
+      .nav-links { gap:12px; }
+      .nav-link  { display:none; }
+      .hero,.section,.method-wrap,.cta-section { padding:80px 24px; }
+      .hero-stat-row { gap:28px; }
+      .hero-stat + .hero-stat::before { display:none; }
+      .problem-grid { grid-template-columns:minmax(0, 1fr); }
+      .method-item { grid-template-columns:minmax(0, 1fr);gap:12px;padding:28px 24px; }
+      .method-num-wrap { display:flex;align-items:center;gap:10px; }
+      .course-grid { grid-template-columns:minmax(0, 1fr); }
+      .teacher-grid { grid-template-columns:minmax(0, 1fr); }
+      .voice-grid { grid-template-columns:minmax(0, 1fr); }
+      footer { padding:20px 24px;flex-direction:column;gap:8px;text-align:center; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor-dot"></div>
+<div class="cursor-ring"></div>
+
+<nav>
+  <a href="#" class="nav-logo">
+    <div>
+      <div class="nav-brand">みらい学習塾</div>
+      <div class="nav-sub">中学受験・高校受験 / MIRAI JUKU</div>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="#problem"  class="nav-link">なぜ成績が上がらないか</a>
+    <a href="#method"   class="nav-link">独自メソッド</a>
+    <a href="#courses"  class="nav-link">コース</a>
+    <a href="#voice"    class="nav-link">保護者の声</a>
+    <a href="#cta" class="nav-cta">無料体験を申し込む</a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-badge reveal">合格実績より大切なこと / 2026年度入塾受付中</div>
+  <h1 class="hero-title reveal">
+    うちの子が<br>
+    勉強嫌いなのは<br>
+    <span class="accent-yellow">才能のせいじゃない</span>
+  </h1>
+  <p class="hero-sub reveal">
+    勉強が嫌いになる理由の9割は、つまずいたまま放置された「あの一瞬」にあります。まず、そこを見つけるところから始めましょう。
+  </p>
+  <div class="hero-stat-row reveal">
+    <div class="hero-stat">
+      <span class="hero-stat-num">96<span class="hero-stat-unit">%</span></span>
+      <span class="hero-stat-label">受講生満足度</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-num">+38<span class="hero-stat-unit">点</span></span>
+      <span class="hero-stat-label">定期テスト平均点UP（入塾6ヶ月後）</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-num">98<span class="hero-stat-unit">%</span></span>
+      <span class="hero-stat-label">卒業後の高校進学率</span>
+    </div>
+  </div>
+  <div class="hero-cta-row reveal">
+    <a href="#cta" class="btn-primary">まず、つまずきを一緒に探しましょう（無料）</a>
+    <a href="#method" class="btn-ghost">独自メソッドを見る</a>
+  </div>
+  <p class="hero-note reveal">体験授業後の勧誘は行いません。お子さんのペースを最優先にします</p>
+</section>
+
+<!-- ── PROBLEM ── -->
+<section class="section" id="problem" style="background:var(--bg-sub)">
+  <div class="section-inner">
+    <p class="section-label reveal">PROBLEM</p>
+    <h2 class="section-title reveal">
+      なぜ塾に通っても成績が上がらないのか
+      <span class="sub">「一生懸命通わせているのに、なぜ？」その答えは塾選びではなく、構造にあります</span>
+    </h2>
+    <div class="problem-grid">
+      <div class="problem-card reveal">
+        <div class="problem-num">01</div>
+        <span class="problem-icon">📢</span>
+        <h3 class="problem-title">わからないまま授業が進む</h3>
+        <p class="problem-body">集団授業は「平均的な子」に合わせて設計されています。わからない瞬間があっても授業は止まらず、そのまま次の単元へ進む。やがて「わかる」という感覚自体を失っていきます。</p>
+        <div class="problem-quote">「手を挙げると恥ずかしいから、わからなくてもそのままにしていた」（中2・男子 本人談）</div>
+      </div>
+      <div class="problem-card reveal">
+        <div class="problem-num">02</div>
+        <span class="problem-icon">🌀</span>
+        <h3 class="problem-title">何がわからないかわからない</h3>
+        <p class="problem-body">「どこで詰まっているか」を自分で把握する力——メタ認知——は、放置すると育ちません。「なんかわからない」という霧の中に子供を置いたまま問題を解かせても、何も積み上がりません。</p>
+        <div class="problem-quote">「勉強しなさいと言ったら『何をすればいいかわからない』と言われた。その言葉が刺さった」（母親 Bさん 談）</div>
+      </div>
+      <div class="problem-card reveal">
+        <div class="problem-num">03</div>
+        <span class="problem-icon">💤</span>
+        <h3 class="problem-title">宿題をやらない</h3>
+        <p class="problem-body">宿題をやらないのは怠けているからではなく、「やっても意味がない」という学習性無力感の表れです。解けない問題を繰り返させることで、脳は「努力と成功は結びつかない」と学習してしまいます。</p>
+        <div class="problem-quote">「宿題ノートを見たら、何ページも白紙だった。聞いたら『どうせわからないから』と言われた」（母親 Cさん 談）</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── METHOD ── -->
+<section class="method-wrap" id="method">
+  <div class="section-inner">
+    <p class="section-label reveal">OUR METHOD</p>
+    <h2 class="section-title reveal">
+      なぜここだけ違うのか
+      <span class="sub">3つの独自メソッドが、お子さんの「勉強の文脈」を根本から変えます</span>
+    </h2>
+    <div class="method-list">
+      <div class="method-item reveal">
+        <div class="method-num-wrap">
+          <span class="method-num">01</span>
+          <span class="method-num-label">METHOD</span>
+        </div>
+        <div class="method-content">
+          <span class="method-badge">DIAGNOSIS</span>
+          <h3>つまずき診断テスト——過去のつまずきポイントを特定する</h3>
+          <p>入塾時に独自の「つまずき診断テスト」を実施します。現在の学年の問題ではなく、過去のどこで理解が止まったかを遡って特定するテストです。多くの場合、中2の数学の壁は小5の分数の理解にまで根があります。その根を見つけてから、初めて建て直しが始まります。</p>
+          <span class="method-tip">入塾初日の診断で「どこから教えるか」が決まります。学年ではなく、理解の地点から出発します</span>
+        </div>
+      </div>
+      <div class="method-item reveal">
+        <div class="method-num-wrap">
+          <span class="method-num">02</span>
+          <span class="method-num-label">METHOD</span>
+        </div>
+        <div class="method-content">
+          <span class="method-badge">CYCLE</span>
+          <h3>1問正解サイクル——毎回「解けた」で終わる授業設計</h3>
+          <p>授業の最後は必ず「自分で解けた問題」で締めくくります。どんなに簡単な問題でもかまいません。「できた」という体験が積み重なることで、脳の報酬回路が勉強と成功を結びつけ直していきます。これは行動科学の原理に基づいた設計です。難しい問題を出すのはその後です。</p>
+          <span class="method-tip">「解けた」という体験の積み重ねが自己効力感を回復させます。これが成績向上の前提条件です</span>
+        </div>
+      </div>
+      <div class="method-item reveal">
+        <div class="method-num-wrap">
+          <span class="method-num">03</span>
+          <span class="method-num-label">METHOD</span>
+        </div>
+        <div class="method-content">
+          <span class="method-badge">FAMILY</span>
+          <h3>親子コミュニケーション設計——家庭を「勉強できる場所」に変える</h3>
+          <p>学力は塾の中だけで伸びるものではありません。家庭での声かけ・机に向かう習慣・スマホとの距離感——これらを保護者と一緒に設計します。毎月1回の保護者面談で「家での様子」を共有し、塾と家庭が一体となってお子さんをサポートする環境をつくります。</p>
+          <span class="method-tip">「勉強しなさい」という声かけが逆効果になるメカニズムと、代わりになる言葉をお伝えします</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── COURSES ── -->
+<section class="section" id="courses">
+  <div class="section-inner">
+    <p class="section-label reveal">COURSES</p>
+    <h2 class="section-title reveal">
+      対象学年・コース
+      <span class="sub">学年・目的・ペースに合わせて、3つのコースをご用意しています</span>
+    </h2>
+    <div class="course-grid">
+      <div class="course-card reveal">
+        <span class="course-badge">COURSE A</span>
+        <div class="course-grade">小学4〜6年生</div>
+        <div class="course-name">中学受験<br>コース</div>
+        <p class="course-desc">志望校合格を目指しながら、詰め込みではなく「考える力」を育てます。算数・国語を中心に、過去問演習は小6秋以降から段階的に取り組みます。</p>
+        <table class="course-table">
+          <tr><td>週の授業回数</td><td><strong>週2〜3回（各90分）</strong></td></tr>
+          <tr><td>クラス人数</td><td><strong>最大6名</strong></td></tr>
+          <tr><td>保護者面談</td><td><strong>月1回（必須）</strong></td></tr>
+        </table>
+        <div class="course-price">月額 <strong>28,000〜42,000円</strong>（学年・コマ数による）</div>
+      </div>
+      <div class="course-card reveal">
+        <span class="course-badge">COURSE B</span>
+        <div class="course-grade">中学1〜3年生</div>
+        <div class="course-name">高校受験<br>コース</div>
+        <p class="course-desc">公立・私立問わず志望校別の対策を行います。つまずき診断を元に小学校範囲まで遡って基礎固めし、入試本番から逆算したスケジュールを設計します。</p>
+        <table class="course-table">
+          <tr><td>週の授業回数</td><td><strong>週2〜4回（各90分）</strong></td></tr>
+          <tr><td>クラス人数</td><td><strong>最大5名</strong></td></tr>
+          <tr><td>保護者面談</td><td><strong>月1回（必須）</strong></td></tr>
+        </table>
+        <div class="course-price">月額 <strong>30,000〜46,000円</strong>（学年・コマ数による）</div>
+      </div>
+      <div class="course-card reveal">
+        <span class="course-badge">COURSE C</span>
+        <div class="course-grade">中学1〜3年生</div>
+        <div class="course-name">定期テスト<br>対策コース</div>
+        <p class="course-desc">「受験は考えていないけど、このままの成績では心配」という方へ。学校の進度に合わせて、各定期テストで確実に点数を上げることを目標にします。</p>
+        <table class="course-table">
+          <tr><td>週の授業回数</td><td><strong>週1〜2回（各90分）</strong></td></tr>
+          <tr><td>クラス人数</td><td><strong>最大8名</strong></td></tr>
+          <tr><td>保護者面談</td><td><strong>テスト後ごと</strong></td></tr>
+        </table>
+        <div class="course-price">月額 <strong>18,000〜28,000円</strong>（学年・コマ数による）</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TEACHERS ── -->
+<section class="section" id="teachers" style="background:var(--bg-sub)">
+  <div class="section-inner">
+    <p class="section-label reveal">TEACHERS</p>
+    <h2 class="section-title reveal">
+      講師紹介
+      <span class="sub">「教えること」より「子供が動き出す瞬間」を大切にする2人の講師</span>
+    </h2>
+    <div class="teacher-grid">
+      <div class="teacher-card reveal">
+        <div class="teacher-initial">T.M</div>
+        <span class="teacher-tag">CHIEF INSTRUCTOR</span>
+        <div class="teacher-name">田中 真帆</div>
+        <div class="teacher-role">塾長 / 算数・数学担当</div>
+        <p class="teacher-bio">中学2年時に不登校を経験。「わからないことが怖くなった」という感覚を今も鮮明に覚えている。大学で教育心理学を学び、「学習性無力感」という概念に自分の体験が重なり、教育者を志す。20年間で指導した生徒は800名超。「できた瞬間の顔が、この仕事を続ける理由です」と話す。</p>
+        <span class="teacher-keyword">元不登校経験者 / 教育心理学 / 20年のキャリア</span>
+      </div>
+      <div class="teacher-card reveal">
+        <div class="teacher-initial">K.R</div>
+        <span class="teacher-tag">INSTRUCTOR</span>
+        <div class="teacher-name">川上 領太</div>
+        <div class="teacher-role">講師 / 国語・英語・理社担当</div>
+        <p class="teacher-bio">元公立中学校教師。10年間の教壇経験で気づいたのは、「成績の差は才能ではなく、安心して間違えられる環境があるかどうか」。学校では一人ひとりに時間をかけられない現実に限界を感じ、少人数指導の塾へ転職。「学校の先生には言えなかったことを、ここで話してほしい」がモットー。</p>
+        <span class="teacher-keyword">元公立中学教師 / 10年の教壇経験 / 国語・英語</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── VOICE ── -->
+<section class="section" id="voice">
+  <div class="section-inner">
+    <p class="section-label reveal">PARENT VOICES</p>
+    <h2 class="section-title reveal">
+      保護者の声
+      <span class="sub">「成績が上がった」より先に起きた変化を、保護者の言葉でお伝えします</span>
+    </h2>
+    <div class="voice-grid">
+      <div class="voice-card reveal">
+        <span class="voice-tag">VOICE 01 — 中2・女子 保護者</span>
+        <p class="voice-text">半年前は宿題を投げ出して泣いていた子が、今は自分から机に向かうようになりました。成績が上がる前に、表情が変わったんです。「今日の授業、こういうことだったんだよ」と話しかけてくるようになって、そのほうが私には嬉しかった。</p>
+        <div class="voice-meta">入塾前 定期テスト平均 → 52点 / 入塾後6ヶ月 → 78点</div>
+        <span class="voice-change">自分から机に向かうようになった</span>
+      </div>
+      <div class="voice-card reveal">
+        <span class="voice-tag">VOICE 02 — 小5・男子 保護者</span>
+        <p class="voice-text">最初の診断テストで「小3の割り算が入口でした」と言われたとき、正直ショックでした。でも先生が「責める話じゃなく、ここから積み上げれば絶対に間に合います」と言ってくれた。息子が先生を信頼するのが早かったのが印象的でした。</p>
+        <div class="voice-meta">つまずき診断で小3範囲に遡り、4ヶ月で学年の単元に追いつく</div>
+        <span class="voice-change">「わかる」と言えるようになった</span>
+      </div>
+      <div class="voice-card reveal">
+        <span class="voice-tag">VOICE 03 — 中3・男子 保護者</span>
+        <p class="voice-text">「勉強しなさい」と言うたびにケンカになっていました。面談で「その声かけはやめてみてください、理由を説明します」と言われて試したら、本当に関係が変わった。子どもの問題じゃなくて、家庭の環境の問題だったんだと気づかされました。</p>
+        <div class="voice-meta">入塾前 志望校D判定 → 入塾8ヶ月後 第一志望合格</div>
+        <span class="voice-change">親子関係から変わっていった</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FAQ ── -->
+<section class="section" style="background:var(--bg-sub)">
+  <div class="section-inner">
+    <p class="section-label reveal">FAQ</p>
+    <h2 class="section-title reveal" style="margin-bottom:48px">よくあるご質問</h2>
+    <div class="faq-list">
+      <div class="faq-item reveal">
+        <div class="faq-q">体験授業後に入塾を強く勧めてきますか？</div>
+        <div class="faq-a">勧誘は行いません。体験授業後は、お子さんの様子と診断結果をお伝えします。入塾するかどうかはご家庭でゆっくり話し合ってください。「検討します」で電話をかけ直すようなことは一切しません。</div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q">他の塾と並行して通えますか？</div>
+        <div class="faq-a">はい、可能です。ただし、お子さんの学習負荷が増えすぎることを懸念しています。入塾前のご相談で、現在の状況をお聞きした上で「本当に必要なもの」を一緒に考えさせていただきます。掛け持ちが不要になるケースも多くあります。</div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q">成績の保証はしてもらえますか？</div>
+        <div class="faq-a">成績保証はしていません。代わりに、「やってみよう」と思える状態を必ず作ることをお約束します。勉強への意欲が戻れば、成績は後からついてきます。逆に言えば、意欲のない状態でいくら問題を解かせても成績は上がりません。私たちはその根っこから取り組みます。</div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q">途中でコースを変更できますか？</div>
+        <div class="faq-a">もちろん変更できます。お子さんの状況や志望校の変化に合わせて、柔軟に対応します。学期ごとに面談を設けており、そのタイミングでコースの見直しを行っています。急ぎの変更が必要な場合はお電話でもご相談ください。</div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q">発達特性のある子どもでも通えますか？</div>
+        <div class="faq-a">はい。特性に応じた指導経験のある講師が対応します。入塾前のご相談で特性の内容を教えていただければ、授業設計に反映します。「集団が難しい」「板書が苦手」など、具体的なご要望があれば遠慮なくお伝えください。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ── -->
+<section class="cta-section" id="cta">
+  <p class="section-label reveal">FREE TRIAL</p>
+  <h2 class="cta-title reveal">
+    まず、お子さんのつまずきを<br>
+    <span style="color:var(--indigo-lt)">一緒に探しましょう</span>
+  </h2>
+  <div class="cta-honest reveal">
+    <strong>成績保証はしません。</strong>でも「やってみよう」と思える状態は必ず作ります。<br>
+    勉強が嫌いになったのはお子さんのせいでも、才能のせいでもありません。<br>
+    つまずいた場所さえ見つければ、必ず動き出せます。
+  </div>
+  <div class="cta-options reveal">
+    <span class="cta-option-tag">体験授業（90分）無料</span>
+    <span class="cta-option-tag">つまずき診断レポート付き</span>
+    <span class="cta-option-tag">保護者同席可</span>
+  </div>
+  <a href="#" class="btn-primary reveal">無料体験授業を申し込む</a>
+  <p class="cta-note reveal">体験授業後の勧誘は行いません。お子さんとご家族のペースを最優先にします</p>
+</section>
+
+<footer>
+  <div class="footer-brand">みらい学習塾 / MIRAI JUKU</div>
+  <div class="footer-copy">© 2026 みらい学習塾. Powered by Senkode.</div>
+</footer>
+
+<script>
+  // CURSOR
+  const dot  = document.querySelector('.cursor-dot');
+  const ring = document.querySelector('.cursor-ring');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+  (function loop(){
+    rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
+    dot.style.left=mx+'px'; dot.style.top=my+'px';
+    ring.style.left=rx+'px'; ring.style.top=ry+'px';
+    requestAnimationFrame(loop);
+  })();
+  document.querySelectorAll('a,button').forEach(el=>{
+    el.addEventListener('mouseenter',()=>ring.classList.add('big'));
+    el.addEventListener('mouseleave',()=>ring.classList.remove('big'));
+  });
+
+  // SCROLL REVEAL
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});
+  },{threshold:0.08});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+  // FAQ ACCORDION
+  document.querySelectorAll('.faq-item').forEach(item=>{
+    item.querySelector('.faq-q').addEventListener('click',()=>{
+      const isOpen=item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+      if(!isOpen) item.classList.add('open');
+    });
+  });
+</script>
+</body>
+</html>

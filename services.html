@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Services — Senkode AI Direction</title>
+  <meta name="description" content="SenkodeのAIディレクションサービス一覧。AI制作ディレクション・SEOライティング・Webコーディング・コンサルティング。料金・納期・対応範囲をご確認ください。">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital@1&family=Noto+Sans+JP:wght@100;200;300;700&display=swap" rel="stylesheet">
+  <style>
+    [class*="grid"] > *, [class*="inner"] > *, [class*="wrap"] > * { min-width: 0; }
+
+    img, video, iframe { max-width: 100%; height: auto; }
+
+    html { overflow-x: hidden; }
+
+    :root {
+      --gold:       #C9A84C;
+      --gold-light: #E8C97A;
+      --gold-dim:   #6B5420;
+      --black:      #080808;
+      --off-black:  #0F0F0F;
+      --card:       #111111;
+      --white:      #F4F1EC;
+      --muted:      rgba(244,241,236,0.35);
+      --border:     rgba(201,168,76,0.1);
+      --gold-hover:    rgba(201,168,76,0.1);
+      --gold-alpha-40: rgba(201,168,76,0.4);
+      --gold-alpha-30: rgba(201,168,76,0.3);
+      --gold-alpha-50: rgba(201,168,76,0.5);
+      --white-dim:     rgba(244,241,236,0.4);
+      --white-faint:   rgba(244,241,236,0.2);
+      --gold-glow-soft: rgba(201,168,76,0.08);
+      --gold-grid:      rgba(201,168,76,0.03);
+      --nav-bg:         rgba(15,15,15,0.85);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    p, li, h1, h2, h3, h4, span, div, td, dt, dd, label {
+      word-break: keep-all;
+      overflow-wrap: break-word;
+      line-break: strict;
+    }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: none;
+      word-break: keep-all;
+      overflow-wrap: break-word;
+      line-break: strict;
+    }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dim); }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(var(--gold-grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--gold-grid) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none; z-index: 0;
+    }
+
+    .reveal {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
+      will-change: opacity, transform;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* CURSOR */
+    .cursor-dot {
+      position: fixed; width: 8px; height: 8px; background: var(--gold);
+      border-radius: 50%; transform: translate(-50%,-50%);
+      pointer-events: none; z-index: 9999; mix-blend-mode: difference;
+    }
+    .cursor-ring {
+      position: fixed; width: 32px; height: 32px;
+      border: 1px solid var(--gold-alpha-50); border-radius: 50%;
+      transform: translate(-50%,-50%); pointer-events: none;
+      z-index: 9998; transition: width 0.3s, height 0.3s;
+    }
+    .cursor-ring.expanded { width: 48px; height: 48px; }
+
+    /* NOISE */
+    .noise {
+      position: fixed; inset: 0; pointer-events: none; z-index: 500; opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat: repeat; background-size: 200px 200px;
+    }
+
+    /* NAV */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 60px;
+      background: var(--nav-bg); backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-wordmark { font-family: 'Bebas Neue', cursive; font-size: 22px; letter-spacing: 0.25em; color: var(--white); }
+    .nav-links { display: flex; align-items: center; gap: 32px; }
+    .nav-link { font-size: 11px; letter-spacing: 0.2em; color: var(--muted); text-decoration: none; transition: color 0.3s; }
+    .nav-link:hover, .nav-link.active { color: var(--white); }
+    .nav-cta {
+      font-size: 10px; letter-spacing: 0.2em; color: var(--gold);
+      text-decoration: none; border: 1px solid var(--gold-alpha-40);
+      padding: 8px 16px; transition: background 0.3s;
+    }
+    .nav-cta:hover { background: var(--gold-hover); }
+
+    /* PAGE HERO */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .page-hero {
+      padding: 120px 60px 80px;
+      position: relative; z-index: 1;
+      border-bottom: 1px solid var(--border);
+    }
+    .page-hero-inner {
+      max-width: 1100px;
+      width: 100%; margin: 0 auto;
+      animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.1s both;
+    }
+    .page-label { font-size: 10px; letter-spacing: 0.35em; color: var(--gold); margin-bottom: 16px; font-weight: 100; }
+    .page-title {
+      font-family: 'Bebas Neue', cursive;
+      font-size: clamp(56px, 8vw, 96px);
+      letter-spacing: 0.08em; color: var(--white); line-height: 1; margin-bottom: 20px;
+    }
+    .page-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-size: 16px;
+      color: var(--muted); letter-spacing: 0.05em;
+    }
+
+    /* SERVICE BLOCKS */
+    .services-section {
+      padding: 100px 60px;
+      position: relative; z-index: 1;
+    }
+    .services-inner { max-width: 1100px;
+      width: 100%; margin: 0 auto; }
+
+    .service-block {
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      gap: 0;
+      border: 1px solid var(--border);
+      margin-bottom: 2px;
+      background: var(--card);
+      overflow: hidden;
+      transition-delay: var(--delay, 0s);
+    }
+    .service-block:hover .service-block-bar { opacity: 1; }
+
+    .service-block-left {
+      padding: 48px 40px;
+      border-right: 1px solid var(--border);
+      position: relative;
+    }
+    .service-block-bar {
+      position: absolute;
+      top: 0; left: 0;
+      width: 2px; height: 100%;
+      background: var(--gold);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .service-num {
+      font-size: 11px; letter-spacing: 0.25em;
+      color: var(--gold); margin-bottom: 16px; display: block;
+    }
+    .service-name {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 32px; letter-spacing: 0.08em;
+      color: var(--white); line-height: 1.15; margin-bottom: 16px;
+    }
+    .service-tag-list { display: flex; flex-wrap: wrap; gap: 6px; }
+    .service-tag {
+      font-size: 9px; letter-spacing: 0.15em; color: var(--gold);
+      border: 1px solid var(--gold-alpha-30); padding: 3px 10px;
+    }
+
+    .service-block-right { padding: 48px 48px; }
+    .service-desc {
+      font-size: 13px; color: var(--muted); line-height: 2;
+      margin-bottom: 32px;
+    }
+    .service-specs {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 24px;
+      padding-top: 28px;
+      border-top: 1px solid var(--border);
+    }
+    .spec-item {}
+    .spec-label {
+      font-size: 9px; letter-spacing: 0.25em; color: var(--gold);
+      margin-bottom: 6px; display: block;
+    }
+    .spec-value {
+      font-size: 13px; color: var(--white); font-weight: 300; line-height: 1.6;
+    }
+
+    /* PROCESS */
+    .process-section {
+      padding: 100px 60px;
+      background: var(--off-black);
+      position: relative; z-index: 1;
+    }
+    .process-inner { max-width: 1100px;
+      width: 100%; margin: 0 auto; }
+    .section-header { text-align: center; margin-bottom: 64px; }
+    .section-label { font-size: 10px; letter-spacing: 0.35em; color: var(--gold); margin-bottom: 12px; font-weight: 100; }
+    .section-title { font-family: 'Noto Sans JP', sans-serif; font-weight: 700; font-size: 24px; letter-spacing: 0.1em; color: var(--white); }
+
+    .process-steps {
+      display: flex; align-items: flex-start;
+      justify-content: center; gap: 0;
+    }
+    .process-step {
+      flex: 1; text-align: center; padding: 0 20px;
+      border: 1px solid var(--border); background: var(--card);
+      padding: 36px 24px;
+    }
+    .step-num {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 40px; letter-spacing: 0.1em;
+      color: var(--gold); opacity: 0.4; margin-bottom: 12px; display: block;
+    }
+    .step-name { font-size: 13px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
+    .step-desc { font-size: 11px; color: var(--muted); line-height: 1.8; }
+    .process-arrow {
+      font-size: 16px; color: var(--gold); opacity: 0.4;
+      padding: 36px 0; display: flex; align-items: center; flex-shrink: 0;
+    }
+
+    /* FAQ */
+    .faq-section {
+      padding: 100px 60px;
+      position: relative; z-index: 1;
+    }
+    .faq-inner { max-width: 800px;
+      width: 100%; margin: 0 auto; }
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+      padding: 28px 0;
+      cursor: pointer;
+      transition-delay: var(--delay, 0s);
+    }
+    .faq-q {
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 24px;
+    }
+    .faq-question {
+      font-size: 14px; font-weight: 300;
+      color: var(--white); line-height: 1.6;
+    }
+    .faq-icon {
+      font-size: 20px; color: var(--gold);
+      flex-shrink: 0; transition: transform 0.3s;
+      font-weight: 100; line-height: 1;
+    }
+    .faq-item.open .faq-icon { transform: rotate(45deg); }
+    .faq-answer {
+      font-size: 12px; color: var(--muted); line-height: 2;
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.16,1,0.3,1), padding 0.3s;
+    }
+    .faq-item.open .faq-answer { max-height: 300px; padding-top: 16px; }
+
+    /* CTA */
+    .cta {
+      padding: 140px 60px;
+      background: var(--off-black);
+      position: relative; z-index: 1; text-align: center;
+    }
+    .cta-content { max-width: 600px;
+      width: 100%; margin: 0 auto; }
+    .cta-title {
+      font-family: 'Bebas Neue', cursive;
+      font-size: clamp(32px, 5vw, 56px);
+      letter-spacing: 0.1em; color: var(--white); margin-bottom: 16px;
+    }
+    .cta-sub { font-size: 12px; color: var(--muted); line-height: 1.9; margin-bottom: 40px; }
+    .btn-primary {
+      display: inline-block; padding: 14px 32px;
+      border: 1px solid var(--gold); color: var(--gold);
+      text-decoration: none; font-size: 11px;
+      letter-spacing: 0.2em; transition: background 0.3s;
+    }
+    .btn-primary:hover { background: var(--gold-hover); }
+
+    /* FOOTER */
+    .footer {
+      padding: 24px 60px; background: var(--black);
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      position: relative; z-index: 1;
+    }
+    .footer-copy { font-size: 10px; letter-spacing: 0.25em; color: var(--muted); }
+    .footer-tag  { font-size: 9px;  letter-spacing: 0.15em; color: var(--white-faint); }
+    .footer-sns { display:flex; gap:20px; align-items:center; }
+    .footer-sns a { display:flex; align-items:center; justify-content:center; width:32px; height:32px; color:var(--muted); transition:color 0.3s; }
+    .footer-sns a:hover { color:var(--gold); }
+
+    /* TABLET */
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .nav { padding: 20px 40px; }
+      .page-hero { padding: 100px 40px 60px; }
+      .services-section { padding: 80px 40px; }
+      .service-block { grid-template-columns: minmax(0, 1fr); }
+      .service-block-left { border-right: none; border-bottom: 1px solid var(--border); padding: 40px 40px; }
+      .service-block-right { padding: 40px 40px; }
+      .service-specs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .process-section { padding: 80px 40px; }
+      .faq-section { padding: 80px 40px; }
+      .cta { padding: 100px 40px; }
+      .footer { padding: 24px 40px; }
+    }
+
+    /* MOBILE */
+    @media (max-width: 768px) {
+      body { cursor: auto; }
+      .cursor-dot, .cursor-ring { display: none; }
+      .nav { padding: 16px 24px; }
+      .nav-links { gap: 16px; }
+      .nav-link { display: none; }
+      .page-hero { padding: 80px 24px 60px; }
+      .services-section { padding: 60px 24px; }
+      .service-block { grid-template-columns: minmax(0, 1fr); }
+      .service-block-left { border-right: none; border-bottom: 1px solid var(--border); padding: 32px 24px; }
+      .service-block-right { padding: 32px 24px; }
+      .service-specs { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+      .process-section { padding: 60px 24px; }
+      .process-steps { flex-direction: column; gap: 2px; }
+      .process-arrow { transform: rotate(90deg); padding: 0; align-self: center; }
+      .process-step { padding: 24px; }
+      .faq-section { padding: 60px 24px; }
+      .cta { padding: 80px 24px; }
+      .footer { padding: 20px 24px; flex-direction: column; gap: 8px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+  <div class="noise"></div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <a href="index.html" class="nav-logo">
+      <svg width="44" height="44" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="logoGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#6B5420"/>
+            <stop offset="50%" stop-color="#E8C97A"/>
+            <stop offset="100%" stop-color="#C9A84C"/>
+          </linearGradient>
+          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <path id="logoCircle" d="M30,5 A25,25,0,1,1,29.999,5" fill="none"/>
+        </defs>
+        <circle cx="30" cy="30" r="28" fill="none" stroke="#C9A84C" stroke-width="0.5" opacity="0.4"/>
+        <circle cx="30" cy="30" r="20" fill="none" stroke="#C9A84C" stroke-width="0.3" opacity="0.2"/>
+        <g transform="translate(-6,-4.4) scale(0.36)">
+          <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="url(#logoGrad)" style="filter: url(#glow)"/>
+        </g>
+        <text font-family="'Bebas Neue','Noto Sans JP',sans-serif" font-size="5" fill="#C9A84C" opacity="0.78">
+          <textPath href="#logoCircle" startOffset="0%" letter-spacing="2.5">Senkode · 閃光 · Senkode · 閃光 ·</textPath>
+        </text>
+      </svg>
+      <span class="nav-wordmark">Senkode</span>
+    </a>
+    <div class="nav-links">
+      <a href="services.html" class="nav-link active">SERVICES</a>
+      <a href="works.html" class="nav-link">WORKS</a>
+      <a href="articles/index.html" class="nav-link">ARTICLES</a>
+      <a href="about.html" class="nav-link">ABOUT</a>
+      <a href="contact.html" class="nav-cta">CONTACT</a>
+    </div>
+  </nav>
+
+  <!-- Page Hero -->
+  <section class="page-hero">
+    <div class="page-hero-inner">
+      <p class="page-label">AI DIRECTION SERVICES</p>
+      <h1 class="page-title">Services</h1>
+      <p class="page-sub">AIで加速する制作サービス — Pricing &amp; Scope</p>
+    </div>
+  </section>
+
+  <!-- Service Blocks -->
+  <section class="services-section">
+    <div class="services-inner">
+
+      <!-- 01 SEO Writing -->
+      <div class="service-block reveal" style="--delay:0s">
+        <div class="service-block-left">
+          <div class="service-block-bar"></div>
+          <span class="service-num">01</span>
+          <h2 class="service-name">SEO<br>WRITING</h2>
+          <div class="service-tag-list">
+            <span class="service-tag">記事制作</span>
+            <span class="service-tag">SEO</span>
+            <span class="service-tag">AI活用</span>
+          </div>
+        </div>
+        <div class="service-block-right">
+          <p class="service-desc">
+            AIと人間の知性を掛け合わせた、検索で勝てるコンテンツを提供します。
+            大手運送会社の管理職として10年以上、業務改善・KPI管理・DX推進に携わってきた現場一次情報と、
+            Claude・ChatGPTによる高速生成を組み合わせ、量と質を同時に実現。
+            「AIが書けない言葉」を人間が宿らせることで、競合に差をつける記事をお届けします。
+          </p>
+          <div class="service-specs">
+            <div class="spec-item">
+              <span class="spec-label">PRICE</span>
+              <span class="spec-value">¥5,000〜<small style="display:block;opacity:0.5;font-size:10px">文字数・難易度による</small></span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">DELIVERY</span>
+              <span class="spec-value">3〜5営業日</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">REVISION</span>
+              <span class="spec-value">2回まで無料</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 02 LP Copywriting -->
+      <div class="service-block reveal" style="--delay:0.1s">
+        <div class="service-block-left">
+          <div class="service-block-bar"></div>
+          <span class="service-num">02</span>
+          <h2 class="service-name">LP<br>COPY</h2>
+          <div class="service-tag-list">
+            <span class="service-tag">LP</span>
+            <span class="service-tag">コピーライティング</span>
+            <span class="service-tag">CVR改善</span>
+          </div>
+        </div>
+        <div class="service-block-right">
+          <p class="service-desc">
+            AIが叩き台を生成し、人間が感情と戦略を宿らせる——それがSenkodeのLPコピーです。
+            ターゲットの課題と感情をAIで分析・整理し、スクロールのたびに購買意欲が高まる構成を設計。
+            セミナー集客・商品販売・サービス申込みなど、目的に合わせてAIを武器に高速で制作します。
+          </p>
+          <div class="service-specs">
+            <div class="spec-item">
+              <span class="spec-label">PRICE</span>
+              <span class="spec-value">¥15,000〜<small style="display:block;opacity:0.5;font-size:10px">ページ量・要件による</small></span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">DELIVERY</span>
+              <span class="spec-value">5〜7営業日</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">REVISION</span>
+              <span class="spec-value">2回まで無料</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 03 Web Production -->
+      <div class="service-block reveal" style="--delay:0.2s">
+        <div class="service-block-left">
+          <div class="service-block-bar"></div>
+          <span class="service-num">03</span>
+          <h2 class="service-name">WEB<br>PRODUCTION</h2>
+          <div class="service-tag-list">
+            <span class="service-tag">HTML/CSS/JS</span>
+            <span class="service-tag">コーディング</span>
+            <span class="service-tag">高速表示</span>
+          </div>
+        </div>
+        <div class="service-block-right">
+          <p class="service-desc">
+            AIで設計し、人間が磨く——それがSenkodeのWeb制作です。
+            Claude Code・Copilotを制作フローに組み込み、従来比3〜5倍のスピードで高品質なサイトを構築。
+            HTML / CSS / Vanilla JSで軽量・高速、PageSpeedスコア90以上を標準。
+            コピーライティングからコーディングまで、AIディレクションで一気通貫に対応します。
+          </p>
+          <div class="service-specs">
+            <div class="spec-item">
+              <span class="spec-label">LP / 1ページ</span>
+              <span class="spec-value">¥30,000〜<small style="display:block;opacity:0.5;font-size:10px">コピー込み対応可</small></span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">コーポレートサイト</span>
+              <span class="spec-value">¥80,000〜<small style="display:block;opacity:0.5;font-size:10px">5ページ程度</small></span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">DELIVERY</span>
+              <span class="spec-value">5〜14営業日<small style="display:block;opacity:0.5;font-size:10px">規模による</small></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 04 Video Direction -->
+      <div class="service-block reveal" style="--delay:0.3s">
+        <div class="service-block-left">
+          <div class="service-block-bar"></div>
+          <span class="service-num">04</span>
+          <h2 class="service-name">VIDEO<br>DIRECTION</h2>
+          <div class="service-tag-list">
+            <span class="service-tag">AI動画生成</span>
+            <span class="service-tag">HeyGen</span>
+            <span class="service-tag">Runway</span>
+            <span class="service-tag">SNS動画</span>
+          </div>
+        </div>
+        <div class="service-block-right">
+          <p class="service-desc">
+            Runway・HeyGen・ElevenLabsを駆使したAI動画ディレクション。脚本・構成からAIへのブリーフィング、品質管理まで一貫して担当します。撮影ゼロ・タレントゼロで、プレミアムな映像コンテンツを高速納品。
+          </p>
+          <div class="service-specs">
+            <div class="spec-item">
+              <span class="spec-label">SNS動画</span>
+              <span class="spec-value">¥15,000〜<small style="display:block;opacity:0.5;font-size:10px">30秒〜60秒 / 本</small></span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">AI話者動画</span>
+              <span class="spec-value">¥20,000〜<small style="display:block;opacity:0.5;font-size:10px">HeyGen制作 / 本</small></span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">広告動画</span>
+              <span class="spec-value">¥50,000〜<small style="display:block;opacity:0.5;font-size:10px">要件による</small></span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">DELIVERY</span>
+              <span class="spec-value">5〜7営業日</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 05 AI Automation -->
+      <div class="service-block reveal" style="--delay:0.4s">
+        <div class="service-block-left">
+          <div class="service-block-bar"></div>
+          <span class="service-num">05</span>
+          <h2 class="service-name">AI<br>AUTOMATION</h2>
+          <div class="service-tag-list">
+            <span class="service-tag">業務自動化</span>
+            <span class="service-tag">GAS</span>
+            <span class="service-tag">Claude API</span>
+            <span class="service-tag">Notion連携</span>
+          </div>
+        </div>
+        <div class="service-block-right">
+          <p class="service-desc">
+            「毎日繰り返している作業」をAIが自動実行する仕組みを構築します。
+            Claude API × Google Apps Script × Notionを組み合わせ、SNS投稿生成・日次レポート作成・データ集計など、
+            あなたの業務フローを完全自動化。自社で設計・構築・本番稼働中のシステムを、そのままクライアントへ展開します。
+            「作って終わり」ではなく、実際に毎日使い続けているからこそ、本質的な改善提案ができます。
+          </p>
+          <div class="service-specs">
+            <div class="spec-item">
+              <span class="spec-label">初期構築</span>
+              <span class="spec-value">¥50,000〜<small style="display:block;opacity:0.5;font-size:10px">規模・連携数による</small></span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">月額保守</span>
+              <span class="spec-value">¥20,000〜<small style="display:block;opacity:0.5;font-size:10px">改善・追加対応込み</small></span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">DELIVERY</span>
+              <span class="spec-value">2〜4週間<small style="display:block;opacity:0.5;font-size:10px">ヒアリング〜本番稼働</small></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 06 App Development -->
+      <div class="service-block reveal" style="--delay:0.5s">
+        <div class="service-block-left">
+          <div class="service-block-bar"></div>
+          <span class="service-num">06</span>
+          <h2 class="service-name">APP<br>DEVELOPMENT</h2>
+          <div class="service-tag-list">
+            <span class="service-tag">Webアプリ</span>
+            <span class="service-tag">AIツール</span>
+            <span class="service-tag">Next.js</span>
+            <span class="service-tag">Claude API</span>
+          </div>
+        </div>
+        <div class="service-block-right">
+          <p class="service-desc">
+            AIを核に据えたWebアプリ・業務ツールを高品質で開発します。
+            Claude API × Next.js × Vercelを組み合わせ、採用スクリーニング・フードオーダー・問診フォーム・不動産AI査定など、
+            業務を変える本格的なプロダクトを構築。設計・実装・デプロイまで一気通貫で対応。
+            PageSpeed 90+・セキュリティ・レスポンシブを標準装備した、売れるプロダクトを届けます。
+          </p>
+          <div class="service-specs">
+            <div class="spec-item">
+              <span class="spec-label">Liteプラン</span>
+              <span class="spec-value">¥30,000〜<small style="display:block;opacity:0.5;font-size:10px">静的ツール・フォーム系</small></span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Standardプラン</span>
+              <span class="spec-value">¥80,000〜<small style="display:block;opacity:0.5;font-size:10px">AI連携・インタラクション</small></span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Premiumプラン</span>
+              <span class="spec-value">¥200,000〜<small style="display:block;opacity:0.5;font-size:10px">SaaS・マルチユーザー</small></span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">DELIVERY</span>
+              <span class="spec-value">5〜20営業日<small style="display:block;opacity:0.5;font-size:10px">規模・要件による</small></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 07 Freelance Starter Pack -->
+      <div class="service-block reveal" style="--delay:0.5s">
+        <div class="service-block-left">
+          <div class="service-block-bar"></div>
+          <span class="service-num">07</span>
+          <h2 class="service-name">FREELANCE<br>STARTER</h2>
+          <div class="service-tag-list">
+            <span class="service-tag">副業スタート</span>
+            <span class="service-tag">Web一式</span>
+            <span class="service-tag">AI導入</span>
+            <span class="service-tag">個人向け</span>
+          </div>
+        </div>
+        <div class="service-block-right">
+          <p class="service-desc">
+            「副業を始めたいけど何から手をつければいいかわからない」という方のための、スタートアップパッケージです。
+            ポートフォリオサイト制作・サービス設計・提案文テンプレ・AI活用ツール導入まで一式を支援。
+            Senkode自身が副業として実践しながら積み上げているノウハウを、そのままパッケージにしました。
+            「先を走っている人に伴走してもらう」感覚で、最短ルートで副業収益化を目指します。
+          </p>
+          <div class="service-specs">
+            <div class="spec-item">
+              <span class="spec-label">スタンダード</span>
+              <span class="spec-value">¥30,000<small style="display:block;opacity:0.5;font-size:10px">サイト+設計サポート</small></span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">フル支援</span>
+              <span class="spec-value">¥50,000<small style="display:block;opacity:0.5;font-size:10px">+AI自動化+提案文</small></span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">DELIVERY</span>
+              <span class="spec-value">2〜3週間</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 06 Consulting -->
+      <div class="service-block reveal" style="--delay:0.5s">
+        <div class="service-block-left">
+          <div class="service-block-bar"></div>
+          <span class="service-num">06</span>
+          <h2 class="service-name">CONSULTING</h2>
+          <div class="service-tag-list">
+            <span class="service-tag">戦略設計</span>
+            <span class="service-tag">DX推進</span>
+            <span class="service-tag">AI活用研修</span>
+          </div>
+        </div>
+        <div class="service-block-right">
+          <p class="service-desc">
+            「AIをどう使うか」から始める、AI時代の経営コンサルティングです。
+            大手運送会社の現役管理職として10年以上、業務効率化・KPI管理・組織改革を実践してきた一次情報をベースに、
+            あなたの会社・チームに最適なAI活用戦略を設計します。
+            「AIで何ができるか」の研修から「実際に動かす」実装まで、一気通貫で伴走します。
+          </p>
+          <div class="service-specs">
+            <div class="spec-item">
+              <span class="spec-label">スポット相談</span>
+              <span class="spec-value">¥30,000〜<small style="display:block;opacity:0.5;font-size:10px">2時間 / Zoom</small></span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">月次顧問</span>
+              <span class="spec-value">¥50,000〜<small style="display:block;opacity:0.5;font-size:10px">月4時間 + チャット対応</small></span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">FIRST STEP</span>
+              <span class="spec-value">無料相談30分</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Process -->
+  <section class="process-section">
+    <div class="process-inner">
+      <div class="section-header reveal">
+        <p class="section-label">HOW WE WORK</p>
+        <h2 class="section-title">仕事の流れ</h2>
+      </div>
+      <div class="process-steps reveal">
+        <div class="process-step">
+          <span class="step-num">01</span>
+          <h3 class="step-name">無料相談</h3>
+          <p class="step-desc">課題・目標・予算をヒアリング。24時間以内にご返信。</p>
+        </div>
+        <div class="process-arrow">→</div>
+        <div class="process-step">
+          <span class="step-num">02</span>
+          <h3 class="step-name">提案・見積もり</h3>
+          <p class="step-desc">最適なサービスと費用をご提案。納得いただけるまで調整。</p>
+        </div>
+        <div class="process-arrow">→</div>
+        <div class="process-step">
+          <span class="step-num">03</span>
+          <h3 class="step-name">制作・実行</h3>
+          <p class="step-desc">スピードと精度で納品。進捗はこまめにご報告。</p>
+        </div>
+        <div class="process-arrow">→</div>
+        <div class="process-step">
+          <span class="step-num">04</span>
+          <h3 class="step-name">納品・改善</h3>
+          <p class="step-desc">成果物を納品。修正対応・効果測定まで伴走。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq-section">
+    <div class="faq-inner">
+      <div class="section-header reveal">
+        <p class="section-label">FAQ</p>
+        <h2 class="section-title">よくある質問</h2>
+      </div>
+
+      <div class="faq-item reveal" style="--delay:0s">
+        <div class="faq-q">
+          <span class="faq-question">どんなジャンルの記事でも対応できますか？</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">物流・運送・DX・AI活用・業務効率化・ビジネス全般が得意ジャンルです。それ以外のジャンルも対応可能ですが、まずはお気軽にご相談ください。専門知識が必要なジャンルは事前にお知らせいただけるとスムーズです。</div>
+      </div>
+
+      <div class="faq-item reveal" style="--delay:0.06s">
+        <div class="faq-q">
+          <span class="faq-question">AIを使って記事を書いていますか？</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">はい、ChatGPT・Claudeを活用した制作体制を整えています。ただしAI生成文をそのまま納品することはありません。必ず人間の目で構成・内容・表現を精査し、現場経験に基づく一次情報を加えた品質に仕上げてお届けします。</div>
+      </div>
+
+      <div class="faq-item reveal" style="--delay:0.12s">
+        <div class="faq-q">
+          <span class="faq-question">修正が多くなりそうですが追加料金はかかりますか？</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">修正は2回まで無料です。認識のズレを防ぐため、着手前に構成案をご確認いただいてから本文執筆に入ります。3回目以降の修正は、内容に応じてご相談させてください。</div>
+      </div>
+
+      <div class="faq-item reveal" style="--delay:0.18s">
+        <div class="faq-q">
+          <span class="faq-question">継続的な依頼は可能ですか？</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">はい、継続依頼を歓迎しています。月単位・本数単位でのご契約も対応可能です。継続いただける場合は単価・納期について優先的にご対応します。</div>
+      </div>
+
+      <div class="faq-item reveal" style="--delay:0.24s">
+        <div class="faq-q">
+          <span class="faq-question">まず1本だけ試してみることはできますか？</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">もちろんです。1記事からお受けしています。まずはお問い合わせフォームよりご相談ください。24時間以内にご返信します。</div>
+      </div>
+
+      <div class="faq-item reveal" style="--delay:0.30s">
+        <div class="faq-q">
+          <span class="faq-question">AI業務自動化はどんな業務に対応できますか？</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">SNS投稿の自動生成・日次〜月次レポートの自動作成・お問い合わせ対応の自動振り分け・データ集計・スプレッドシートへの自動記録など、「毎日同じ操作を繰り返している」業務は基本的に自動化できます。まずはどんな業務をお持ちか教えてください。</div>
+      </div>
+
+      <div class="faq-item reveal" style="--delay:0.36s">
+        <div class="faq-q">
+          <span class="faq-question">プログラミング知識がなくても自動化システムを使えますか？</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">はい。構築はすべてこちらで対応します。納品後の操作はGoogleフォーム・Notionなど日常的なツールのみ。専門知識は不要です。運用マニュアルもあわせてご提供します。</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="cta-content reveal">
+      <p class="section-label">GET STARTED</p>
+      <h2 class="cta-title">AI時代の第一歩を、今日踏み出す。</h2>
+      <p class="cta-sub">まずは無料相談から。24時間以内にご返信します。</p>
+      <a href="contact.html" class="btn-primary">無料相談を申し込む →</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <span class="footer-copy">Senkode © 2026</span>
+    <div class="footer-sns">
+      <a href="https://note.com/sena01300" target="_blank" rel="noopener" aria-label="note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+          <path d="M5 4h14a2 2 0 0 1 2 2v13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a2 2 0 0 1 2-2z"/>
+          <line x1="8" y1="9" x2="16" y2="9"/><line x1="8" y1="13" x2="13" y2="13"/>
+        </svg>
+      </a>
+      <a href="https://x.com/senkode1006" target="_blank" rel="noopener" aria-label="X">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.402 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.256 5.63 5.908-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+        </svg>
+      </a>
+    </div>
+    <span class="footer-tag">閃光 — Flash of Light</span>
+  </footer>
+
+  <script>
+    // Cursor
+    const cursorDot  = document.querySelector('.cursor-dot');
+    const cursorRing = document.querySelector('.cursor-ring');
+    let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0, cursorRafId = null;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX; mouseY = e.clientY;
+      cursorDot.style.left = mouseX + 'px';
+      cursorDot.style.top  = mouseY + 'px';
+      if (cursorRafId === null) {
+        ringX = mouseX; ringY = mouseY;
+        cursorRafId = requestAnimationFrame(animateCursor);
+      }
+    });
+
+    function animateCursor() {
+      const dx = mouseX - ringX, dy = mouseY - ringY;
+      if (Math.abs(dx) > 0.05 || Math.abs(dy) > 0.05) {
+        ringX += dx * 0.15; ringY += dy * 0.15;
+        cursorRing.style.left = ringX + 'px';
+        cursorRing.style.top  = ringY + 'px';
+      }
+      cursorRafId = requestAnimationFrame(animateCursor);
+    }
+
+    document.querySelectorAll('.service-block, .btn-primary, .nav-cta, .faq-item').forEach(el => {
+      el.addEventListener('mouseenter', () => cursorRing.classList.add('expanded'));
+      el.addEventListener('mouseleave', () => cursorRing.classList.remove('expanded'));
+    });
+
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const delay = parseFloat(entry.target.style.getPropertyValue('--delay')) || 0;
+          setTimeout(() => entry.target.classList.add('visible'), delay * 1000);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // FAQ accordion
+    document.querySelectorAll('.faq-item').forEach(item => {
+      item.querySelector('.faq-q').addEventListener('click', () => {
+        item.classList.toggle('open');
+      });
+    });
+  </script>
+</body>
+</html>

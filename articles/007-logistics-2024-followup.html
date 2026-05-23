@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>物流2024年問題から1年——運送会社の現役管理職が語る、変わったこと・変わらなかったこと — Senkode Articles</title>
+  <meta name="description" content="2024年4月の時間外労働規制から1年。「物流が止まる」という警告は本当だったのか。現役管理職が現場の実態を数字と肌感覚で書く。">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital@1&family=Noto+Sans+JP:wght@100;200;300;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold:       #C9A84C;
+      --gold-light: #E8C97A;
+      --gold-dim:   #6B5420;
+      --black:      #080808;
+      --off-black:  #0F0F0F;
+      --card:       #111111;
+      --white:      #F4F1EC;
+      --muted:      rgba(244,241,236,0.35);
+      --border:     rgba(201,168,76,0.1);
+      --gold-hover:    rgba(201,168,76,0.1);
+      --gold-alpha-40: rgba(201,168,76,0.4);
+      --gold-alpha-30: rgba(201,168,76,0.3);
+      --gold-alpha-50: rgba(201,168,76,0.5);
+      --white-dim:     rgba(244,241,236,0.4);
+      --white-faint:   rgba(244,241,236,0.2);
+      --gold-grid:     rgba(201,168,76,0.03);
+      --nav-bg:        rgba(15,15,15,0.85);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dim); }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(var(--gold-grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--gold-grid) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none; z-index: 0;
+    }
+
+    /* CURSOR */
+    .cursor-dot {
+      position: fixed; width: 8px; height: 8px; background: var(--gold);
+      border-radius: 50%; transform: translate(-50%,-50%);
+      pointer-events: none; z-index: 9999; mix-blend-mode: difference;
+    }
+    .cursor-ring {
+      position: fixed; width: 32px; height: 32px;
+      border: 1px solid var(--gold-alpha-50); border-radius: 50%;
+      transform: translate(-50%,-50%); pointer-events: none;
+      z-index: 9998; transition: width 0.3s, height 0.3s;
+    }
+    .cursor-ring.expanded { width: 48px; height: 48px; }
+
+    .noise {
+      position: fixed; inset: 0; pointer-events: none; z-index: 500; opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat: repeat; background-size: 200px 200px;
+    }
+
+    /* NAV */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 60px;
+      background: var(--nav-bg); backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-wordmark { font-family: 'Bebas Neue', cursive; font-size: 22px; letter-spacing: 0.25em; color: var(--white); }
+    .nav-links { display: flex; align-items: center; gap: 32px; }
+    .nav-link { font-size: 11px; letter-spacing: 0.2em; color: var(--muted); text-decoration: none; transition: color 0.3s; }
+    .nav-link:hover, .nav-link.active { color: var(--white); }
+    .nav-cta {
+      font-size: 10px; letter-spacing: 0.2em; color: var(--gold);
+      text-decoration: none; border: 1px solid var(--gold-alpha-40);
+      padding: 8px 16px; transition: background 0.3s;
+    }
+    .nav-cta:hover { background: var(--gold-hover); }
+
+    /* ARTICLE LAYOUT */
+    .article-hero {
+      padding: 100px 60px 60px;
+      position: relative; z-index: 1;
+      border-bottom: 1px solid var(--border);
+      max-width: 860px; margin: 0 auto;
+      animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.1s both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .article-meta {
+      display: flex; align-items: center; gap: 16px; margin-bottom: 24px;
+    }
+    .article-tag {
+      font-size: 9px; letter-spacing: 0.15em; color: var(--gold);
+      border: 1px solid var(--gold-alpha-30); padding: 3px 10px;
+    }
+    .article-date { font-size: 10px; color: var(--muted); letter-spacing: 0.15em; }
+    .article-read-time { font-size: 10px; color: var(--muted); letter-spacing: 0.1em; }
+
+    .article-title {
+      font-size: clamp(24px, 4vw, 40px);
+      font-weight: 700; color: var(--white);
+      line-height: 1.5; margin-bottom: 20px;
+    }
+    .article-lead {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-size: 16px;
+      color: var(--muted); line-height: 1.9; letter-spacing: 0.03em;
+    }
+
+    /* ARTICLE BODY */
+    .article-body {
+      max-width: 860px; margin: 0 auto;
+      padding: 60px 60px 120px;
+      position: relative; z-index: 1;
+    }
+
+    .article-body h2 {
+      font-size: 20px; font-weight: 700; color: var(--white);
+      margin: 56px 0 20px;
+      padding-left: 16px;
+      border-left: 2px solid var(--gold);
+    }
+    .article-body h3 {
+      font-size: 15px; font-weight: 700; color: var(--white);
+      margin: 36px 0 12px;
+    }
+    .article-body p {
+      font-size: 14px; color: var(--muted); line-height: 2.1;
+      margin-bottom: 20px;
+    }
+    .article-body strong { color: var(--white); font-weight: 700; }
+    .article-body ul, .article-body ol {
+      margin: 16px 0 24px 20px;
+    }
+    .article-body li {
+      font-size: 14px; color: var(--muted); line-height: 2; margin-bottom: 6px;
+    }
+
+    /* TABLE */
+    .article-table {
+      width: 100%; border-collapse: collapse;
+      margin: 28px 0; font-size: 12px;
+    }
+    .article-table th {
+      font-size: 9px; letter-spacing: 0.2em; color: var(--gold);
+      border-bottom: 1px solid var(--gold-alpha-40);
+      padding: 10px 16px; text-align: left; font-weight: 300;
+    }
+    .article-table td {
+      padding: 12px 16px; color: var(--muted);
+      border-bottom: 1px solid var(--border); line-height: 1.7;
+    }
+    .article-table tr:hover td { color: var(--white); }
+
+    /* CALLOUT */
+    .callout {
+      border: 1px solid var(--gold-alpha-40);
+      background: var(--gold-hover);
+      padding: 24px 28px; margin: 32px 0;
+    }
+    .callout-label {
+      font-size: 9px; letter-spacing: 0.2em; color: var(--gold);
+      margin-bottom: 10px; display: block;
+    }
+    .callout p { font-size: 13px; color: var(--white); margin-bottom: 0; }
+
+    /* DIVIDER */
+    .article-divider {
+      border: none; border-top: 1px solid var(--border);
+      margin: 48px 0;
+    }
+
+    /* BACK LINK */
+    .back-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 10px; letter-spacing: 0.2em; color: var(--muted);
+      text-decoration: none; margin-bottom: 40px;
+      transition: color 0.3s;
+    }
+    .back-link:hover { color: var(--gold); }
+
+    /* NEXT ARTICLE */
+    .next-article {
+      border-top: 1px solid var(--border);
+      padding: 40px 0 0; margin-top: 80px;
+    }
+    .next-label { font-size: 9px; letter-spacing: 0.25em; color: var(--gold); margin-bottom: 12px; display: block; }
+    .next-title { font-size: 15px; font-weight: 700; color: var(--muted); line-height: 1.6; transition: color 0.3s; }
+    .next-article:hover .next-title { color: var(--white); }
+
+    /* FOOTER */
+    .footer {
+      padding: 24px 60px; background: var(--black);
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      position: relative; z-index: 1;
+    }
+    .footer-copy { font-size: 10px; letter-spacing: 0.25em; color: var(--muted); }
+    .footer-tag  { font-size: 9px;  letter-spacing: 0.15em; color: var(--white-faint); }
+
+    /* CTA BLOCK */
+    .cta-block {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-left: 2px solid var(--gold);
+      padding: 28px 32px; margin: 40px 0 0;
+    }
+    .cta-block p {
+      font-size: 13px; color: var(--muted); margin-bottom: 16px;
+    }
+    .cta-block a {
+      display: inline-block;
+      font-size: 10px; letter-spacing: 0.2em; color: var(--gold);
+      text-decoration: none; border: 1px solid var(--gold-alpha-40);
+      padding: 10px 20px; transition: background 0.3s;
+    }
+    .cta-block a:hover { background: var(--gold-hover); }
+
+    @media (max-width: 768px) {
+      body { cursor: auto; }
+      .cursor-dot, .cursor-ring { display: none; }
+      .nav { padding: 16px 24px; }
+      .nav-link { display: none; }
+      .article-hero { padding: 80px 24px 48px; }
+      .article-body { padding: 40px 24px 80px; }
+      .footer { padding: 20px 24px; flex-direction: column; gap: 8px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+  <div class="noise"></div>
+
+  <nav class="nav">
+    <a href="/index.html" class="nav-logo">
+      <svg width="44" height="44" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="logoGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#6B5420"/>
+            <stop offset="50%" stop-color="#E8C97A"/>
+            <stop offset="100%" stop-color="#C9A84C"/>
+          </linearGradient>
+          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <path id="logoCircle" d="M30,5 A25,25,0,1,1,29.999,5" fill="none"/>
+        </defs>
+        <circle cx="30" cy="30" r="28" fill="none" stroke="#C9A84C" stroke-width="0.5" opacity="0.4"/>
+        <circle cx="30" cy="30" r="20" fill="none" stroke="#C9A84C" stroke-width="0.3" opacity="0.2"/>
+        <g transform="translate(-6,-4.4) scale(0.36)">
+          <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="url(#logoGrad)" style="filter: url(#glow)"/>
+        </g>
+        <text font-family="'Bebas Neue','Noto Sans JP',sans-serif" font-size="5" fill="#C9A84C" opacity="0.78">
+          <textPath href="#logoCircle" startOffset="0%" letter-spacing="2.5">Senkode · 閃光 · Senkode · 閃光 ·</textPath>
+        </text>
+      </svg>
+      <span class="nav-wordmark">Senkode</span>
+    </a>
+    <div class="nav-links">
+      <a href="/services.html" class="nav-link">SERVICES</a>
+      <a href="/works.html" class="nav-link">WORKS</a>
+      <a href="/articles/index.html" class="nav-link active">ARTICLES</a>
+      <a href="/about.html" class="nav-link">ABOUT</a>
+      <a href="/contact.html" class="nav-cta">CONTACT</a>
+    </div>
+  </nav>
+
+  <!-- Article Hero -->
+  <div class="article-hero">
+    <a href="/articles/index.html" class="back-link">← ARTICLES</a>
+    <div class="article-meta">
+      <span class="article-tag">物流×DX</span>
+      <span class="article-date">2026.05.10</span>
+      <span class="article-read-time">読了 約10分</span>
+    </div>
+    <h1 class="article-title">物流2024年問題から1年——運送会社の現役管理職が語る、変わったこと・変わらなかったこと</h1>
+    <p class="article-lead">規制が施行された翌月から、現場の空気が変わった。でも変わったのは「残業時間の数字」だけで、構造そのものは驚くほど動いていない。業界の内側から見た1年間の正直な記録を書く。</p>
+  </div>
+
+  <!-- Article Body -->
+  <article class="article-body">
+
+    <h2>「物流が止まる」は本当だったか</h2>
+
+    <p>2024年4月、トラックドライバーへの時間外労働規制が適用された。年960時間の上限。それまで青天井に近かった残業が、法律で縛られることになった。メディアはこぞって「物流2024年問題」と呼び、「宅配便が届かなくなる」「農産物が腐る」「製造業のサプライチェーンが崩壊する」と書いた。あれから1年が経った。</p>
+
+    <p>結論から言う。<strong>「物流が止まった」という意味では、大きな混乱は起きていない。</strong>でも「何も変わらなかった」かというと、それも違う。変わったことと、驚くほど変わらなかったことが、それぞれはっきりある。</p>
+
+    <p>私は運送会社の管理職として10年以上、配送現場と荷主との交渉の両方を見てきた。数字だけでなく、ドライバーさんや中小の事業者から聞いた言葉も含めて、できるだけそのまま書く。業界の「建前」ではなく、現場の「本音」を残したいと思っている。</p>
+
+    <h2>変わったこと① ドライバーの時間外労働の内訳</h2>
+
+    <p>規制適用の前後で、数字は確かに変わった。弊社内のデータと、同業他社との情報交換から見えてきた傾向を整理するとこうなる。</p>
+
+    <table class="article-table">
+      <thead>
+        <tr>
+          <th>指標</th>
+          <th>規制前（2023年度）</th>
+          <th>規制後（2024年度）</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>月平均残業時間（ドライバー）</td>
+          <td>約95〜110時間</td>
+          <td>約72〜80時間</td>
+        </tr>
+        <tr>
+          <td>長距離便（500km超）の運行本数</td>
+          <td>100とすると</td>
+          <td>約78（中継輸送へ移行）</td>
+        </tr>
+        <tr>
+          <td>チャーター便比率（緊急対応）</td>
+          <td>全体の約12%</td>
+          <td>約18%（コスト増）</td>
+        </tr>
+        <tr>
+          <td>1日あたり早朝出勤（5時前）の割合</td>
+          <td>約20%</td>
+          <td>約34%</td>
+        </tr>
+        <tr>
+          <td>休憩・待機記録の電子化率</td>
+          <td>約28%</td>
+          <td>約55%（デジタコ普及）</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>月の残業時間は数字の上では減っている。しかし現場で聞いた話は、「残業が減った」とは少し違う。正確に言うと、<strong>「深夜残業が早朝出勤に置き換わった」</strong>のだ。</p>
+
+    <p>長距離便の減少は見た目よりも根深い問題をはらんでいる。中継輸送（途中で別のドライバーに引き継ぐ）が増えているが、中継地点のターミナルや待機場所の整備が追いついていない。荷物は動いているが、効率は落ちている。その分のコストは誰が吸収しているかというと、多くの場合は運送会社側だ。</p>
+
+    <div class="callout">
+      <span class="callout-label">現場ドライバーの声</span>
+      <p>「残業時間は管理されるようになったけど、早朝に切り替えただけです。体への負担はむしろ増えた気がする。残業代が減った分、収入が月2〜3万円下がった人もいます。規制があってよかったとは思う。でも喜んでいる人が周りにいるかというと、正直あまりいないですよ。」</p>
+    </div>
+
+    <p>「残業代が減った」という実態は、業界全体で静かに起きている。ドライバーという職業の収入水準が、もともと残業込みで設計されていたという構造的な問題が、規制によって一気に表面化した形だ。</p>
+
+    <h2>変わったこと② 荷主との力関係</h2>
+
+    <p>これは正直、予想以上に変わった。特に<strong>「待機時間の有料化」と「附帯作業の別料金化」</strong>の交渉が、以前より通りやすくなっている。</p>
+
+    <p>規制以前、荷主の工場や倉庫で2〜4時間待たされることは珍しくなかった。荷降ろしの手伝いや、仕分け作業まで「当たり前」のように要求されていた。それが無料だったのは、運送会社に断る力がなかったからだ。「嫌なら別の会社に頼む」という空気が、常にあった。</p>
+
+    <p>2024年以降、その交渉の前提が少し変わった。「法律で時間が管理されているから、待機時間はコストとして計上する必要がある」という説明が、荷主に対して刺さるようになってきた。規制という「外圧」が、価格交渉のレバレッジになっている。</p>
+
+    <p>実際に私が関わった案件では、ある食品メーカーとの契約更改で、荷待ち2時間以上に対して1時間あたり3,000円の待機料金を設定することが合意できた。3年前には考えられなかった結果だ。</p>
+
+    <div class="callout">
+      <span class="callout-label">中小事業者の本音</span>
+      <p>「大手が標準化された分、うちみたいな小さいところが細かいところを全部拾わないといけなくなった。大手が断った荷物、断った時間帯、断った条件——それが全部うちに来る。しかも単価は変わらない。大手が力をつけた分、しわ寄せがこっちに来ている感じがしています。」（中小運送会社・社長）</p>
+    </div>
+
+    <p>大手が勝ち取った交渉力の恩恵は、業界全体に均等には届いていない。荷主との交渉力が大手に偏ることで、中小がより過酷な条件を受け入れざるを得なくなる構造が生まれつつある。「業界全体の労働環境が改善された」とはまだ言い切れない。</p>
+
+    <h2>変わらなかったこと① "翌日配送"という消費者の常識</h2>
+
+    <p>今夜注文して、明日届く。この感覚は、消費者の間でまったく変わっていない。それどころか、ここ数年でECが拡大した分、翌日配送を「当たり前」だと思っている人の数は増えている。</p>
+
+    <p>問題の根は深い。大手ECプラットフォームが翌日配送を競争優位の武器にし続けている限り、その要求は運送会社に向け続けられる。法律でドライバーの残業時間を規制しても、「翌日に届けなければ他社に負ける」というプレッシャーは形を変えて残る。</p>
+
+    <p>実際に変わったのは、そのプレッシャーに応えるための「手段」だ。残業でカバーしていたものを、早朝出勤・中継輸送・外部委託でカバーするようになっただけで、配送の総量と速度への期待は変わっていない。</p>
+
+    <div class="callout">
+      <span class="callout-label">ドライバーさんに聞いた</span>
+      <p>「翌日配送のプレッシャーは変わってないです。ただ、残業じゃなくて早朝出勤になっただけ。午前2時に出発して、夕方に帰る。法律上は残業じゃない。でも体はきついのは同じです。消費者の方がそこまで考えているかというと、正直わからないですけど。」</p>
+    </div>
+
+    <p>消費者の意識が変わらない限り、このサイクルは続く。配送料の値上げや、お届け日数の緩和——これらは運送会社単独では実現できない。ECプラットフォーム・小売・消費者が一体として変わらなければ、ドライバーへの負荷は形を変えながら存在し続ける。</p>
+
+    <h2>変わらなかったこと② 現場のデジタル化</h2>
+
+    <p>デジタコ（デジタル式運行記録計）の普及は進んだ。それは事実だ。しかし<strong>「業務全体がデジタル化された」という意味では、業界の大半はまだ2010年代から抜け出せていない。</strong></p>
+
+    <p>FAXで注文を受け、電話で確認し、紙の帳票に手書きで記録する——そういう現場は今も普通に存在する。私自身の会社でも、特定の荷主との取引では未だにFAXが現役だ。荷主側がFAXしか対応していないからだ。</p>
+
+    <p>中小の運送会社に話を聞くと、「DXのことは考えている。でも今年は規制対応でコストを使い切った」という声が繰り返し出てくる。デジタコ導入・ドライバーへの研修・勤怠管理システムの整備。これだけで相当な出費になる。その後にDXの投資余力が残っている中小は、正直なところ少数派だ。</p>
+
+    <p>DXが進んでいるのは大手と、意識の高い一部の中小だけ。業界全体の生産性という意味では、規制の前後でほとんど変化がない。現場の人間として、それが一番もどかしいところだ。</p>
+
+    <h2>現場管理職として見る「本当に必要だったこと」</h2>
+
+    <p>規制は必要だった。それは間違いない。青天井の残業が続けば、ドライバーは疲弊し、事故が増え、若者が業界に入ってこなくなる。「法律がなければ変わらなかった」というのは、業界の外から見れば批判に聞こえるかもしれないが、内側から見れば事実でもある。</p>
+
+    <p>ただ、規制だけで構造は変わらない。「残業時間を減らす」という目標は達成されつつある。しかし、その先にある「ドライバーが長く働き続けられる業界」という目標に近づいているかどうかは、まだ疑問がある。</p>
+
+    <p>本当に変えなければならないのは、荷主・小売・消費者が持つ「物流はタダ」「翌日当たり前」という意識だ。送料無料・翌日配送を当然の権利として使い続けている限り、その代償はどこかで誰かが払い続けている。</p>
+
+    <p>AIやDXは補助ツールとして有効だ。配車の最適化、予測配送、スマートロッカーの活用——こういった技術は確実に現場の負荷を減らす。でもそれは「ある条件の下で効率を上げる」話であって、その条件——翌日配送を当然とする需要側の構造——を変えるものではない。</p>
+
+    <div class="callout">
+      <span class="callout-label">10年以上現場で働いてきてわかったこと</span>
+      <p>「法律が変わっても、要求の本質は変わらない」ということが骨身に染みてわかる。残業規制が施行された後も、荷主から「なんとかならないか」という話は必ず来る。法律の範囲でやり繰りするために、誰かが何かを犠牲にする。それが現場の実態だ。構造を変えるのは法律ではなく、お金の流れと、人々の意識だと思っている。</p>
+    </div>
+
+    <hr class="article-divider">
+
+    <h2>まとめ——2026年への視点</h2>
+
+    <p>物流2024年問題から1年。「変わったこと」は確かにある。残業時間は減った。荷主との交渉がしやすくなった。デジタコが普及し、記録の精度が上がった。これらは前進だ。</p>
+
+    <p>一方で「変わらなかったこと」の方が、重みとしては大きい。翌日配送への需要は変わらない。現場のデジタル化は大手と中小で二極化している。中小へのしわ寄せは構造化されつつある。</p>
+
+    <p>2026年以降に本当の変化が起きるとすれば、それは法律の続きではなく、送料・配送日数・附帯サービスの「価格への反映」が始まる時だと思っている。物流コストが可視化され、消費者が「翌日配送を選ぶなら追加料金がかかる」という選択をする社会になれば、ようやく構造が動く。</p>
+
+    <p>それが来るまでは、現場は今日も「工夫」を続ける。それが私たちの仕事だ。</p>
+
+    <!-- Author + CTA -->
+    <div class="callout">
+      <span class="callout-label">著者プロフィール</span>
+      <p>運送会社勤務・管理職。物流現場での実務歴10年以上。ドライバーとの現場対話・荷主交渉・コスト管理を担当。物流DX・業務効率化のリアルな実態を発信している。本記事はクライアントシミュレーションとして作成。</p>
+    </div>
+
+    <div class="cta-block">
+      <p>物流・DX・業務効率化の領域でコンテンツ制作・コンサルティングをご検討の方へ。Senkodeでは、業界の一次情報に基づいた高品質なコンテンツ制作と、デジタル化・自動化の戦略立案を一気通貫で提供しています。</p>
+      <a href="/contact.html">CONTACT — まずは相談する</a>
+    </div>
+
+    <!-- Next Article -->
+    <div class="next-article">
+      <span class="next-label">NEXT ARTICLE</span>
+      <p class="next-title">物流DXの現実——中小運送会社が「デジタル化できない」本当の理由（近日公開）</p>
+    </div>
+
+  </article>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <span class="footer-copy">Senkode © 2026</span>
+    <span class="footer-tag">閃光 — Flash of Light</span>
+  </footer>
+
+  <script>
+    const cursorDot  = document.querySelector('.cursor-dot');
+    const cursorRing = document.querySelector('.cursor-ring');
+    let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX; mouseY = e.clientY;
+      cursorDot.style.left = mouseX + 'px';
+      cursorDot.style.top  = mouseY + 'px';
+    });
+
+    (function animateCursor() {
+      const dx = mouseX - ringX, dy = mouseY - ringY;
+      ringX += dx * 0.15; ringY += dy * 0.15;
+      cursorRing.style.left = ringX + 'px';
+      cursorRing.style.top  = ringY + 'px';
+      requestAnimationFrame(animateCursor);
+    })();
+
+    document.querySelectorAll('a, .nav-cta').forEach(el => {
+      el.addEventListener('mouseenter', () => cursorRing.classList.add('expanded'));
+      el.addEventListener('mouseleave', () => cursorRing.classList.remove('expanded'));
+    });
+  </script>
+</body>
+</html>

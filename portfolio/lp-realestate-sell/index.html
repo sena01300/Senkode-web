@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>誠実不動産 | 査定額より大切なこと——売却後に後悔しない3つの確認事項</title>
+  <meta name="description" content="査定額が一番高い会社に頼んではいけない。売却後に後悔しない3つの確認事項をお伝えします。年間成約率94%の売却専門不動産会社。しつこい電話営業はしません。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@100;200;300;400&display=swap" rel="stylesheet">
+  <style>
+    [class*="grid"] > *, [class*="inner"] > *, [class*="wrap"] > * { min-width: 0; }
+
+    img, video, iframe { max-width: 100%; height: auto; }
+
+    html { overflow-x: hidden; }
+
+    :root {
+      --bg:         #0C0906;
+      --bg-sub:     #100D0A;
+      --card:       #171210;
+      --amber:      #D4A853;
+      --amber-lt:   #E8C97A;
+      --amber-bd:   rgba(212,168,83,0.25);
+      --amber-glow: rgba(212,168,83,0.1);
+      --text:       #F0EDE8;
+      --text-mid:   rgba(240,237,232,0.55);
+      --text-faint: rgba(240,237,232,0.22);
+      --bd:         rgba(212,168,83,0.12);
+      --red:        #E05252;
+      --green:      #52A882;
+      --nav-bg:     rgba(12,9,6,0.9);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--amber); }
+
+    /* CURSOR */
+    .cursor-dot  { position:fixed;width:6px;height:6px;background:var(--amber);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%); }
+    .cursor-ring { position:fixed;width:28px;height:28px;border:1px solid rgba(212,168,83,0.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width 0.25s,height 0.25s; }
+    .cursor-ring.big { width:44px;height:44px; }
+
+    /* GRID BG */
+    body::before {
+      content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+      background-image:linear-gradient(rgba(212,168,83,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(212,168,83,0.025) 1px,transparent 1px);
+      background-size:60px 60px;
+    }
+
+    /* NAV */
+    nav {
+      position:fixed;top:0;left:0;right:0;z-index:100;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:18px 60px;
+      background:var(--nav-bg);backdrop-filter:blur(12px);
+      border-bottom:1px solid var(--bd);
+    }
+    .nav-logo { display:flex;align-items:center;gap:10px;text-decoration:none; }
+    .nav-brand { font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:0.15em;color:var(--amber); }
+    .nav-sub   { font-size:9px;letter-spacing:0.2em;color:var(--text-faint); }
+    .nav-links { display:flex;align-items:center;gap:28px; }
+    .nav-link  { font-size:11px;letter-spacing:0.15em;color:var(--text-mid);text-decoration:none;transition:color 0.2s; }
+    .nav-link:hover { color:var(--text); }
+    .nav-cta {
+      font-size:11px;letter-spacing:0.1em;padding:9px 22px;
+      background:var(--amber);color:var(--bg);text-decoration:none;font-weight:400;
+      transition:background 0.2s;
+    }
+    .nav-cta:hover { background:var(--amber-lt); }
+
+    /* REVEAL */
+    .reveal { opacity:0;transform:translateY(24px);transition:opacity 0.6s,transform 0.6s;   will-change: opacity, transform;
+    }
+    .reveal.visible { opacity:1;transform:none; }
+
+    /* ── HERO ── */
+    .hero {
+      position:relative;z-index:2;
+      min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+      padding:120px 60px 80px;text-align:center;
+    }
+    .hero::after {
+      content:'';position:absolute;inset:0;z-index:-1;
+      background:radial-gradient(ellipse 60% 50% at 50% 60%, rgba(212,168,83,0.06) 0%, transparent 70%);
+    }
+    .hero-badge {
+      display:inline-flex;align-items:center;gap:8px;
+      border:1px solid var(--amber-bd);padding:6px 18px;margin-bottom:36px;
+      font-size:10px;letter-spacing:0.22em;color:var(--amber);
+    }
+    .hero-badge::before { content:'';width:6px;height:6px;background:var(--amber);border-radius:50%;animation:blink 1.4s ease-in-out infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.15} }
+
+    .hero-title {
+      font-family:'Bebas Neue',sans-serif;
+      font-size:clamp(44px,8.5vw,100px);line-height:1.05;
+      letter-spacing:0.04em;margin-bottom:20px;
+    }
+    .hero-title .accent { color:var(--amber); }
+    .hero-title .warn   { color:var(--red); }
+
+    .hero-sub {
+      font-size:clamp(13px,1.8vw,16px);font-weight:200;
+      color:var(--text-mid);max-width:600px;
+      width: 100%;line-height:2.1;margin:0 auto 52px;
+    }
+
+    .hero-stat-row {
+      display:flex;gap:64px;justify-content:center;flex-wrap:wrap;margin-bottom:52px;
+    }
+    .hero-stat { text-align:center;position:relative; }
+    .hero-stat + .hero-stat::before {
+      content:'';position:absolute;left:-32px;top:50%;transform:translateY(-50%);
+      width:1px;height:40px;background:var(--bd);
+    }
+    .hero-stat-num {
+      font-family:'Bebas Neue',sans-serif;font-size:54px;line-height:1;
+      color:var(--amber);letter-spacing:0.02em;display:block;
+    }
+    .hero-stat-unit { font-size:18px;color:var(--text-mid); }
+    .hero-stat-label { font-size:10px;letter-spacing:0.15em;color:var(--text-faint);margin-top:6px;display:block; }
+
+    .hero-cta-row { display:flex;gap:16px;justify-content:center;flex-wrap:wrap; }
+    .btn-primary {
+      font-size:12px;letter-spacing:0.15em;padding:16px 44px;
+      background:var(--amber);color:var(--bg);text-decoration:none;font-weight:400;
+      transition:background 0.2s,transform 0.2s;display:inline-block;
+    }
+    .btn-primary:hover { background:var(--amber-lt);transform:translateY(-2px); }
+    .btn-ghost {
+      font-size:12px;letter-spacing:0.15em;padding:16px 44px;
+      border:1px solid var(--amber-bd);color:var(--amber-lt);text-decoration:none;
+      transition:background 0.2s;display:inline-block;
+    }
+    .btn-ghost:hover { background:var(--amber-glow); }
+    .hero-note { font-size:10px;letter-spacing:0.1em;color:var(--text-faint);margin-top:20px; }
+
+    /* ── SECTION BASE ── */
+    .section { position:relative;z-index:2;padding:100px 60px; }
+    .section-inner { max-width:1100px;
+      width: 100%;margin:0 auto; }
+    .section-label { font-size:10px;letter-spacing:0.3em;color:var(--amber);margin-bottom:16px; }
+    .section-title {
+      font-family:'Bebas Neue',sans-serif;
+      font-size:clamp(30px,5vw,56px);letter-spacing:0.04em;
+      line-height:1.1;margin-bottom:48px;
+    }
+    .section-title .sub {
+      font-family:'Noto Sans JP',sans-serif;font-size:0.45em;font-weight:200;
+      display:block;color:var(--text-mid);letter-spacing:0.05em;margin-top:10px;
+    }
+
+    /* ── PROBLEM ── */
+    .problem-grid { display:grid;grid-template-columns:repeat(3,minmax(0, 1fr));gap:2px; }
+    .problem-card {
+      background:var(--card);padding:36px 28px;position:relative;overflow:hidden;
+      border-bottom:2px solid transparent;transition:border-color 0.3s,background 0.3s;
+    }
+    .problem-card:hover { background:#1D1814;border-bottom-color:var(--red); }
+    .problem-num {
+      font-family:'Bebas Neue',sans-serif;font-size:72px;
+      color:rgba(224,82,82,0.07);line-height:1;position:absolute;top:16px;right:20px;
+    }
+    .problem-icon { font-size:28px;margin-bottom:18px;display:block; }
+    .problem-title { font-size:15px;font-weight:400;margin-bottom:12px;letter-spacing:0.02em; }
+    .problem-body  { font-size:13px;line-height:2;color:var(--text-mid); }
+    .problem-quote {
+      margin-top:16px;padding:12px 16px;
+      background:rgba(224,82,82,0.05);border-left:2px solid rgba(224,82,82,0.4);
+      font-size:12px;color:var(--text-mid);font-style:italic;line-height:1.9;
+    }
+
+    /* ── CHECKLIST (3つの確認事項) ── */
+    .check-wrap { background:var(--bg-sub);padding:100px 60px; }
+    .check-list { display:flex;flex-direction:column;gap:2px;margin-top:48px; }
+    .check-item {
+      background:var(--card);padding:40px 44px;
+      display:grid;grid-template-columns:56px minmax(0, 1fr);gap:28px;align-items:flex-start;
+      border-left:3px solid transparent;transition:border-color 0.3s,background 0.3s;
+    }
+    .check-item:hover { background:#1D1814;border-left-color:var(--amber); }
+    .check-num-wrap { text-align:center;padding-top:4px; }
+    .check-num {
+      font-family:'Bebas Neue',sans-serif;font-size:40px;line-height:1;
+      color:var(--amber);display:block;
+    }
+    .check-num-label { font-size:8px;letter-spacing:0.2em;color:var(--text-faint);display:block;margin-top:2px; }
+    .check-content h3 { font-size:18px;font-weight:300;margin-bottom:12px;letter-spacing:0.02em; }
+    .check-content p  { font-size:13px;line-height:2.1;color:var(--text-mid); }
+    .check-tip {
+      margin-top:14px;padding:10px 14px;
+      background:var(--amber-glow);border:1px solid var(--bd);
+      font-size:11px;color:var(--amber-lt);letter-spacing:0.04em;line-height:1.8;
+      display:inline-block;
+    }
+
+    /* ── WHY US ── */
+    .why-grid { display:grid;grid-template-columns:repeat(2,minmax(0, 1fr));gap:2px; }
+    .why-card {
+      background:var(--card);padding:40px 36px;
+      border-top:2px solid transparent;transition:border-top-color 0.3s,background 0.3s;
+    }
+    .why-card:hover { background:#1D1814;border-top-color:var(--amber); }
+    .why-icon-row { display:flex;align-items:center;gap:14px;margin-bottom:18px; }
+    .why-icon { font-size:26px; }
+    .why-label { font-size:9px;letter-spacing:0.25em;color:var(--amber);padding:3px 10px;border:1px solid var(--amber-bd); }
+    .why-card h3 { font-size:16px;font-weight:300;margin-bottom:12px; }
+    .why-card p  { font-size:13px;line-height:2;color:var(--text-mid); }
+
+    /* ── TIMELINE ── */
+    .timeline-wrap { background:var(--bg-sub);padding:100px 60px; }
+    .timeline { display:grid;grid-template-columns:repeat(6,minmax(0, 1fr));gap:0;margin-top:48px;position:relative; }
+    .timeline::before {
+      content:'';position:absolute;top:28px;left:calc(100%/12);right:calc(100%/12);
+      height:1px;background:linear-gradient(90deg, transparent, var(--amber-bd), transparent);
+      z-index:0;
+    }
+    .tl-step { text-align:center;padding:0 12px;position:relative;z-index:1; }
+    .tl-dot {
+      width:16px;height:16px;border-radius:50%;
+      background:var(--bg-sub);border:2px solid var(--amber);
+      margin:0 auto 16px;
+    }
+    .tl-step.active .tl-dot { background:var(--amber); }
+    .tl-num {
+      font-family:'Bebas Neue',sans-serif;font-size:11px;
+      color:var(--amber-lt);letter-spacing:0.15em;display:block;margin-bottom:8px;
+    }
+    .tl-title { font-size:13px;font-weight:300;margin-bottom:6px;line-height:1.5; }
+    .tl-duration { font-size:10px;letter-spacing:0.08em;color:var(--amber);display:block;margin-bottom:6px; }
+    .tl-body  { font-size:11px;line-height:1.8;color:var(--text-faint); }
+    .tl-divider {
+      position:absolute;top:20px;right:-1px;width:1px;height:16px;
+      background:var(--amber-bd);z-index:2;
+    }
+    .tl-step:last-child .tl-divider { display:none; }
+
+    /* ── RESULTS / CASES ── */
+    .result-stat-row {
+      display:grid;grid-template-columns:repeat(3,minmax(0, 1fr));gap:2px;margin-bottom:2px;
+    }
+    .result-stat-card { background:var(--card);padding:36px 28px;text-align:center; }
+    .result-stat-num {
+      font-family:'Bebas Neue',sans-serif;font-size:56px;
+      color:var(--amber);line-height:1;display:block;margin-bottom:6px;
+    }
+    .result-stat-unit { font-size:16px;color:var(--amber-lt); }
+    .result-stat-label { font-size:11px;color:var(--text-mid);letter-spacing:0.05em;margin-top:4px;line-height:1.7; }
+
+    .case-grid { display:grid;grid-template-columns:repeat(3,minmax(0, 1fr));gap:2px;margin-top:2px; }
+    .case-card { background:var(--card);padding:36px 28px; }
+    .case-tag  { font-size:9px;letter-spacing:0.22em;color:var(--amber-lt);margin-bottom:14px;display:block; }
+    .case-detail { font-size:14px;font-weight:400;margin-bottom:16px;line-height:1.6; }
+    .case-period {
+      display:inline-block;font-size:10px;letter-spacing:0.1em;
+      padding:3px 10px;background:var(--amber-glow);border:1px solid var(--bd);
+      color:var(--amber);margin-bottom:16px;
+    }
+    .case-point { font-size:13px;line-height:1.9;color:var(--text-mid);padding-top:14px;border-top:1px solid var(--bd); }
+    .case-plus {
+      font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--green);
+      display:block;margin-top:12px;letter-spacing:0.02em;
+    }
+    .case-plus-label { font-size:10px;color:var(--text-faint);letter-spacing:0.1em; }
+
+    /* ── CTA SECTION ── */
+    .cta-section {
+      position:relative;z-index:2;padding:100px 60px;text-align:center;
+      background:var(--bg-sub);border-top:1px solid var(--bd);
+    }
+    .cta-title {
+      font-family:'Bebas Neue',sans-serif;
+      font-size:clamp(32px,5.5vw,68px);letter-spacing:0.04em;margin-bottom:20px;line-height:1.1;
+    }
+    .cta-sub { font-size:15px;font-weight:200;color:var(--text-mid);line-height:2.2;margin-bottom:20px;max-width:640px;margin-left:auto;margin-right:auto; }
+    .cta-options {
+      display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:36px;
+    }
+    .cta-option-tag {
+      font-size:11px;letter-spacing:0.1em;padding:6px 18px;
+      border:1px solid var(--bd);color:var(--text-mid);
+    }
+    .cta-note { font-size:11px;color:var(--text-faint);margin-top:20px;letter-spacing:0.05em; }
+
+    /* FAQ */
+    .faq-list { max-width:760px;
+      width: 100%;margin:0 auto; }
+    .faq-item { border-bottom:1px solid var(--bd);padding:28px 0; }
+    .faq-q {
+      font-size:15px;font-weight:300;cursor:pointer;
+      display:flex;justify-content:space-between;align-items:center;gap:16px;
+    }
+    .faq-q::after { content:'＋';color:var(--amber);flex-shrink:0;transition:transform 0.3s; }
+    .faq-item.open .faq-q::after { transform:rotate(45deg); }
+    .faq-a {
+      max-height:0;overflow:hidden;transition:max-height 0.4s ease,padding 0.3s;
+      font-size:14px;color:var(--text-mid);line-height:2;
+    }
+    .faq-item.open .faq-a { max-height:300px;padding-top:16px; }
+
+    /* FOOTER */
+    footer {
+      position:relative;z-index:2;
+      padding:28px 60px;background:var(--bg);border-top:1px solid var(--bd);
+      display:flex;align-items:center;justify-content:space-between;
+    }
+    .footer-brand { font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:0.15em;color:var(--amber); }
+    .footer-copy  { font-size:10px;letter-spacing:0.1em;color:var(--text-faint); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width:768px) {
+      body { cursor:auto; }
+      .cursor-dot,.cursor-ring { display:none; }
+      nav { padding:14px 20px; }
+      .nav-links { gap:12px; }
+      .nav-link  { display:none; }
+      .hero,.section,.check-wrap,.timeline-wrap,.cta-section { padding:80px 24px; }
+      .hero-stat-row { gap:28px; }
+      .hero-stat + .hero-stat::before { display:none; }
+      .problem-grid { grid-template-columns:minmax(0, 1fr); }
+      .check-item { grid-template-columns:minmax(0, 1fr);gap:12px;padding:28px 24px; }
+      .check-num-wrap { display:flex;align-items:center;gap:10px; }
+      .why-grid { grid-template-columns:minmax(0, 1fr); }
+      .timeline { grid-template-columns:minmax(0, 1fr) minmax(0, 1fr);gap:24px; }
+      .timeline::before { display:none; }
+      .tl-divider { display:none; }
+      .result-stat-row { grid-template-columns:minmax(0, 1fr); }
+      .case-grid { grid-template-columns:minmax(0, 1fr); }
+      footer { padding:20px 24px;flex-direction:column;gap:8px;text-align:center; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor-dot"></div>
+<div class="cursor-ring"></div>
+
+<nav>
+  <a href="#" class="nav-logo">
+    <div>
+      <div class="nav-brand">誠実不動産</div>
+      <div class="nav-sub">売却専門 / REAL ESTATE</div>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="#problem"   class="nav-link">なぜ危険か</a>
+    <a href="#checklist" class="nav-link">3つの確認</a>
+    <a href="#why"       class="nav-link">当社の強み</a>
+    <a href="#flow"      class="nav-link">売却の流れ</a>
+    <a href="#cta" class="nav-cta">無料で話を聞く</a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-badge reveal">売却専門 / 年間成約率94%</div>
+  <h1 class="hero-title reveal">
+    査定額が<br>
+    一番高い会社に<br>
+    頼んでは<span class="warn">いけない</span>
+  </h1>
+  <p class="hero-sub reveal">
+    査定額は"釣り"に使われることがある。大切なのは最終的に手元に残る金額です。
+  </p>
+  <div class="hero-stat-row reveal">
+    <div class="hero-stat">
+      <span class="hero-stat-num">127<span class="hero-stat-unit">件</span></span>
+      <span class="hero-stat-label">年間成約件数</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-num">94<span class="hero-stat-unit">%</span></span>
+      <span class="hero-stat-label">年間成約率</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-num">62<span class="hero-stat-unit">日</span></span>
+      <span class="hero-stat-label">平均売却期間</span>
+    </div>
+  </div>
+  <div class="hero-cta-row reveal">
+    <a href="#cta" class="btn-primary">まず話を聞いてもらう（無料）</a>
+    <a href="#checklist" class="btn-ghost">3つの確認事項を見る</a>
+  </div>
+  <p class="hero-note reveal">※ しつこい電話営業はしません。査定だけでも歓迎します</p>
+</section>
+
+<!-- ── PROBLEM ── -->
+<section class="section" id="problem" style="background:var(--bg-sub)">
+  <div class="section-inner">
+    <p class="section-label reveal">PROBLEM</p>
+    <h2 class="section-title reveal">
+      なぜ査定額だけで選ぶと危険か
+      <span class="sub">「高い査定を出した会社に頼む」——その判断が、後悔の始まりになることがある</span>
+    </h2>
+    <div class="problem-grid">
+      <div class="problem-card reveal">
+        <div class="problem-num">01</div>
+        <span class="problem-icon">🎣</span>
+        <h3 class="problem-title">査定額を高く提示して専任媒介を取る業者の実態</h3>
+        <p class="problem-body">一部の業者は最初だけ高い査定額を提示し、専任媒介契約を取ったあとで「相場が下がった」と値下げを誘導します。結果として成約額は他社より低くなるケースが後を絶ちません。</p>
+        <div class="problem-quote">「3000万円と言われたのに、2ヶ月後には2600万円まで下げてほしいと言われた」（売主様 談）</div>
+      </div>
+      <div class="problem-card reveal">
+        <div class="problem-num">02</div>
+        <span class="problem-icon">📋</span>
+        <h3 class="problem-title">瑕疵担保（かしたんぽ）の説明不足で売却後にトラブル</h3>
+        <p class="problem-body">売却後も「隠れた欠陥」が発覚すれば、売主が責任を問われることがあります。きちんとした担当者なら契約前にリスクを整理し、免責事項の設定や保険加入を提案します。</p>
+        <div class="problem-quote">「引き渡し後に雨漏りが発覚し、修繕費を請求されると言われた。説明を受けた記憶がない」（売主様 談）</div>
+      </div>
+      <div class="problem-card reveal">
+        <div class="problem-num">03</div>
+        <span class="problem-icon">📉</span>
+        <h3 class="problem-title">売却タイミングを誤ると手取りが大幅減</h3>
+        <p class="problem-body">不動産の売却益には譲渡所得税がかかります。所有期間が5年を超えるかどうか、住んでいた家かどうかで税率が大きく変わります。税の計算なしに売却すると、手元に残る金額が想定より数百万円少なくなることもあります。</p>
+        <div class="problem-quote">「売った翌年に多額の税金の請求が来た。誰も事前に教えてくれなかった」（売主様 談）</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CHECKLIST ── -->
+<section class="check-wrap" id="checklist">
+  <div class="section-inner">
+    <p class="section-label reveal">BEFORE YOU SELL</p>
+    <h2 class="section-title reveal">
+      売却前に必ず確認すべき3つのこと
+      <span class="sub">不動産会社を選ぶ前に、これだけは自分で確かめてください</span>
+    </h2>
+    <div class="check-list">
+      <div class="check-item reveal">
+        <div class="check-num-wrap">
+          <span class="check-num">01</span>
+          <span class="check-num-label">CHECK</span>
+        </div>
+        <div class="check-content">
+          <h3>この会社は過去に近隣物件をいくらで成約したか</h3>
+          <p>査定額は「売れればいい」と願う数字でしかありません。大切なのは「実際にいくらで成約したか」という実績の透明性です。誠実な会社は近隣の成約事例を資料で見せてくれます。それができない会社には依頼しないことをおすすめします。</p>
+          <span class="check-tip">確認ポイント：「過去6ヶ月の近隣成約事例を見せてください」と一言伝えるだけでわかります</span>
+        </div>
+      </div>
+      <div class="check-item reveal">
+        <div class="check-num-wrap">
+          <span class="check-num">02</span>
+          <span class="check-num-label">CHECK</span>
+        </div>
+        <div class="check-content">
+          <h3>専任媒介か一般媒介か、どちらが自分に有利か</h3>
+          <p>専任媒介は1社だけに依頼する契約で、業者は熱心に動きます。一方、一般媒介は複数社に依頼できますが、各社の動きが薄くなることも。あなたの物件の特性・立地・価格帯によってどちらが有利かは異なります。「なんとなく専任に」は危険です。</p>
+          <span class="check-tip">確認ポイント：「なぜ専任媒介を勧めるのか」理由を説明できない会社には要注意です</span>
+        </div>
+      </div>
+      <div class="check-item reveal">
+        <div class="check-num-wrap">
+          <span class="check-num">03</span>
+          <span class="check-num-label">CHECK</span>
+        </div>
+        <div class="check-content">
+          <h3>売却後の税金計算をしてもらったか</h3>
+          <p>不動産の売却で利益が出た場合、譲渡所得税がかかります。所有5年超か以下かで税率が大きく違い、マイホーム売却には3000万円特別控除という大きな優遇もあります。税理士と連携している不動産会社なら、売る前に「手取りシミュレーション」を出してもらえます。</p>
+          <span class="check-tip">確認ポイント：「売却後の手取り額をシミュレーションしてもらえますか」と聞いてみてください</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── WHY US ── -->
+<section class="section" id="why">
+  <div class="section-inner">
+    <p class="section-label reveal">WHY US</p>
+    <h2 class="section-title reveal">
+      なぜ当社に頼むのか
+      <span class="sub">「売れたらおしまい」では終わらない、4つの理由</span>
+    </h2>
+    <div class="why-grid">
+      <div class="why-card reveal">
+        <div class="why-icon-row">
+          <span class="why-icon">📊</span>
+          <span class="why-label">透明性</span>
+        </div>
+        <h3>成約できなかった場合の報告義務</h3>
+        <p>販売活動の経過を週次で報告します。「内覧があったのか」「どんな反応だったか」を正直にお伝えし、戦略の見直しも一緒に行います。都合の悪いことを隠す文化がありません。</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-icon-row">
+          <span class="why-icon">🔓</span>
+          <span class="why-label">公正</span>
+        </div>
+        <h3>囲い込みをしない宣言</h3>
+        <p>囲い込みとは、他社からの問い合わせを意図的にシャットアウトする違法スレスレの行為です。当社はREINSへの登録状況をお客様にも開示し、第三者からの問い合わせを積極的に受け入れます。</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-icon-row">
+          <span class="why-icon">🧾</span>
+          <span class="why-label">税務連携</span>
+        </div>
+        <h3>提携税理士による手取りシミュレーション</h3>
+        <p>売却前に譲渡所得税のシミュレーションを無料で実施します。3000万円特別控除・買い替え特例など、適用できる制度を漏れなく確認し、手元に最大限残る方法を設計します。</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-icon-row">
+          <span class="why-icon">🤝</span>
+          <span class="why-label">長期サポート</span>
+        </div>
+        <h3>売却後3年間のアフターフォロー</h3>
+        <p>引き渡し後に「雨漏りが出た」「給湯器が壊れた」といったトラブルが起きることもあります。当社は売却後3年間、法的なご相談窓口の紹介や書類作成のサポートを継続して行います。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TIMELINE ── -->
+<section class="timeline-wrap" id="flow">
+  <div class="section-inner">
+    <p class="section-label reveal">PROCESS</p>
+    <h2 class="section-title reveal">
+      売却の流れ
+      <span class="sub">無料相談から引き渡しまで、全6ステップで丁寧に進めます</span>
+    </h2>
+    <div class="timeline reveal">
+      <div class="tl-step">
+        <div class="tl-dot"></div>
+        <div class="tl-divider"></div>
+        <span class="tl-num">STEP 01</span>
+        <span class="tl-duration">1〜3日</span>
+        <div class="tl-title">無料相談</div>
+        <div class="tl-body">ご希望・状況のヒアリング。税金・時期・価格の基本方針を整理します</div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-dot"></div>
+        <div class="tl-divider"></div>
+        <span class="tl-num">STEP 02</span>
+        <span class="tl-duration">3〜7日</span>
+        <div class="tl-title">現地査定</div>
+        <div class="tl-body">担当者が現地を確認し、近隣成約事例を元に適正価格を提示します</div>
+      </div>
+      <div class="tl-step active">
+        <div class="tl-dot"></div>
+        <div class="tl-divider"></div>
+        <span class="tl-num">STEP 03</span>
+        <span class="tl-duration">1日</span>
+        <div class="tl-title">媒介契約</div>
+        <div class="tl-body">専任・一般どちらが有利かをご一緒に判断し、契約内容を丁寧に説明します</div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-dot"></div>
+        <div class="tl-divider"></div>
+        <span class="tl-num">STEP 04</span>
+        <span class="tl-duration">平均45日</span>
+        <div class="tl-title">販売活動</div>
+        <div class="tl-body">REINS掲載・ポータルサイト・SNS・チラシ配布を並行実施。週次報告を継続</div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-dot"></div>
+        <div class="tl-divider"></div>
+        <span class="tl-num">STEP 05</span>
+        <span class="tl-duration">1〜2週間</span>
+        <div class="tl-title">売買契約</div>
+        <div class="tl-body">条件交渉・瑕疵担保の設定・手付金受領まで丁寧にサポートします</div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-dot"></div>
+        <div class="tl-divider"></div>
+        <span class="tl-num">STEP 06</span>
+        <span class="tl-duration">1〜2ヶ月後</span>
+        <div class="tl-title">引き渡し</div>
+        <div class="tl-body">残代金決済・鍵の引き渡し。売却後3年間のアフターフォローがスタートします</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── RESULTS ── -->
+<section class="section" id="results">
+  <div class="section-inner">
+    <p class="section-label reveal">CASE STUDIES</p>
+    <h2 class="section-title reveal">
+      実績・成約事例
+      <span class="sub">当社が実際に支援した成約事例（地名・条件等は一部変更しています）</span>
+    </h2>
+    <div class="result-stat-row">
+      <div class="result-stat-card reveal">
+        <span class="result-stat-num">127<span class="result-stat-unit">件</span></span>
+        <div class="result-stat-label">年間成約件数</div>
+      </div>
+      <div class="result-stat-card reveal">
+        <span class="result-stat-num">94<span class="result-stat-unit">%</span></span>
+        <div class="result-stat-label">年間成約率（業界平均72%）</div>
+      </div>
+      <div class="result-stat-card reveal">
+        <span class="result-stat-num">62<span class="result-stat-unit">日</span></span>
+        <div class="result-stat-label">平均売却期間（業界平均95日）</div>
+      </div>
+    </div>
+    <div class="case-grid">
+      <div class="case-card reveal">
+        <span class="case-tag">CASE 01 — 港区 マンション 3LDK</span>
+        <div class="case-detail">築14年・75㎡・12階部屋</div>
+        <span class="case-period">査定から68日で成約</span>
+        <div class="case-point">他社査定より+180万円で成約。近隣の成約事例を丁寧に分析し、内覧時の演出も提案。税理士と連携し3000万円控除の適用で納税額をゼロに抑えました。</div>
+        <span class="case-plus">+180万円</span>
+        <span class="case-plus-label">近隣相場比 成約額</span>
+      </div>
+      <div class="case-card reveal">
+        <span class="case-tag">CASE 02 — 世田谷区 戸建て 4LDK</span>
+        <div class="case-detail">築22年・95㎡・土地35坪</div>
+        <span class="case-period">査定から54日で成約</span>
+        <div class="case-point">売却前にホームインスペクション（住宅診断）を実施し、瑕疵担保リスクを可視化。買主にも安心感が伝わり、価格交渉なしで即決。引き渡し後のトラブルもゼロ。</div>
+        <span class="case-plus">交渉ゼロ</span>
+        <span class="case-plus-label">提示価格での即決成約</span>
+      </div>
+      <div class="case-card reveal">
+        <span class="case-tag">CASE 03 — 川崎市 マンション 2LDK</span>
+        <div class="case-detail">築8年・62㎡・駅徒歩6分</div>
+        <span class="case-period">査定から41日で成約</span>
+        <div class="case-point">所有5年未満のため譲渡税率が高い状況。売却タイミングを2ヶ月ずらすことで5年超の長期譲渡所得に切り替え、手取り額を320万円増加。焦らない判断が大きな差になりました。</div>
+        <span class="case-plus">+320万円</span>
+        <span class="case-plus-label">税制活用による手取り増</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FAQ ── -->
+<section class="section" style="background:var(--bg-sub)">
+  <div class="section-inner">
+    <p class="section-label reveal">FAQ</p>
+    <h2 class="section-title reveal" style="margin-bottom:48px">よくあるご質問</h2>
+    <div class="faq-list">
+      <div class="faq-item reveal">
+        <div class="faq-q">査定だけでもお願いできますか？</div>
+        <div class="faq-a">はい、もちろんです。査定のみのご依頼も大歓迎です。査定後に契約を迫るようなことは一切しません。「いくらで売れるか知りたい」という段階でお気軽にご連絡ください。</div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q">電話での営業はありますか？</div>
+        <div class="faq-a">しつこい電話営業はしません。ご相談後の連絡は、お客様のご希望の方法（メール・LINE・電話）で、必要な場合のみお送りします。「情報が欲しいだけ」という段階でも安心してお問い合わせください。</div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q">住んでいる状態でも売却できますか？</div>
+        <div class="faq-a">はい、居住中のまま売却活動を進めることは一般的です。内覧の日程調整や室内の準備についても、無理のない範囲でご一緒に考えます。引っ越し先が決まってから売却したい場合など、ご事情に合わせてスケジュールを設計します。</div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q">売却に必要な書類は何ですか？</div>
+        <div class="faq-a">権利証（登記識別情報）・身分証明書・固定資産税納税通知書などが基本です。書類の確認から取得サポートまで、担当者が丁寧にご案内します。「何を用意すればいいかわからない」という状態でご相談いただいても問題ありません。</div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q">購入物件を探したいのですが、サポートしてもらえますか？</div>
+        <div class="faq-a">はい、売却のご相談に合わせて購入物件の資料作成も無料で承ります。「今の家を売って次の家を買いたい」という住み替えのケースも多く、両方をセットでご相談いただくことで、タイミングのズレを防ぐ計画が立てやすくなります。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ── -->
+<section class="cta-section" id="cta">
+  <p class="section-label reveal">CONTACT</p>
+  <h2 class="cta-title reveal">
+    まず、無料査定の前に<br>
+    <span style="color:var(--amber)">話を聞いてください</span>
+  </h2>
+  <p class="cta-sub reveal">
+    押しつけることはしません。査定額を高く見せて契約を急かすこともしません。
+    売却後に「あのとき相談して良かった」と思ってもらえる関係を大切にしています。
+  </p>
+  <div class="cta-options reveal">
+    <span class="cta-option-tag">査定だけでも歓迎</span>
+    <span class="cta-option-tag">購入時の資料も無料で作成</span>
+    <span class="cta-option-tag">税金シミュレーション無料</span>
+  </div>
+  <a href="#" class="btn-primary reveal">無料で相談する（所要30〜60分）</a>
+  <p class="cta-note reveal">※ しつこい電話営業はしません。相談後の継続はすべてお客様の判断に委ねます</p>
+</section>
+
+<footer>
+  <div class="footer-brand">誠実不動産 / SEIJITSU REALTY</div>
+  <div class="footer-copy">© 2026 誠実不動産. Powered by Senkode.</div>
+</footer>
+
+<script>
+  // CURSOR
+  const dot  = document.querySelector('.cursor-dot');
+  const ring = document.querySelector('.cursor-ring');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+  (function loop(){
+    rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
+    dot.style.left=mx+'px'; dot.style.top=my+'px';
+    ring.style.left=rx+'px'; ring.style.top=ry+'px';
+    requestAnimationFrame(loop);
+  })();
+  document.querySelectorAll('a,button').forEach(el=>{
+    el.addEventListener('mouseenter',()=>ring.classList.add('big'));
+    el.addEventListener('mouseleave',()=>ring.classList.remove('big'));
+  });
+
+  // SCROLL REVEAL
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});
+  },{threshold:0.08});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+  // FAQ
+  document.querySelectorAll('.faq-item').forEach(item=>{
+    item.querySelector('.faq-q').addEventListener('click',()=>{
+      const isOpen=item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+      if(!isOpen) item.classList.add('open');
+    });
+  });
+</script>
+</body>
+</html>

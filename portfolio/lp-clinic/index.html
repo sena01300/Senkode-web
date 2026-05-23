@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CLINIQUE BLANC — プレミアム美容クリニック</title>
+  <meta name="description" content="あなた本来の美しさを引き出す、プレミアム美容クリニック。ヒアルロン酸・医療脱毛・美白治療。完全予約制・個室対応。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,600&family=Noto+Sans+JP:wght@100;200;300&display=swap" rel="stylesheet">
+  <style>
+    [class*="grid"] > *, [class*="inner"] > *, [class*="wrap"] > * { min-width: 0; }
+
+    img, video, iframe { max-width: 100%; height: auto; }
+
+    html { overflow-x: hidden; }
+
+    :root {
+      --bg:          #FFFFFF;
+      --bg-soft:     #FDF8F8;
+      --bg-pink:     #FBF0F0;
+      --rose:        #F5C8C8;
+      --rose-mid:    #D9A0A0;
+      --rose-deep:   #C9A0A0;
+      --text:        #2D1515;
+      --text-mid:    #776060;
+      --text-faint:  rgba(45,21,21,0.35);
+      --border:      rgba(201,160,160,0.2);
+      --border-soft: rgba(201,160,160,0.1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--rose-mid); }
+    .reveal {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);
+      will-change: opacity, transform;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hero-grid { grid-template-columns: minmax(0, 1fr) !important; }
+      .hero-visual { min-height: 280px !important; }
+      .services-grid { grid-template-columns: minmax(0, 1fr) !important; }
+      .flow-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important; }
+      .flow-line { display: none !important; }
+      .voice-grid { grid-template-columns: minmax(0, 1fr) !important; }
+      .section-pad { padding: 80px 24px !important; }
+      .cta-btns { flex-direction: column !important; align-items: center !important; }
+      .footer-inner { flex-direction: column !important; gap: 12px !important; text-align: center; }
+      nav { padding: 16px 24px !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav style="position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:20px 60px;background:rgba(255,255,255,0.92);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid var(--border-soft);">
+  <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;letter-spacing:3px;color:var(--rose-deep);">Clinique Blanc</div>
+  <div class="nav-links" style="display:flex;gap:36px;font-size:11px;letter-spacing:3px;color:var(--text-mid);">
+    <a href="#services" style="color:inherit;text-decoration:none;">SERVICES</a>
+    <a href="#flow" style="color:inherit;text-decoration:none;">FLOW</a>
+    <a href="#voice" style="color:inherit;text-decoration:none;">VOICE</a>
+    <a href="#cta" style="color:inherit;text-decoration:none;">CONTACT</a>
+  </div>
+  <a href="#cta" style="font-size:10px;letter-spacing:2px;color:var(--rose-deep);border:1px solid var(--rose-deep);padding:8px 20px;text-decoration:none;">予約する</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero-grid" style="display:grid;grid-template-columns:minmax(0, 1fr) minmax(0, 1fr);min-height:90vh;">
+  <div style="display:flex;flex-direction:column;justify-content:center;padding:80px 60px;position:relative;">
+    <div style="position:absolute;top:-80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(245,200,200,0.15) 0%,transparent 70%);pointer-events:none;"></div>
+    <p style="font-size:10px;letter-spacing:5px;color:var(--rose-deep);margin-bottom:20px;" class="reveal">PREMIUM AESTHETIC CLINIC</p>
+    <h1 style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:clamp(36px,5vw,60px);line-height:1.2;color:var(--text);margin-bottom:24px;" class="reveal">"美しさは、<br>静けさの中にある。"</h1>
+    <div style="width:40px;height:1px;background:var(--rose-deep);margin-bottom:20px;" class="reveal"></div>
+    <p style="font-size:14px;line-height:1.9;color:var(--text-mid);max-width:340px;margin-bottom:40px;" class="reveal">あなた本来の美しさを引き出す、プレミアム美容医療。<br>一人ひとりに寄り添った、丁寧なカウンセリングから始まります。</p>
+    <div class="cta-btns" style="display:flex;gap:16px;">
+      <a href="#cta" style="font-size:11px;letter-spacing:2px;color:var(--bg);background:var(--rose-deep);padding:14px 32px;text-decoration:none;">無料カウンセリング →</a>
+      <a href="#services" style="font-size:11px;letter-spacing:2px;color:var(--rose-deep);border:1px solid var(--rose-deep);padding:14px 32px;text-decoration:none;">施術を見る</a>
+    </div>
+  </div>
+  <div class="hero-visual" style="background:linear-gradient(160deg,#FDE8E8 0%,#F5C8C8 40%,#EDB0B0 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;min-height:500px;">
+    <div style="position:absolute;top:-60px;right:-60px;width:280px;height:280px;border-radius:50%;background:rgba(255,255,255,0.25);"></div>
+    <div style="position:absolute;bottom:40px;left:-40px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,0.15);"></div>
+    <div style="text-align:center;position:relative;z-index:1;">
+      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:80px;font-weight:300;color:rgba(255,255,255,0.4);line-height:1;letter-spacing:-2px;">B</div>
+      <div style="font-size:10px;letter-spacing:6px;color:rgba(255,255,255,0.6);margin-top:8px;">CLINIQUE BLANC</div>
+    </div>
+    <div style="position:absolute;bottom:40px;right:30px;background:rgba(255,255,255,0.3);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);padding:10px 16px;font-size:10px;letter-spacing:2px;color:var(--text);">FREE COUNSELING</div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" class="section-pad" style="padding:120px 60px;background:var(--bg-soft);">
+  <div style="max-width:1100px;margin:0 auto;">
+    <p style="font-size:10px;letter-spacing:5px;color:var(--rose-deep);margin-bottom:12px;" class="reveal">SERVICES</p>
+    <h2 style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:clamp(28px,4vw,44px);color:var(--text);margin-bottom:60px;" class="reveal">施術メニュー</h2>
+    <div class="services-grid" style="display:grid;grid-template-columns:repeat(3,minmax(0, 1fr));gap:2px;">
+      <div style="background:var(--bg);padding:40px 32px;border-top:2px solid var(--rose);transition:transform 0.3s;" class="reveal" onmouseenter="this.style.transform='translateY(-4px)'" onmouseleave="this.style.transform=''">
+        <div style="font-size:11px;letter-spacing:4px;color:var(--rose-deep);margin-bottom:16px;">01</div>
+        <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;color:var(--text);margin-bottom:12px;">ヒアルロン酸注入</h3>
+        <p style="font-size:13px;line-height:1.9;color:var(--text-mid);">自然な輪郭形成と保湿効果。ほうれい線・目の下のクマ・唇のボリュームアップに。ダウンタイムほぼゼロ。</p>
+        <div style="margin-top:24px;font-size:10px;letter-spacing:2px;color:var(--rose-deep);">¥29,800〜 →</div>
+      </div>
+      <div style="background:var(--bg);padding:40px 32px;border-top:2px solid var(--rose);transition:transform 0.3s;" class="reveal" onmouseenter="this.style.transform='translateY(-4px)'" onmouseleave="this.style.transform=''">
+        <div style="font-size:11px;letter-spacing:4px;color:var(--rose-deep);margin-bottom:16px;">02</div>
+        <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;color:var(--text);margin-bottom:12px;">医療脱毛</h3>
+        <p style="font-size:13px;line-height:1.9;color:var(--text-mid);">医療レーザーによる永久脱毛。全身・顔・VIOに対応。痛みの少ない最新機器を使用。6回コースで完了。</p>
+        <div style="margin-top:24px;font-size:10px;letter-spacing:2px;color:var(--rose-deep);">¥58,000〜 →</div>
+      </div>
+      <div style="background:var(--bg);padding:40px 32px;border-top:2px solid var(--rose);transition:transform 0.3s;" class="reveal" onmouseenter="this.style.transform='translateY(-4px)'" onmouseleave="this.style.transform=''">
+        <div style="font-size:11px;letter-spacing:4px;color:var(--rose-deep);margin-bottom:16px;">03</div>
+        <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;color:var(--text);margin-bottom:12px;">美白・トーンアップ</h3>
+        <p style="font-size:13px;line-height:1.9;color:var(--text-mid);">美容点滴・レーザートーニング・ピーリングを組み合わせた複合治療。くすみ・シミ・色ムラを集中改善。</p>
+        <div style="margin-top:24px;font-size:10px;letter-spacing:2px;color:var(--rose-deep);">¥18,000〜 →</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FLOW -->
+<section id="flow" class="section-pad" style="padding:120px 60px;background:var(--bg);">
+  <div style="max-width:1100px;margin:0 auto;">
+    <p style="font-size:10px;letter-spacing:5px;color:var(--rose-deep);margin-bottom:12px;" class="reveal">FLOW</p>
+    <h2 style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:clamp(28px,4vw,44px);color:var(--text);margin-bottom:60px;" class="reveal">ご来院の流れ</h2>
+    <div class="flow-grid" style="display:grid;grid-template-columns:repeat(4,minmax(0, 1fr));gap:0;position:relative;">
+      <div class="flow-line" style="position:absolute;top:28px;left:12.5%;right:12.5%;height:1px;background:var(--border);"></div>
+      <div style="text-align:center;padding:0 20px;" class="reveal">
+        <div style="width:56px;height:56px;border-radius:50%;border:1px solid var(--rose-deep);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:var(--rose-deep);background:var(--bg);position:relative;z-index:1;">1</div>
+        <h4 style="font-size:13px;letter-spacing:1px;color:var(--text);margin-bottom:8px;">Web予約</h4>
+        <p style="font-size:11px;color:var(--text-mid);line-height:1.7;">24時間いつでもオンライン予約可能。LINEからもOK。</p>
+      </div>
+      <div style="text-align:center;padding:0 20px;" class="reveal">
+        <div style="width:56px;height:56px;border-radius:50%;border:1px solid var(--rose-deep);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:var(--rose-deep);background:var(--bg);position:relative;z-index:1;">2</div>
+        <h4 style="font-size:13px;letter-spacing:1px;color:var(--text);margin-bottom:8px;">無料カウンセリング</h4>
+        <p style="font-size:11px;color:var(--text-mid);line-height:1.7;">専任医師が肌状態を診断。最適プランをご提案。</p>
+      </div>
+      <div style="text-align:center;padding:0 20px;" class="reveal">
+        <div style="width:56px;height:56px;border-radius:50%;border:1px solid var(--rose-deep);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:var(--rose-deep);background:var(--bg);position:relative;z-index:1;">3</div>
+        <h4 style="font-size:13px;letter-spacing:1px;color:var(--text);margin-bottom:8px;">施術</h4>
+        <p style="font-size:11px;color:var(--text-mid);line-height:1.7;">完全個室。痛みに配慮した施術で、リラックスした時間を。</p>
+      </div>
+      <div style="text-align:center;padding:0 20px;" class="reveal">
+        <div style="width:56px;height:56px;border-radius:50%;border:1px solid var(--rose-deep);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:var(--rose-deep);background:var(--bg);position:relative;z-index:1;">4</div>
+        <h4 style="font-size:13px;letter-spacing:1px;color:var(--text);margin-bottom:8px;">アフターケア</h4>
+        <p style="font-size:11px;color:var(--text-mid);line-height:1.7;">施術後の経過もLINEでサポート。再診も無料。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VOICE -->
+<section id="voice" class="section-pad" style="padding:120px 60px;background:var(--bg-pink);">
+  <div style="max-width:1100px;margin:0 auto;">
+    <p style="font-size:10px;letter-spacing:5px;color:var(--rose-deep);margin-bottom:12px;" class="reveal">VOICE</p>
+    <h2 style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:clamp(28px,4vw,44px);color:var(--text);margin-bottom:60px;" class="reveal">患者様の声</h2>
+    <div class="voice-grid" style="display:grid;grid-template-columns:repeat(3,minmax(0, 1fr));gap:24px;">
+      <div style="background:var(--bg);padding:32px;" class="reveal">
+        <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:40px;color:var(--rose);line-height:1;margin-bottom:16px;">"</div>
+        <p style="font-size:13px;line-height:1.9;color:var(--text-mid);margin-bottom:20px;">カウンセリングから施術まで、一貫して丁寧に対応していただきました。ヒアルロン酸注入は痛みもほとんどなく、ダウンタイムもほぼゼロ。自然な仕上がりに大満足です。</p>
+        <div style="font-size:11px;letter-spacing:2px;color:var(--rose-deep);">30代 / 会社員</div>
+      </div>
+      <div style="background:var(--bg);padding:32px;" class="reveal">
+        <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:40px;color:var(--rose);line-height:1;margin-bottom:16px;">"</div>
+        <p style="font-size:13px;line-height:1.9;color:var(--text-mid);margin-bottom:20px;">医療脱毛を他院でも試しましたが、ここが一番痛みが少なかった。スタッフの方が親身で、施術中も声がけしてくれて安心感がありました。友人にも紹介しました。</p>
+        <div style="font-size:11px;letter-spacing:2px;color:var(--rose-deep);">20代 / 看護師</div>
+      </div>
+      <div style="background:var(--bg);padding:32px;" class="reveal">
+        <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:40px;color:var(--rose);line-height:1;margin-bottom:16px;">"</div>
+        <p style="font-size:13px;line-height:1.9;color:var(--text-mid);margin-bottom:20px;">シミが気になり始めて相談したところ、複合治療をすすめられました。3回の施術でかなりトーンが均一になり、メイクが楽になりました。継続して通っています。</p>
+        <div style="font-size:11px;letter-spacing:2px;color:var(--rose-deep);">40代 / 主婦</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta" class="section-pad" style="padding:140px 60px;background:linear-gradient(160deg,#FDF8F8 0%,#FBF0F0 50%,#F5E0E0 100%);text-align:center;">
+  <p style="font-size:10px;letter-spacing:5px;color:var(--rose-deep);margin-bottom:16px;" class="reveal">GET STARTED</p>
+  <h2 style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:clamp(32px,5vw,52px);color:var(--text);margin-bottom:20px;" class="reveal">まずは無料カウンセリングから。</h2>
+  <p style="font-size:14px;line-height:1.9;color:var(--text-mid);margin-bottom:48px;" class="reveal">お肌の状態を丁寧に診断し、あなたに最適なプランをご提案します。<br>費用・施術内容・ダウンタイムなど、どんなことでもお気軽に。</p>
+  <div class="cta-btns" style="display:flex;gap:16px;justify-content:center;">
+    <a href="#" style="font-size:12px;letter-spacing:3px;color:var(--bg);background:var(--rose-deep);padding:16px 48px;text-decoration:none;">無料カウンセリングを予約する →</a>
+    <a href="tel:0312345678" style="font-size:12px;letter-spacing:2px;color:var(--rose-deep);border:1px solid var(--rose-deep);padding:16px 32px;text-decoration:none;">03-1234-5678</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner" style="display:flex;align-items:center;justify-content:space-between;padding:40px 60px;background:var(--bg);border-top:1px solid var(--border-soft);">
+    <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:var(--rose-deep);">Clinique Blanc</div>
+    <div style="font-size:11px;color:var(--text-faint);letter-spacing:2px;">東京都港区 / 完全予約制</div>
+    <div style="font-size:11px;color:var(--text-faint);letter-spacing:1px;">© 2026 Clinique Blanc</div>
+  </div>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

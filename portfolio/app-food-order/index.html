@@ -1,0 +1,1766 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>食材発注AIアシスタント 要件定義書 | Senkode Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@100;200;300&display=swap" rel="stylesheet">
+  <style>
+    [class*="grid"] > *, [class*="inner"] > *, [class*="wrap"] > * { min-width: 0; }
+
+    img, video, iframe { max-width: 100%; height: auto; }
+
+    html { overflow-x: hidden; }
+
+    :root {
+      --bg:        #0C0604;
+      --bg-sub:    #120A06;
+      --card:      #1A0E08;
+      --red:       #DC2626;
+      --red-lt:    #EF4444;
+      --red-bd:    rgba(220,38,38,0.25);
+      --red-glow:  rgba(220,38,38,0.1);
+      --orange:    #EA580C;
+      --orange-bd: rgba(234,88,12,0.25);
+      --amber:     #D97706;
+      --green:     #16A34A;
+      --green-bd:  rgba(22,163,74,0.25);
+      --text:      #FFF7F0;
+      --text-mid:  rgba(255,247,240,0.55);
+      --text-faint:rgba(255,247,240,0.22);
+      --bd:        rgba(220,38,38,0.12);
+      --nav-bg:    rgba(12,6,4,0.92);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      scroll-behavior: smooth;
+      cursor: none;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 200;
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+
+    /* ─── Custom cursor ─── */
+    #cursor {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background: var(--red);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width .2s, height .2s, opacity .2s;
+    }
+    #cursor-ring {
+      position: fixed;
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--red-bd);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: transform .12s ease-out, width .2s, height .2s;
+    }
+
+    /* ─── Navigation ─── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: var(--nav-bg);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--bd);
+      padding: 0 48px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      color: var(--red);
+      letter-spacing: .1em;
+    }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--text-mid);
+      text-decoration: none;
+      font-size: .75rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--red-lt); }
+
+    /* ─── Scroll reveal ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity .7s ease, transform .7s ease;
+      will-change: opacity, transform;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── Layout ─── */
+    .container {
+      max-width: 1100px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 48px;
+    }
+
+    section {
+      padding: 96px 0;
+      border-top: 1px solid var(--bd);
+    }
+
+    /* ─── HERO ─── */
+    #hero {
+      padding: 160px 0 96px;
+      border-top: none;
+      position: relative;
+      overflow: hidden;
+    }
+    #hero::before {
+      content: '';
+      position: absolute;
+      top: -200px;
+      right: -200px;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, var(--red-glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    #hero::after {
+      content: '';
+      position: absolute;
+      bottom: -100px;
+      left: -100px;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(234,88,12,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--red-bd);
+      background: var(--red-glow);
+      color: var(--red-lt);
+      font-size: .7rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 2px;
+      margin-bottom: 32px;
+    }
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--red);
+      border-radius: 50%;
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .3; }
+    }
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      line-height: 1.05;
+      letter-spacing: .04em;
+      color: var(--text);
+      margin-bottom: 40px;
+    }
+    .hero-title span { color: var(--red); }
+
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      background: var(--bd);
+      border: 1px solid var(--bd);
+      margin-bottom: 48px;
+    }
+    .info-item {
+      background: var(--bg-sub);
+      padding: 20px 24px;
+    }
+    .info-label {
+      font-size: .65rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 6px;
+    }
+    .info-value {
+      font-size: .9rem;
+      font-weight: 300;
+      color: var(--text);
+    }
+    .hero-summary {
+      background: var(--card);
+      border-left: 3px solid var(--red);
+      padding: 24px 32px;
+      font-size: .95rem;
+      color: var(--text-mid);
+      max-width: 820px;
+    }
+    .hero-summary strong { color: var(--red-lt); font-weight: 300; }
+
+    /* ─── Section heading ─── */
+    .section-label {
+      font-size: .65rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.4rem;
+      letter-spacing: .06em;
+      color: var(--text);
+      margin-bottom: 40px;
+    }
+
+    /* ─── Cards grid ─── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--bd);
+      padding: 28px;
+      transition: border-color .3s, transform .3s;
+    }
+    .card:hover {
+      border-color: var(--red-bd);
+      transform: translateY(-4px);
+    }
+    .card-icon {
+      font-size: 1.6rem;
+      margin-bottom: 12px;
+    }
+    .card-title {
+      font-size: .8rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 10px;
+    }
+    .card-body {
+      font-size: .85rem;
+      color: var(--text-mid);
+      line-height: 1.7;
+    }
+    .card-body em {
+      font-style: normal;
+      color: var(--text-faint);
+      font-size: .8rem;
+      display: block;
+      margin-top: 8px;
+    }
+
+    /* ─── Callout box ─── */
+    .callout {
+      background: var(--red-glow);
+      border: 1px solid var(--red-bd);
+      border-left: 3px solid var(--red);
+      padding: 20px 28px;
+      margin: 24px 0;
+      font-size: .875rem;
+      color: var(--text-mid);
+    }
+    .callout strong { color: var(--red-lt); font-weight: 300; }
+
+    /* ─── KPI numbers ─── */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 32px;
+    }
+    .kpi-box {
+      background: var(--bg-sub);
+      border: 1px solid var(--bd);
+      padding: 28px 24px;
+      text-align: center;
+    }
+    .kpi-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      color: var(--red);
+      line-height: 1;
+    }
+    .kpi-unit {
+      font-size: .75rem;
+      color: var(--red-lt);
+      letter-spacing: .1em;
+    }
+    .kpi-label {
+      font-size: .78rem;
+      color: var(--text-mid);
+      margin-top: 8px;
+      line-height: 1.6;
+    }
+
+    /* ─── System diagram ─── */
+    .diagram-wrap {
+      background: var(--bg-sub);
+      border: 1px solid var(--bd);
+      padding: 40px 48px;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 200;
+      font-size: .85rem;
+      overflow-x: auto;
+    }
+    .diagram-node {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 10px 0;
+    }
+    .node-box {
+      border: 1px solid var(--red-bd);
+      background: var(--card);
+      color: var(--red-lt);
+      padding: 8px 20px;
+      font-size: .82rem;
+      letter-spacing: .06em;
+      white-space: nowrap;
+      min-width: 280px;
+    }
+    .node-box.orange {
+      border-color: var(--orange-bd);
+      color: var(--orange);
+    }
+    .node-box.green {
+      border-color: var(--green-bd);
+      color: var(--green);
+    }
+    .node-box.amber {
+      border-color: rgba(217,119,6,0.3);
+      color: var(--amber);
+    }
+    .node-desc {
+      color: var(--text-faint);
+      font-size: .78rem;
+      padding-top: 10px;
+    }
+    .node-sub-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 10px 0;
+    }
+    .node-sub {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .node-sub-indent {
+      color: var(--text-faint);
+      font-size: .75rem;
+      padding-left: 32px;
+    }
+    .node-sub-indent::before {
+      content: '├── ';
+      color: var(--red-bd);
+      font-size: .8rem;
+    }
+    .node-sub-indent.last::before { content: '└── '; }
+    .node-sub-box {
+      border: 1px solid rgba(234,88,12,0.2);
+      background: var(--bg);
+      color: var(--orange);
+      padding: 5px 14px;
+      font-size: .76rem;
+      letter-spacing: .04em;
+    }
+    .node-sub-note {
+      color: var(--text-faint);
+      font-size: .72rem;
+    }
+    .node-arrow {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 2px 0 2px 24px;
+      color: var(--red);
+      font-size: .75rem;
+    }
+    .node-arrow::before {
+      content: '↓';
+      font-size: 1rem;
+    }
+    .node-note {
+      color: var(--text-faint);
+    }
+
+    /* ─── Tables ─── */
+    .tbl-wrap {
+      overflow-x: auto;
+      margin: 24px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .85rem;
+    }
+    thead th {
+      background: var(--card);
+      color: var(--red);
+      font-weight: 300;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      font-size: .7rem;
+      padding: 14px 20px;
+      text-align: left;
+      border-bottom: 1px solid var(--red-bd);
+    }
+    tbody tr {
+      border-bottom: 1px solid var(--bd);
+      transition: background .2s;
+    }
+    tbody tr:hover { background: var(--red-glow); }
+    tbody td {
+      padding: 14px 20px;
+      color: var(--text-mid);
+      vertical-align: top;
+    }
+    tbody td:first-child {
+      color: var(--text);
+      font-weight: 300;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .65rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 2px;
+    }
+    .tag-high   { background: rgba(220,38,38,0.12); color: var(--red-lt); border: 1px solid var(--red-bd); }
+    .tag-med    { background: rgba(234,88,12,0.12); color: var(--orange); border: 1px solid var(--orange-bd); }
+    .tag-low    { background: rgba(217,119,6,0.12); color: var(--amber); border: 1px solid rgba(217,119,6,0.3); }
+    .tag-ph1    { background: rgba(220,38,38,0.08); color: var(--red); border: 1px solid rgba(220,38,38,0.2); }
+    .tag-ph2    { background: rgba(234,88,12,0.08); color: var(--orange); border: 1px solid rgba(234,88,12,0.2); }
+    .tag-ph3    { background: rgba(217,119,6,0.08); color: var(--amber); border: 1px solid rgba(217,119,6,0.2); }
+
+    /* ─── Section sub-heading ─── */
+    .sub-heading {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: .06em;
+      margin-bottom: 16px;
+    }
+    .sub-heading.red    { color: var(--red); }
+    .sub-heading.orange { color: var(--orange); }
+    .sub-heading.amber  { color: var(--amber); }
+    .sub-heading.green  { color: var(--green); }
+    .sub-heading.light  { color: var(--text); }
+
+    /* ─── Wireframe mocks ─── */
+    .wireframe-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 24px;
+    }
+    .wireframe-grid .wf-full { grid-column: 1 / -1; }
+    .wf-device {
+      border: 1px solid var(--red-bd);
+      background: var(--bg-sub);
+      overflow: hidden;
+    }
+    .wf-titlebar {
+      background: var(--card);
+      padding: 10px 16px;
+      font-size: .65rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--red);
+      border-bottom: 1px solid var(--bd);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .wf-dots { display: flex; gap: 5px; }
+    .wf-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--text-faint);
+    }
+    .wf-body { padding: 20px; }
+
+    /* Order approval wireframe */
+    .wf-order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .wf-order-title {
+      font-size: .75rem;
+      color: var(--text);
+      letter-spacing: .08em;
+    }
+    .wf-ai-badge {
+      font-size: .62rem;
+      padding: 3px 10px;
+      background: var(--red-glow);
+      border: 1px solid var(--red-bd);
+      color: var(--red-lt);
+      letter-spacing: .1em;
+    }
+    .wf-order-table-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 80px 80px 40px;
+      gap: 4px;
+      padding: 6px 10px;
+      background: var(--card);
+      border-bottom: 1px solid var(--bd);
+      font-size: .62rem;
+      color: var(--text-faint);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .wf-order-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 80px 80px 40px;
+      gap: 4px;
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--bd);
+      align-items: center;
+      transition: background .2s;
+    }
+    .wf-order-row:hover { background: var(--red-glow); }
+    .wf-ingredient {
+      font-size: .76rem;
+      color: var(--text);
+    }
+    .wf-qty {
+      font-size: .76rem;
+      color: var(--red-lt);
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: .04em;
+    }
+    .wf-range {
+      font-size: .66rem;
+      color: var(--text-faint);
+    }
+    .wf-check {
+      width: 18px;
+      height: 18px;
+      border: 1px solid var(--red-bd);
+      background: var(--card);
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .wf-check.checked {
+      background: var(--red-glow);
+      border-color: var(--red);
+    }
+    .wf-check.checked::after {
+      content: '✓';
+      font-size: .65rem;
+      color: var(--red-lt);
+    }
+    .wf-note-row {
+      margin-top: 12px;
+      padding: 10px 12px;
+      background: rgba(234,88,12,0.08);
+      border: 1px solid var(--orange-bd);
+      font-size: .72rem;
+      color: var(--orange);
+    }
+    .wf-approve-btn {
+      margin-top: 14px;
+      height: 40px;
+      background: var(--red);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .72rem;
+      letter-spacing: .12em;
+      color: var(--text);
+      font-weight: 300;
+      cursor: pointer;
+    }
+
+    /* Waste log wireframe */
+    .wf-waste-title {
+      text-align: center;
+      font-size: .8rem;
+      color: var(--text);
+      letter-spacing: .08em;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--bd);
+    }
+    .wf-waste-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--bd);
+    }
+    .wf-waste-name { font-size: .76rem; color: var(--text); }
+    .wf-waste-ctrl {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .wf-num-btn {
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--red-bd);
+      background: var(--card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .8rem;
+      color: var(--red-lt);
+    }
+    .wf-num-val {
+      width: 36px;
+      text-align: center;
+      font-size: .8rem;
+      color: var(--text);
+    }
+    .wf-num-unit {
+      font-size: .66rem;
+      color: var(--text-faint);
+      min-width: 20px;
+    }
+    .wf-waste-submit {
+      margin-top: 14px;
+      height: 40px;
+      border: 1px solid var(--red-bd);
+      background: var(--red-glow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .72rem;
+      letter-spacing: .1em;
+      color: var(--red-lt);
+    }
+
+    /* Dashboard bar chart wireframe */
+    .wf-dash-kpi {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .wf-kpi-mini {
+      background: var(--card);
+      border: 1px solid var(--bd);
+      padding: 10px 14px;
+      text-align: center;
+    }
+    .wf-kpi-val {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      color: var(--red);
+      line-height: 1;
+    }
+    .wf-kpi-desc {
+      font-size: .6rem;
+      color: var(--text-faint);
+      margin-top: 4px;
+    }
+    .wf-chart-label {
+      font-size: .62rem;
+      color: var(--text-faint);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .wf-bar-grid {
+      display: grid;
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+      gap: 4px;
+      align-items: end;
+      height: 80px;
+    }
+    .wf-bar-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      height: 100%;
+      justify-content: flex-end;
+    }
+    .wf-bar {
+      width: 100%;
+      border-radius: 1px 1px 0 0;
+      min-height: 4px;
+    }
+    .wf-bar.before { background: rgba(220,38,38,0.35); }
+    .wf-bar.after  { background: var(--green); opacity: .7; }
+    .wf-bar-week {
+      font-size: .55rem;
+      color: var(--text-faint);
+    }
+    .wf-chart-legend {
+      display: flex;
+      gap: 16px;
+      margin-top: 8px;
+    }
+    .wf-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: .62rem;
+      color: var(--text-faint);
+    }
+    .wf-legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 1px;
+    }
+
+    /* ─── Prompt block ─── */
+    .prompt-block {
+      background: var(--bg);
+      border: 1px solid var(--bd);
+      padding: 32px 36px;
+      font-family: 'Noto Sans JP', monospace;
+      font-weight: 100;
+      font-size: .82rem;
+      line-height: 1.9;
+      color: var(--text-mid);
+      position: relative;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .prompt-block::before {
+      content: 'PROMPT DESIGN';
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      font-size: .6rem;
+      letter-spacing: .15em;
+      color: var(--text-faint);
+    }
+    .prompt-key     { color: var(--red-lt); }
+    .prompt-val     { color: var(--amber); }
+    .prompt-comment { color: var(--text-faint); }
+    .prompt-string  { color: var(--orange); }
+
+    /* ─── Phase timeline ─── */
+    .phase-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .phase-card {
+      background: var(--card);
+      border: 1px solid var(--bd);
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+    .phase-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+    }
+    .phase-1::before { background: var(--red); }
+    .phase-2::before { background: var(--orange); }
+    .phase-3::before { background: var(--amber); }
+    .phase-label {
+      font-size: .6rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 8px;
+    }
+    .phase-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: .05em;
+      margin-bottom: 16px;
+    }
+    .phase-1 .phase-name { color: var(--red); }
+    .phase-2 .phase-name { color: var(--orange); }
+    .phase-3 .phase-name { color: var(--amber); }
+    .phase-scope {
+      font-size: .8rem;
+      color: var(--text-mid);
+      margin-bottom: 20px;
+      line-height: 1.7;
+    }
+    .phase-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: .75rem;
+    }
+    .phase-weeks { color: var(--text-mid); }
+    .phase-cost {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: .05em;
+    }
+    .phase-1 .phase-cost { color: var(--red); }
+    .phase-2 .phase-cost { color: var(--orange); }
+    .phase-3 .phase-cost { color: var(--amber); }
+
+    /* ─── ROI section ─── */
+    .roi-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 1px;
+      background: var(--bd);
+      border: 1px solid var(--bd);
+      margin: 32px 0;
+    }
+    .roi-cell {
+      background: var(--bg-sub);
+      padding: 24px 20px;
+      text-align: center;
+    }
+    .roi-arrow {
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: var(--text-faint);
+    }
+    .roi-label {
+      font-size: .62rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 8px;
+    }
+    .roi-value {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      line-height: 1;
+    }
+    .roi-sub {
+      font-size: .7rem;
+      color: var(--text-faint);
+      margin-top: 4px;
+    }
+    .roi-red    { color: var(--red); }
+    .roi-green  { color: var(--green); }
+    .roi-orange { color: var(--orange); }
+    .roi-amber  { color: var(--amber); }
+    .roi-white  { color: var(--text); }
+
+    /* ─── Tech stack ─── */
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 32px;
+    }
+    .tech-item {
+      background: var(--card);
+      border: 1px solid var(--bd);
+      padding: 20px 16px;
+      text-align: center;
+      transition: border-color .3s;
+    }
+    .tech-item:hover { border-color: var(--red-bd); }
+    .tech-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: .06em;
+      color: var(--red);
+      margin-bottom: 6px;
+    }
+    .tech-role {
+      font-size: .68rem;
+      color: var(--text-faint);
+    }
+
+    /* ─── Footer ─── */
+    footer {
+      background: var(--bg-sub);
+      border-top: 1px solid var(--bd);
+      padding: 48px;
+      text-align: center;
+    }
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      color: var(--red);
+      letter-spacing: .1em;
+      margin-bottom: 12px;
+    }
+    .footer-tagline {
+      font-size: .75rem;
+      color: var(--text-faint);
+      letter-spacing: .12em;
+    }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .container { padding: 0 20px; }
+      section { padding: 64px 0; }
+      #hero { padding: 120px 0 64px; }
+      .info-bar { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+      .card-grid { grid-template-columns: minmax(0, 1fr); }
+      .kpi-row { grid-template-columns: minmax(0, 1fr); }
+      .wireframe-grid { grid-template-columns: minmax(0, 1fr); }
+      .phase-grid { grid-template-columns: minmax(0, 1fr); }
+      .tech-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .roi-grid { grid-template-columns: minmax(0, 1fr); }
+      .wf-order-table-head,
+      .wf-order-row { grid-template-columns: minmax(0, 1fr) 64px 64px 32px; }
+      .diagram-wrap { padding: 24px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- Navigation -->
+<nav>
+  <div class="nav-logo">SENKODE</div>
+  <ul class="nav-links">
+    <li><a href="#overview">概要</a></li>
+    <li><a href="#architecture">構成図</a></li>
+    <li><a href="#requirements">機能要件</a></li>
+    <li><a href="#wireframes">画面仕様</a></li>
+    <li><a href="#prompt">プロンプト設計</a></li>
+    <li><a href="#phases">フェーズ</a></li>
+    <li><a href="#roi">ROI試算</a></li>
+  </ul>
+</nav>
+
+<!-- ════════════════════ HERO ════════════════════ -->
+<section id="hero">
+  <div class="container">
+    <div class="badge reveal">
+      <span class="badge-dot"></span>
+      APP REQUIREMENTS / 飲食業×AI発注最適化
+    </div>
+    <h1 class="hero-title reveal">
+      食材発注<span>AI</span>アシスタント<br>要件定義書
+    </h1>
+    <div class="info-bar reveal">
+      <div class="info-item">
+        <div class="info-label">業態</div>
+        <div class="info-value">都市部・中規模レストラン</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">月商</div>
+        <div class="info-value">500万円（席数60〜80）</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">廃棄ロス率</div>
+        <div class="info-value">月売上の4〜6%</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">作成日</div>
+        <div class="info-value">2026-05-10</div>
+      </div>
+    </div>
+    <div class="hero-summary reveal">
+      月売上500万の<strong>4〜6%（月20〜30万円）</strong>が廃棄ロス。
+      過去の売上データ×天気×イベント×曜日をClaude APIが分析し、食材の必要量を予測発注することで
+      <strong>廃棄ロスを60%削減</strong>。年間最大<strong>216万円</strong>のコスト改善を目指す。
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════ OVERVIEW ════════════════════ -->
+<section id="overview">
+  <div class="container">
+    <div class="section-label reveal">01 — PROJECT OVERVIEW</div>
+    <h2 class="section-title reveal">プロジェクト概要</h2>
+
+    <div class="card-grid">
+      <div class="card reveal">
+        <div class="card-icon">📋</div>
+        <div class="card-title">課題 01 — 勘と経験に依存した発注</div>
+        <div class="card-body">
+          ベテランシェフの頭の中にしかない発注ノウハウ。担当者が休むと発注量の根拠が消える。
+          <em>属人化した知識は引き継ぎができず、廃棄と欠品の両方が発生する。</em>
+        </div>
+      </div>
+      <div class="card reveal">
+        <div class="card-icon">🌦</div>
+        <div class="card-title">課題 02 — 天気・イベントの手動考慮</div>
+        <div class="card-body">
+          明日の天気や近隣イベントの影響を毎回手動で考慮しており、予測作業だけで1日30分かかっている。
+          <em>繁忙期の判断ミスが大量廃棄に直結している。</em>
+        </div>
+      </div>
+      <div class="card reveal">
+        <div class="card-icon">📊</div>
+        <div class="card-title">課題 03 — 廃棄の原因分析が不可能</div>
+        <div class="card-body">
+          何が余って何が足りなかったか記録が残らない。廃棄が発生しても「なぜ」が分からず改善できない。
+          <em>経験則は更新されないまま同じミスを繰り返す。</em>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout reveal">
+      <strong>解決アプローチ：</strong>
+      POSシステムの売上データ・天気API・イベントカレンダー・廃棄ログをClaude API（claude-sonnet-4-6）が複合分析。
+      翌日の来客数とメニュー別需要を予測し、食材の推奨発注量を自動算出する。
+      シェフは承認するだけで発注が完了し、廃棄ログが蓄積されるほど予測精度が向上する自己改善ループを実現する。
+    </div>
+
+    <div class="kpi-row">
+      <div class="kpi-box reveal">
+        <div class="kpi-number">60<span class="kpi-unit">%</span></div>
+        <div class="kpi-label">廃棄ロス削減率（目標）</div>
+      </div>
+      <div class="kpi-box reveal">
+        <div class="kpi-number">216<span class="kpi-unit">万円</span></div>
+        <div class="kpi-label">年間コスト改善額（最大）</div>
+      </div>
+      <div class="kpi-box reveal">
+        <div class="kpi-number">30<span class="kpi-unit">分</span></div>
+        <div class="kpi-label">毎日の発注予測作業を削減</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════ ARCHITECTURE ════════════════════ -->
+<section id="architecture">
+  <div class="container">
+    <div class="section-label reveal">02 — SYSTEM ARCHITECTURE</div>
+    <h2 class="section-title reveal">システム構成図</h2>
+
+    <div class="diagram-wrap reveal">
+      <div class="diagram-node">
+        <div class="node-box">POSシステム</div>
+        <div class="node-desc">売上・メニュー別数量データ（Square / Airレジ / ぐるなびセルフ 等）</div>
+      </div>
+      <div class="node-arrow">
+        <span class="node-note">日次自動連携（API または CSV取込）</span>
+      </div>
+      <div class="diagram-node">
+        <div class="node-box orange">データ収集層</div>
+        <div class="node-desc">複数ソースの情報を統合・正規化</div>
+      </div>
+      <div class="node-sub-list" style="padding-left:40px; margin: 4px 0 4px 0;">
+        <div class="node-sub">
+          <span class="node-sub-indent">天気API（明日の気温・天候・3日先まで）</span>
+        </div>
+        <div class="node-sub">
+          <span class="node-sub-indent">Googleカレンダー（近隣イベント・祝日）</span>
+        </div>
+        <div class="node-sub">
+          <span class="node-sub-indent last">過去廃棄ログ（スタッフがタブレットで手入力）</span>
+        </div>
+      </div>
+      <div class="node-arrow">
+        <span class="node-note">構造化プロンプトを組み立てAPI呼び出し</span>
+      </div>
+      <div class="diagram-node">
+        <div class="node-box" style="border-color:var(--red-bd); color:var(--red-lt);">Claude API（claude-sonnet-4-6）</div>
+        <div class="node-desc">売上パターン分析 + 需要予測 + 食材使用量逆算 + 発注量算出</div>
+      </div>
+      <div class="node-arrow">
+        <span class="node-note">推奨発注リストをJSON形式で返却</span>
+      </div>
+      <div class="diagram-node">
+        <div class="node-box amber">発注管理画面（Next.js）</div>
+        <div class="node-desc">AI推奨リストを表示。シェフが確認・修正・承認</div>
+      </div>
+      <div class="node-arrow">
+        <span class="node-note">承認後に発注を実行</span>
+      </div>
+      <div class="diagram-node">
+        <div class="node-box green">発注実行レイヤー</div>
+        <div class="node-desc">業者別メール自動送信 / FAX送信（既存業者対応）</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════ REQUIREMENTS ════════════════════ -->
+<section id="requirements">
+  <div class="container">
+    <div class="section-label reveal">03 — FUNCTIONAL REQUIREMENTS</div>
+    <h2 class="section-title reveal">機能要件</h2>
+
+    <!-- A. データ収集 -->
+    <h3 class="sub-heading red reveal" style="margin-top:0;">A. データ収集・連携機能</h3>
+    <div class="tbl-wrap reveal">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:30%">機能</th>
+            <th style="width:40%">詳細仕様</th>
+            <th style="width:15%">優先度</th>
+            <th style="width:15%">フェーズ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>POSシステム連携</td>
+            <td>主要POSシステム5種（Square・Airレジ・ぐるなびセルフ等）とのAPIまたはCSV取込。日次で自動同期</td>
+            <td><span class="tag tag-high">HIGH</span></td>
+            <td><span class="tag tag-ph1">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>天気API自動取得</td>
+            <td>翌日〜3日先の気温・天候を自動取得。外気温15℃以下は温かいメニュー需要増として反映</td>
+            <td><span class="tag tag-high">HIGH</span></td>
+            <td><span class="tag tag-ph1">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>イベントカレンダー手動登録</td>
+            <td>近隣の大規模イベント・祝日・特別営業日をスタッフが登録。カレンダーUIで視覚管理</td>
+            <td><span class="tag tag-med">MED</span></td>
+            <td><span class="tag tag-ph1">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>廃棄ログ入力</td>
+            <td>スタッフがタブレットで食材別廃棄量を入力。翌日の予測学習データとして蓄積</td>
+            <td><span class="tag tag-high">HIGH</span></td>
+            <td><span class="tag tag-ph1">Phase 1</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- B. AI分析 -->
+    <h3 class="sub-heading orange reveal" style="margin-top:40px;">B. AI分析・予測機能</h3>
+    <div class="tbl-wrap reveal">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:30%">機能</th>
+            <th style="width:40%">詳細仕様</th>
+            <th style="width:15%">優先度</th>
+            <th style="width:15%">フェーズ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>売上トレンド分析</td>
+            <td>過去30日のメニュー別販売数を分析。週次・月次のトレンドを自動検出</td>
+            <td><span class="tag tag-high">HIGH</span></td>
+            <td><span class="tag tag-ph1">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>複合需要予測</td>
+            <td>曜日×天気×イベントの3要素を掛け合わせた翌日来客数と注文比率の予測。直近3週間の同曜日データを優先</td>
+            <td><span class="tag tag-high">HIGH</span></td>
+            <td><span class="tag tag-ph1">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>食材展開（レシピDB連携）</td>
+            <td>メニュー別の食材使用量をレシピDBから自動逆算。「鶏の唐揚げ 30食分」→「鶏むね肉 4.5kg」へ変換</td>
+            <td><span class="tag tag-high">HIGH</span></td>
+            <td><span class="tag tag-ph1">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>信頼区間付き予測量表示</td>
+            <td>推奨量に加え最小・最大の幅を表示（例：「鶏むね肉: 推奨2.3kg ±0.4kg」）。シェフが安心して修正できる根拠を提供</td>
+            <td><span class="tag tag-med">MED</span></td>
+            <td><span class="tag tag-ph1">Phase 1</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- C. 発注管理 -->
+    <h3 class="sub-heading amber reveal" style="margin-top:40px;">C. 発注管理画面</h3>
+    <div class="tbl-wrap reveal">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:30%">機能</th>
+            <th style="width:40%">詳細仕様</th>
+            <th style="width:15%">優先度</th>
+            <th style="width:15%">フェーズ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>AI推奨リストの確認・修正</td>
+            <td>推奨発注量をシェフが直接編集できる。修正した場合は「手動修正済み」フラグが付き学習データに反映</td>
+            <td><span class="tag tag-high">HIGH</span></td>
+            <td><span class="tag tag-ph1">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>業者別発注書自動作成</td>
+            <td>承認ボタン押下で業者ごとにフォーマットした発注書を自動生成。メール送信またはFAX出力に対応</td>
+            <td><span class="tag tag-high">HIGH</span></td>
+            <td><span class="tag tag-ph1">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>廃棄ロス分析ダッシュボード</td>
+            <td>週次・月次の廃棄額推移グラフ。食材別の廃棄率ランキング。AI導入前後の比較レポート</td>
+            <td><span class="tag tag-med">MED</span></td>
+            <td><span class="tag tag-ph2">Phase 2</span></td>
+          </tr>
+          <tr>
+            <td>アラート機能</td>
+            <td>予測来客数が通常比150%以上の日は「増量アラート」を表示。在庫ゼロリスクが高い食材に赤フラグ</td>
+            <td><span class="tag tag-med">MED</span></td>
+            <td><span class="tag tag-ph2">Phase 2</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- D. 非機能要件 -->
+    <h3 class="sub-heading light reveal" style="margin-top:56px;">D. 非機能要件</h3>
+    <div class="tbl-wrap reveal">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:22%">項目</th>
+            <th style="width:35%">要件</th>
+            <th style="width:43%">対応方法</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>予測精度</td>
+            <td>需要予測の誤差±15%以内（稼働3ヶ月後の目標）</td>
+            <td>廃棄ログを蓄積するほど精度が向上する自己改善ループ。初期は安全在庫を多めに設定し、徐々に絞る</td>
+          </tr>
+          <tr>
+            <td>操作性</td>
+            <td>非IT系スタッフが3回で操作できること</td>
+            <td>廃棄ログ入力画面はタブレット最適化・大型タッチターゲット。ステップ数は3以内に制限</td>
+          </tr>
+          <tr>
+            <td>POS連携</td>
+            <td>主要POSシステム5種に対応（Square・Airレジ・ぐるなびセルフ等）</td>
+            <td>API接続を優先。APIなしの場合はCSVエクスポート→自動取込フローで代替</td>
+          </tr>
+          <tr>
+            <td>オフライン対応</td>
+            <td>ネット障害時は前回の発注量で仮発注できること</td>
+            <td>前回発注データをローカルキャッシュ。「オフラインモード」で前回値を表示し手動承認を可能にする</td>
+          </tr>
+          <tr>
+            <td>セキュリティ</td>
+            <td>発注データ・売上データの保護。不正アクセス遮断</td>
+            <td>Supabase RLSによるアクセス制御。API キーはサーバーサイドのみ管理。TLS 1.3通信</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════ WIREFRAMES ════════════════════ -->
+<section id="wireframes">
+  <div class="container">
+    <div class="section-label reveal">04 — SCREEN SPECIFICATIONS</div>
+    <h2 class="section-title reveal">画面仕様 / モックアップ</h2>
+
+    <div class="wireframe-grid">
+
+      <!-- Screen 1: Order approval -->
+      <div class="wf-device reveal">
+        <div class="wf-titlebar">
+          <span>発注承認画面 — シェフ向け（タブレット）</span>
+          <div class="wf-dots">
+            <div class="wf-dot"></div>
+            <div class="wf-dot"></div>
+            <div class="wf-dot" style="background: var(--red);"></div>
+          </div>
+        </div>
+        <div class="wf-body">
+          <div class="wf-order-header">
+            <div class="wf-order-title">明日の推奨発注リスト / 2026-05-11 月曜</div>
+            <div class="wf-ai-badge">AI生成</div>
+          </div>
+          <div class="wf-order-table-head">
+            <span>食材名</span>
+            <span>推奨量</span>
+            <span>幅</span>
+            <span></span>
+          </div>
+          <div class="wf-order-row">
+            <div class="wf-ingredient">鶏むね肉</div>
+            <div class="wf-qty">2.3 kg</div>
+            <div class="wf-range">±0.4 kg</div>
+            <div class="wf-check checked"></div>
+          </div>
+          <div class="wf-order-row">
+            <div class="wf-ingredient">玉ねぎ</div>
+            <div class="wf-qty">5.0 kg</div>
+            <div class="wf-range">±0.8 kg</div>
+            <div class="wf-check checked"></div>
+          </div>
+          <div class="wf-order-row">
+            <div class="wf-ingredient">トマト（ホール缶）</div>
+            <div class="wf-qty">12 缶</div>
+            <div class="wf-range">±2 缶</div>
+            <div class="wf-check"></div>
+          </div>
+          <div class="wf-order-row">
+            <div class="wf-ingredient">豚バラ肉（厚切）</div>
+            <div class="wf-qty">3.6 kg</div>
+            <div class="wf-range">±0.6 kg</div>
+            <div class="wf-check checked"></div>
+          </div>
+          <div class="wf-order-row">
+            <div class="wf-ingredient">生クリーム（200ml）</div>
+            <div class="wf-qty">8 パック</div>
+            <div class="wf-range">±1 個</div>
+            <div class="wf-check checked"></div>
+          </div>
+          <div class="wf-note-row">
+            明日は晴れ・25℃。通常比+15%の来客を予測。花見シーズンのため外席稼働率が高い。
+          </div>
+          <div class="wf-approve-btn">承認して発注する →</div>
+        </div>
+      </div>
+
+      <!-- Screen 2: Waste log -->
+      <div class="wf-device reveal">
+        <div class="wf-titlebar">
+          <span>廃棄ログ入力 — スタッフ向け（タブレット）</span>
+          <div class="wf-dots">
+            <div class="wf-dot"></div>
+            <div class="wf-dot"></div>
+            <div class="wf-dot" style="background: var(--red);"></div>
+          </div>
+        </div>
+        <div class="wf-body">
+          <div class="wf-waste-title">本日の廃棄を入力してください / 2026-05-10</div>
+          <div class="wf-waste-row">
+            <div class="wf-waste-name">鶏むね肉</div>
+            <div class="wf-waste-ctrl">
+              <div class="wf-num-btn">−</div>
+              <div class="wf-num-val">0.2</div>
+              <div class="wf-num-unit">kg</div>
+              <div class="wf-num-btn">＋</div>
+            </div>
+          </div>
+          <div class="wf-waste-row">
+            <div class="wf-waste-name">玉ねぎ</div>
+            <div class="wf-waste-ctrl">
+              <div class="wf-num-btn">−</div>
+              <div class="wf-num-val">0.0</div>
+              <div class="wf-num-unit">kg</div>
+              <div class="wf-num-btn">＋</div>
+            </div>
+          </div>
+          <div class="wf-waste-row">
+            <div class="wf-waste-name">レタス</div>
+            <div class="wf-waste-ctrl">
+              <div class="wf-num-btn">−</div>
+              <div class="wf-num-val">1.0</div>
+              <div class="wf-num-unit">kg</div>
+              <div class="wf-num-btn">＋</div>
+            </div>
+          </div>
+          <div class="wf-waste-row">
+            <div class="wf-waste-name">豚バラ肉（厚切）</div>
+            <div class="wf-waste-ctrl">
+              <div class="wf-num-btn">−</div>
+              <div class="wf-num-val">0.4</div>
+              <div class="wf-num-unit">kg</div>
+              <div class="wf-num-btn">＋</div>
+            </div>
+          </div>
+          <div class="wf-waste-row">
+            <div class="wf-waste-name">トマト（ホール缶）</div>
+            <div class="wf-waste-ctrl">
+              <div class="wf-num-btn">−</div>
+              <div class="wf-num-val">3</div>
+              <div class="wf-num-unit">缶</div>
+              <div class="wf-num-btn">＋</div>
+            </div>
+          </div>
+          <div class="wf-waste-submit">本日の廃棄を送信する</div>
+        </div>
+      </div>
+
+      <!-- Screen 3: Dashboard (full width) -->
+      <div class="wf-device wf-full reveal">
+        <div class="wf-titlebar">
+          <span>廃棄ロス推移ダッシュボード — 店長向け（PC）/ 月次分析</span>
+          <div class="wf-dots">
+            <div class="wf-dot"></div>
+            <div class="wf-dot"></div>
+            <div class="wf-dot" style="background: var(--red);"></div>
+          </div>
+        </div>
+        <div class="wf-body">
+          <div class="wf-dash-kpi">
+            <div class="wf-kpi-mini">
+              <div class="wf-kpi-val" style="color:var(--red);">25.4<span style="font-size:.75rem;">万</span></div>
+              <div class="wf-kpi-desc">AI導入前の月間廃棄ロス</div>
+            </div>
+            <div class="wf-kpi-mini">
+              <div class="wf-kpi-val" style="color:var(--green);">10.2<span style="font-size:.75rem;">万</span></div>
+              <div class="wf-kpi-desc">今月の廃棄ロス（▼60%）</div>
+            </div>
+            <div class="wf-kpi-mini">
+              <div class="wf-kpi-val" style="color:var(--amber);">180<span style="font-size:.75rem;">万</span></div>
+              <div class="wf-kpi-desc">年間換算削減額（予測）</div>
+            </div>
+          </div>
+          <div class="wf-chart-label">週別廃棄ロス推移 — AI導入前後比較（棒グラフ）</div>
+          <div class="wf-bar-grid">
+            <div class="wf-bar-col">
+              <div class="wf-bar before" style="height:72px;"></div>
+              <div class="wf-bar after" style="height:72px;"></div>
+              <div class="wf-bar-week">4/7</div>
+            </div>
+            <div class="wf-bar-col">
+              <div class="wf-bar before" style="height:60px;"></div>
+              <div class="wf-bar after" style="height:60px;"></div>
+              <div class="wf-bar-week">4/14</div>
+            </div>
+            <div class="wf-bar-col">
+              <div class="wf-bar before" style="height:80px;"></div>
+              <div class="wf-bar after" style="height:40px;"></div>
+              <div class="wf-bar-week">4/21</div>
+            </div>
+            <div class="wf-bar-col">
+              <div class="wf-bar before" style="height:68px;"></div>
+              <div class="wf-bar after" style="height:32px;"></div>
+              <div class="wf-bar-week">4/28</div>
+            </div>
+            <div class="wf-bar-col">
+              <div class="wf-bar before" style="height:76px;"></div>
+              <div class="wf-bar after" style="height:28px;"></div>
+              <div class="wf-bar-week">5/5</div>
+            </div>
+            <div class="wf-bar-col">
+              <div class="wf-bar before" style="height:64px;"></div>
+              <div class="wf-bar after" style="height:26px;"></div>
+              <div class="wf-bar-week">5/12</div>
+            </div>
+            <div class="wf-bar-col">
+              <div class="wf-bar before" style="height:70px;"></div>
+              <div class="wf-bar after" style="height:24px;"></div>
+              <div class="wf-bar-week">5/19</div>
+            </div>
+            <div class="wf-bar-col">
+              <div class="wf-bar before" style="height:66px;"></div>
+              <div class="wf-bar after" style="height:20px;"></div>
+              <div class="wf-bar-week">5/26</div>
+            </div>
+          </div>
+          <div class="wf-chart-legend">
+            <div class="wf-legend-item">
+              <div class="wf-legend-dot" style="background:rgba(220,38,38,0.45);"></div>
+              AI導入前の廃棄ロス
+            </div>
+            <div class="wf-legend-item">
+              <div class="wf-legend-dot" style="background:var(--green); opacity:.7;"></div>
+              AI導入後の廃棄ロス
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════ PROMPT DESIGN ════════════════════ -->
+<section id="prompt">
+  <div class="container">
+    <div class="section-label reveal">05 — PROMPT ENGINEERING</div>
+    <h2 class="section-title reveal">AIの予測ロジック / プロンプト設計</h2>
+
+    <div class="callout reveal">
+      <strong>設計方針：</strong>
+      シェフが「なぜこの量か」を理解できるよう、推奨量だけでなく推論の根拠を必ず1文で付与する設計にする。
+      JSON出力を強制することで、発注管理画面側でのパース処理を安定させる。
+      廃棄ログを学習データとして蓄積するほど予測精度が向上する自己改善ループを構成する。
+    </div>
+
+    <div class="prompt-block reveal"><span class="prompt-key">system</span>: |
+あなたは飲食店の食材発注を最適化するAIです。
+過去の売上データ・天気・イベント・廃棄ログを分析し、
+翌日の食材発注量を正確に予測してください。
+
+<span class="prompt-comment"># 出力ルール</span>
+- 必ずJSONのみで出力する（説明文・Markdown不要）
+- confidence は HIGH / MEDIUM / LOW の3段階のみ
+- reasoning は推奨理由を1文（40字以内）で記述
+- special_notes はなければ空文字を返す
+
+---
+
+<span class="prompt-key">user</span>: |
+【入力データ】
+直近30日間のメニュー別販売数: <span class="prompt-val">{sales_history}</span>
+明日の予想天気: <span class="prompt-val">{weather}</span>
+近隣イベント: <span class="prompt-val">{events}</span>
+直近3週間の同曜日売上: <span class="prompt-val">{same_weekday_sales}</span>
+現在の在庫量: <span class="prompt-val">{current_stock}</span>
+廃棄ログ（直近2週間）: <span class="prompt-val">{waste_log}</span>
+
+---
+
+<span class="prompt-comment"># 期待するJSON出力形式</span>
+{
+  <span class="prompt-key">"predicted_covers"</span>: <span class="prompt-val">予測来客数</span>,
+  <span class="prompt-key">"confidence"</span>: <span class="prompt-string">"HIGH | MEDIUM | LOW"</span>,
+  <span class="prompt-key">"items"</span>: [
+    {
+      <span class="prompt-key">"ingredient"</span>: <span class="prompt-string">"食材名"</span>,
+      <span class="prompt-key">"recommended_order"</span>: <span class="prompt-val">数量</span>,
+      <span class="prompt-key">"unit"</span>: <span class="prompt-string">"単位（kg / 個 / 缶 等）"</span>,
+      <span class="prompt-key">"confidence_range"</span>: {
+        <span class="prompt-key">"min"</span>: <span class="prompt-val">最小量</span>,
+        <span class="prompt-key">"max"</span>: <span class="prompt-val">最大量</span>
+      },
+      <span class="prompt-key">"reasoning"</span>: <span class="prompt-string">"この量を推奨する理由（1文）"</span>
+    }
+  ],
+  <span class="prompt-key">"special_notes"</span>: <span class="prompt-string">"注意事項（明日は花見客が多い等）"</span>
+}</div>
+
+    <div class="callout reveal" style="margin-top:32px;">
+      <strong>信頼度判定ロジック：</strong>
+      HIGH — 直近3週間の同曜日データが揃っており、天気・イベントの変動が少ない通常日。
+      MEDIUM — 気温変化±5℃以上または近隣イベントあり。廃棄ログが2週間未満の食材。
+      LOW — 連休初日・イベント直前など過去データが少ない特殊日。在庫変動の大きい食材。
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════ PHASES ════════════════════ -->
+<section id="phases">
+  <div class="container">
+    <div class="section-label reveal">06 — DEVELOPMENT ROADMAP</div>
+    <h2 class="section-title reveal">開発フェーズ・工数</h2>
+
+    <div class="phase-grid">
+      <div class="phase-card phase-1 reveal">
+        <div class="phase-label">PHASE 01 / MVP</div>
+        <div class="phase-name">データ取込 + AI予測</div>
+        <div class="phase-scope">
+          POSシステムからのCSV取込フロー構築。
+          天気API・イベントカレンダー連携。
+          Claude APIによる需要予測・発注量算出。
+          発注承認画面の基本版（リスト表示・承認）。
+          廃棄ログ入力画面（タブレット最適化）。
+        </div>
+        <div class="phase-meta">
+          <span class="phase-weeks">10週間</span>
+          <span class="phase-cost">¥2,200,000</span>
+        </div>
+      </div>
+      <div class="phase-card phase-2 reveal">
+        <div class="phase-label">PHASE 02 / GROWTH</div>
+        <div class="phase-name">POS連携 + 分析強化</div>
+        <div class="phase-scope">
+          主要POSシステム5種とのAPI直接連携。
+          廃棄ロス分析ダッシュボード。
+          業者別発注書自動生成・メール送信。
+          在庫切れリスクアラート機能。
+          予測精度フィードバック収集機能。
+        </div>
+        <div class="phase-meta">
+          <span class="phase-weeks">6週間</span>
+          <span class="phase-cost">¥1,200,000</span>
+        </div>
+      </div>
+      <div class="phase-card phase-3 reveal">
+        <div class="phase-label">PHASE 03 / SCALE</div>
+        <div class="phase-name">マルチ店舗 + 自動送信</div>
+        <div class="phase-scope">
+          複数店舗・マルチテナント対応。
+          FAX自動送信（既存業者対応）。
+          月次レポート自動生成。
+          レシピDB管理画面（店舗側で編集可能に）。
+        </div>
+        <div class="phase-meta">
+          <span class="phase-weeks">4週間</span>
+          <span class="phase-cost">¥800,000</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout reveal" style="margin-top:32px;">
+      <strong>合計：</strong> 20週間 / ¥4,200,000（税抜）。
+      Phase 1のMVPのみ先行着手も可能。月額保守費用は別途お見積もり。
+      各フェーズは独立しており、進捗に応じてスコープを調整できる。
+    </div>
+
+    <!-- Tech stack -->
+    <div class="section-label reveal" style="margin-top:64px;">TECHNOLOGY STACK</div>
+    <div class="tech-grid">
+      <div class="tech-item reveal">
+        <div class="tech-name">Next.js</div>
+        <div class="tech-role">フロントエンド / App Router</div>
+      </div>
+      <div class="tech-item reveal">
+        <div class="tech-name">Supabase</div>
+        <div class="tech-role">DB / Auth / Realtime</div>
+      </div>
+      <div class="tech-item reveal">
+        <div class="tech-name">Claude API</div>
+        <div class="tech-role">需要予測エンジン</div>
+      </div>
+      <div class="tech-item reveal">
+        <div class="tech-name">Vercel</div>
+        <div class="tech-role">ホスティング / Functions</div>
+      </div>
+      <div class="tech-item reveal">
+        <div class="tech-name">TypeScript</div>
+        <div class="tech-role">型安全開発</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════ ROI ════════════════════ -->
+<section id="roi">
+  <div class="container">
+    <div class="section-label reveal">07 — ROI CALCULATION</div>
+    <h2 class="section-title reveal">ROI試算</h2>
+
+    <div class="roi-grid reveal">
+      <div class="roi-cell">
+        <div class="roi-label">現状の廃棄ロス</div>
+        <div class="roi-value roi-red">25<span style="font-size:1rem;">万円</span></div>
+        <div class="roi-sub">月間（売上500万×5%）</div>
+      </div>
+      <div class="roi-cell roi-arrow">→</div>
+      <div class="roi-cell">
+        <div class="roi-label">AI導入後の削減</div>
+        <div class="roi-value roi-green">15<span style="font-size:1rem;">万円</span></div>
+        <div class="roi-sub">月間削減額（60%削減）</div>
+      </div>
+      <div class="roi-cell roi-arrow">×12</div>
+      <div class="roi-cell">
+        <div class="roi-label">年間削減額</div>
+        <div class="roi-value roi-green">180<span style="font-size:1rem;">万円</span></div>
+        <div class="roi-sub">年間（最大216万円）</div>
+      </div>
+    </div>
+
+    <div class="kpi-row reveal">
+      <div class="kpi-box">
+        <div class="kpi-number" style="color:var(--orange);">420<span class="kpi-unit">万円</span></div>
+        <div class="kpi-label">開発費（Phase 1+2）</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-number" style="color:var(--amber);">2.3<span class="kpi-unit">年</span></div>
+        <div class="kpi-label">投資回収期間（年間180万で計算）</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-number" style="color:var(--green);">60<span class="kpi-unit">%</span></div>
+        <div class="kpi-label">廃棄ロス削減目標（稼働3ヶ月後）</div>
+      </div>
+    </div>
+
+    <div class="callout reveal" style="margin-top:32px;">
+      <strong>補足：</strong>
+      廃棄ロス削減に加え、発注作業の時間削減（毎日30分 × 365日 = 約182時間/年）も副次効果として期待できる。
+      シェフ・スタッフの拘束時間が減り、調理・接客品質の向上に注力できる環境が整う。
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-logo">SENKODE</div>
+  <div class="footer-tagline">ONE FLASH OF INSIGHT. ENCODED FOREVER.</div>
+  <div style="margin-top: 24px; font-size: .72rem; color: var(--text-faint);">
+    This document is a portfolio specimen by Senkode. &nbsp;|&nbsp; 2026-05-10
+  </div>
+</footer>
+
+<script>
+  // ─── Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring   = document.getElementById('cursor-ring');
+  let mouseX = 0, mouseY = 0;
+  let ringX  = 0, ringY  = 0;
+
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    cursor.style.left = mouseX + 'px';
+    cursor.style.top  = mouseY + 'px';
+  });
+
+  function animateRing() {
+    ringX += (mouseX - ringX) * 0.14;
+    ringY += (mouseY - ringY) * 0.14;
+    ring.style.left = ringX + 'px';
+    ring.style.top  = ringY + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  document.querySelectorAll('a, button, .card, .tech-item, .wf-order-row, .phase-card').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.width  = '18px';
+      cursor.style.height = '18px';
+      ring.style.width    = '56px';
+      ring.style.height   = '56px';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.width  = '10px';
+      cursor.style.height = '10px';
+      ring.style.width    = '36px';
+      ring.style.height   = '36px';
+    });
+  });
+
+  // ─── Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer  = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  revealEls.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

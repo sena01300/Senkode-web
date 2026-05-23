@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CONCEPT — CAFÉ MATIN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,300;1,400&family=Noto+Sans+JP:wght@300;400&family=Playfair+Display:ital,wght@1,400;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    :root {
+      --border-soft: rgba(61,43,31,0.1);
+    }
+
+    /* --- Section header --- */
+    .section-header { text-align: center; margin-bottom: 64px; }
+    .section-label {
+      font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
+      color: var(--terra); margin-bottom: 16px;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif; font-style: italic;
+      font-size: clamp(28px, 3vw, 40px);
+    }
+
+    /* --- Story section (alternating) --- */
+    .story-block {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: center;
+      margin-bottom: 100px;
+    }
+    .story-block.reverse { direction: rtl; }
+    .story-block.reverse > * { direction: ltr; }
+    .story-img {
+      aspect-ratio: 4/3;
+      background-size: cover; background-position: center;
+    }
+    .story-label {
+      font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
+      color: var(--terra); margin-bottom: 16px;
+    }
+    .story-title {
+      font-family: 'Playfair Display', serif; font-style: italic;
+      font-size: clamp(24px, 2.5vw, 34px); line-height: 1.4;
+      margin-bottom: 20px;
+    }
+    .story-text {
+      color: var(--brown-mid); line-height: 2; font-size: 14px;
+    }
+    .story-quote {
+      font-family: 'Cormorant Garamond', serif; font-style: italic;
+      font-size: 20px; color: var(--terra);
+      border-left: 2px solid var(--terra);
+      padding-left: 20px; margin: 24px 0;
+      line-height: 1.6;
+    }
+
+    /* --- Commitment (icons + list) --- */
+    .commitment-section { background: var(--bg-soft); }
+    .commitment-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px;
+    }
+    .commitment-item { text-align: center; }
+    .commitment-icon {
+      width: 56px; height: 56px; margin: 0 auto 20px;
+      border: 1px solid var(--terra);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+    }
+    .commitment-title {
+      font-family: 'Playfair Display', serif; font-style: italic;
+      font-size: 18px; margin-bottom: 12px;
+    }
+    .commitment-text { font-size: 13px; color: var(--brown-mid); line-height: 1.8; }
+
+    /* --- Timeline --- */
+    .timeline { max-width: 640px; margin: 0 auto; }
+    .timeline-item {
+      display: grid; grid-template-columns: 80px 1fr;
+      gap: 32px; margin-bottom: 48px; align-items: start;
+    }
+    .timeline-time {
+      font-family: 'Playfair Display', serif; font-style: italic;
+      font-size: 22px; color: var(--terra); text-align: right;
+      padding-top: 2px;
+    }
+    .timeline-content {
+      border-left: 1px solid var(--border-soft);
+      padding-left: 32px; padding-bottom: 40px;
+    }
+    .timeline-item:last-child .timeline-content { padding-bottom: 0; }
+    .timeline-title { font-size: 15px; font-weight: 400; margin-bottom: 6px; }
+    .timeline-text { font-size: 13px; color: var(--brown-mid); line-height: 1.8; }
+
+    @media (max-width: 768px) {
+      .story-block { grid-template-columns: 1fr; gap: 40px; }
+      .story-block.reverse { direction: ltr; }
+      .commitment-grid { grid-template-columns: 1fr; }
+      .timeline-item { grid-template-columns: 60px 1fr; gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor-dot" id="cursor"></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">CAFÉ <span>MATIN</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">TOP</a></li>
+    <li><a href="menu.html">MENU</a></li>
+    <li><a href="concept.html" aria-current="page">CONCEPT</a></li>
+    <li><a href="gallery.html">GALLERY</a></li>
+    <li><a href="access.html">ACCESS</a></li>
+  </ul>
+</nav>
+
+<div class="page-hero">
+  <p class="page-hero-label">Concept</p>
+  <h1 class="page-hero-title">朝を、丁寧に。</h1>
+</div>
+
+<!-- Story Section 1: オーナーの想い -->
+<section class="section-pad">
+  <div class="story-block reveal">
+    <div class="story-img" style="background-image:url('https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800&q=80')"></div>
+    <div>
+      <p class="story-label">Owner's Story</p>
+      <h2 class="story-title">「おいしい朝」が、<br>一日を変える。</h2>
+      <blockquote class="story-quote">朝に丁寧な時間を持てる人は、強い。</blockquote>
+      <p class="story-text">フランスの田舎町で食べたクロワッサンに感動して、パン職人の道に入りました。日本に戻って10年、「毎日通えるカフェ」を作りたいという想いが膨らみ続け、2020年に下北沢にCAFÉ MATINをオープン。焼きたてのパンと、産地から届くコーヒーで、あなたの朝を少しだけ特別にしたい。</p>
+    </div>
+  </div>
+
+  <div class="story-block reverse reveal">
+    <div class="story-img" style="background-image:url('https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=800&q=80')"></div>
+    <div>
+      <p class="story-label">Our Coffee</p>
+      <h2 class="story-title">豆から育てる、<br>一杯のコーヒー。</h2>
+      <p class="story-text">コーヒーは毎週、生産者と直接連絡を取り合いながら仕入れています。エチオピア・コロンビア・パナマ——それぞれの土地の個性を大切に、浅煎りと深煎りを使い分けています。豆の声を聴きながら、その日最適な抽出を心がけています。</p>
+    </div>
+  </div>
+</section>
+
+<!-- Commitment Section -->
+<section class="section-pad commitment-section">
+  <div class="section-header reveal">
+    <p class="section-label">Our Values</p>
+    <h2 class="section-title">素材へのこだわり</h2>
+  </div>
+  <div class="commitment-grid">
+    <div class="commitment-item reveal">
+      <div class="commitment-icon">🌾</div>
+      <h3 class="commitment-title">国産小麦</h3>
+      <p class="commitment-text">北海道産の小麦粉のみを使用。添加物は一切加えず、小麦本来の風味を大切にします。</p>
+    </div>
+    <div class="commitment-item reveal" style="transition-delay:0.1s">
+      <div class="commitment-icon">☕</div>
+      <h3 class="commitment-title">スペシャルティコーヒー</h3>
+      <p class="commitment-text">カップオブエクセレンス入賞農園の豆を中心に、品質の高い豆のみを厳選して仕入れています。</p>
+    </div>
+    <div class="commitment-item reveal" style="transition-delay:0.2s">
+      <div class="commitment-icon">🌿</div>
+      <h3 class="commitment-title">季節の食材</h3>
+      <p class="commitment-text">地元農家と連携し、旬の野菜・フルーツを使ったメニューを月替わりでご用意しています。</p>
+    </div>
+  </div>
+</section>
+
+<!-- Timeline Section -->
+<section class="section-pad">
+  <div class="section-header reveal">
+    <p class="section-label">A Day</p>
+    <h2 class="section-title">カフェの一日</h2>
+  </div>
+  <div class="timeline reveal">
+    <div class="timeline-item">
+      <div class="timeline-time">5:00</div>
+      <div class="timeline-content">
+        <h3 class="timeline-title">仕込み開始</h3>
+        <p class="timeline-text">天然酵母を起こし、生地を作り始めます。その日の気温・湿度に合わせて水分量を微調整するのが職人の仕事。</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-time">7:30</div>
+      <div class="timeline-content">
+        <h3 class="timeline-title">焼き上がり</h3>
+        <p class="timeline-text">石窯から取り出した瞬間、店内に広がる焼きたての香り。開店前から行列ができることも。</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-time">8:00</div>
+      <div class="timeline-content">
+        <h3 class="timeline-title">OPEN</h3>
+        <p class="timeline-text">扉を開けます。朝の光の中で、コーヒーを飲みながら本を読む——そんな朝のはじまりを大切にしています。</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-time">15:00</div>
+      <div class="timeline-content">
+        <h3 class="timeline-title">CLOSE</h3>
+        <p class="timeline-text">「朝のカフェ」として、15時に閉店。スタッフ全員で翌日の仕込みを始めます。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="footer-logo">CAFÉ MATIN</span>
+  <ul class="footer-links">
+    <li><a href="menu.html">MENU</a></li>
+    <li><a href="concept.html">CONCEPT</a></li>
+    <li><a href="gallery.html">GALLERY</a></li>
+    <li><a href="access.html">ACCESS</a></li>
+  </ul>
+  <span>© 2026 CAFÉ MATIN</span>
+</footer>
+
+<script>
+  const cursor = document.getElementById('cursor');
+  if (cursor) {
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+  }
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

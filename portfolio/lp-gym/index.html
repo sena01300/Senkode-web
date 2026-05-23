@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>APEX GYM — 結果にコミットするパーソナルトレーニング</title>
+  <meta name="description" content="忙しい会社員・管理職のためのパーソナルジム。週2回60分から、3ヶ月で確実に体を変えるプログラム。完全個室・完全予約制。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@1,400;1,600&family=Noto+Sans+JP:wght@100;200;300;400;700&display=swap" rel="stylesheet">
+  <style>
+    [class*="grid"] > *, [class*="inner"] > *, [class*="wrap"] > * { min-width: 0; }
+
+    img, video, iframe { max-width: 100%; height: auto; }
+
+    html { overflow-x: hidden; }
+
+    :root {
+      --gold:       #EF4444;
+      --gold-light: #FCA5A5;
+      --gold-dim:   #991B1B;
+      --black:      #0A0505;
+      --off-black:  #0F0808;
+      --card:       #130D0D;
+      --white:      #FFF8F8;
+      --muted:      rgba(255,248,248,0.4);
+      --muted-sm:   rgba(255,248,248,0.22);
+      --border:     rgba(239,68,68,0.14);
+      --gold-glow:  rgba(239,68,68,0.07);
+      --gold-grid:  rgba(239,68,68,0.025);
+      --orange-accent: #F97316;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(var(--gold-grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--gold-grid) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none; z-index: 0;
+    }
+
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dim); }
+
+    .reveal {
+      opacity: 0; transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
+      will-change: opacity, transform;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    .gold { color: var(--gold); }
+    .tag {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: 10px; letter-spacing: 4px; color: var(--gold);
+      font-weight: 300; text-transform: uppercase; margin-bottom: 24px;
+    }
+    .tag::before { content: ''; width: 24px; height: 1px; background: var(--gold); }
+
+    /* ===== HEADER ===== */
+    header {
+      position: fixed; top: 0; width: 100%; z-index: 200;
+      background: rgba(8,8,8,0.9);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 60px; height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px; letter-spacing: 6px;
+      display: flex; align-items: center; gap: 2px;
+    }
+    .logo-accent { color: var(--gold); }
+
+    nav { display: flex; align-items: center; gap: 32px; }
+    nav a {
+      color: var(--muted); text-decoration: none;
+      font-size: 11px; letter-spacing: 2px;
+      transition: color 0.3s;
+    }
+    nav a:hover { color: var(--white); }
+
+    .nav-cta {
+      background: var(--gold); color: var(--black) !important;
+      font-size: 11px !important; font-weight: 700 !important;
+      letter-spacing: 2px; padding: 10px 24px;
+      transition: background 0.3s !important;
+    }
+    .nav-cta:hover { background: var(--gold-light) !important; }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh;
+      position: relative; z-index: 1;
+      display: flex; align-items: flex-end;
+      padding: 0 60px 100px;
+      overflow: hidden;
+    }
+
+    /* Diagonal split background */
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: var(--black);
+      overflow: hidden;
+    }
+
+    .hero-bg::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 55%;
+      height: 100%;
+      background: linear-gradient(135deg, #0a0a0a 0%, #141414 100%);
+      clip-path: polygon(10% 0, 100% 0, 100% 100%, 0% 100%);
+    }
+
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 55%;
+      height: 100%;
+      background: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 40px,
+        rgba(239,68,68,0.015) 40px,
+        rgba(239,68,68,0.015) 41px
+      );
+      clip-path: polygon(10% 0, 100% 0, 100% 100%, 0% 100%);
+    }
+
+    /* Vertical gold line accent */
+    .hero-line {
+      position: absolute;
+      left: 58px; top: 80px; bottom: 80px;
+      width: 2px;
+      background: linear-gradient(to bottom, transparent, var(--gold) 30%, var(--gold) 70%, transparent);
+      opacity: 0.4;
+    }
+
+    /* Large background number */
+    .hero-bg-num {
+      position: absolute;
+      right: -30px; top: 50%;
+      transform: translateY(-50%);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 400px; line-height: 1;
+      color: var(--gold); opacity: 0.025;
+      letter-spacing: -15px;
+      pointer-events: none; user-select: none;
+    }
+
+    .hero-inner {
+      position: relative; z-index: 1;
+      max-width: 760px;
+    }
+
+    .hero-eyebrow {
+      font-size: 10px; letter-spacing: 5px; color: var(--gold);
+      text-transform: uppercase; margin-bottom: 32px;
+      display: flex; align-items: center; gap: 16px;
+      opacity: 0; transform: translateX(-20px);
+      animation: heroIn 0.8s 0.2s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    .hero-eyebrow::before { content: ''; width: 40px; height: 1px; background: var(--gold); }
+
+    @keyframes heroIn { to { opacity: 1; transform: none; } }
+
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(64px, 8vw, 108px);
+      line-height: 0.9; letter-spacing: 2px;
+      margin-bottom: 40px;
+      opacity: 0; transform: translateY(20px);
+      animation: heroIn 1s 0.3s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+
+    h1 .line-main { display: block; }
+    h1 .line-gold {
+      display: block;
+      background: linear-gradient(90deg, var(--gold-dim), var(--gold-light), var(--gold));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-lead {
+      font-size: 16px; line-height: 2.1; color: var(--muted);
+      max-width: 520px; margin-bottom: 52px;
+      opacity: 0; transform: translateY(15px);
+      animation: heroIn 1s 0.5s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+
+    .hero-actions {
+      display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+      opacity: 0; transform: translateY(15px);
+      animation: heroIn 1s 0.65s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+
+    .btn-primary {
+      background: var(--gold); color: var(--black);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 12px; font-weight: 700; letter-spacing: 3px;
+      padding: 18px 44px; border: none; cursor: pointer;
+      transition: all 0.3s; text-decoration: none; display: inline-block;
+      position: relative; overflow: hidden;
+    }
+    .btn-primary::after {
+      content: ''; position: absolute; inset: 0;
+      background: var(--gold-light);
+      transform: translateX(-100%); transition: transform 0.3s;
+    }
+    .btn-primary:hover::after { transform: translateX(0); }
+    .btn-primary span { position: relative; z-index: 1; }
+
+    .btn-outline {
+      color: var(--muted); font-size: 12px; letter-spacing: 2px;
+      text-decoration: none; display: flex; align-items: center; gap: 8px;
+      transition: color 0.3s;
+    }
+    .btn-outline::after { content: '→'; transition: transform 0.3s; }
+    .btn-outline:hover { color: var(--white); }
+    .btn-outline:hover::after { transform: translateX(4px); }
+
+    /* Hero floating card */
+    .hero-card {
+      position: absolute;
+      right: 60px; top: 50%;
+      transform: translateY(-50%);
+      background: rgba(17,17,17,0.92);
+      border: 1px solid var(--border);
+      padding: 40px 36px;
+      width: 280px;
+      backdrop-filter: blur(8px);
+      opacity: 0; transform: translateY(-50%) translateX(30px);
+      animation: heroIn 1s 0.7s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    .hero-card::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--gold-dim), var(--gold-light));
+    }
+
+    .hc-label {
+      font-size: 9px; letter-spacing: 4px; color: var(--gold);
+      text-transform: uppercase; margin-bottom: 24px;
+    }
+
+    .hc-stat {
+      display: flex; flex-direction: column;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .hc-stat:last-of-type { border-bottom: none; padding-bottom: 0; }
+
+    .hc-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 44px; line-height: 1;
+      background: linear-gradient(180deg, var(--gold-light), var(--gold));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 4px;
+    }
+
+    .hc-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+    /* ===== TRUST STRIP ===== */
+    .trust {
+      position: relative; z-index: 1;
+      background: var(--off-black);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 24px 60px;
+      display: flex; align-items: center; gap: 0;
+      overflow: hidden;
+    }
+
+    .trust-label {
+      font-size: 10px; letter-spacing: 3px; color: var(--muted-sm);
+      text-transform: uppercase; white-space: nowrap;
+      margin-right: 48px; flex-shrink: 0;
+    }
+
+    .trust-scroll {
+      display: flex; gap: 48px;
+      animation: scrollLeft 20s linear infinite;
+    }
+
+    @keyframes scrollLeft {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .trust-item {
+      font-size: 12px; color: var(--muted);
+      white-space: nowrap; display: flex; align-items: center; gap: 8px;
+    }
+    .trust-item::before { content: '◆'; color: var(--gold-dim); font-size: 8px; }
+
+    /* ===== SECTION ===== */
+    .section { padding: 140px 60px; position: relative; z-index: 1; }
+    .section-alt { background: var(--off-black); }
+    .section-header { margin-bottom: 80px; }
+
+    h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(40px, 4.5vw, 60px);
+      letter-spacing: 3px; line-height: 1.05;
+      margin-bottom: 20px;
+    }
+
+    .section-lead { font-size: 15px; color: var(--muted); line-height: 2; max-width: 520px; }
+
+    /* ===== FOR WHO ===== */
+    .forwho-grid {
+      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 2px;
+    }
+
+    .fw-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 48px 36px;
+      position: relative; overflow: hidden;
+      transition: border-color 0.3s, transform 0.4s cubic-bezier(0.16,1,0.3,1);
+      cursor: default;
+    }
+    .fw-card:hover {
+      border-color: rgba(239,68,68,0.4);
+      transform: translateY(-6px);
+    }
+
+    .fw-card::after {
+      content: ''; position: absolute;
+      bottom: 0; left: 0; right: 0; height: 0;
+      background: linear-gradient(to top, rgba(239,68,68,0.06), transparent);
+      transition: height 0.5s;
+    }
+    .fw-card:hover::after { height: 100%; }
+
+    .fw-icon { font-size: 36px; margin-bottom: 24px; display: block; }
+
+    .fw-title {
+      font-size: 18px; font-weight: 400; letter-spacing: 0.5px;
+      margin-bottom: 16px; line-height: 1.5;
+    }
+
+    .fw-body { font-size: 13px; color: var(--muted); line-height: 2; }
+
+    .fw-tag {
+      display: inline-block; margin-top: 20px;
+      font-size: 10px; letter-spacing: 2px; color: var(--gold);
+      border: 1px solid rgba(239,68,68,0.3); padding: 3px 10px;
+    }
+
+    /* ===== RESULTS (BEFORE/AFTER) ===== */
+    .ba-grid {
+      display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 2px;
+    }
+
+    .ba-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 52px 48px;
+      display: flex; flex-direction: column; gap: 28px;
+    }
+
+    .ba-header {
+      display: flex; align-items: center; gap: 20px;
+    }
+
+    .ba-avatar {
+      width: 56px; height: 56px;
+      background: linear-gradient(135deg, var(--gold-dim), var(--card));
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px; color: var(--gold);
+      flex-shrink: 0;
+    }
+
+    .ba-meta strong { display: block; font-size: 14px; font-weight: 400; margin-bottom: 4px; }
+    .ba-meta span { font-size: 12px; color: var(--gold); }
+
+    .ba-before-after {
+      display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 16px;
+      align-items: center;
+    }
+
+    .ba-box {
+      background: var(--off-black);
+      border: 1px solid var(--border);
+      padding: 20px;
+    }
+
+    .ba-box-label {
+      font-size: 9px; letter-spacing: 3px;
+      text-transform: uppercase; margin-bottom: 10px;
+    }
+    .before .ba-box-label { color: var(--muted-sm); }
+    .after .ba-box-label { color: var(--gold); }
+
+    .ba-box-val {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 32px; line-height: 1;
+    }
+    .before .ba-box-val { color: var(--muted); }
+    .after .ba-box-val { color: var(--gold-light); }
+
+    .ba-box-unit { font-size: 14px; }
+
+    .ba-arrow {
+      font-size: 20px; color: var(--gold); text-align: center;
+    }
+
+    .ba-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 15px; color: var(--muted); line-height: 1.9;
+      border-left: 2px solid var(--gold-dim); padding-left: 20px;
+    }
+
+    .ba-stars { display: flex; gap: 4px; }
+    .star { color: var(--gold); font-size: 13px; }
+
+    /* ===== PROGRAM ===== */
+    .program-wrap {
+      display: grid; grid-template-columns: 360px minmax(0, 1fr);
+      gap: 60px; align-items: start;
+    }
+
+    .program-sidebar {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 48px 40px;
+      position: sticky; top: 90px;
+    }
+
+    .sidebar-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px; letter-spacing: 3px; margin-bottom: 8px;
+    }
+
+    .sidebar-sub { font-size: 13px; color: var(--muted); line-height: 1.8; margin-bottom: 32px; }
+
+    .sidebar-price {
+      display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px;
+    }
+
+    .sidebar-price-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 56px; line-height: 1;
+      background: linear-gradient(180deg, var(--gold-light), var(--gold));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .sidebar-price-unit { font-size: 18px; color: var(--muted); }
+    .sidebar-price-note { font-size: 12px; color: var(--muted-sm); margin-bottom: 32px; }
+
+    .sidebar-features {
+      list-style: none; display: flex; flex-direction: column; gap: 12px;
+      margin-bottom: 32px;
+    }
+    .sidebar-features li {
+      display: flex; gap: 10px; font-size: 13px; align-items: flex-start;
+    }
+    .sidebar-features li::before { content: '◆'; color: var(--gold); font-size: 9px; flex-shrink: 0; margin-top: 4px; }
+
+    .program-steps {
+      display: flex; flex-direction: column; gap: 2px;
+    }
+
+    .ps-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 36px 40px;
+      display: grid;
+      grid-template-columns: 48px minmax(0, 1fr);
+      gap: 24px;
+      align-items: start;
+      transition: border-color 0.3s;
+    }
+    .ps-item:hover { border-color: rgba(239,68,68,0.35); }
+
+    .ps-week {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 36px; color: var(--gold); line-height: 1;
+      text-align: center;
+    }
+    .ps-week-sub {
+      font-size: 9px; letter-spacing: 2px; color: var(--muted-sm);
+      text-align: center;
+    }
+
+    .ps-title { font-size: 18px; font-weight: 400; letter-spacing: 0.5px; margin-bottom: 10px; }
+    .ps-body { font-size: 13px; color: var(--muted); line-height: 2; }
+
+    .ps-items {
+      display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px;
+    }
+
+    .ps-tag {
+      font-size: 11px; color: rgba(239,68,68,0.7);
+      border: 1px solid rgba(239,68,68,0.2); padding: 3px 10px;
+    }
+
+    /* ===== COUNTER ===== */
+    .counter-section {
+      padding: 100px 60px;
+      background: var(--off-black);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      position: relative; z-index: 1;
+    }
+
+    .counter-grid {
+      display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .counter-item {
+      padding: 40px 40px;
+      border-right: 1px solid var(--border);
+      text-align: center;
+    }
+    .counter-item:last-child { border-right: none; }
+
+    .counter-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 72px; line-height: 1; display: block;
+      background: linear-gradient(180deg, var(--gold-light), var(--gold));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; margin-bottom: 12px;
+    }
+
+    .counter-label { font-size: 12px; color: var(--muted); letter-spacing: 1px; line-height: 1.8; }
+
+    /* ===== FAQ ===== */
+    .faq-grid {
+      display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 2px;
+    }
+
+    .faq-item { background: var(--card); border: 1px solid var(--border); }
+
+    .faq-q {
+      padding: 24px 28px;
+      display: flex; justify-content: space-between; align-items: center;
+      cursor: pointer; font-size: 14px; gap: 16px;
+      transition: background 0.3s;
+    }
+    .faq-q:hover { background: rgba(239,68,68,0.03); }
+    .faq-q-pre { color: var(--gold); font-family: 'Bebas Neue', sans-serif; font-size: 18px; flex-shrink: 0; }
+    .faq-q-text { flex: 1; line-height: 1.5; }
+    .faq-toggle { color: var(--gold); font-size: 22px; flex-shrink: 0; transition: transform 0.3s; line-height: 1; }
+    .faq-item.open .faq-toggle { transform: rotate(45deg); }
+    .faq-a { padding: 0 28px; max-height: 0; overflow: hidden; font-size: 13px; color: var(--muted); line-height: 2; transition: max-height 0.4s, padding 0.3s; }
+    .faq-item.open .faq-a { max-height: 200px; padding: 0 28px 24px; }
+
+    /* ===== CTA ===== */
+    .cta-section {
+      padding: 160px 60px;
+      position: relative; z-index: 1; overflow: hidden;
+      text-align: center;
+    }
+
+    .cta-section::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 900px 600px at 50% 50%, rgba(239,68,68,0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .cta-inner { max-width: 640px;
+      width: 100%; margin: 0 auto; }
+
+    .cta-urgency {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: rgba(251,146,60,0.15); border: 1px solid rgba(251,146,60,0.4);
+      color: #FB923C; font-size: 12px; letter-spacing: 2px;
+      padding: 8px 20px; margin-bottom: 32px;
+    }
+    .cta-urgency::before { content: '●'; font-size: 8px; animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0%,100%{ opacity:1; } 50%{ opacity:0.3; } }
+
+    .cta-inner h2 { margin-bottom: 24px; }
+    .cta-inner > p { font-size: 15px; color: var(--muted); line-height: 2; margin-bottom: 56px; }
+
+    .cta-form {
+      display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px;
+      text-align: left;
+    }
+
+    .form-field { position: relative; }
+    .form-field.full { grid-column: 1 / -1; }
+
+    .form-field label { display: block; font-size: 10px; letter-spacing: 3px; color: var(--gold); text-transform: uppercase; margin-bottom: 8px; }
+
+    .form-field input,
+    .form-field select,
+    .form-field textarea {
+      width: 100%;
+      background: var(--card); border: 1px solid var(--border);
+      color: var(--white); font-family: 'Noto Sans JP', sans-serif;
+      font-size: 14px; font-weight: 300;
+      padding: 16px 20px; outline: none;
+      transition: border-color 0.3s; appearance: none;
+    }
+    .form-field input::placeholder,
+    .form-field textarea::placeholder { color: rgba(244,241,236,0.2); }
+    .form-field input:focus,
+    .form-field select:focus,
+    .form-field textarea:focus { border-color: rgba(239,68,68,0.6); }
+    .form-field select option { background: var(--card); color: var(--white); }
+    .form-field textarea { height: 100px; resize: none; }
+
+    .submit-row {
+      grid-column: 1 / -1;
+      display: flex; flex-direction: column; align-items: center; gap: 14px;
+      margin-top: 8px;
+    }
+    .submit-note { font-size: 11px; color: var(--muted-sm); letter-spacing: 1px; }
+
+    /* ===== FOOTER ===== */
+    footer {
+      padding: 40px 60px;
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      position: relative; z-index: 1;
+    }
+    .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 5px; color: var(--muted-sm); }
+    footer p { font-size: 11px; color: var(--muted-sm); letter-spacing: 1px; }
+    .portfolio-badge { font-size: 10px; letter-spacing: 3px; color: var(--gold-dim); text-transform: uppercase; border: 1px solid rgba(153,27,27,0.4); padding: 5px 14px; }
+
+    /* ===== MOBILE CTA ===== */
+    .mobile-cta {
+      display: none;
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 300;
+      background: rgba(8,8,8,0.95); backdrop-filter: blur(10px);
+      border-top: 1px solid var(--border); padding: 16px 24px;
+      transition: opacity 0.3s;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1100px) {
+      .hero-card { display: none; }
+      .program-wrap { grid-template-columns: minmax(0, 1fr); }
+      .program-sidebar { position: static; }
+    }
+
+    @media (max-width: 768px) {
+      header { padding: 0 24px; }
+      nav a:not(.nav-cta) { display: none; }
+
+      .hero { padding: 120px 24px 80px; align-items: center; }
+      h1 { font-size: 56px; }
+      .hero-bg-num { display: none; }
+
+      .trust { padding: 18px 24px; }
+      .section { padding: 80px 24px; }
+      .counter-section { padding: 60px 24px; }
+
+      .forwho-grid { grid-template-columns: minmax(0, 1fr); }
+      .fw-card { padding: 32px 24px; }
+
+      .ba-grid { grid-template-columns: minmax(0, 1fr); }
+      .ba-card { padding: 32px 24px; }
+
+      .ps-item { padding: 28px 20px; grid-template-columns: 36px minmax(0, 1fr); gap: 16px; }
+
+      .counter-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .counter-item:nth-child(2) { border-right: none; }
+      .counter-item:nth-child(3) { border-top: 1px solid var(--border); }
+      .counter-item:nth-child(4) { border-top: 1px solid var(--border); border-right: none; }
+
+      .faq-grid { grid-template-columns: minmax(0, 1fr); }
+
+      .cta-section { padding: 80px 24px 120px; }
+      .cta-form { grid-template-columns: minmax(0, 1fr); }
+
+      footer { flex-direction: column; gap: 16px; text-align: center; padding: 32px 24px; }
+      .mobile-cta { display: block; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo"><span class="logo-accent">APEX</span>&nbsp;GYM</div>
+    <nav>
+      <a href="#forwho">対象者</a>
+      <a href="#results">実績</a>
+      <a href="#program">プログラム</a>
+      <a href="#faq">FAQ</a>
+      <a href="#contact" class="nav-cta">無料体験</a>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-line"></div>
+    <div class="hero-bg-num">3</div>
+
+    <div class="hero-inner">
+      <div class="hero-eyebrow">Personal Training — Results Guaranteed</div>
+      <h1>
+        <span class="line-main">3ヶ月で、</span>
+        <span class="line-gold">体を変える。</span>
+      </h1>
+      <p class="hero-lead">
+        忙しい会社員・管理職のためのパーソナルジム。<br>
+        週2回60分のトレーニングで、確実に体は変わる。<br>
+        「時間がない」は言い訳にならない。予約制だから、通う習慣が生まれる。
+      </p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-primary"><span>無料体験を予約する</span></a>
+        <a href="#results" class="btn-outline">変化した人の声を見る</a>
+      </div>
+    </div>
+
+    <div class="hero-card">
+      <div class="hc-label">Average Results</div>
+      <div class="hc-stat">
+        <div class="hc-num">ー8.4<small style="font-size:0.5em">kg</small></div>
+        <div class="hc-desc">3ヶ月での平均体重減少</div>
+      </div>
+      <div class="hc-stat">
+        <div class="hc-num">ー6.2<small style="font-size:0.5em">%</small></div>
+        <div class="hc-desc">体脂肪率の平均減少</div>
+      </div>
+      <div class="hc-stat">
+        <div class="hc-num">97<small style="font-size:0.5em">%</small></div>
+        <div class="hc-desc">3ヶ月完走率</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST SCROLL -->
+  <div class="trust">
+    <span class="trust-label">Track Record</span>
+    <div class="trust-scroll">
+      <span class="trust-item">トレーナー全員 NSCA資格保有</span>
+      <span class="trust-item">完全マンツーマン指導</span>
+      <span class="trust-item">入会金・契約解除金なし</span>
+      <span class="trust-item">無理な食事制限なし</span>
+      <span class="trust-item">会員平均年齢 41歳</span>
+      <span class="trust-item">最短翌日から通えます</span>
+      <span class="trust-item">トレーナー全員 NSCA資格保有</span>
+      <span class="trust-item">完全マンツーマン指導</span>
+      <span class="trust-item">入会金・契約解除金なし</span>
+      <span class="trust-item">無理な食事制限なし</span>
+      <span class="trust-item">会員平均年齢 41歳</span>
+      <span class="trust-item">最短翌日から通えます</span>
+    </div>
+  </div>
+
+  <!-- FOR WHO -->
+  <section class="section" id="forwho">
+    <div class="section-header reveal">
+      <div class="tag">For Who</div>
+      <h2>こんな方に<span class="gold">選ばれています</span></h2>
+      <p class="section-lead">「時間がない」「続かない」「何度もリバウンドした」。<br>それでも確実に変わりたい方のためのジムです。</p>
+    </div>
+    <div class="forwho-grid">
+      <div class="fw-card reveal">
+        <span class="fw-icon">💼</span>
+        <h3 class="fw-title">忙しい管理職・<br>経営者の方</h3>
+        <p class="fw-body">平日の夜7時〜22時、土日も対応可能。予約制なので「通えない日」が生まれません。週2回60分から始められます。</p>
+        <span class="fw-tag">スキマ時間対応</span>
+      </div>
+      <div class="fw-card reveal" style="transition-delay:0.12s">
+        <span class="fw-icon">🔄</span>
+        <h3 class="fw-title">何度も失敗・<br>リバウンドを繰り返した方</h3>
+        <p class="fw-body">独学のトレーニングや食事制限で失敗した経験がある方へ。正しい知識と継続できる仕組みを一緒に作ります。</p>
+        <span class="fw-tag">挫折ゼロ設計</span>
+      </div>
+      <div class="fw-card reveal" style="transition-delay:0.24s">
+        <span class="fw-icon">📊</span>
+        <h3 class="fw-title">「なんとなく」ではなく<br>数字で変わりたい方</h3>
+        <p class="fw-body">体重・体脂肪・筋肉量を毎回計測。データに基づいてプログラムを調整するので、変化が「見える」形で実感できます。</p>
+        <span class="fw-tag">データ主導</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section class="section section-alt" id="results">
+    <div class="section-header reveal">
+      <div class="tag">Results</div>
+      <h2>実際の<span class="gold">変化の記録</span></h2>
+      <p class="section-lead">数字と言葉、両方でお伝えします。</p>
+    </div>
+    <div class="ba-grid">
+      <div class="ba-card reveal">
+        <div class="ba-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+        <div class="ba-header">
+          <div class="ba-avatar">TK</div>
+          <div class="ba-meta">
+            <strong>T.K. 会社員（46歳・男性）</strong>
+            <span>開始から3ヶ月</span>
+          </div>
+        </div>
+        <div class="ba-before-after">
+          <div class="ba-box before">
+            <div class="ba-box-label">Before</div>
+            <div class="ba-box-val">83.2<span class="ba-box-unit">kg</span></div>
+          </div>
+          <div class="ba-arrow">→</div>
+          <div class="ba-box after">
+            <div class="ba-box-label">After</div>
+            <div class="ba-box-val">74.1<span class="ba-box-unit">kg</span></div>
+          </div>
+        </div>
+        <p class="ba-quote">「残業が多くて週2回すら無理かと思っていましたが、予約制なので『その時間だけは動く』という習慣がついた。3ヶ月で9kg落ちたのは自分でも信じられません。」</p>
+      </div>
+      <div class="ba-card reveal" style="transition-delay:0.12s">
+        <div class="ba-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+        <div class="ba-header">
+          <div class="ba-avatar">SM</div>
+          <div class="ba-meta">
+            <strong>S.M. 営業管理職（39歳・女性）</strong>
+            <span>開始から3ヶ月</span>
+          </div>
+        </div>
+        <div class="ba-before-after">
+          <div class="ba-box before">
+            <div class="ba-box-label">Before</div>
+            <div class="ba-box-val">29.4<span class="ba-box-unit">%</span></div>
+          </div>
+          <div class="ba-arrow">→</div>
+          <div class="ba-box after">
+            <div class="ba-box-label">After</div>
+            <div class="ba-box-val">22.8<span class="ba-box-unit">%</span></div>
+          </div>
+        </div>
+        <p class="ba-quote">「体重より体脂肪率を落としたかった。数字で管理してもらえるので『今どこにいるか』が常にわかる。それが続けられた一番の理由だと思います。」</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- COUNTER -->
+  <div class="counter-section reveal">
+    <div class="counter-grid">
+      <div class="counter-item">
+        <span class="counter-num" data-target="240" data-suffix="+">0</span>
+        <div class="counter-label">累計会員数</div>
+      </div>
+      <div class="counter-item">
+        <span class="counter-num" data-target="97" data-suffix="%">0</span>
+        <div class="counter-label">3ヶ月完走率</div>
+      </div>
+      <div class="counter-item">
+        <span class="counter-num" data-target="89" data-suffix="%">0</span>
+        <div class="counter-label">リピート率</div>
+      </div>
+      <div class="counter-item">
+        <span class="counter-num" data-target="8" data-suffix=".4kg">0</span>
+        <div class="counter-label">平均体重減少<br>（3ヶ月）</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROGRAM -->
+  <section class="section" id="program">
+    <div class="section-header reveal">
+      <div class="tag">Program</div>
+      <h2>3ヶ月<span class="gold">完走プログラム</span></h2>
+      <p class="section-lead">毎月目標を更新しながら、着実に体を変えます。</p>
+    </div>
+    <div class="program-wrap">
+      <div class="program-sidebar reveal">
+        <div class="sidebar-title">Standard Plan</div>
+        <p class="sidebar-sub">3ヶ月コミットコース<br>週2回 × 60分セッション</p>
+        <div class="sidebar-price">
+          <span class="sidebar-price-num">48,000</span>
+          <span class="sidebar-price-unit">円</span>
+        </div>
+        <p class="sidebar-price-note">/ 月（税込）※3ヶ月契約</p>
+        <ul class="sidebar-features">
+          <li>週2回のパーソナルトレーニング（60分）</li>
+          <li>毎回の体組成測定・記録</li>
+          <li>個別食事プラン作成</li>
+          <li>LINEでの食事・体重記録サポート</li>
+          <li>完全個室・完全予約制</li>
+          <li>3ヶ月完走できなかった場合は延長無料</li>
+        </ul>
+        <a href="#contact" class="btn-primary" style="width:100%;text-align:center;display:block"><span>無料体験を予約する</span></a>
+      </div>
+      <div class="program-steps">
+        <div class="ps-item reveal">
+          <div>
+            <div class="ps-week">1</div>
+            <div class="ps-week-sub">MONTH</div>
+          </div>
+          <div>
+            <h3 class="ps-title">現状把握 &amp; 動ける体を作る</h3>
+            <p class="ps-body">体組成測定・姿勢分析・動作確認から始めます。筋肉量と脂肪量の現状を数値で確認し、あなた専用のプログラムを設計。まず「正しく動ける体」を作る1ヶ月。</p>
+            <div class="ps-items">
+              <span class="ps-tag">初期測定</span>
+              <span class="ps-tag">姿勢改善</span>
+              <span class="ps-tag">基礎フォーム習得</span>
+            </div>
+          </div>
+        </div>
+        <div class="ps-item reveal" style="transition-delay:0.1s">
+          <div>
+            <div class="ps-week">2</div>
+            <div class="ps-week-sub">MONTH</div>
+          </div>
+          <div>
+            <h3 class="ps-title">負荷を上げ、脂肪を燃やす</h3>
+            <p class="ps-body">基礎が整ったら強度を上げます。筋肥大トレーニングと有酸素の組み合わせで代謝を高め、体脂肪を効率よく落とします。食事管理も本格化。</p>
+            <div class="ps-items">
+              <span class="ps-tag">高強度トレーニング</span>
+              <span class="ps-tag">食事管理強化</span>
+              <span class="ps-tag">中間測定</span>
+            </div>
+          </div>
+        </div>
+        <div class="ps-item reveal" style="transition-delay:0.2s">
+          <div>
+            <div class="ps-week">3</div>
+            <div class="ps-week-sub">MONTH</div>
+          </div>
+          <div>
+            <h3 class="ps-title">仕上げ &amp; 継続できる習慣作り</h3>
+            <p class="ps-body">目標数値への最終仕上げと同時に、「ジムを卒業しても続けられる体」を目指します。セルフトレーニングのルーティン設計・栄養の自己管理まで伝授。</p>
+            <div class="ps-items">
+              <span class="ps-tag">ラスト追い込み</span>
+              <span class="ps-tag">セルフ管理習得</span>
+              <span class="ps-tag">最終測定</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section section-alt" id="faq">
+    <div class="section-header reveal">
+      <div class="tag">FAQ</div>
+      <h2>よくある<span class="gold">質問</span></h2>
+    </div>
+    <div class="faq-grid">
+      <div class="faq-item reveal">
+        <div class="faq-q">
+          <span class="faq-q-pre">Q</span>
+          <span class="faq-q-text">運動が苦手・ほぼ未経験でも大丈夫ですか？</span>
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-a">もちろんです。会員の約6割は運動習慣がなかった方です。フォームの基礎から丁寧に指導します。</div>
+      </div>
+      <div class="faq-item reveal" style="transition-delay:0.05s">
+        <div class="faq-q">
+          <span class="faq-q-pre">Q</span>
+          <span class="faq-q-text">週2回が難しい週はどうなりますか？</span>
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-a">予約変更・振り替えに柔軟に対応します。出張が多い方や繁忙期がある方も問題なく続けていただいています。</div>
+      </div>
+      <div class="faq-item reveal" style="transition-delay:0.1s">
+        <div class="faq-q">
+          <span class="faq-q-pre">Q</span>
+          <span class="faq-q-text">食事制限は厳しいですか？</span>
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-a">極端な食事制限は行いません。「続けられる食事」を基本に、生活スタイルに合わせた現実的なプランを作成します。</div>
+      </div>
+      <div class="faq-item reveal" style="transition-delay:0.15s">
+        <div class="faq-q">
+          <span class="faq-q-pre">Q</span>
+          <span class="faq-q-text">目標が達成できなかった場合は？</span>
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-a">設定目標に対して著しく届かなかった場合、1ヶ月の無料延長対応をしています。「結果にコミット」を本気で実践します。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section" id="contact">
+    <div class="cta-inner">
+      <div class="reveal">
+        <div class="cta-urgency">残り体験枠 今月あと3名</div>
+        <div class="tag">Free Trial</div>
+        <h2>まず<span class="gold">無料体験</span>から始める</h2>
+        <p>60分の無料体験で、あなたの現状を測定します。<br>入会の強制は一切なし。「どれくらい変われるか」を<br>数字で確認するだけでも大歓迎です。</p>
+      </div>
+      <div class="cta-form reveal" style="transition-delay:0.15s">
+        <div class="form-field">
+          <label>お名前</label>
+          <input type="text" placeholder="山田 太郎">
+        </div>
+        <div class="form-field">
+          <label>電話番号</label>
+          <input type="tel" placeholder="090-0000-0000">
+        </div>
+        <div class="form-field">
+          <label>ご希望の曜日</label>
+          <select>
+            <option value="" disabled selected>選択してください</option>
+            <option>平日（昼）</option>
+            <option>平日（夜7時以降）</option>
+            <option>土曜</option>
+            <option>日曜</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>目標</label>
+          <select>
+            <option value="" disabled selected>選択してください</option>
+            <option>体重を減らしたい</option>
+            <option>体脂肪を落としたい</option>
+            <option>筋肉をつけたい</option>
+            <option>健康維持・体力向上</option>
+          </select>
+        </div>
+        <div class="form-field full">
+          <label>現在の状況・気になること（任意）</label>
+          <textarea placeholder="「デスクワークで腰が痛い」「食事管理が苦手」など、何でもご記入ください"></textarea>
+        </div>
+        <div class="submit-row">
+          <a href="#" class="btn-primary" style="width:100%;text-align:center"><span>無料体験を予約する（今月あと3名）</span></a>
+          <p class="submit-note">24時間以内にご連絡します ・ 無理な勧誘は一切行いません</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">APEX GYM</div>
+    <p>© 2026 APEX GYM. All rights reserved.</p>
+    <span class="portfolio-badge">Portfolio — Senkode</span>
+  </footer>
+
+  <!-- MOBILE CTA -->
+  <div class="mobile-cta">
+    <a href="#contact" class="btn-primary" style="width:100%;text-align:center;display:block"><span>無料体験を予約する</span></a>
+  </div>
+
+  <script>
+    // Scroll reveal
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+    // Counter animation
+    function animateCounter(el) {
+      const raw = el.dataset.target;
+      const suffix = el.dataset.suffix || '';
+      const target = parseFloat(raw);
+      const duration = 1800;
+      const start = performance.now();
+      const easeOut = t => 1 - Math.pow(1 - t, 3);
+      const isDecimal = raw.includes('.');
+
+      function update(now) {
+        const progress = Math.min((now - start) / duration, 1);
+        const value = easeOut(progress) * target;
+        el.textContent = (isDecimal ? value.toFixed(1) : Math.floor(value)) + suffix;
+        if (progress < 1) requestAnimationFrame(update);
+        else el.textContent = (isDecimal ? target.toFixed(1) : target) + suffix;
+      }
+      requestAnimationFrame(update);
+    }
+
+    new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.querySelectorAll('.counter-num').forEach(animateCounter);
+          e.target._observed = true;
+        }
+      });
+    }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' }).observe(document.querySelector('.counter-section'));
+
+    // FAQ
+    document.querySelectorAll('.faq-q').forEach(q => {
+      q.addEventListener('click', () => q.closest('.faq-item').classList.toggle('open'));
+    });
+
+    // Mobile CTA hide near contact
+    const contactEl = document.getElementById('contact');
+    const mCta = document.querySelector('.mobile-cta');
+    if (mCta && contactEl) {
+      new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          mCta.style.opacity = e.isIntersecting ? '0' : '1';
+          mCta.style.pointerEvents = e.isIntersecting ? 'none' : 'auto';
+        });
+      }, { threshold: 0.1 }).observe(contactEl);
+    }
+  </script>
+</body>
+</html>

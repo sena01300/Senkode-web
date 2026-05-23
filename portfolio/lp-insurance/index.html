@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>中立保険相談室 | あなたが今払っている保険料の平均32%は不要かもしれない</title>
+  <meta name="description" content="特定の保険会社と代理店契約なし。完全中立の独立FPが、まず「削れる保険」を見つけます。初回60分無料。セールス電話はしません。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@100;200;300;400&display=swap" rel="stylesheet">
+  <style>
+    [class*="grid"] > *, [class*="inner"] > *, [class*="wrap"] > * { min-width: 0; }
+
+    img, video, iframe { max-width: 100%; height: auto; }
+
+    html { overflow-x: hidden; }
+
+    :root {
+      --bg:        #05080F;
+      --bg-sub:    #080C18;
+      --card:      #0C1122;
+      --navy:      #2563EB;
+      --navy-lt:   #3B82F6;
+      --navy-bd:   rgba(37,99,235,0.25);
+      --navy-glow: rgba(37,99,235,0.1);
+      --silver:    #94A3B8;
+      --silver-bd: rgba(148,163,184,0.2);
+      --gold:      #D4AF37;
+      --gold-bd:   rgba(212,175,55,0.3);
+      --red:       #EF4444;
+      --green:     #22C55E;
+      --text:      #EFF3FF;
+      --text-mid:  rgba(239,243,255,0.55);
+      --text-faint:rgba(239,243,255,0.22);
+      --bd:        rgba(37,99,235,0.12);
+      --nav-bg:    rgba(5,8,15,0.92);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--navy); }
+
+    /* CURSOR */
+    .cursor-dot  { position:fixed;width:6px;height:6px;background:var(--navy-lt);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%); }
+    .cursor-ring { position:fixed;width:28px;height:28px;border:1px solid rgba(59,130,246,0.45);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width 0.25s,height 0.25s; }
+    .cursor-ring.big { width:44px;height:44px; }
+
+    /* GRID BG */
+    body::before {
+      content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+      background-image:
+        linear-gradient(rgba(37,99,235,0.03) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(37,99,235,0.03) 1px,transparent 1px);
+      background-size:60px 60px;
+    }
+
+    /* NAV */
+    nav {
+      position:fixed;top:0;left:0;right:0;z-index:100;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:18px 60px;
+      background:var(--nav-bg);backdrop-filter:blur(12px);
+      border-bottom:1px solid var(--bd);
+    }
+    .nav-logo { display:flex;align-items:center;gap:10px;text-decoration:none; }
+    .nav-brand { font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:0.15em;color:var(--navy-lt); }
+    .nav-sub   { font-size:9px;letter-spacing:0.2em;color:var(--text-faint); }
+    .nav-links { display:flex;align-items:center;gap:28px; }
+    .nav-link  { font-size:11px;letter-spacing:0.15em;color:var(--text-mid);text-decoration:none;transition:color 0.2s; }
+    .nav-link:hover { color:var(--text); }
+    .nav-cta {
+      font-size:11px;letter-spacing:0.1em;padding:9px 22px;
+      background:var(--navy);color:var(--text);text-decoration:none;font-weight:400;
+      transition:background 0.2s;
+    }
+    .nav-cta:hover { background:var(--navy-lt); }
+
+    /* REVEAL */
+    .reveal { opacity:0;transform:translateY(24px);transition:opacity 0.6s,transform 0.6s;   will-change: opacity, transform;
+    }
+    .reveal.visible { opacity:1;transform:none; }
+
+    /* ── HERO ── */
+    .hero {
+      position:relative;z-index:2;
+      min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+      padding:120px 60px 80px;text-align:center;
+    }
+    .hero::after {
+      content:'';position:absolute;inset:0;z-index:-1;
+      background:radial-gradient(ellipse 65% 55% at 50% 58%, rgba(37,99,235,0.07) 0%, transparent 70%);
+    }
+
+    .hero-badge {
+      display:inline-flex;align-items:center;gap:10px;
+      border:1px solid var(--navy-bd);padding:7px 20px;margin-bottom:36px;
+      font-size:10px;letter-spacing:0.22em;color:var(--navy-lt);
+    }
+    .hero-badge-dot {
+      width:6px;height:6px;background:var(--navy-lt);border-radius:50%;
+      animation:blink 1.4s ease-in-out infinite;flex-shrink:0;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.1} }
+
+    .hero-title {
+      font-family:'Bebas Neue',sans-serif;
+      font-size:clamp(44px,8.5vw,100px);line-height:1.05;
+      letter-spacing:0.04em;margin-bottom:24px;
+    }
+    .hero-title .accent { color:var(--navy-lt); }
+    .hero-title .warn   { color:var(--gold); }
+
+    .hero-sub {
+      font-size:clamp(13px,1.8vw,16px);font-weight:200;
+      color:var(--text-mid);max-width:660px;
+      width: 100%;line-height:2.2;margin:0 auto 52px;
+    }
+
+    .hero-stat-row {
+      display:flex;gap:64px;justify-content:center;flex-wrap:wrap;margin-bottom:52px;
+    }
+    .hero-stat { text-align:center;position:relative; }
+    .hero-stat + .hero-stat::before {
+      content:'';position:absolute;left:-32px;top:50%;transform:translateY(-50%);
+      width:1px;height:40px;background:var(--bd);
+    }
+    .hero-stat-num {
+      font-family:'Bebas Neue',sans-serif;font-size:54px;line-height:1;
+      color:var(--navy-lt);letter-spacing:0.02em;display:block;
+    }
+    .hero-stat-unit { font-size:18px;color:var(--text-mid); }
+    .hero-stat-label { font-size:10px;letter-spacing:0.15em;color:var(--text-faint);margin-top:6px;display:block; }
+
+    .hero-cta-row { display:flex;gap:16px;justify-content:center;flex-wrap:wrap; }
+    .btn-primary {
+      font-size:12px;letter-spacing:0.15em;padding:16px 44px;
+      background:var(--navy);color:var(--text);text-decoration:none;font-weight:400;
+      transition:background 0.2s,transform 0.2s;display:inline-block;
+    }
+    .btn-primary:hover { background:var(--navy-lt);transform:translateY(-2px); }
+    .btn-ghost {
+      font-size:12px;letter-spacing:0.15em;padding:16px 44px;
+      border:1px solid var(--navy-bd);color:var(--navy-lt);text-decoration:none;
+      transition:background 0.2s;display:inline-block;
+    }
+    .btn-ghost:hover { background:var(--navy-glow); }
+    .hero-note { font-size:10px;letter-spacing:0.1em;color:var(--text-faint);margin-top:20px; }
+
+    /* ── SECTION BASE ── */
+    .section { position:relative;z-index:2;padding:100px 60px; }
+    .section-inner { max-width:1100px;
+      width: 100%;margin:0 auto; }
+    .section-label { font-size:10px;letter-spacing:0.3em;color:var(--navy-lt);margin-bottom:16px; }
+    .section-title {
+      font-family:'Bebas Neue',sans-serif;
+      font-size:clamp(30px,5vw,56px);letter-spacing:0.04em;
+      line-height:1.1;margin-bottom:48px;
+    }
+    .section-title .sub {
+      font-family:'Noto Sans JP',sans-serif;font-size:0.45em;font-weight:200;
+      display:block;color:var(--text-mid);letter-spacing:0.05em;margin-top:10px;
+    }
+
+    /* ── PROBLEM ── */
+    .problem-grid { display:grid;grid-template-columns:repeat(3,minmax(0, 1fr));gap:2px; }
+    .problem-card {
+      background:var(--card);padding:36px 28px;position:relative;overflow:hidden;
+      border-bottom:2px solid transparent;transition:border-color 0.3s,background 0.3s;
+    }
+    .problem-card:hover { background:#0F1830;border-bottom-color:var(--navy); }
+    .problem-num {
+      font-family:'Bebas Neue',sans-serif;font-size:72px;
+      color:rgba(37,99,235,0.06);line-height:1;position:absolute;top:16px;right:20px;
+    }
+    .problem-icon { font-size:28px;margin-bottom:18px;display:block; }
+    .problem-title { font-size:15px;font-weight:400;margin-bottom:12px;letter-spacing:0.02em; }
+    .problem-body  { font-size:13px;line-height:2;color:var(--text-mid); }
+    .problem-quote {
+      margin-top:16px;padding:12px 16px;
+      background:rgba(37,99,235,0.05);border-left:2px solid rgba(59,130,246,0.4);
+      font-size:12px;color:var(--text-mid);font-style:italic;line-height:1.9;
+    }
+
+    /* ── APPROACH (3ステップ) ── */
+    .approach-wrap { background:var(--bg-sub);padding:100px 60px; }
+    .step-list { display:flex;flex-direction:column;gap:2px;margin-top:48px; }
+    .step-item {
+      background:var(--card);padding:40px 44px;
+      display:grid;grid-template-columns:72px minmax(0, 1fr);gap:28px;align-items:flex-start;
+      border-left:3px solid transparent;transition:border-color 0.3s,background 0.3s;
+    }
+    .step-item:hover { background:#0F1830;border-left-color:var(--navy-lt); }
+    .step-num-wrap { text-align:center;padding-top:4px; }
+    .step-num {
+      font-family:'Bebas Neue',sans-serif;font-size:44px;line-height:1;
+      color:var(--navy-lt);display:block;
+    }
+    .step-num-label { font-size:8px;letter-spacing:0.2em;color:var(--text-faint);display:block;margin-top:2px; }
+    .step-content h3 { font-size:18px;font-weight:300;margin-bottom:12px;letter-spacing:0.02em; }
+    .step-content p  { font-size:13px;line-height:2.1;color:var(--text-mid); }
+    .step-tip {
+      margin-top:14px;padding:10px 16px;
+      background:var(--navy-glow);border:1px solid var(--bd);
+      font-size:11px;color:var(--navy-lt);letter-spacing:0.04em;line-height:1.8;
+      display:inline-block;
+    }
+
+    /* ── STRENGTHS ── */
+    .strength-grid { display:grid;grid-template-columns:repeat(2,minmax(0, 1fr));gap:2px; }
+    .strength-card {
+      background:var(--card);padding:40px 36px;
+      border-top:2px solid transparent;transition:border-top-color 0.3s,background 0.3s;
+    }
+    .strength-card:hover { background:#0F1830;border-top-color:var(--navy-lt); }
+    .strength-icon-row { display:flex;align-items:center;gap:14px;margin-bottom:18px; }
+    .strength-icon { font-size:26px; }
+    .strength-label {
+      font-size:9px;letter-spacing:0.25em;color:var(--navy-lt);
+      padding:3px 10px;border:1px solid var(--navy-bd);
+    }
+    .strength-card h3 { font-size:16px;font-weight:300;margin-bottom:12px; }
+    .strength-card p  { font-size:13px;line-height:2;color:var(--text-mid); }
+    .strength-highlight {
+      margin-top:16px;padding:10px 14px;
+      background:rgba(212,175,55,0.05);border:1px solid var(--gold-bd);
+      font-size:11px;color:var(--gold);letter-spacing:0.04em;line-height:1.8;
+    }
+
+    /* ── CASES ── */
+    .case-grid { display:grid;grid-template-columns:repeat(3,minmax(0, 1fr));gap:2px; }
+    .case-card {
+      background:var(--card);padding:36px 28px;
+      border-top:2px solid transparent;transition:border-top-color 0.3s;
+    }
+    .case-card:hover { border-top-color:var(--green); }
+    .case-tag  { font-size:9px;letter-spacing:0.22em;color:var(--silver);margin-bottom:14px;display:block; }
+    .case-persona { font-size:13px;font-weight:400;margin-bottom:12px;line-height:1.6;color:var(--text); }
+    .case-numbers {
+      display:flex;align-items:center;gap:12px;margin:16px 0;
+      padding:14px 0;border-top:1px solid var(--bd);border-bottom:1px solid var(--bd);
+    }
+    .case-num-block { text-align:center;flex:1; }
+    .case-num-label { font-size:9px;letter-spacing:0.1em;color:var(--text-faint);margin-bottom:4px;display:block; }
+    .case-num-val {
+      font-family:'Bebas Neue',sans-serif;font-size:28px;line-height:1;display:block;
+    }
+    .case-num-val.before { color:var(--silver); }
+    .case-num-val.after  { color:var(--green); }
+    .case-arrow { font-size:18px;color:var(--navy-lt);flex-shrink:0; }
+    .case-saving {
+      font-family:'Bebas Neue',sans-serif;font-size:20px;
+      color:var(--green);display:block;margin-top:12px;letter-spacing:0.02em;
+    }
+    .case-saving-label { font-size:10px;color:var(--text-faint);letter-spacing:0.1em; }
+    .case-detail { font-size:12px;line-height:1.9;color:var(--text-mid);margin-top:14px; }
+
+    /* ── FAQ ── */
+    .faq-list { max-width:780px;
+      width: 100%;margin:0 auto; }
+    .faq-item { border-bottom:1px solid var(--bd);padding:28px 0; }
+    .faq-q {
+      font-size:15px;font-weight:300;cursor:pointer;
+      display:flex;justify-content:space-between;align-items:center;gap:16px;
+    }
+    .faq-q::after { content:'＋';color:var(--navy-lt);flex-shrink:0;transition:transform 0.3s; }
+    .faq-item.open .faq-q::after { transform:rotate(45deg); }
+    .faq-a {
+      max-height:0;overflow:hidden;transition:max-height 0.4s ease,padding 0.3s;
+      font-size:14px;color:var(--text-mid);line-height:2.1;
+    }
+    .faq-item.open .faq-a { max-height:340px;padding-top:16px; }
+
+    /* ── CTA ── */
+    .cta-section {
+      position:relative;z-index:2;padding:100px 60px;text-align:center;
+      background:var(--bg-sub);border-top:1px solid var(--bd);
+    }
+    .cta-section::before {
+      content:'';position:absolute;inset:0;z-index:-1;
+      background:radial-gradient(ellipse 70% 60% at 50% 50%, rgba(37,99,235,0.06) 0%, transparent 70%);
+    }
+    .cta-title {
+      font-family:'Bebas Neue',sans-serif;
+      font-size:clamp(30px,5vw,64px);letter-spacing:0.04em;margin-bottom:24px;line-height:1.1;
+    }
+    .cta-sub {
+      font-size:15px;font-weight:200;color:var(--text-mid);
+      line-height:2.3;margin-bottom:16px;max-width:640px;margin-left:auto;margin-right:auto;
+    }
+    .cta-stance {
+      font-size:13px;font-weight:200;color:var(--text-mid);
+      margin-bottom:40px;font-style:italic;
+    }
+    .cta-options {
+      display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:36px;
+    }
+    .cta-option-tag {
+      font-size:11px;letter-spacing:0.1em;padding:6px 18px;
+      border:1px solid var(--bd);color:var(--text-mid);
+    }
+    .cta-note { font-size:10px;color:var(--text-faint);margin-top:20px;letter-spacing:0.07em;line-height:1.9; }
+
+    /* TRUST BADGES */
+    .trust-row {
+      display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin:36px 0 0;
+    }
+    .trust-badge {
+      display:flex;align-items:center;gap:8px;
+      font-size:11px;letter-spacing:0.1em;color:var(--text-faint);
+    }
+    .trust-badge-dot { width:5px;height:5px;background:var(--green);border-radius:50%;flex-shrink:0; }
+
+    /* FOOTER */
+    footer {
+      position:relative;z-index:2;
+      padding:28px 60px;background:var(--bg);border-top:1px solid var(--bd);
+      display:flex;align-items:center;justify-content:space-between;
+    }
+    .footer-brand { font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:0.15em;color:var(--navy-lt); }
+    .footer-copy  { font-size:10px;letter-spacing:0.1em;color:var(--text-faint); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width:768px) {
+      body { cursor:auto; }
+      .cursor-dot,.cursor-ring { display:none; }
+      nav { padding:14px 20px; }
+      .nav-links { gap:12px; }
+      .nav-link  { display:none; }
+      .hero,
+      .section,
+      .approach-wrap,
+      .cta-section { padding:80px 24px; }
+      .hero-stat-row { gap:28px; }
+      .hero-stat + .hero-stat::before { display:none; }
+      .problem-grid { grid-template-columns:minmax(0, 1fr); }
+      .step-item { grid-template-columns:minmax(0, 1fr);gap:12px;padding:28px 24px; }
+      .step-num-wrap { display:flex;align-items:center;gap:10px; }
+      .strength-grid { grid-template-columns:minmax(0, 1fr); }
+      .case-grid { grid-template-columns:minmax(0, 1fr); }
+      footer { padding:20px 24px;flex-direction:column;gap:8px;text-align:center; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor-dot"></div>
+<div class="cursor-ring"></div>
+
+<nav>
+  <a href="#" class="nav-logo">
+    <div>
+      <div class="nav-brand">中立保険相談室</div>
+      <div class="nav-sub">独立FP / 完全中立アドバイス</div>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="#problem"   class="nav-link">なぜ不要な保険が増えるか</a>
+    <a href="#approach"  class="nav-link">3ステップ</a>
+    <a href="#strengths" class="nav-link">中立の強み</a>
+    <a href="#cases"     class="nav-link">相談事例</a>
+    <a href="#cta" class="nav-cta">無料で棚卸しを頼む</a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-badge reveal">
+    <span class="hero-badge-dot"></span>
+    特定の保険会社と契約なし&nbsp;/&nbsp;完全中立アドバイス
+  </div>
+  <h1 class="hero-title reveal">
+    あなたが今払っている保険料の<br>
+    平均<span class="warn">32%</span>は<br>
+    不要かもしれない
+  </h1>
+  <p class="hero-sub reveal">
+    保険の見直し、と言うと「もっと良い保険を買う」と思われがちです。でも私たちが最初にやることは、あなたが今持っている保険の中から"要らないもの"を見つけることです。
+  </p>
+  <div class="hero-stat-row reveal">
+    <div class="hero-stat">
+      <span class="hero-stat-num">2,300<span class="hero-stat-unit">件</span></span>
+      <span class="hero-stat-label">累計相談件数</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-num">1.4<span class="hero-stat-unit">万円</span></span>
+      <span class="hero-stat-label">月間平均削減保険料</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-num">96<span class="hero-stat-unit">%</span></span>
+      <span class="hero-stat-label">顧客満足度（継続調査）</span>
+    </div>
+  </div>
+  <div class="hero-cta-row reveal">
+    <a href="#cta" class="btn-primary">今の保険を棚卸しする（初回60分無料）</a>
+    <a href="#approach" class="btn-ghost">まず3ステップを見る</a>
+  </div>
+  <p class="hero-note reveal">セールス電話はしません。個人情報の第三者提供なし。相談後の契約義務もありません</p>
+</section>
+
+<!-- ── PROBLEM ── -->
+<section class="section" id="problem" style="background:var(--bg-sub)">
+  <div class="section-inner">
+    <p class="section-label reveal">PROBLEM</p>
+    <h2 class="section-title reveal">
+      なぜ多くの人が不要な保険を持っているのか
+      <span class="sub">「なんとなく入ったまま」——その状態が長年続いている人が、じつは大半です</span>
+    </h2>
+    <div class="problem-grid">
+      <div class="problem-card reveal">
+        <div class="problem-num">01</div>
+        <span class="problem-icon">🔄</span>
+        <h3 class="problem-title">入った時と状況が変わっている</h3>
+        <p class="problem-body">独身で加入した生命保険を、結婚・子育てを経た今もそのまま持ち続けている方は非常に多くいます。独身時代に必要だったカバーは、今の家族構成には合っていないことがほとんどです。</p>
+        <div class="problem-quote">「独身の頃に親に勧められて入った保険を、30年以上そのままにしていた。確認したら保障内容が今の生活とまったく合っていなかった」（43歳・会社員）</div>
+      </div>
+      <div class="problem-card reveal">
+        <div class="problem-num">02</div>
+        <span class="problem-icon">📋</span>
+        <h3 class="problem-title">保険の重複を把握していない</h3>
+        <p class="problem-body">医療保険・がん保険・入院保険が別々の会社で3枚重なっているケースは珍しくありません。同じリスクに対して二重・三重に保険料を払い続けている状態を、ご本人が気づいていないことがほとんどです。</p>
+        <div class="problem-quote">「医療保険が3つあることに気づいていなかった。棚卸しをして初めて重複を確認できた。年間19万円の無駄払いだった」（51歳・自営業）</div>
+      </div>
+      <div class="problem-card reveal">
+        <div class="problem-num">03</div>
+        <span class="problem-icon">😶</span>
+        <h3 class="problem-title">"なんとなく不安"で入り続けている</h3>
+        <p class="problem-body">10年前の不安が、今の資産・収入・家族状況の変化を踏まえても同じように有効かどうか、誰も確認していません。「解約するのが怖い」という感情だけで保険料を払い続けていることがよくあります。</p>
+        <div class="problem-quote">「子供が独立して大学を卒業したのに、死亡保障を減らすことを誰にも相談できないままでいた」（58歳・会社員）</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── APPROACH ── -->
+<section class="approach-wrap" id="approach">
+  <div class="section-inner">
+    <p class="section-label reveal">OUR APPROACH</p>
+    <h2 class="section-title reveal">
+      私たちのアプローチ
+      <span class="sub">新しい保険を売る前に、まず削れるものを見つける——それが私たちの順番です</span>
+    </h2>
+    <div class="step-list">
+      <div class="step-item reveal">
+        <div class="step-num-wrap">
+          <span class="step-num">01</span>
+          <span class="step-num-label">STEP</span>
+        </div>
+        <div class="step-content">
+          <h3>保有保険の「棚卸し」——持っている保険を全部並べて可視化する</h3>
+          <p>まず、あなたが現在加入しているすべての保険を一覧化します。証券を持参いただくか、記憶にある情報だけでも構いません。「何を持っているかわからない」という状態からでも始められます。保険証券の読み方も丁寧にご説明します。</p>
+          <span class="step-tip">ポイント：棚卸しだけで「知らなかった」が複数見つかることが多いです</span>
+        </div>
+      </div>
+      <div class="step-item reveal">
+        <div class="step-num-wrap">
+          <span class="step-num">02</span>
+          <span class="step-num-label">STEP</span>
+        </div>
+        <div class="step-content">
+          <h3>「人生の今の状況」と照らし合わせ——今の家族・収入・資産でどこをカバーすべきか</h3>
+          <p>保険は「今のリスクを今の状況でカバーする」ものです。家族構成・子供の年齢・収入・貯蓄額・住宅ローン残高などを確認し、今あなたに本当に必要な保障の範囲を整理します。「入った時の理由」ではなく「今の理由」で考えます。</p>
+          <span class="step-tip">ポイント：必要な保障は人によって、時期によって大きく異なります</span>
+        </div>
+      </div>
+      <div class="step-item reveal">
+        <div class="step-num-wrap">
+          <span class="step-num">03</span>
+          <span class="step-num-label">STEP</span>
+        </div>
+        <div class="step-content">
+          <h3>「削る・残す・足す」の優先順位づけ——新しい保険を売る前に削れるものを先に削る</h3>
+          <p>不要な保険を削り、残すべき保険を確認し、それでも不足があれば初めて追加を検討します。このステップの結果、「新しい保険は不要だった」という結論になることも少なくありません。私たちはそれを正直に伝えます。</p>
+          <span class="step-tip">ポイント：「削ることを勧める」ことが私たちの差別化です</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── STRENGTHS ── -->
+<section class="section" id="strengths">
+  <div class="section-inner">
+    <p class="section-label reveal">WHY NEUTRAL</p>
+    <h2 class="section-title reveal">
+      中立アドバイザーの強み
+      <span class="sub">「売りたい保険がない」——これが、最も大切な私たちの立場です</span>
+    </h2>
+    <div class="strength-grid">
+      <div class="strength-card reveal">
+        <div class="strength-icon-row">
+          <span class="strength-icon">⚖️</span>
+          <span class="strength-label">完全中立</span>
+        </div>
+        <h3>特定の保険会社と代理店契約なし</h3>
+        <p>一般的な保険代理店は特定の保険会社と契約しており、その会社の商品を優先して勧めることがあります。私たちはどの保険会社とも代理店契約を結んでおらず、売りたい商品がありません。だから中立でいられます。</p>
+        <div class="strength-highlight">「この保険は解約した方がいい」——それを言える立場でいることが私たちの存在意義です</div>
+      </div>
+      <div class="strength-card reveal">
+        <div class="strength-icon-row">
+          <span class="strength-icon">🔍</span>
+          <span class="strength-label">比較力</span>
+        </div>
+        <h3>40社以上の商品を比較できる独立FP資格保持者</h3>
+        <p>CFP・AFPの資格を保有する独立FPが担当します。国内主要保険会社40社以上の商品データを参照しながら、あなたの状況に最適な選択肢を中立に比較します。「1社しか知らない担当者」とは視野の広さが異なります。</p>
+      </div>
+      <div class="strength-card reveal">
+        <div class="strength-icon-row">
+          <span class="strength-icon">🛡️</span>
+          <span class="strength-label">誠実さ</span>
+        </div>
+        <h3>「解約を勧めることも辞さない」というスタンス</h3>
+        <p>保険販売で収益を得ない私たちだからこそ、「その保険は解約していい」「今は何も変えなくていい」という結論を正直にお伝えできます。相談者にとってベストな答えが、何もしないことであれば、そう言います。</p>
+      </div>
+      <div class="strength-card reveal">
+        <div class="strength-icon-row">
+          <span class="strength-icon">💼</span>
+          <span class="strength-label">料金体系</span>
+        </div>
+        <h3>初回60分無料・継続は時間制（保険販売では稼がない）</h3>
+        <p>初回相談は60分完全無料です。継続相談は時間単位の相談料制を採用しています。保険を売ることで手数料を得る仕組みではないため、「契約させたい」というインセンティブが構造的に存在しません。</p>
+        <div class="strength-highlight">初回60分無料 / 継続相談：6,600円〜（60分・税込）</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CASES ── -->
+<section class="section" id="cases" style="background:var(--bg-sub)">
+  <div class="section-inner">
+    <p class="section-label reveal">CASE STUDIES</p>
+    <h2 class="section-title reveal">
+      よくある相談事例
+      <span class="sub">実際の相談をベースにした事例です（個人情報は変更・一般化しています）</span>
+    </h2>
+    <div class="case-grid">
+      <div class="case-card reveal">
+        <span class="case-tag">CASE 01 — 40代会社員 / 既婚・子2人</span>
+        <div class="case-persona">月3.2万円の保険料が1.8万円になった40代会社員</div>
+        <div class="case-numbers">
+          <div class="case-num-block">
+            <span class="case-num-label">削減前</span>
+            <span class="case-num-val before">3.2万円</span>
+            <span style="font-size:9px;color:var(--text-faint)">月額</span>
+          </div>
+          <span class="case-arrow">→</span>
+          <div class="case-num-block">
+            <span class="case-num-label">削減後</span>
+            <span class="case-num-val after">1.8万円</span>
+            <span style="font-size:9px;color:var(--text-faint)">月額</span>
+          </div>
+        </div>
+        <span class="case-saving">年間▲16.8万円</span>
+        <span class="case-saving-label">節約額（年間）</span>
+        <p class="case-detail">独身時代に加入した終身死亡保険・収入保障保険・特約が積み重なった状態でした。会社の団体保険と重複していた医療特約を外し、必要な死亡保障だけを適正な保険料で再設計。保障を落とさず、保険料だけを40%削減できました。</p>
+      </div>
+      <div class="case-card reveal">
+        <span class="case-tag">CASE 02 — 50代自営業 / 独立13年</span>
+        <div class="case-persona">重複していた医療保険2枚を解約して年間24万円節約</div>
+        <div class="case-numbers">
+          <div class="case-num-block">
+            <span class="case-num-label">削減前</span>
+            <span class="case-num-val before">3.4万円</span>
+            <span style="font-size:9px;color:var(--text-faint)">月額</span>
+          </div>
+          <span class="case-arrow">→</span>
+          <div class="case-num-block">
+            <span class="case-num-label">削減後</span>
+            <span class="case-num-val after">1.4万円</span>
+            <span style="font-size:9px;color:var(--text-faint)">月額</span>
+          </div>
+        </div>
+        <span class="case-saving">年間▲24万円</span>
+        <span class="case-saving-label">節約額（年間）</span>
+        <p class="case-detail">自営業20年間で複数の知人営業マンから勧められた保険が積み重なり、医療保険3枚・がん保険2枚が重複していました。入院給付が3重になっていた部分を整理し、必要な保障は1枚に集約。貯蓄型保険は解約返戻金を受け取り、運用に回すことを選択しました。</p>
+      </div>
+      <div class="case-card reveal">
+        <span class="case-tag">CASE 03 — 30代夫婦 / 子供1人・第2子検討中</span>
+        <div class="case-persona">教育費に備えるため生命保険を見直した30代夫婦</div>
+        <div class="case-numbers">
+          <div class="case-num-block">
+            <span class="case-num-label">削減前</span>
+            <span class="case-num-val before">5.8万円</span>
+            <span style="font-size:9px;color:var(--text-faint)">月額（夫婦合計）</span>
+          </div>
+          <span class="case-arrow">→</span>
+          <div class="case-num-block">
+            <span class="case-num-label">削減後</span>
+            <span class="case-num-val after">3.6万円</span>
+            <span style="font-size:9px;color:var(--text-faint)">月額（夫婦合計）</span>
+          </div>
+        </div>
+        <span class="case-saving">年間▲26.4万円</span>
+        <span class="case-saving-label">節約額（年間）</span>
+        <p class="case-detail">学資保険・収入保障・死亡保障・医療保険を別々の担当者から購入した結果、月5.8万円に達していました。今の貯蓄額・住宅ローン残高・夫婦の収入を踏まえ、死亡保障の過剰分を削減。浮いた保険料を教育費の積み立て投資に充てる設計に変えました。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FAQ ── -->
+<section class="section">
+  <div class="section-inner">
+    <p class="section-label reveal">FAQ</p>
+    <h2 class="section-title reveal" style="max-width:780px;margin-left:auto;margin-right:auto">よくあるご質問</h2>
+    <div class="faq-list">
+      <div class="faq-item reveal">
+        <div class="faq-q">本当に中立なんですか？どうやって稼いでいるのですか？</div>
+        <div class="faq-a">はい、私たちは特定の保険会社と代理店契約を結んでいないため、保険を販売して手数料を得る仕組みがありません。収益はすべて相談料（時間制）です。初回60分は無料、2回目以降は60分6,600円（税込）から。「保険を売らないと収入にならない」という構造が存在しないため、中立なアドバイスが可能です。</div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q">今の保険会社に直接相談すれば良いのでは？</div>
+        <div class="faq-a">保険会社の担当者は自社商品を軸にアドバイスします。「この保険を解約して他社に乗り換えてください」とは言えません。私たちは特定の会社に縛られていないため、「今の保険を解約した方が良い」「他社の方が有利」という判断も中立に行えます。また、複数社の保険が重複している場合、1社の担当者では全体像を把握できません。</div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q">解約して後悔しませんか？</div>
+        <div class="faq-a">「解約=損」とは限りません。不要な保険に払い続けていた保険料の方が、解約リスクより大きいケースが多くあります。私たちは解約を勧める場合、その根拠（今の保障で十分である理由・貯蓄状況・他の保障との重複）を丁寧に説明します。納得できなければ解約しなくていい。それがスタンスです。</div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q">健康に不安がありますが相談できますか？</div>
+        <div class="faq-a">はい、相談いただけます。健康状態によって新規加入できる保険の選択肢が限られるケースはありますが、既に加入している保険の棚卸しや整理は健康状態に関わらず行えます。また、持病があっても加入できる引受基準緩和型の保険についても情報提供が可能です。</div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q">相談後、必ず契約が必要ですか？</div>
+        <div class="faq-a">いいえ、まったく必要ありません。相談の結果「今の保険をそのままにするのが最善」という結論になることもあります。また「新しい保険は不要」という結果になることも多くあります。私たちの報酬は相談料であり、保険を売ることで得る手数料ではないため、契約を強要するインセンティブが存在しません。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ── -->
+<section class="cta-section" id="cta">
+  <p class="section-label reveal">CONTACT</p>
+  <h2 class="cta-title reveal">
+    まず、今の保険を<br>
+    <span style="color:var(--navy-lt)">"棚卸し"させてください</span>
+  </h2>
+  <p class="cta-sub reveal">
+    初回60分は無料です。保険証券がなくても、何となくの記憶だけでも構いません。
+  </p>
+  <p class="cta-stance reveal">
+    「相談しても、保険を売らないこともある。それが私たちのスタンスです」
+  </p>
+  <div class="cta-options reveal">
+    <span class="cta-option-tag">初回60分無料</span>
+    <span class="cta-option-tag">保険証券がなくてもOK</span>
+    <span class="cta-option-tag">オンライン相談対応</span>
+    <span class="cta-option-tag">契約義務なし</span>
+  </div>
+  <a href="#" class="btn-primary reveal">今すぐ相談予約をする（無料）</a>
+  <div class="trust-row reveal">
+    <span class="trust-badge"><span class="trust-badge-dot"></span>セールス電話はしません</span>
+    <span class="trust-badge"><span class="trust-badge-dot"></span>個人情報の第三者提供なし</span>
+    <span class="trust-badge"><span class="trust-badge-dot"></span>相談後の保険契約義務なし</span>
+  </div>
+  <p class="cta-note reveal">
+    ※ 初回相談は完全無料です。当日キャンセルも歓迎します。まず話すだけでも構いません
+  </p>
+</section>
+
+<footer>
+  <div class="footer-brand">中立保険相談室 / NEUTRAL FP OFFICE</div>
+  <div class="footer-copy">© 2026 中立保険相談室. Powered by Senkode.</div>
+</footer>
+
+<script>
+  // CURSOR
+  const dot  = document.querySelector('.cursor-dot');
+  const ring = document.querySelector('.cursor-ring');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{ mx=e.clientX; my=e.clientY; });
+  (function loop(){
+    rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
+    dot.style.left=mx+'px';  dot.style.top=my+'px';
+    ring.style.left=rx+'px'; ring.style.top=ry+'px';
+    requestAnimationFrame(loop);
+  })();
+  document.querySelectorAll('a,button').forEach(el=>{
+    el.addEventListener('mouseenter',()=>ring.classList.add('big'));
+    el.addEventListener('mouseleave',()=>ring.classList.remove('big'));
+  });
+
+  // SCROLL REVEAL
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); }
+    });
+  },{threshold:0.08});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+  // FAQ ACCORDION
+  document.querySelectorAll('.faq-item').forEach(item=>{
+    item.querySelector('.faq-q').addEventListener('click',()=>{
+      const isOpen=item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+      if(!isOpen) item.classList.add('open');
+    });
+  });
+</script>
+</body>
+</html>

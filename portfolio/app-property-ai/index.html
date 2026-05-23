@@ -1,0 +1,1684 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TenantAI — 賃貸入居者対応AIチャットボット 要件定義書 | Senkode Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@100;200;300&family=Cormorant+Garamond:ital@1&display=swap" rel="stylesheet">
+  <style>
+    [class*="grid"] > *, [class*="inner"] > *, [class*="wrap"] > * { min-width: 0; }
+
+    img, video, iframe { max-width: 100%; height: auto; }
+
+    html { overflow-x: hidden; }
+
+    :root {
+      --bg:           #040810;
+      --bg-sub:       #060C14;
+      --card:         #0A1220;
+      --sky:          #0EA5E9;
+      --sky-lt:       #38BDF8;
+      --sky-bd:       rgba(14,165,233,0.25);
+      --sky-glow:     rgba(14,165,233,0.08);
+      --amber:        #F59E0B;
+      --red:          #EF4444;
+      --violet:       #8B5CF6;
+      --text:         #E8F4FD;
+      --text-mid:     rgba(232,244,253,0.55);
+      --text-faint:   rgba(232,244,253,0.22);
+      --bd:           rgba(14,165,233,0.12);
+      --nav-bg:       rgba(4,8,16,0.92);
+      /* Senkode brand */
+      --gold:         #C9A84C;
+      --gold-light:   #E8C97A;
+      --gold-dim:     #6B5420;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; cursor: none; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 200;
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+
+    /* ─── Custom cursor ─── */
+    #cursor {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background: var(--sky);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width .2s, height .2s, opacity .2s;
+    }
+    #cursor-ring {
+      position: fixed;
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--sky-bd);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: transform .12s ease-out, width .2s, height .2s;
+    }
+
+    /* ─── Navigation ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: var(--nav-bg);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--bd);
+      padding: 0 48px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+    .nav-logo-text {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      color: var(--sky);
+      letter-spacing: .1em;
+    }
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--text-mid);
+      text-decoration: none;
+      font-size: .72rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--sky); }
+
+    /* ─── Scroll reveal ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity .7s ease, transform .7s ease;
+      will-change: opacity, transform;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ─── Layout ─── */
+    .container {
+      max-width: 1100px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 48px;
+    }
+    section {
+      padding: 96px 0;
+      border-top: 1px solid var(--bd);
+    }
+
+    /* ─── HERO ─── */
+    #hero {
+      padding: 160px 0 96px;
+      border-top: none;
+      position: relative;
+      overflow: hidden;
+    }
+    #hero::before {
+      content: '';
+      position: absolute;
+      top: -240px; right: -200px;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(14,165,233,0.1) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    #hero::after {
+      content: '';
+      position: absolute;
+      bottom: -100px; left: -80px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(139,92,246,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--sky-bd);
+      background: var(--sky-glow);
+      color: var(--sky-lt);
+      font-size: .7rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 2px;
+      margin-bottom: 32px;
+    }
+    .badge-dot {
+      width: 6px; height: 6px;
+      background: var(--sky);
+      border-radius: 50%;
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: .3; }
+    }
+
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      line-height: 1.05;
+      letter-spacing: .04em;
+      color: var(--text);
+      margin-bottom: 40px;
+    }
+    .hero-title span { color: var(--sky); }
+
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      background: var(--bd);
+      border: 1px solid var(--bd);
+      margin-bottom: 40px;
+    }
+    .info-item {
+      background: var(--bg-sub);
+      padding: 20px 24px;
+    }
+    .info-label {
+      font-size: .65rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--sky);
+      margin-bottom: 6px;
+    }
+    .info-value {
+      font-size: .9rem;
+      font-weight: 300;
+      color: var(--text);
+    }
+
+    .roi-bar {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+    .roi-card {
+      background: var(--card);
+      border: 1px solid var(--sky-bd);
+      padding: 28px 24px;
+      text-align: center;
+    }
+    .roi-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      color: var(--sky);
+      line-height: 1;
+    }
+    .roi-unit {
+      font-size: .8rem;
+      color: var(--sky-lt);
+      letter-spacing: .1em;
+    }
+    .roi-label {
+      font-size: .75rem;
+      color: var(--text-mid);
+      margin-top: 8px;
+      line-height: 1.5;
+    }
+
+    .hero-summary {
+      background: var(--card);
+      border-left: 3px solid var(--sky);
+      padding: 24px 32px;
+      font-size: .92rem;
+      color: var(--text-mid);
+      max-width: 860px;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+    }
+    .hero-summary strong { color: var(--sky-lt); font-style: normal; font-weight: 400; }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 40px;
+      background: var(--sky);
+      color: var(--bg);
+      font-size: .82rem;
+      font-weight: 300;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: 14px 32px;
+      text-decoration: none;
+      transition: background .2s, transform .2s;
+      font-family: 'Noto Sans JP', sans-serif;
+    }
+    .hero-cta:hover { background: var(--sky-lt); transform: translateY(-2px); }
+    .hero-cta-arrow { font-size: 1rem; }
+
+    /* ─── Section heading ─── */
+    .section-label {
+      font-size: .65rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--sky);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.4rem;
+      letter-spacing: .06em;
+      color: var(--text);
+      margin-bottom: 40px;
+    }
+    .sub-heading {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: .06em;
+      margin-bottom: 16px;
+      margin-top: 40px;
+    }
+
+    /* ─── Problem cards ─── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--bd);
+      padding: 28px;
+      transition: border-color .3s, transform .3s;
+    }
+    .card:hover { border-color: var(--sky-bd); transform: translateY(-4px); }
+    .card-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.4rem;
+      color: var(--sky);
+      line-height: 1;
+      margin-bottom: 12px;
+      opacity: .35;
+    }
+    .card-title {
+      font-size: .8rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--sky);
+      margin-bottom: 10px;
+    }
+    .card-body {
+      font-size: .85rem;
+      color: var(--text-mid);
+      line-height: 1.7;
+    }
+
+    /* ─── Approach list ─── */
+    .approach-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 32px 0;
+    }
+    .approach-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      background: var(--card);
+      border: 1px solid var(--bd);
+      padding: 20px 24px;
+      transition: border-color .3s;
+    }
+    .approach-item:hover { border-color: var(--sky-bd); }
+    .approach-arrow { color: var(--sky); font-size: 1rem; margin-top: 2px; flex-shrink: 0; }
+    .approach-text { font-size: .88rem; color: var(--text-mid); }
+    .approach-text strong { color: var(--text); font-weight: 300; }
+
+    /* ─── Callout ─── */
+    .callout {
+      background: var(--sky-glow);
+      border: 1px solid var(--sky-bd);
+      border-left: 3px solid var(--sky);
+      padding: 20px 28px;
+      margin: 24px 0;
+      font-size: .875rem;
+      color: var(--text-mid);
+    }
+    .callout strong { color: var(--sky-lt); font-weight: 300; }
+    .callout-amber {
+      background: rgba(245,158,11,0.06);
+      border-color: rgba(245,158,11,0.3);
+      border-left-color: var(--amber);
+    }
+    .callout-amber strong { color: var(--amber); }
+    .callout-violet {
+      background: rgba(139,92,246,0.06);
+      border-color: rgba(139,92,246,0.3);
+      border-left-color: var(--violet);
+    }
+    .callout-violet strong { color: var(--violet); }
+
+    /* ─── Tables ─── */
+    .tbl-wrap { overflow-x: auto; margin: 24px 0; }
+    table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+    thead th {
+      background: var(--card);
+      color: var(--sky);
+      font-weight: 300;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      font-size: .7rem;
+      padding: 14px 20px;
+      text-align: left;
+      border-bottom: 1px solid var(--sky-bd);
+    }
+    tbody tr {
+      border-bottom: 1px solid var(--bd);
+      transition: background .2s;
+    }
+    tbody tr:hover { background: var(--sky-glow); }
+    tbody td {
+      padding: 14px 20px;
+      color: var(--text-mid);
+      vertical-align: top;
+    }
+    tbody td:first-child { color: var(--text); font-weight: 300; }
+    .tag {
+      display: inline-block;
+      font-size: .65rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 2px;
+    }
+    .tag-high   { background: rgba(239,68,68,0.12); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
+    .tag-med    { background: rgba(245,158,11,0.12); color: var(--amber); border: 1px solid rgba(245,158,11,0.3); }
+    .tag-low    { background: rgba(14,165,233,0.12); color: var(--sky); border: 1px solid var(--sky-bd); }
+    .tag-ph     { background: rgba(139,92,246,0.12); color: var(--violet); border: 1px solid rgba(139,92,246,0.3); }
+    .tag-ph2    { background: rgba(14,165,233,0.12); color: var(--sky); border: 1px solid var(--sky-bd); }
+    .tag-ph3    { background: rgba(245,158,11,0.12); color: var(--amber); border: 1px solid rgba(245,158,11,0.3); }
+
+    /* ─── Screen spec boxes ─── */
+    .screen-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin: 32px 0;
+    }
+    .screen-card {
+      background: var(--card);
+      border: 1px solid var(--bd);
+      overflow: hidden;
+      transition: border-color .3s;
+    }
+    .screen-card:hover { border-color: var(--sky-bd); }
+    .screen-header {
+      background: var(--bg-sub);
+      border-bottom: 1px solid var(--bd);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .screen-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+    }
+    .screen-dot-sky    { background: var(--sky); }
+    .screen-dot-amber  { background: var(--amber); }
+    .screen-dot-violet { background: var(--violet); }
+    .screen-title-text {
+      font-size: .68rem;
+      letter-spacing: .1em;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      margin-left: 4px;
+    }
+    .screen-body {
+      padding: 20px 18px;
+    }
+    .screen-item {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--bd);
+      font-size: .78rem;
+      color: var(--text-mid);
+    }
+    .screen-item:last-child { border-bottom: none; }
+    .screen-item-dot {
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--sky);
+      margin-top: 7px;
+      flex-shrink: 0;
+    }
+
+    /* ─── Chat mockup ─── */
+    .chat-frame {
+      border: 1px solid var(--sky-bd);
+      background: var(--bg-sub);
+      overflow: hidden;
+      max-width: 700px;
+      margin: 32px auto;
+    }
+    .chat-header {
+      background: var(--card);
+      border-bottom: 1px solid var(--bd);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .chat-avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--sky-glow);
+      border: 1px solid var(--sky-bd);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .6rem;
+      color: var(--sky);
+      letter-spacing: .03em;
+      flex-shrink: 0;
+      font-weight: 300;
+    }
+    .chat-name { font-size: .82rem; color: var(--text); font-weight: 300; }
+    .chat-status {
+      font-size: .65rem;
+      color: var(--sky);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .chat-status-dot {
+      width: 5px; height: 5px;
+      background: var(--sky);
+      border-radius: 50%;
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    .chat-body {
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      min-height: 340px;
+    }
+    .msg {
+      display: flex;
+      gap: 10px;
+      max-width: 85%;
+    }
+    .msg.msg-ai    { align-self: flex-start; }
+    .msg.msg-user  { align-self: flex-end; flex-direction: row-reverse; }
+    .msg-icon {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .55rem;
+      font-weight: 300;
+      letter-spacing: .03em;
+      margin-top: 4px;
+    }
+    .msg-ai   .msg-icon { background: var(--sky-glow); border: 1px solid var(--sky-bd); color: var(--sky); }
+    .msg-user .msg-icon { background: rgba(139,92,246,0.1); border: 1px solid rgba(139,92,246,0.25); color: var(--violet); }
+    .msg-bubble {
+      padding: 12px 16px;
+      font-size: .83rem;
+      line-height: 1.65;
+      border-radius: 2px;
+    }
+    .msg-ai   .msg-bubble { background: var(--card); border: 1px solid var(--sky-bd); color: var(--text-mid); }
+    .msg-user .msg-bubble { background: rgba(139,92,246,0.1); border: 1px solid rgba(139,92,246,0.25); color: var(--text); }
+    .msg-meta {
+      font-size: .62rem;
+      color: var(--text-faint);
+      margin-top: 4px;
+      padding: 0 4px;
+    }
+    .msg-link { color: var(--sky); text-decoration: underline; text-underline-offset: 3px; font-size: .78rem; }
+    .chat-input-bar {
+      background: var(--card);
+      border-top: 1px solid var(--bd);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .chat-input-mock {
+      flex: 1;
+      height: 38px;
+      background: var(--bg-sub);
+      border: 1px solid var(--bd);
+      padding: 0 14px;
+      display: flex;
+      align-items: center;
+      font-size: .78rem;
+      color: var(--text-faint);
+    }
+    .chat-send-btn {
+      height: 38px;
+      width: 80px;
+      background: var(--sky);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .72rem;
+      letter-spacing: .08em;
+      color: var(--bg);
+      font-weight: 300;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+    .chat-escalate {
+      background: rgba(245,158,11,0.1);
+      border: 1px solid rgba(245,158,11,0.3);
+      color: var(--amber);
+      font-size: .7rem;
+      padding: 8px 14px;
+      letter-spacing: .08em;
+      text-align: center;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    /* ─── Prompt block ─── */
+    .prompt-block {
+      background: var(--bg);
+      border: 1px solid var(--bd);
+      padding: 32px 36px;
+      font-family: 'Noto Sans JP', monospace;
+      font-weight: 100;
+      font-size: .82rem;
+      line-height: 1.9;
+      color: var(--text-mid);
+      position: relative;
+      overflow-x: auto;
+      white-space: pre-wrap;
+    }
+    .prompt-block::before {
+      content: 'PROMPT DESIGN — TENANT AI';
+      position: absolute;
+      top: 12px; right: 16px;
+      font-size: .6rem;
+      letter-spacing: .15em;
+      color: var(--text-faint);
+      white-space: nowrap;
+    }
+    .prompt-key     { color: var(--sky-lt); }
+    .prompt-val     { color: var(--amber); }
+    .prompt-comment { color: var(--text-faint); }
+    .prompt-rule    { color: var(--violet); }
+
+    /* ─── Phase cards ─── */
+    .phase-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .phase-card {
+      background: var(--card);
+      border: 1px solid var(--bd);
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+    .phase-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+    }
+    .phase-1::before { background: var(--sky); }
+    .phase-2::before { background: var(--violet); }
+    .phase-3::before { background: var(--amber); }
+    .phase-label {
+      font-size: .6rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 8px;
+    }
+    .phase-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: .05em;
+      margin-bottom: 16px;
+    }
+    .phase-1 .phase-name { color: var(--sky); }
+    .phase-2 .phase-name { color: var(--violet); }
+    .phase-3 .phase-name { color: var(--amber); }
+    .phase-scope { font-size: .8rem; color: var(--text-mid); margin-bottom: 20px; line-height: 1.7; }
+    .phase-meta { display: flex; justify-content: space-between; align-items: flex-end; font-size: .75rem; }
+    .phase-weeks { color: var(--text-mid); }
+    .phase-cost { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: .05em; }
+    .phase-1 .phase-cost { color: var(--sky); }
+    .phase-2 .phase-cost { color: var(--violet); }
+    .phase-3 .phase-cost { color: var(--amber); }
+    .phase-items {
+      list-style: none;
+      margin-bottom: 20px;
+    }
+    .phase-items li {
+      font-size: .78rem;
+      color: var(--text-mid);
+      padding: 4px 0;
+      padding-left: 12px;
+      position: relative;
+      line-height: 1.6;
+    }
+    .phase-items li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--text-faint);
+    }
+
+    /* ─── Estimate table ─── */
+    .estimate-total {
+      background: var(--card);
+      border: 1px solid var(--sky-bd);
+      padding: 24px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 32px;
+    }
+    .estimate-label {
+      font-size: .75rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--text-mid);
+    }
+    .estimate-value {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.6rem;
+      color: var(--sky);
+      letter-spacing: .06em;
+    }
+    .estimate-note { font-size: .72rem; color: var(--text-faint); margin-top: 4px; }
+
+    /* ─── Tech stack ─── */
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 32px;
+    }
+    .tech-item {
+      background: var(--card);
+      border: 1px solid var(--bd);
+      padding: 20px 14px;
+      text-align: center;
+      transition: border-color .3s;
+    }
+    .tech-item:hover { border-color: var(--sky-bd); }
+    .tech-name { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: .06em; color: var(--sky); margin-bottom: 6px; }
+    .tech-role { font-size: .67rem; color: var(--text-faint); line-height: 1.4; }
+
+    /* ─── CTA section ─── */
+    .cta-section {
+      background: linear-gradient(135deg, var(--card) 0%, rgba(14,165,233,0.05) 100%);
+      border: 1px solid var(--sky-bd);
+      padding: 64px 48px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: -150px; left: 50%;
+      transform: translateX(-50%);
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(14,165,233,0.07) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .cta-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      letter-spacing: .06em;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+    .cta-title span { color: var(--sky); }
+    .cta-body { font-size: .9rem; color: var(--text-mid); margin-bottom: 40px; max-width: 640px; margin-left: auto; margin-right: auto; }
+    .cta-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--sky);
+      color: var(--bg);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: .82rem;
+      font-weight: 300;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: 16px 40px;
+      text-decoration: none;
+      transition: background .2s, transform .2s;
+    }
+    .btn-primary:hover { background: var(--sky-lt); transform: translateY(-2px); }
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: transparent;
+      color: var(--sky);
+      border: 1px solid var(--sky-bd);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: .82rem;
+      font-weight: 200;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: 16px 40px;
+      text-decoration: none;
+      transition: border-color .2s, color .2s, background .2s;
+    }
+    .btn-secondary:hover { border-color: var(--sky); background: var(--sky-glow); }
+
+    /* ─── Senkode SVG logo ─── */
+    .senkode-logo-svg {
+      width: 28px;
+      height: 42px;
+      display: block;
+    }
+
+    /* ─── Footer ─── */
+    footer {
+      background: var(--bg-sub);
+      border-top: 1px solid var(--bd);
+      padding: 48px;
+      text-align: center;
+    }
+    .footer-logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+    .footer-logo-text {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      color: var(--sky);
+      letter-spacing: .12em;
+    }
+    .footer-tagline { font-size: .72rem; color: var(--text-faint); letter-spacing: .14em; }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .container { padding: 0 20px; }
+      section { padding: 64px 0; }
+      #hero { padding: 120px 0 64px; }
+      .info-bar { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+      .roi-bar { grid-template-columns: minmax(0, 1fr); }
+      .card-grid { grid-template-columns: minmax(0, 1fr); }
+      .screen-grid { grid-template-columns: minmax(0, 1fr); }
+      .phase-grid { grid-template-columns: minmax(0, 1fr); }
+      .tech-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .chat-frame { max-width: 100%; }
+      .cta-section { padding: 48px 24px; }
+      .cta-buttons { flex-direction: column; align-items: center; }
+      .estimate-total { flex-direction: column; gap: 12px; text-align: center; }
+      footer { padding: 48px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- Navigation -->
+<nav>
+  <a class="nav-logo" href="#">
+    <svg class="senkode-logo-svg" viewBox="0 0 160 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="navGrad" x1="69" y1="40" x2="131" y2="151" gradientUnits="userSpaceOnUse">
+          <stop offset="0%"   stop-color="#6B5420"/>
+          <stop offset="50%"  stop-color="#E8C97A"/>
+          <stop offset="100%" stop-color="#C9A84C"/>
+        </linearGradient>
+      </defs>
+      <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="url(#navGrad)"/>
+    </svg>
+    <span class="nav-logo-text">SENKODE</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#background">背景・課題</a></li>
+    <li><a href="#requirements">機能要件</a></li>
+    <li><a href="#screens">画面仕様</a></li>
+    <li><a href="#prompt">プロンプト設計</a></li>
+    <li><a href="#phases">フェーズ</a></li>
+    <li><a href="#cta">相談する</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="container">
+    <div class="badge reveal">
+      <span class="badge-dot"></span>
+      APP REQUIREMENTS — H-A006 / Real Estate × AI Chatbot
+    </div>
+    <h1 class="hero-title reveal">
+      <span>TenantAI</span>
+      賃貸入居者対応
+      AIチャットボット
+      要件定義書
+    </h1>
+
+    <div class="info-bar reveal">
+      <div class="info-item">
+        <div class="info-label">ドキュメントID</div>
+        <div class="info-value">H-A006</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">クライアント種別</div>
+        <div class="info-value">賃貸管理会社</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">管理戸数</div>
+        <div class="info-value">200〜500戸</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">作成日</div>
+        <div class="info-value">2026-05-10</div>
+      </div>
+    </div>
+
+    <div class="roi-bar reveal">
+      <div class="roi-card">
+        <div class="roi-number">70<span class="roi-unit">%</span></div>
+        <div class="roi-label">問い合わせ自動対応率（AI一次処理）</div>
+      </div>
+      <div class="roi-card">
+        <div class="roi-number">120<span class="roi-unit">h</span></div>
+        <div class="roi-label">月間CS工数削減（管理スタッフ5名分）</div>
+      </div>
+      <div class="roi-card">
+        <div class="roi-number">24<span class="roi-unit">h</span></div>
+        <div class="roi-label">365日深夜対応・休日対応を完全自動化</div>
+      </div>
+    </div>
+
+    <div class="hero-summary reveal">
+      「深夜の漏水連絡」「退去手続きの問い合わせ」「オーナーへの報告」——管理スタッフ5名が抱える<strong>繰り返し業務の70%</strong>をAIが代替し、月<strong>120時間の工数</strong>を戦略業務へ解放する。
+    </div>
+
+    <a href="#cta" class="hero-cta reveal">
+      この要件でSenkodeに相談する
+      <span class="hero-cta-arrow">→</span>
+    </a>
+  </div>
+</section>
+
+<!-- BACKGROUND & CHALLENGES -->
+<section id="background">
+  <div class="container">
+    <div class="section-label reveal">01 — BACKGROUND &amp; CHALLENGES</div>
+    <h2 class="section-title reveal">背景と課題</h2>
+
+    <div class="card-grid">
+      <div class="card reveal">
+        <div class="card-num">01</div>
+        <div class="card-title">深夜の漏水・緊急連絡</div>
+        <div class="card-body">夜間・休日の漏水・設備故障連絡が全問い合わせの約18%を占める。電話対応が担当者個人の携帯に依存しており、対応記録が残らない。初動の遅れがクレームに発展するリスクが高い。</div>
+      </div>
+      <div class="card reveal">
+        <div class="card-num">02</div>
+        <div class="card-title">退去・更新手続きへの質問</div>
+        <div class="card-body">「退去通知はいつまでに？」「更新料はいくら？」といった定型の問い合わせが全体の40%超。同じ質問へ毎回個別に返信しており、スタッフの実質的な付加価値が出ない繰り返し業務になっている。</div>
+      </div>
+      <div class="card reveal">
+        <div class="card-num">03</div>
+        <div class="card-title">オーナー向け報告の工数</div>
+        <div class="card-body">物件ごとの入退去状況・修繕履歴・賃料収支をオーナーに月次報告するのに、スタッフが手作業でデータを集約している。200〜500戸規模では月30〜40時間が報告書作成だけで費やされている。</div>
+      </div>
+    </div>
+
+    <div class="callout reveal">
+      <strong>仮説（H-A006）：</strong>入居者からの問い合わせ70%をAIが自動対応することでCS工数を半減できる。同時に緊急案件の自動検知で初動対応時間を現状比50%短縮する。
+    </div>
+
+    <div class="section-label reveal" style="margin-top: 48px;">SOLUTION APPROACH</div>
+    <div class="approach-list">
+      <div class="approach-item reveal">
+        <div class="approach-arrow">→</div>
+        <div class="approach-text"><strong>LINE Bot経由でAIが24時間一次対応</strong>——入居者が使い慣れているLINEを窓口にすることで導入摩擦をゼロにする。FAQ・物件規約・手続きガイドをClaudeに与え、定型問い合わせを即時自動回答する。</div>
+      </div>
+      <div class="approach-item reveal">
+        <div class="approach-arrow">→</div>
+        <div class="approach-text"><strong>緊急案件の自動検知とエスカレーション</strong>——「水漏れ」「ガス漏れ」「鍵紛失」等のキーワードとAIの感情分析を組み合わせて緊急度を自動分類。担当者のSlack/SMSに即時通知し、対応記録をシステムに自動保存する。</div>
+      </div>
+      <div class="approach-item reveal">
+        <div class="approach-arrow">→</div>
+        <div class="approach-text"><strong>オーナーレポートの自動生成</strong>——管理DB（空室状況・入退去・修繕履歴・賃料収支）から月次レポートをClaudeが自動作成してオーナーにメール配信。手作業30〜40時間を1クリックに圧縮する。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FUNCTIONAL REQUIREMENTS -->
+<section id="requirements">
+  <div class="container">
+    <div class="section-label reveal">02 — FUNCTIONAL REQUIREMENTS</div>
+    <h2 class="section-title reveal">機能要件</h2>
+
+    <!-- A: LINE Bot -->
+    <h3 class="sub-heading reveal" style="color: var(--sky);">A. 入居者チャット機能（LINE Bot）</h3>
+    <div class="tbl-wrap reveal">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:28%">機能</th>
+            <th style="width:38%">詳細仕様</th>
+            <th style="width:16%">優先度</th>
+            <th style="width:18%">フェーズ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>LINE Bot連携</td>
+            <td>LINE Messaging APIで入居者LINEを受信。Webhook経由でバックエンドに転送。公式アカウント管理画面で設定管理</td>
+            <td><span class="tag tag-high">HIGH</span></td>
+            <td><span class="tag tag-ph">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>入居者本人確認</td>
+            <td>LINEのuser_idと管理DBの部屋番号を紐づけ登録。初回メッセージ時に部屋番号・姓名で認証。認証済みユーザーのみAI応答を有効化</td>
+            <td><span class="tag tag-high">HIGH</span></td>
+            <td><span class="tag tag-ph">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>クイックリプライ選択肢</td>
+            <td>「よくある問い合わせ」「緊急連絡」「退去手続き」「更新手続き」「オーナーに確認」の5選択肢をリッチメニューで常時表示</td>
+            <td><span class="tag tag-high">HIGH</span></td>
+            <td><span class="tag tag-ph">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>画像・ファイル受信</td>
+            <td>入居者が修繕箇所の写真を送付可能。LINE APIで受信し、管理DBに保存。エスカレーション通知に画像URLを添付</td>
+            <td><span class="tag tag-med">MED</span></td>
+            <td><span class="tag tag-ph2">Phase 2</span></td>
+          </tr>
+          <tr>
+            <td>会話履歴の引き継ぎ</td>
+            <td>同一入居者の過去7日間の会話履歴をコンテキストに含め、AIが前回の文脈を踏まえて回答する</td>
+            <td><span class="tag tag-med">MED</span></td>
+            <td><span class="tag tag-ph2">Phase 2</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- B: AI自動応答 -->
+    <h3 class="sub-heading reveal" style="color: var(--violet);">B. AI自動応答モジュール（Claude API統合）</h3>
+    <div class="tbl-wrap reveal">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:28%">機能</th>
+            <th style="width:38%">詳細仕様</th>
+            <th style="width:16%">優先度</th>
+            <th style="width:18%">フェーズ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>FAQ自動回答（70%カバー目標）</td>
+            <td>退去通知期限・更新料・駐車場・ゴミ出しルール・設備操作法など100〜200件のFAQをVector DBで管理。意味的類似検索で最適回答を生成</td>
+            <td><span class="tag tag-high">HIGH</span></td>
+            <td><span class="tag tag-ph">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>問い合わせカテゴリ自動分類</td>
+            <td>緊急 / 退去 / 更新 / 設備 / 騒音 / その他 の6カテゴリをClaudeが自動分類。カテゴリに応じて回答テンプレート・エスカレーション先を切り替え</td>
+            <td><span class="tag tag-high">HIGH</span></td>
+            <td><span class="tag tag-ph">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>物件情報・規約の参照</td>
+            <td>物件ごとの賃貸借契約書・管理規約・建物仕様書をRAGで参照。物件Aと物件Bで異なるルールを正確に使い分けて回答</td>
+            <td><span class="tag tag-high">HIGH</span></td>
+            <td><span class="tag tag-ph">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>回答信頼度スコアリング</td>
+            <td>AIが自信度スコア（0〜1）を計算。0.7未満の場合は「担当者に確認します」と返してエスカレーションを起動する</td>
+            <td><span class="tag tag-high">HIGH</span></td>
+            <td><span class="tag tag-ph">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>多言語対応（日英・日中）</td>
+            <td>外国籍入居者向けに英語・中国語での自動応答。入力言語を自動検出して同言語で返答</td>
+            <td><span class="tag tag-low">LOW</span></td>
+            <td><span class="tag tag-ph3">Phase 3</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- C: エスカレーション -->
+    <h3 class="sub-heading reveal" style="color: var(--amber);">C. エスカレーション機能（緊急案件の即時通知）</h3>
+    <div class="tbl-wrap reveal">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:28%">機能</th>
+            <th style="width:38%">詳細仕様</th>
+            <th style="width:16%">優先度</th>
+            <th style="width:18%">フェーズ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>緊急キーワード検知</td>
+            <td>「水漏れ」「ガス漏れ」「鍵」「火事」「怪我」等の緊急ワードを検知した場合、AI応答とは別に即時Slack通知を発火。検知は前処理（正規表現）とAI分類の2段構え</td>
+            <td><span class="tag tag-high">HIGH</span></td>
+            <td><span class="tag tag-ph">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>担当者への自動通知</td>
+            <td>Slack Webhookで物件担当者のチャンネルに通知。通知内容：入居者名・部屋番号・メッセージ本文・緊急度・AIサマリー・過去履歴リンク</td>
+            <td><span class="tag tag-high">HIGH</span></td>
+            <td><span class="tag tag-ph">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>入居者への応急対応ガイド</td>
+            <td>エスカレーション起動と同時に、入居者に「担当者に繋ぎました。XX分以内に連絡します。それまでの間、〇〇してください。」と送信</td>
+            <td><span class="tag tag-high">HIGH</span></td>
+            <td><span class="tag tag-ph">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>対応履歴の自動記録</td>
+            <td>エスカレーション起動から担当者が対応完了マークをつけるまでの全ログを時系列で管理DBに保存。クレーム発生時の証跡として活用</td>
+            <td><span class="tag tag-med">MED</span></td>
+            <td><span class="tag tag-ph2">Phase 2</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- D: オーナーレポート -->
+    <h3 class="sub-heading reveal" style="color: var(--sky);">D. オーナーレポート自動生成</h3>
+    <div class="tbl-wrap reveal">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:28%">機能</th>
+            <th style="width:38%">詳細仕様</th>
+            <th style="width:16%">優先度</th>
+            <th style="width:18%">フェーズ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>月次レポート自動生成</td>
+            <td>毎月1日に管理DBからデータ取得 → Claudeがオーナー向け文章を生成 → PDF化して指定メールアドレスに自動送信</td>
+            <td><span class="tag tag-high">HIGH</span></td>
+            <td><span class="tag tag-ph3">Phase 3</span></td>
+          </tr>
+          <tr>
+            <td>レポート構成項目</td>
+            <td>当月の入退去状況・空室率・修繕履歴（写真付き）・問い合わせ件数・賃料収支サマリー・来月の予定（更新期日）を自動生成</td>
+            <td><span class="tag tag-high">HIGH</span></td>
+            <td><span class="tag tag-ph3">Phase 3</span></td>
+          </tr>
+          <tr>
+            <td>オーナーポータル閲覧</td>
+            <td>過去12ヶ月分のレポートをWeb閲覧できるオーナー専用ページ。ログインはGoogle OAuthで認証</td>
+            <td><span class="tag tag-med">MED</span></td>
+            <td><span class="tag tag-ph3">Phase 3</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- E: 非機能要件 -->
+    <h3 class="sub-heading reveal" style="color: var(--text);">E. 非機能要件</h3>
+    <div class="tbl-wrap reveal">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:20%">項目</th>
+            <th style="width:30%">要件値</th>
+            <th style="width:50%">対応アーキテクチャ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>応答速度</td>
+            <td>3秒以内（AI応答含む）</td>
+            <td>ストリーミングレスポンスで初回トークンを即時表示。Vector DB検索を非同期並列で実行し待機時間を短縮</td>
+          </tr>
+          <tr>
+            <td>可用性</td>
+            <td>99.9%（月間停止8.7分以内）</td>
+            <td>Vercelのエッジ関数による自動スケーリング。Claude API障害時はFAQ DB直接参照のフォールバックで最低限の回答を継続</td>
+          </tr>
+          <tr>
+            <td>個人情報・セキュリティ</td>
+            <td>個人情報保護法準拠・TLS 1.3・暗号化保存</td>
+            <td>会話ログをSupabase RLSで物件ごとに隔離。入居者個人情報はAES-256で暗号化保存。保存期間は退去後2年で自動削除</td>
+          </tr>
+          <tr>
+            <td>拡張性</td>
+            <td>管理戸数2,000戸まで追加工数不要で対応</td>
+            <td>マルチテナント設計で物件ごとにFAQ・規約DBを分離。新物件追加はCSVインポートのみで完了。API利用量はオートスケール</td>
+          </tr>
+          <tr>
+            <td>監査ログ</td>
+            <td>全AI回答・全エスカレーションを永続保存</td>
+            <td>Supabaseの監査テーブルに全イベントを追記専用で記録。管理者はダッシュボードで任意期間のログをエクスポート可能</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout callout-amber reveal">
+      <strong>重要：個人情報取り扱い方針</strong>——入居者の氏名・部屋番号・連絡先はAIのプロンプトには直接含めず、部屋IDのみを参照キーとして使用する。Claude APIへ送信するデータは匿名化したうえで処理し、個人を特定できる情報を外部APIに渡さない設計とする。
+    </div>
+  </div>
+</section>
+
+<!-- SCREEN SPECS -->
+<section id="screens">
+  <div class="container">
+    <div class="section-label reveal">03 — SCREEN SPECIFICATIONS</div>
+    <h2 class="section-title reveal">画面仕様</h2>
+
+    <div class="screen-grid">
+      <div class="screen-card reveal">
+        <div class="screen-header">
+          <div class="screen-dot screen-dot-sky"></div>
+          <span class="screen-title-text">入居者 — LINE チャット画面</span>
+        </div>
+        <div class="screen-body">
+          <div class="screen-item">
+            <div class="screen-item-dot"></div>
+            <div>リッチメニュー：5カテゴリ選択肢を常時表示。タップで即メッセージ送信</div>
+          </div>
+          <div class="screen-item">
+            <div class="screen-item-dot"></div>
+            <div>AIバブルはブランドアイコン付きで表示。「自動応答」バッジを明示して誤認防止</div>
+          </div>
+          <div class="screen-item">
+            <div class="screen-item-dot"></div>
+            <div>緊急連絡選択時は赤ハイライトのカード形式UIに切り替え、担当者連絡状況をリアルタイム表示</div>
+          </div>
+          <div class="screen-item">
+            <div class="screen-item-dot"></div>
+            <div>「担当者に繋ぐ」ボタンをメッセージ入力エリア上部に常時表示</div>
+          </div>
+          <div class="screen-item">
+            <div class="screen-item-dot"></div>
+            <div>画像送信：修繕箇所の写真を最大4枚まで添付可能</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="screen-card reveal">
+        <div class="screen-header">
+          <div class="screen-dot screen-dot-violet"></div>
+          <span class="screen-title-text">管理者 — ダッシュボード</span>
+        </div>
+        <div class="screen-body">
+          <div class="screen-item">
+            <div class="screen-item-dot" style="background: var(--violet);"></div>
+            <div>リアルタイム対話モニター：進行中の会話一覧。AI応答済み・エスカレーション中を色分け表示</div>
+          </div>
+          <div class="screen-item">
+            <div class="screen-item-dot" style="background: var(--violet);"></div>
+            <div>KPIパネル：当日の問い合わせ件数・AI解決率・平均応答時間を最上部に常時表示</div>
+          </div>
+          <div class="screen-item">
+            <div class="screen-item-dot" style="background: var(--violet);"></div>
+            <div>物件別フィルタ：担当物件のみを絞り込んで表示。スタッフごとにデフォルト物件を設定可能</div>
+          </div>
+          <div class="screen-item">
+            <div class="screen-item-dot" style="background: var(--violet);"></div>
+            <div>会話割り込み機能：管理者がいつでもAI応答に割り込んで手動返信に切り替え</div>
+          </div>
+          <div class="screen-item">
+            <div class="screen-item-dot" style="background: var(--violet);"></div>
+            <div>FAQ管理画面：ノーコードでFAQを追加・編集・削除。変更は即座にAI回答に反映</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="screen-card reveal">
+        <div class="screen-header">
+          <div class="screen-dot screen-dot-amber"></div>
+          <span class="screen-title-text">担当者 — エスカレーション通知</span>
+        </div>
+        <div class="screen-body">
+          <div class="screen-item">
+            <div class="screen-item-dot" style="background: var(--amber);"></div>
+            <div>Slack通知：物件名・部屋番号・入居者名・緊急度・AIが生成した状況サマリーをプッシュ通知</div>
+          </div>
+          <div class="screen-item">
+            <div class="screen-item-dot" style="background: var(--amber);"></div>
+            <div>通知からワンクリックでダッシュボードの当該会話に直接ジャンプ</div>
+          </div>
+          <div class="screen-item">
+            <div class="screen-item-dot" style="background: var(--amber);"></div>
+            <div>対応ステータス管理：「対応中」「完了」「要フォロー」の3ステータスをSlackのボタンで更新可能</div>
+          </div>
+          <div class="screen-item">
+            <div class="screen-item-dot" style="background: var(--amber);"></div>
+            <div>SLA管理：緊急案件は30分以内対応をデフォルトSLAとし、未対応時は上長にアラートを再送</div>
+          </div>
+          <div class="screen-item">
+            <div class="screen-item-dot" style="background: var(--amber);"></div>
+            <div>業者手配ボタン：提携修繕業者への発注テンプレートを1タップで送信</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chat mockup -->
+    <div class="callout reveal" style="margin-top: 8px;">
+      <strong>入居者チャット画面イメージ：</strong>入居者がLINEで問い合わせ → TenantAIが即時応答 → 緊急案件は担当者への自動エスカレーションまでを示したサンプル会話フローです。
+    </div>
+
+    <div class="chat-frame reveal">
+      <div class="chat-header">
+        <div class="chat-avatar">AI</div>
+        <div>
+          <div class="chat-name">TenantAI — 〇〇不動産サポート</div>
+          <div class="chat-status">
+            <span class="chat-status-dot"></span>
+            24時間対応中
+          </div>
+        </div>
+      </div>
+      <div class="chat-body">
+        <div class="msg msg-ai">
+          <div class="msg-icon">AI</div>
+          <div>
+            <div class="msg-bubble">こんにちは。〇〇不動産のサポートAIです。退去・更新手続き・設備トラブルなど、ご不明な点はなんでもご相談ください。</div>
+            <div class="msg-meta">00:12 — 自動応答</div>
+          </div>
+        </div>
+        <div class="msg msg-user">
+          <div class="msg-icon">入居者</div>
+          <div>
+            <div class="msg-bubble">水漏れが起きています。洗面台の下から水が出ています。夜中なので電話できますか</div>
+            <div class="msg-meta">00:13</div>
+          </div>
+        </div>
+        <div class="msg msg-ai">
+          <div class="msg-icon">AI</div>
+          <div>
+            <div class="msg-bubble">緊急の水漏れを確認しました。ただいま<strong style="color: var(--sky-lt);">担当の田中に通知</strong>しました。30分以内に連絡が届きます。それまでの間、洗面台下の<strong style="color: var(--sky-lt);">止水栓（銀色のバルブ）を右に回して閉めて</strong>ください。床が濡れている場合はタオルで押さえてください。<span class="msg-link">止水栓の場所を確認する →</span></div>
+            <div class="msg-meta">00:13 — 緊急エスカレーション発火・担当者通知済み</div>
+          </div>
+        </div>
+        <div class="msg msg-user">
+          <div class="msg-icon">入居者</div>
+          <div>
+            <div class="msg-bubble">ありがとうございます。バルブ閉めました</div>
+            <div class="msg-meta">00:15</div>
+          </div>
+        </div>
+        <div class="msg msg-ai">
+          <div class="msg-icon">AI</div>
+          <div>
+            <div class="msg-bubble">ご対応ありがとうございます。止水栓を閉めることで被害を最小限に抑えられます。担当者から折り返しの連絡が届くまでしばらくお待ちください。万が一、水の勢いが強い場合は建物全体の元栓（玄関左側の水道メーターボックス内）を閉めてください。</div>
+            <div class="msg-meta">00:15 — 自動応答</div>
+          </div>
+        </div>
+      </div>
+      <div class="chat-input-bar">
+        <div class="chat-input-mock">メッセージを入力...</div>
+        <div class="chat-escalate">担当者に繋ぐ</div>
+        <div class="chat-send-btn">送信</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROMPT DESIGN -->
+<section id="prompt">
+  <div class="container">
+    <div class="section-label reveal">04 — PROMPT ENGINEERING</div>
+    <h2 class="section-title reveal">プロンプト設計</h2>
+
+    <div class="callout reveal">
+      <strong>設計方針：</strong>物件情報・管理規約・よくある回答をシステムプロンプトに注入し、Claudeが物件ごとに正確な回答を生成できる構造を設計する。個人情報は部屋IDのみを使い、名前・連絡先はAPIに渡さない。緊急検知ルールをハードルールとして最上位に定義し、AIが安全側に倒す判断をする。
+    </div>
+
+    <div class="prompt-block reveal"><span class="prompt-key">system</span>: <span class="prompt-comment">|</span>
+あなたは【物件管理会社名】の入居者対応サポートAIです。
+
+<span class="prompt-comment">【最優先ルール — 緊急エスカレーション】</span>
+以下のいずれかを検知した場合、即座に escalate: true を返す:
+  <span class="prompt-rule">- 水漏れ・雨漏り・ガス漏れ・火災・地震被害の言及</span>
+  <span class="prompt-rule">- 鍵紛失・不法侵入・ストーカー・犯罪の言及</span>
+  <span class="prompt-rule">- 入居者が怒り・恐怖・強い不満を表現している</span>
+  <span class="prompt-rule">- AIへの信頼度が低下し「人間に繋いでほしい」と要求</span>
+  <span class="prompt-rule">- 回答自信度スコアが 0.7 未満</span>
+
+<span class="prompt-comment">【物件コンテキスト（動的注入）】</span>
+物件ID     : <span class="prompt-val">{property_id}</span>
+物件名     : <span class="prompt-val">{property_name}</span>
+管理規約   : <span class="prompt-val">{property_rules_text}</span>
+FAQ関連項目: <span class="prompt-val">{faq_retrieved_items}</span>
+入居者部屋 : <span class="prompt-val">{room_number}</span>
+過去7日の会話: <span class="prompt-val">{conversation_history}</span>
+
+<span class="prompt-comment">【口調・制約】</span>
+- 敬語・丁寧語で統一。「〜でございます」は使わない
+- 法的・医療・金銭トラブルには具体的判断をせず「確認して折り返す」
+- 規約に記載のない事項は「確認します」と答え、確定情報として返答しない
+- 回答は300文字以内。長くなる場合は要点をリスト化する
+
+<span class="prompt-comment"># 出力形式（JSON Structured Output）</span>
+{
+  <span class="prompt-key">"category"</span>   : <span class="prompt-val">"emergency | move_out | renewal | equipment | noise | other"</span>,
+  <span class="prompt-key">"urgency"</span>    : <span class="prompt-val">"critical | high | normal | low"</span>,
+  <span class="prompt-key">"escalate"</span>   : <span class="prompt-val">true | false</span>,
+  <span class="prompt-key">"confidence"</span> : <span class="prompt-val">0.0 〜 1.0</span>,
+  <span class="prompt-key">"response"</span>   : <span class="prompt-val">"入居者への返答テキスト"</span>,
+  <span class="prompt-key">"staff_summary"</span>: <span class="prompt-val">"エスカレーション時の担当者向け状況サマリー"</span>
+}</div>
+
+    <div class="callout callout-violet reveal">
+      <strong>RAG（検索拡張生成）設計：</strong>物件規約・FAQ・手続きガイドをChroma DBにVector化して保存。入居者のメッセージから意味的類似度の高い上位3〜5件を取得してシステムプロンプトに注入。Claudeが「提供された情報のみで回答する」ことをハードルールとして定義し、ハルシネーション（事実と異なる回答）を防止する。
+    </div>
+  </div>
+</section>
+
+<!-- PHASES & ESTIMATE -->
+<section id="phases">
+  <div class="container">
+    <div class="section-label reveal">05 — DEVELOPMENT ROADMAP &amp; ESTIMATE</div>
+    <h2 class="section-title reveal">フェーズ別開発計画・見積</h2>
+
+    <div class="phase-grid">
+      <div class="phase-card phase-1 reveal">
+        <div class="phase-label">PHASE 01 / MVP</div>
+        <div class="phase-name">チャット基本</div>
+        <ul class="phase-items">
+          <li>LINE Bot連携・Webhook受信基盤</li>
+          <li>入居者認証（部屋番号紐づけ）</li>
+          <li>FAQ Vector DB構築（100件）</li>
+          <li>Claude API統合・基本FAQ応答</li>
+          <li>緊急キーワード検知・Slack通知</li>
+          <li>管理者ダッシュボード基本版</li>
+          <li>Vercelデプロイ・本番環境構築</li>
+        </ul>
+        <div class="phase-meta">
+          <span class="phase-weeks">8 週間</span>
+          <span class="phase-cost">¥1,200,000</span>
+        </div>
+      </div>
+      <div class="phase-card phase-2 reveal">
+        <div class="phase-label">PHASE 02 / AI応答</div>
+        <div class="phase-name">高精度AI応答</div>
+        <ul class="phase-items">
+          <li>RAG精度チューニング（上位表示改善）</li>
+          <li>画像受信・修繕写真管理機能</li>
+          <li>回答信頼度スコアリング実装</li>
+          <li>会話履歴7日間引き継ぎ</li>
+          <li>エスカレーション対応履歴管理</li>
+          <li>FAQ管理ノーコード画面</li>
+        </ul>
+        <div class="phase-meta">
+          <span class="phase-weeks">6 週間</span>
+          <span class="phase-cost">¥900,000</span>
+        </div>
+      </div>
+      <div class="phase-card phase-3 reveal">
+        <div class="phase-label">PHASE 03 / レポート自動化</div>
+        <div class="phase-name">オーナーレポート</div>
+        <ul class="phase-items">
+          <li>月次レポート自動生成（Claude）</li>
+          <li>PDF自動送信・メール配信基盤</li>
+          <li>オーナーポータル（Google OAuth）</li>
+          <li>KPI分析ダッシュボード（月次グラフ）</li>
+          <li>多言語対応（英語・中国語）</li>
+          <li>API公開・将来の外部システム連携準備</li>
+        </ul>
+        <div class="phase-meta">
+          <span class="phase-weeks">6 週間</span>
+          <span class="phase-cost">¥900,000</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Estimate total -->
+    <div class="tbl-wrap reveal" style="margin-top: 40px;">
+      <table>
+        <thead>
+          <tr>
+            <th>フェーズ</th>
+            <th>期間</th>
+            <th>主要スコープ</th>
+            <th>費用（税抜）</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Phase 1 — MVP</td>
+            <td>8週間</td>
+            <td>LINE Bot・FAQ応答・緊急通知・ダッシュボード基本版</td>
+            <td>¥1,200,000</td>
+          </tr>
+          <tr>
+            <td>Phase 2 — AI応答強化</td>
+            <td>6週間</td>
+            <td>RAG精度改善・画像対応・エスカレーション強化</td>
+            <td>¥900,000</td>
+          </tr>
+          <tr>
+            <td>Phase 3 — レポート自動化</td>
+            <td>6週間</td>
+            <td>オーナーレポート自動生成・ポータル・多言語</td>
+            <td>¥900,000</td>
+          </tr>
+          <tr>
+            <td colspan="2" style="font-weight: 300; color: var(--text);">合計（全フェーズ）</td>
+            <td>20週間（約5ヶ月）</td>
+            <td style="color: var(--sky); font-weight: 300; font-size: 1rem;">¥3,000,000</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="estimate-total reveal">
+      <div>
+        <div class="estimate-label">Phase 1 のみ先行着手も可能</div>
+        <div class="estimate-note">Phase 1完了後に効果検証→Phase 2〜3の追加発注も受け付けます</div>
+      </div>
+      <div style="text-align: right;">
+        <div class="estimate-label">Phase 1 先行費用</div>
+        <div class="estimate-value">¥1,200,000</div>
+        <div class="estimate-note">8週間 / 税抜</div>
+      </div>
+    </div>
+
+    <!-- Tech stack -->
+    <div class="section-label reveal" style="margin-top: 64px;">TECHNOLOGY STACK</div>
+    <div class="tech-grid">
+      <div class="tech-item reveal">
+        <div class="tech-name">LINE API</div>
+        <div class="tech-role">Bot・Messaging・リッチメニュー</div>
+      </div>
+      <div class="tech-item reveal">
+        <div class="tech-name">Claude API</div>
+        <div class="tech-role">AI応答・分類・感情分析</div>
+      </div>
+      <div class="tech-item reveal">
+        <div class="tech-name">Next.js</div>
+        <div class="tech-role">フロント・API Routes</div>
+      </div>
+      <div class="tech-item reveal">
+        <div class="tech-name">Supabase</div>
+        <div class="tech-role">DB・RLS・監査ログ</div>
+      </div>
+      <div class="tech-item reveal">
+        <div class="tech-name">Chroma DB</div>
+        <div class="tech-role">Vector DB・RAG検索</div>
+      </div>
+      <div class="tech-item reveal">
+        <div class="tech-name">Vercel</div>
+        <div class="tech-role">ホスティング・Edge Fn</div>
+      </div>
+      <div class="tech-item reveal">
+        <div class="tech-name">Slack</div>
+        <div class="tech-role">緊急通知Webhook</div>
+      </div>
+      <div class="tech-item reveal">
+        <div class="tech-name">TypeScript</div>
+        <div class="tech-role">型安全フルスタック開発</div>
+      </div>
+      <div class="tech-item reveal">
+        <div class="tech-name">Puppeteer</div>
+        <div class="tech-role">PDF生成・レポート出力</div>
+      </div>
+      <div class="tech-item reveal">
+        <div class="tech-name">Google OAuth</div>
+        <div class="tech-role">オーナーポータル認証</div>
+      </div>
+    </div>
+
+    <div class="callout callout-amber reveal" style="margin-top: 40px;">
+      <strong>月次ランニングコスト目安：</strong>Claude API使用量（月1万メッセージ想定）約¥15,000〜¥30,000 / Supabase Pro¥3,000 / Vercel Pro¥2,500 / LINE公式アカウント¥0〜¥15,000（プランによる）。合計月額¥20,000〜¥50,000程度を想定。管理戸数が増えるほど1戸あたりのコストが下がる逓減モデル。
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta" style="border-top: 1px solid var(--bd); padding: 0;">
+  <div class="cta-section reveal">
+    <div class="section-label" style="margin-bottom: 16px;">06 — ORDER &amp; CONTACT</div>
+    <h2 class="cta-title">この要件定義書を<span>発注書</span>に変えましょう</h2>
+    <p class="cta-body">TenantAIは賃貸管理業務の問い合わせ対応70%を自動化し、月120時間の工数を解放するシステムです。要件の追加・変更・費用の詳細についてはSenkodeにお気軽にご相談ください。初回相談は無料です。</p>
+    <div class="cta-buttons">
+      <a href="mailto:contact@senkode.jp?subject=TenantAI（H-A006）のご相談&body=要件定義書を拝見しました。Phase%201から相談させてください。" class="btn-primary">
+        Phase 1 から相談する →
+      </a>
+      <a href="../" class="btn-secondary">
+        ポートフォリオに戻る
+      </a>
+    </div>
+    <div style="margin-top: 32px; font-size: .72rem; color: var(--text-faint); letter-spacing: .08em;">
+      Senkode — Web制作・AIシステム開発・自動化コンサルティング
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-logo-wrap">
+    <svg width="24" height="36" viewBox="0 0 160 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="footerGrad" x1="69" y1="40" x2="131" y2="151" gradientUnits="userSpaceOnUse">
+          <stop offset="0%"   stop-color="#6B5420"/>
+          <stop offset="50%"  stop-color="#E8C97A"/>
+          <stop offset="100%" stop-color="#C9A84C"/>
+        </linearGradient>
+      </defs>
+      <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="url(#footerGrad)"/>
+    </svg>
+    <div class="footer-logo-text">SENKODE</div>
+  </div>
+  <div class="footer-tagline">ONE FLASH OF INSIGHT. ENCODED FOREVER.</div>
+  <div style="margin-top: 24px; font-size: .7rem; color: var(--text-faint);">
+    Portfolio Specimen H-A006 — TenantAI Requirements Document &nbsp;|&nbsp; Senkode 2026-05-10
+  </div>
+</footer>
+
+<script>
+  // ─── Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring   = document.getElementById('cursor-ring');
+  let mouseX = 0, mouseY = 0;
+  let ringX  = 0, ringY  = 0;
+
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    cursor.style.left = mouseX + 'px';
+    cursor.style.top  = mouseY + 'px';
+  });
+
+  (function animateRing() {
+    ringX += (mouseX - ringX) * 0.14;
+    ringY += (mouseY - ringY) * 0.14;
+    ring.style.left = ringX + 'px';
+    ring.style.top  = ringY + 'px';
+    requestAnimationFrame(animateRing);
+  })();
+
+  document.querySelectorAll('a, .card, .approach-item, .tech-item, .screen-card, .phase-card, .chat-send-btn, .chat-escalate, .btn-primary, .btn-secondary').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.width  = '18px';
+      cursor.style.height = '18px';
+      ring.style.width    = '56px';
+      ring.style.height   = '56px';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.width  = '10px';
+      cursor.style.height = '10px';
+      ring.style.width    = '36px';
+      ring.style.height   = '36px';
+    });
+  });
+
+  // ─── Scroll reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.07 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

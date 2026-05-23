@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact — Senkode</title>
+  <meta name="description" content="Senkodeへのお問い合わせはこちら。無料相談を受け付けています。">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital@1&family=Noto+Sans+JP:wght@100;200;300;700&display=swap" rel="stylesheet">
+  <style>
+    [class*="grid"] > *, [class*="inner"] > *, [class*="wrap"] > * { min-width: 0; }
+
+    img, video, iframe { max-width: 100%; height: auto; }
+
+    html { overflow-x: hidden; }
+
+    /* ===== DESIGN TOKENS ===== */
+    :root {
+      --gold:       #C9A84C;
+      --gold-light: #E8C97A;
+      --gold-dim:   #6B5420;
+      --black:      #080808;
+      --off-black:  #0F0F0F;
+      --card:       #111111;
+      --white:      #F4F1EC;
+      --muted:      rgba(244,241,236,0.35);
+      --border:     rgba(201,168,76,0.1);
+      --gold-hover:    rgba(201,168,76,0.1);
+      --gold-alpha-40: rgba(201,168,76,0.4);
+      --gold-alpha-30: rgba(201,168,76,0.3);
+      --gold-alpha-50: rgba(201,168,76,0.5);
+      --white-dim:     rgba(244,241,236,0.4);
+      --white-faint:   rgba(244,241,236,0.2);
+      --gold-glow-soft: rgba(201,168,76,0.08);
+      --gold-grid:      rgba(201,168,76,0.03);
+      --nav-bg:         rgba(15,15,15,0.85);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    p, li, h1, h2, h3, h4, span, div, td, dt, dd, label {
+      word-break: keep-all;
+      overflow-wrap: break-word;
+      line-break: strict;
+    }
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: none;
+      word-break: keep-all;
+      overflow-wrap: break-word;
+      line-break: strict;
+    }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dim); }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--gold-grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--gold-grid) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
+      will-change: opacity, transform;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    .fade-up {
+      opacity: 0;
+      transform: translateY(32px);
+      animation: fadeUpAnim 0.9s cubic-bezier(0.16,1,0.3,1) 0.2s forwards;
+    }
+    @keyframes fadeUpAnim {
+      to { opacity: 1; transform: none; }
+    }
+
+    /* ===== NOISE ===== */
+    .noise {
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      opacity: 0.025;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ===== FLASH LINE ===== */
+    .flash-line {
+      position: fixed;
+      top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 2;
+      animation: flashMove 8s ease-in-out infinite;
+    }
+    @keyframes flashMove {
+      0%   { left: -2px; opacity: 0; }
+      10%  { opacity: 0.4; }
+      90%  { opacity: 0.4; }
+      100% { left: 101%; opacity: 0; }
+    }
+
+    /* ===== CURSOR ===== */
+    .cursor-dot {
+      position: fixed;
+      width: 8px; height: 8px;
+      background: var(--gold);
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 9999;
+      mix-blend-mode: difference;
+    }
+    .cursor-ring {
+      position: fixed;
+      width: 32px; height: 32px;
+      border: 1px solid var(--gold-alpha-50);
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 9998;
+      transition: width 0.2s, height 0.2s, border-color 0.2s;
+    }
+    .cursor-ring.expanded { width: 48px; height: 48px; }
+
+    /* ===== NAV ===== */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 48px;
+      background: var(--nav-bg);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+    .nav-logo-icon { display: block; }
+    .nav-wordmark {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 22px;
+      letter-spacing: 0.25em;
+      color: var(--white);
+    }
+    .nav-links { display: flex; align-items: center; gap: 36px; }
+    .nav-link {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-link:hover { color: var(--white); }
+    .nav-cta {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      border: 1px solid var(--gold-alpha-40);
+      padding: 8px 20px;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+    .nav-cta:hover { background: var(--gold-hover); }
+    .nav-cta.active { background: var(--gold-hover); color: var(--gold-light); }
+
+    /* ===== CONTACT HERO ===== */
+    .contact-hero {
+      min-height: 40vh;
+      display: flex;
+      align-items: flex-end;
+      padding: 140px 60px 60px;
+      position: relative;
+    }
+    .contact-hero-glow {
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 600px; height: 400px;
+      background: radial-gradient(ellipse, rgba(201,168,76,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .contact-hero-content { position: relative; z-index: 1; }
+    .contact-label {
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+    .contact-title {
+      font-family: 'Bebas Neue', cursive;
+      font-size: clamp(60px, 10vw, 120px);
+      letter-spacing: 0.1em;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--gold-dim), var(--gold-light), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+    }
+    .contact-sub {
+      font-size: 15px;
+      color: var(--muted);
+      font-weight: 200;
+      max-width: 400px;
+      line-height: 1.8;
+    }
+
+    /* ===== FORM SECTION ===== */
+    .contact-section {
+      padding: 60px 60px 140px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 80px;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+    }
+    .contact-info-item { margin-bottom: 40px; }
+    .contact-info-label {
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+    .contact-info-value {
+      font-size: 14px;
+      color: var(--white);
+      font-weight: 200;
+      line-height: 1.8;
+    }
+    .contact-promise {
+      margin-top: 48px;
+      padding: 24px;
+      border: 1px solid var(--border);
+      background: rgba(201,168,76,0.02);
+    }
+    .contact-promise-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 18px;
+      color: var(--gold-light);
+      line-height: 1.6;
+    }
+    .contact-promise-sub {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 8px;
+      letter-spacing: 0.1em;
+    }
+
+    /* ===== FORM ===== */
+    .form-group { margin-bottom: 24px; }
+    .form-label {
+      display: block;
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .form-label span { color: var(--gold); margin-left: 4px; }
+    .form-input,
+    .form-select,
+    .form-textarea {
+      width: 100%;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      color: var(--white);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      font-size: 14px;
+      padding: 14px 16px;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+      appearance: none;
+    }
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      border-color: var(--gold-alpha-40);
+      background: rgba(201,168,76,0.03);
+    }
+    .form-input::placeholder,
+    .form-textarea::placeholder { color: rgba(244,241,236,0.2); }
+    .form-select {
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C9A84C' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      padding-right: 40px;
+    }
+    .form-select option { background: #111; color: var(--white); }
+    .form-textarea { resize: vertical; min-height: 140px; }
+    .form-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+
+    .btn-submit {
+      display: inline-block;
+      padding: 16px 40px;
+      background: transparent;
+      border: 1px solid var(--gold-alpha-40);
+      color: var(--gold);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      font-size: 12px;
+      letter-spacing: 0.25em;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      margin-top: 8px;
+      width: 100%;
+    }
+    .btn-submit:hover { background: var(--gold-hover); }
+
+    /* ===== THANK YOU STATE ===== */
+    .thankyou { display: none; text-align: center; padding: 60px 0; }
+    .thankyou.visible { display: block; }
+    .thankyou-icon { font-size: 48px; margin-bottom: 24px; }
+    .thankyou-title {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 36px;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+    .thankyou-text { font-size: 14px; color: var(--muted); line-height: 1.8; }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 60px;
+      border-top: 1px solid var(--border);
+      position: relative;
+      z-index: 1;
+    }
+    .footer-copy { font-size: 11px; color: var(--muted); letter-spacing: 0.1em; }
+    .footer-tag  { font-size: 11px; color: var(--gold-dim); letter-spacing: 0.2em; }
+    .footer-sns { display:flex; gap:20px; align-items:center; }
+    .footer-sns a { display:flex; align-items:center; justify-content:center; width:32px; height:32px; color:var(--muted); transition:color 0.3s; }
+    .footer-sns a:hover { color:var(--gold); }
+
+    /* ===== TABLET ===== */
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .nav { padding: 20px 40px; }
+      .contact-hero { padding: 100px 40px 60px; }
+      .contact-section { padding: 80px 40px; }
+      .footer { padding: 24px 40px; }
+    }
+
+    /* ===== MOBILE ===== */
+    @media (max-width: 768px) {
+      body { cursor: auto; }
+      .cursor-dot, .cursor-ring, .flash-line { display: none; }
+      .nav { padding: 16px 24px; }
+      .nav-links { gap: 20px; }
+      .contact-hero { padding: 100px 24px 40px; }
+      .contact-section { grid-template-columns: minmax(0, 1fr); gap: 40px; padding: 40px 24px 80px; }
+      .form-row { grid-template-columns: minmax(0, 1fr); }
+      .footer { padding: 20px 24px; flex-direction: column; gap: 8px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+  <div class="noise"></div>
+  <div class="flash-line"></div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <a href="index.html" class="nav-logo">
+      <svg class="nav-logo-icon" width="44" height="44" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="logoGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#6B5420"/>
+            <stop offset="50%" stop-color="#E8C97A"/>
+            <stop offset="100%" stop-color="#C9A84C"/>
+          </linearGradient>
+          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <path id="logoCircle" d="M30,5 A25,25,0,1,1,29.999,5" fill="none"/>
+        </defs>
+        <circle cx="30" cy="30" r="28" fill="none" stroke="#C9A84C" stroke-width="0.5" opacity="0.4"/>
+        <circle cx="30" cy="30" r="20" fill="none" stroke="#C9A84C" stroke-width="0.3" opacity="0.2"/>
+        <g transform="translate(-6,-4.4) scale(0.36)">
+          <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="url(#logoGrad)" style="filter: url(#glow)"/>
+        </g>
+        <text font-family="'Bebas Neue','Noto Sans JP',sans-serif" font-size="5" fill="#C9A84C" opacity="0.78">
+          <textPath href="#logoCircle" startOffset="0%" letter-spacing="2.5">Senkode · 閃光 · Senkode · 閃光 ·</textPath>
+        </text>
+      </svg>
+      <span class="nav-wordmark">Senkode</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html#services" class="nav-link">SERVICES</a>
+      <a href="index.html#works" class="nav-link">WORKS</a>
+      <a href="about.html" class="nav-link">ABOUT</a>
+      <a href="organization.html" class="nav-link">ORGANIZATION</a>
+      <a href="contact.html" class="nav-cta active">CONTACT</a>
+    </div>
+  </nav>
+
+  <!-- Contact Hero -->
+  <section class="contact-hero">
+    <div class="contact-hero-glow"></div>
+    <div class="contact-hero-content fade-up">
+      <p class="contact-label">GET IN TOUCH</p>
+      <h1 class="contact-title">CONTACT</h1>
+      <p class="contact-sub">課題をお聞きし、最適な施策をご提案します。まずはお気軽にご相談ください。</p>
+    </div>
+  </section>
+
+  <!-- Contact Body -->
+  <div class="contact-section">
+    <!-- Left: Info -->
+    <div class="contact-info reveal">
+      <div class="contact-info-item">
+        <p class="contact-info-label">RESPONSE TIME</p>
+        <p class="contact-info-value">24時間以内にご返信します</p>
+      </div>
+      <div class="contact-info-item">
+        <p class="contact-info-label">FREE CONSULTATION</p>
+        <p class="contact-info-value"><span style="display:block">初回相談は無料です。</span><span style="display:block">まずは課題をお話しください。</span></p>
+      </div>
+      <div class="contact-info-item">
+        <p class="contact-info-label">SERVICES</p>
+        <p class="contact-info-value">
+          <span style="display:block">Web制作 / SEOライティング</span>
+          <span style="display:block">コンサルティング / 業務効率化</span>
+        </p>
+      </div>
+      <div class="contact-promise">
+        <p class="contact-promise-text">"一瞬で市場を照らす、閃光のコンサルティング"</p>
+        <p class="contact-promise-sub">— Senkode, Flash of Light</p>
+      </div>
+    </div>
+
+    <!-- Right: Form -->
+    <div class="reveal">
+      <form class="contact-form" id="contactForm"
+            action="https://formspree.io/f/meevvdrl"
+            method="POST">
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="name">お名前<span>*</span></label>
+            <input class="form-input" type="text" id="name" name="name"
+                   placeholder="山田 太郎" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="email">メールアドレス<span>*</span></label>
+            <input class="form-input" type="email" id="email" name="email"
+                   placeholder="taro@example.com" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="company">会社名・屋号</label>
+          <input class="form-input" type="text" id="company" name="company"
+                 placeholder="（任意）株式会社〇〇">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="service">ご相談の種類<span>*</span></label>
+            <select class="form-select" id="service" name="service" required>
+              <option value="" disabled selected>選択してください</option>
+              <option value="web">Web制作</option>
+              <option value="seo">SEOライティング</option>
+              <option value="consulting">コンサルティング</option>
+              <option value="other">その他</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="budget">ご予算感</label>
+            <select class="form-select" id="budget" name="budget">
+              <option value="" disabled selected>選択してください</option>
+              <option value="under10">10万円未満</option>
+              <option value="10to30">10〜30万円</option>
+              <option value="30to100">30〜100万円</option>
+              <option value="negotiable">応相談</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="message">お問い合わせ内容<span>*</span></label>
+          <textarea class="form-textarea" id="message" name="message"
+                    placeholder="現在の課題や、ご希望の内容をお聞かせください。" required></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit">送信する →</button>
+      </form>
+
+      <div class="thankyou" id="thankyou">
+        <div class="thankyou-icon">⚡</div>
+        <p class="thankyou-title">SENT</p>
+        <p class="thankyou-text">
+          <span style="display:block">お問い合わせありがとうございます。</span>
+          <span style="display:block">24時間以内にご返信いたします。</span>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <span class="footer-copy">Senkode © 2026</span>
+    <div class="footer-sns">
+      <a href="https://note.com/sena01300" target="_blank" rel="noopener" aria-label="note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+          <path d="M5 4h14a2 2 0 0 1 2 2v13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a2 2 0 0 1 2-2z"/>
+          <line x1="8" y1="9" x2="16" y2="9"/><line x1="8" y1="13" x2="13" y2="13"/>
+        </svg>
+      </a>
+      <a href="https://x.com/senkode1006" target="_blank" rel="noopener" aria-label="X">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.402 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.256 5.63 5.908-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+        </svg>
+      </a>
+    </div>
+    <span class="footer-tag">閃光 — Flash of Light</span>
+  </footer>
+
+  <script>
+    // Custom cursor
+    const cursorDot  = document.querySelector('.cursor-dot');
+    const cursorRing = document.querySelector('.cursor-ring');
+    let mouseX = 0, mouseY = 0;
+    let ringX  = 0, ringY  = 0;
+    let cursorRafId = null;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      cursorDot.style.left = mouseX + 'px';
+      cursorDot.style.top  = mouseY + 'px';
+      if (cursorRafId === null) {
+        ringX = mouseX;
+        ringY = mouseY;
+        cursorRafId = requestAnimationFrame(animateCursor);
+      }
+    });
+
+    function animateCursor() {
+      const dx = mouseX - ringX;
+      const dy = mouseY - ringY;
+      if (Math.abs(dx) > 0.05 || Math.abs(dy) > 0.05) {
+        ringX += dx * 0.15;
+        ringY += dy * 0.15;
+        cursorRing.style.left = ringX + 'px';
+        cursorRing.style.top  = ringY + 'px';
+      }
+      cursorRafId = requestAnimationFrame(animateCursor);
+    }
+
+    document.querySelectorAll('.btn-submit, .nav-cta').forEach(el => {
+      el.addEventListener('mouseenter', () => cursorRing.classList.add('expanded'));
+      el.addEventListener('mouseleave', () => cursorRing.classList.remove('expanded'));
+    });
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => revealObserver.observe(el));
+
+    // Formspree AJAX submit
+    const form = document.getElementById('contactForm');
+    const thankyou = document.getElementById('thankyou');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        form.style.display = 'none';
+        thankyou.classList.add('visible');
+      } else {
+        alert('送信に失敗しました。時間をおいて再度お試しください。');
+      }
+    });
+  </script>
+</body>
+</html>

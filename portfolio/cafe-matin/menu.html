@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MENU — CAFÉ MATIN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,300;1,400&family=Noto+Sans+JP:wght@300;400&family=Playfair+Display:ital,wght@1,400;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    /* --- Tabs --- */
+    .tab-nav {
+      display: flex; justify-content: center; gap: 0;
+      border-bottom: 1px solid rgba(61,43,31,0.15);
+      margin-bottom: 64px;
+    }
+    .tab-btn {
+      padding: 14px 48px;
+      font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+      background: none; border: none; cursor: pointer;
+      color: var(--brown-mid);
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: color 0.3s, border-color 0.3s;
+    }
+    .tab-btn.active { color: var(--terra); border-bottom-color: var(--terra); }
+    .tab-btn:hover { color: var(--terra); }
+
+    /* --- Menu Grid --- */
+    .menu-panel { display: none; }
+    .menu-panel.active { display: block; }
+    .menu-items {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;
+    }
+    .menu-item {
+      background: var(--bg-soft); overflow: hidden;
+      transition: transform 0.3s;
+    }
+    .menu-item:hover { transform: translateY(-4px); }
+    .menu-item-img {
+      aspect-ratio: 3/2;
+      background-size: cover; background-position: center;
+    }
+    .menu-item-body { padding: 18px 20px; }
+    .menu-item-name {
+      font-family: 'Playfair Display', serif; font-style: italic;
+      font-size: 17px; margin-bottom: 6px;
+    }
+    .menu-item-desc { font-size: 12px; color: var(--brown-mid); line-height: 1.7; margin-bottom: 12px; }
+    .menu-item-price { font-size: 13px; color: var(--terra); }
+
+    @media (max-width: 768px) {
+      .tab-btn { padding: 12px 20px; font-size: 10px; }
+      .menu-items { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor-dot" id="cursor"></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">CAFÉ <span>MATIN</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">TOP</a></li>
+    <li><a href="menu.html" aria-current="page">MENU</a></li>
+    <li><a href="concept.html">CONCEPT</a></li>
+    <li><a href="gallery.html">GALLERY</a></li>
+    <li><a href="access.html">ACCESS</a></li>
+  </ul>
+</nav>
+
+<div class="page-hero">
+  <p class="page-hero-label">Menu</p>
+  <h1 class="page-hero-title">こだわりの一杯と一皿</h1>
+</div>
+
+<section class="section-pad">
+  <!-- Tabs -->
+  <div class="tab-nav">
+    <button class="tab-btn active" data-tab="coffee">COFFEE</button>
+    <button class="tab-btn" data-tab="food">FOOD</button>
+    <button class="tab-btn" data-tab="drink">DRINK</button>
+  </div>
+
+  <!-- COFFEE -->
+  <div class="menu-panel active" id="panel-coffee">
+    <div class="menu-items">
+      <div class="menu-item reveal">
+        <div class="menu-item-img" style="background-image:url('https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=600&q=80')"></div>
+        <div class="menu-item-body">
+          <h3 class="menu-item-name">Morning Latte</h3>
+          <p class="menu-item-desc">エチオピア産シングルオリジン。柔らかな酸味と甘みが朝にふさわしい一杯。</p>
+          <span class="menu-item-price">¥ 680</span>
+        </div>
+      </div>
+      <div class="menu-item reveal" style="transition-delay:0.1s">
+        <div class="menu-item-img" style="background-image:url('https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=600&q=80')"></div>
+        <div class="menu-item-body">
+          <h3 class="menu-item-name">Drip Coffee</h3>
+          <p class="menu-item-desc">毎日変わる産地のコーヒーを丁寧にハンドドリップ。ブラックでどうぞ。</p>
+          <span class="menu-item-price">¥ 580</span>
+        </div>
+      </div>
+      <div class="menu-item reveal" style="transition-delay:0.2s">
+        <div class="menu-item-img" style="background-image:url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=80')"></div>
+        <div class="menu-item-body">
+          <h3 class="menu-item-name">Café au Lait</h3>
+          <p class="menu-item-desc">深煎りのコーヒーと温めたミルクを1:1で。ほっとする王道の味。</p>
+          <span class="menu-item-price">¥ 620</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOD -->
+  <div class="menu-panel" id="panel-food">
+    <div class="menu-items">
+      <div class="menu-item reveal">
+        <div class="menu-item-img" style="background-image:url('https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&q=80')"></div>
+        <div class="menu-item-body">
+          <h3 class="menu-item-name">Pain au Levain</h3>
+          <p class="menu-item-desc">自家製天然酵母のカントリーブレッド。外はパリッ、中はもっちり。</p>
+          <span class="menu-item-price">¥ 420</span>
+        </div>
+      </div>
+      <div class="menu-item reveal" style="transition-delay:0.1s">
+        <div class="menu-item-img" style="background-image:url('https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=600&q=80')"></div>
+        <div class="menu-item-body">
+          <h3 class="menu-item-name">Morning Plate</h3>
+          <p class="menu-item-desc">自家製パン2種・目玉焼き・季節のサラダ。コーヒー付きのモーニングセット。</p>
+          <span class="menu-item-price">¥ 980</span>
+        </div>
+      </div>
+      <div class="menu-item reveal" style="transition-delay:0.2s">
+        <div class="menu-item-img" style="background-image:url('https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?w=600&q=80')"></div>
+        <div class="menu-item-body">
+          <h3 class="menu-item-name">Croque Monsieur</h3>
+          <p class="menu-item-desc">自家製パンを使ったクロックムッシュ。濃厚なベシャメルソースで。</p>
+          <span class="menu-item-price">¥ 880</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DRINK -->
+  <div class="menu-panel" id="panel-drink">
+    <div class="menu-items">
+      <div class="menu-item reveal">
+        <div class="menu-item-img" style="background-image:url('https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?w=600&q=80')"></div>
+        <div class="menu-item-body">
+          <h3 class="menu-item-name">Citrus Soda</h3>
+          <p class="menu-item-desc">国産柑橘のシロップと炭酸水。コーヒーが苦手な方にも。</p>
+          <span class="menu-item-price">¥ 580</span>
+        </div>
+      </div>
+      <div class="menu-item reveal" style="transition-delay:0.1s">
+        <div class="menu-item-img" style="background-image:url('https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=600&q=80')"></div>
+        <div class="menu-item-body">
+          <h3 class="menu-item-name">Chai Latte</h3>
+          <p class="menu-item-desc">スパイスを丁寧に煮出したチャイをミルクで割った一杯。体が温まる。</p>
+          <span class="menu-item-price">¥ 650</span>
+        </div>
+      </div>
+      <div class="menu-item reveal" style="transition-delay:0.2s">
+        <div class="menu-item-img" style="background-image:url('https://images.unsplash.com/photo-1544145945-f90425340c7e?w=600&q=80')"></div>
+        <div class="menu-item-body">
+          <h3 class="menu-item-name">Fresh Juice</h3>
+          <p class="menu-item-desc">その日入荷した旬のフルーツを絞ったフレッシュジュース。内容は日替わり。</p>
+          <span class="menu-item-price">¥ 680</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="footer-logo">CAFÉ MATIN</span>
+  <ul class="footer-links">
+    <li><a href="menu.html">MENU</a></li>
+    <li><a href="concept.html">CONCEPT</a></li>
+    <li><a href="gallery.html">GALLERY</a></li>
+    <li><a href="access.html">ACCESS</a></li>
+  </ul>
+  <span>© 2026 CAFÉ MATIN</span>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  if (cursor) {
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+  }
+
+  // Tab switching (no innerHTML)
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.menu-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      const panel = document.getElementById('panel-' + btn.dataset.tab);
+      if (panel) panel.classList.add('active');
+    });
+  });
+
+  // Scroll reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

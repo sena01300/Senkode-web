@@ -1,0 +1,1881 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QuoteFlow — 見積書自動生成ツール | GAS × Claude API | Senkode</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@100;200;300&display=swap" rel="stylesheet">
+  <style>
+    [class*="grid"] > *, [class*="inner"] > *, [class*="wrap"] > * { min-width: 0; }
+
+    img, video, iframe { max-width: 100%; height: auto; }
+
+    html { overflow-x: hidden; }
+
+    /* ==============================
+       CSS Variables
+    ============================== */
+    :root {
+      --bg:          #0A0704;
+      --bg-sub:      #100C06;
+      --card:        #161008;
+      --orange:      #F97316;
+      --orange-lt:   #FB923C;
+      --orange-bd:   rgba(249,115,22,0.25);
+      --orange-glow: rgba(249,115,22,0.1);
+      --yellow:      #EAB308;
+      --green:       #22C55E;
+      --green-bd:    rgba(34,197,94,0.25);
+      --text:        #F5F0E8;
+      --text-mid:    rgba(245,240,232,0.55);
+      --text-faint:  rgba(245,240,232,0.22);
+      --bd:          rgba(249,115,22,0.12);
+      --nav-bg:      rgba(10,7,4,0.92);
+      --code-bg:     #0C0804;
+      --dot-red:     #FF5F57;
+      --dot-yellow:  #FFBD2E;
+      --dot-green:   #28C840;
+      --red:         #EF4444;
+    }
+
+    /* ==============================
+       Reset & Base
+    ============================== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      line-height: 1.8;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ==============================
+       Custom Cursor
+    ============================== */
+    .cursor {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 10px;
+      height: 10px;
+      background: var(--orange);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 10000;
+      transform: translate(-50%, -50%);
+      transition: transform 0.08s ease, width 0.2s ease, height 0.2s ease, opacity 0.2s ease;
+      mix-blend-mode: screen;
+    }
+
+    .cursor-ring {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--orange-bd);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.18s ease, width 0.25s ease, height 0.25s ease, border-color 0.2s ease;
+    }
+
+    body:hover .cursor { opacity: 1; }
+
+    /* ==============================
+       Scrollbar
+    ============================== */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--orange-bd); border-radius: 2px; }
+
+    /* ==============================
+       Navigation
+    ============================== */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: var(--nav-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--bd);
+      padding: 0 48px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-brand {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px;
+      letter-spacing: 0.15em;
+      color: var(--text);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-brand-accent {
+      color: var(--orange-lt);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-mid);
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--orange-lt);
+    }
+
+    /* ==============================
+       Section Base
+    ============================== */
+    section {
+      padding: 120px 0;
+    }
+
+    .container {
+      max-width: 1120px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 48px;
+    }
+
+    .section-label {
+      font-size: 10px;
+      font-weight: 200;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--orange-lt);
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    /* ==============================
+       Scroll Reveal
+    ============================== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+      will-change: opacity, transform;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+    .reveal-delay-5 { transition-delay: 0.5s; }
+
+    /* ==============================
+       HERO
+    ============================== */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--bd) 1px, transparent 1px),
+        linear-gradient(90deg, var(--bd) 1px, transparent 1px);
+      background-size: 64px 64px;
+      opacity: 0.6;
+    }
+
+    .hero-glow {
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(ellipse, var(--orange-glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      padding-top: 80px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--orange-bd);
+      background: var(--orange-glow);
+      padding: 6px 16px;
+      font-size: 10px;
+      font-weight: 200;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--orange-lt);
+      margin-bottom: 40px;
+    }
+
+    .hero-badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--orange-lt);
+      animation: blink 1.4s ease-in-out infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.1; }
+    }
+
+    .hero-headline {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(52px, 6vw, 88px);
+      line-height: 1.0;
+      letter-spacing: 0.03em;
+      color: var(--text);
+      margin-bottom: 32px;
+    }
+
+    .hero-headline-accent {
+      color: var(--orange-lt);
+    }
+
+    .hero-sub {
+      font-size: 15px;
+      font-weight: 200;
+      color: var(--text-mid);
+      max-width: 600px;
+      line-height: 2;
+      margin-bottom: 64px;
+    }
+
+    .hero-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1px;
+      max-width: 680px;
+      border: 1px solid var(--bd);
+    }
+
+    .hero-metric {
+      background: var(--card);
+      padding: 28px 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-metric::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--orange), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .hero-metric:hover::before {
+      opacity: 1;
+    }
+
+    .hero-metric-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 36px;
+      letter-spacing: 0.05em;
+      color: var(--orange-lt);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .hero-metric-label {
+      font-size: 10px;
+      font-weight: 200;
+      letter-spacing: 0.15em;
+      color: var(--text-faint);
+      text-transform: uppercase;
+    }
+
+    /* ==============================
+       FLOW
+    ============================== */
+    #flow {
+      background: var(--bg-sub);
+    }
+
+    .flow-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 48px;
+      letter-spacing: 0.05em;
+      margin-bottom: 64px;
+      color: var(--text);
+    }
+
+    .flow-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      position: relative;
+    }
+
+    .flow-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 24px;
+      position: relative;
+    }
+
+    .flow-step-connector {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-shrink: 0;
+      width: 48px;
+    }
+
+    .flow-step-node {
+      width: 48px;
+      height: 48px;
+      border: 1px solid var(--orange-bd);
+      background: var(--card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      position: relative;
+      z-index: 1;
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+
+    .flow-step:hover .flow-step-node {
+      background: var(--orange-glow);
+      border-color: var(--orange);
+    }
+
+    .flow-step-line {
+      width: 1px;
+      flex: 1;
+      min-height: 32px;
+      background: linear-gradient(to bottom, var(--orange-bd), transparent);
+    }
+
+    .flow-step-body {
+      padding: 8px 0 40px;
+      flex: 1;
+    }
+
+    .flow-step-tag {
+      font-size: 9px;
+      font-weight: 200;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--orange-lt);
+      margin-bottom: 4px;
+    }
+
+    .flow-step-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 0.08em;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .flow-step-desc {
+      font-size: 13px;
+      font-weight: 200;
+      color: var(--text-mid);
+      max-width: 520px;
+      line-height: 1.9;
+    }
+
+    /* ==============================
+       CODE SNIPPET
+    ============================== */
+    #code {
+      background: var(--bg);
+    }
+
+    .code-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 48px;
+      letter-spacing: 0.05em;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+
+    .code-sub {
+      font-size: 13px;
+      font-weight: 200;
+      color: var(--text-mid);
+      margin-bottom: 40px;
+    }
+
+    .code-window {
+      border: 1px solid var(--orange-bd);
+      overflow: hidden;
+    }
+
+    .code-window-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 20px;
+      background: var(--card);
+      border-bottom: 1px solid var(--orange-bd);
+    }
+
+    .code-window-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .code-window-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .code-window-dot:nth-child(1) { background: var(--dot-red); }
+    .code-window-dot:nth-child(2) { background: var(--dot-yellow); }
+    .code-window-dot:nth-child(3) { background: var(--dot-green); }
+
+    .code-window-label {
+      font-size: 10px;
+      font-weight: 200;
+      letter-spacing: 0.15em;
+      color: var(--orange-lt);
+    }
+
+    .code-block {
+      background: var(--code-bg);
+      padding: 32px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      line-height: 2;
+      color: var(--text-mid);
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    .code-keyword { color: var(--orange-lt); }
+    .code-string  { color: var(--yellow); }
+    .code-comment { color: var(--text-faint); font-style: italic; }
+    .code-fn      { color: #60A5FA; }
+    .code-prop    { color: #F9A8D4; }
+    .code-num     { color: var(--green); }
+
+    /* ==============================
+       QUOTE OUTPUT
+    ============================== */
+    #quote-output {
+      background: var(--bg-sub);
+    }
+
+    .quote-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 48px;
+      letter-spacing: 0.05em;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+
+    .quote-sub {
+      font-size: 13px;
+      font-weight: 200;
+      color: var(--text-mid);
+      margin-bottom: 40px;
+    }
+
+    .quote-wrapper {
+      border: 1px solid var(--orange-bd);
+      overflow: hidden;
+    }
+
+    .quote-header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 20px;
+      background: var(--card);
+      border-bottom: 1px solid var(--bd);
+    }
+
+    .quote-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .quote-header-icon {
+      font-size: 14px;
+    }
+
+    .quote-header-title {
+      font-size: 11px;
+      font-weight: 300;
+      color: var(--text-mid);
+      letter-spacing: 0.1em;
+    }
+
+    .quote-auto-badge {
+      font-size: 9px;
+      font-weight: 200;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border: 1px solid var(--orange-bd);
+      color: var(--orange-lt);
+      background: var(--orange-glow);
+    }
+
+    /* 御見積書ドキュメント */
+    .quote-doc {
+      background: var(--bg);
+      padding: 40px 48px;
+    }
+
+    .quote-doc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 40px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--bd);
+    }
+
+    .quote-doc-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 40px;
+      letter-spacing: 0.08em;
+      color: var(--orange-lt);
+      line-height: 1;
+    }
+
+    .quote-doc-title-sub {
+      font-size: 11px;
+      font-weight: 200;
+      color: var(--text-faint);
+      letter-spacing: 0.15em;
+      margin-top: 4px;
+    }
+
+    .quote-doc-meta {
+      text-align: right;
+    }
+
+    .quote-doc-meta-row {
+      display: flex;
+      gap: 16px;
+      justify-content: flex-end;
+      margin-bottom: 4px;
+    }
+
+    .quote-doc-meta-key {
+      font-size: 10px;
+      font-weight: 200;
+      color: var(--text-faint);
+      letter-spacing: 0.1em;
+      white-space: nowrap;
+    }
+
+    .quote-doc-meta-val {
+      font-size: 10px;
+      font-weight: 300;
+      color: var(--text-mid);
+      letter-spacing: 0.05em;
+    }
+
+    .quote-doc-client {
+      margin-bottom: 32px;
+    }
+
+    .quote-doc-client-label {
+      font-size: 10px;
+      font-weight: 200;
+      color: var(--text-faint);
+      letter-spacing: 0.15em;
+      margin-bottom: 4px;
+    }
+
+    .quote-doc-client-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 24px;
+      letter-spacing: 0.05em;
+      color: var(--text);
+    }
+
+    .quote-doc-message {
+      font-size: 12px;
+      font-weight: 200;
+      color: var(--text-mid);
+      line-height: 2;
+      margin-bottom: 32px;
+      padding: 16px 20px;
+      border-left: 2px solid var(--orange-bd);
+      background: var(--card);
+    }
+
+    /* 明細テーブル */
+    .quote-table-wrap {
+      overflow-x: auto;
+    }
+
+    .quote-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      min-width: 700px;
+    }
+
+    .quote-table thead tr {
+      background: var(--card);
+      border-bottom: 1px solid var(--orange-bd);
+    }
+
+    .quote-table th {
+      padding: 10px 14px;
+      font-size: 9px;
+      font-weight: 300;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    .quote-table th.text-right { text-align: right; }
+
+    .quote-table td {
+      padding: 14px 14px;
+      border-bottom: 1px solid var(--bd);
+      color: var(--text-mid);
+      font-weight: 200;
+      vertical-align: middle;
+    }
+
+    .quote-table td.text-right { text-align: right; }
+
+    .quote-table tbody tr {
+      background: var(--bg);
+      transition: background 0.2s ease;
+    }
+
+    .quote-table tbody tr:hover {
+      background: var(--orange-glow);
+    }
+
+    .quote-item-no {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 14px;
+      color: var(--text-faint);
+      letter-spacing: 0.05em;
+    }
+
+    .quote-category {
+      font-size: 9px;
+      font-weight: 200;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--orange-lt);
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .quote-item-name {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--text);
+    }
+
+    .quote-item-note {
+      font-size: 10px;
+      font-weight: 200;
+      color: var(--text-faint);
+      margin-top: 2px;
+    }
+
+    .quote-price {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 16px;
+      letter-spacing: 0.03em;
+      color: var(--text);
+    }
+
+    .quote-total-section {
+      margin-top: 8px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .quote-total-box {
+      min-width: 300px;
+    }
+
+    .quote-total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--bd);
+    }
+
+    .quote-total-row:last-child {
+      border-bottom: none;
+      background: var(--card);
+      padding: 14px;
+      border: 1px solid var(--orange-bd);
+    }
+
+    .quote-total-key {
+      font-size: 11px;
+      font-weight: 200;
+      color: var(--text-faint);
+      letter-spacing: 0.1em;
+    }
+
+    .quote-total-val {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px;
+      letter-spacing: 0.05em;
+      color: var(--text);
+    }
+
+    .quote-total-row:last-child .quote-total-key {
+      color: var(--orange-lt);
+      font-weight: 300;
+    }
+
+    .quote-total-row:last-child .quote-total-val {
+      color: var(--orange-lt);
+      font-size: 28px;
+    }
+
+    /* ==============================
+       BEFORE / AFTER
+    ============================== */
+    #compare {
+      background: var(--bg);
+    }
+
+    .compare-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 48px;
+      letter-spacing: 0.05em;
+      margin-bottom: 48px;
+      color: var(--text);
+    }
+
+    .compare-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 2px;
+    }
+
+    .compare-card {
+      padding: 48px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .compare-before {
+      background: var(--card);
+      border: 1px solid var(--bd);
+    }
+
+    .compare-after {
+      background: var(--card);
+      border: 1px solid var(--orange-bd);
+    }
+
+    .compare-after::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--orange), var(--yellow));
+    }
+
+    .compare-label {
+      font-size: 10px;
+      font-weight: 200;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    .compare-before .compare-label { color: var(--text-faint); }
+    .compare-after  .compare-label { color: var(--orange-lt); }
+
+    .compare-heading {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 0.05em;
+      margin-bottom: 32px;
+    }
+
+    .compare-before .compare-heading { color: var(--text-mid); }
+    .compare-after  .compare-heading { color: var(--text); }
+
+    .compare-items {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .compare-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 13px;
+      font-weight: 200;
+      color: var(--text-mid);
+    }
+
+    .compare-item-icon {
+      font-size: 14px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .compare-before .compare-item-icon { color: var(--red); }
+    .compare-after  .compare-item-icon { color: var(--green); }
+
+    .compare-item-value {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 0.05em;
+      display: block;
+      line-height: 1.2;
+      margin-bottom: 2px;
+    }
+
+    .compare-before .compare-item-value { color: var(--text-mid); }
+    .compare-after  .compare-item-value { color: var(--orange-lt); }
+
+    .compare-item-desc {
+      font-size: 12px;
+      color: var(--text-faint);
+    }
+
+    /* ==============================
+       INDUSTRY CARDS
+    ============================== */
+    #industries {
+      background: var(--bg-sub);
+    }
+
+    .industries-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 48px;
+      letter-spacing: 0.05em;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+
+    .industries-sub {
+      font-size: 13px;
+      font-weight: 200;
+      color: var(--text-mid);
+      margin-bottom: 48px;
+    }
+
+    .industries-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 2px;
+    }
+
+    .industry-card {
+      background: var(--card);
+      border: 1px solid var(--bd);
+      padding: 40px 32px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s ease, background 0.3s ease;
+    }
+
+    .industry-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--orange), var(--yellow));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+
+    .industry-card:hover {
+      border-color: var(--orange-bd);
+      background: var(--bg-sub);
+    }
+
+    .industry-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .industry-icon {
+      font-size: 28px;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .industry-tag {
+      font-size: 9px;
+      font-weight: 200;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--orange-lt);
+      margin-bottom: 8px;
+    }
+
+    .industry-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 0.05em;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    .industry-desc {
+      font-size: 12px;
+      font-weight: 200;
+      color: var(--text-mid);
+      line-height: 1.9;
+      margin-bottom: 20px;
+    }
+
+    .industry-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .industry-feature {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 200;
+      color: var(--text-faint);
+    }
+
+    .industry-feature::before {
+      content: '';
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--orange-bd);
+      flex-shrink: 0;
+      transition: background 0.2s ease;
+    }
+
+    .industry-card:hover .industry-feature::before {
+      background: var(--orange-lt);
+    }
+
+    /* ==============================
+       PRICING
+    ============================== */
+    #pricing {
+      background: var(--bg);
+    }
+
+    .pricing-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 48px;
+      letter-spacing: 0.05em;
+      margin-bottom: 48px;
+      color: var(--text);
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 2px;
+      margin-bottom: 48px;
+    }
+
+    .pricing-card {
+      background: var(--card);
+      border: 1px solid var(--bd);
+      padding: 48px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pricing-card-main {
+      border-color: var(--orange-bd);
+    }
+
+    .pricing-card-main::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--orange), var(--yellow));
+    }
+
+    .pricing-card-label {
+      font-size: 9px;
+      font-weight: 200;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--orange-lt);
+      margin-bottom: 20px;
+    }
+
+    .pricing-amount {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 52px;
+      letter-spacing: 0.03em;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .pricing-amount-unit {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 16px;
+      font-weight: 200;
+      color: var(--text-mid);
+      margin-bottom: 24px;
+    }
+
+    .pricing-desc {
+      font-size: 12px;
+      font-weight: 200;
+      color: var(--text-mid);
+      line-height: 2;
+      margin-bottom: 32px;
+    }
+
+    .pricing-items {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .pricing-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      font-weight: 200;
+      color: var(--text-mid);
+    }
+
+    .pricing-item::before {
+      content: '';
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--orange-lt);
+      flex-shrink: 0;
+    }
+
+    .deliverables-section {
+      border: 1px solid var(--bd);
+      padding: 40px 48px;
+      background: var(--card);
+    }
+
+    .deliverables-label {
+      font-size: 10px;
+      font-weight: 200;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 24px;
+    }
+
+    .deliverables-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    .deliverable-item {
+      padding: 20px;
+      border: 1px solid var(--bd);
+      background: var(--bg);
+      transition: border-color 0.3s ease;
+    }
+
+    .deliverable-item:hover {
+      border-color: var(--orange-bd);
+    }
+
+    .deliverable-icon {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .deliverable-name {
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* ==============================
+       FOOTER
+    ============================== */
+    footer {
+      padding: 48px;
+      border-top: 1px solid var(--bd);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-brand {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 16px;
+      letter-spacing: 0.15em;
+      color: var(--text-faint);
+    }
+
+    .footer-copy {
+      font-size: 11px;
+      font-weight: 200;
+      color: var(--text-faint);
+      letter-spacing: 0.1em;
+    }
+
+    /* ==============================
+       Responsive
+    ============================== */
+    @media (max-width: 768px) {
+      nav { padding: 0 24px; }
+      .nav-links { display: none; }
+      .container { padding: 0 24px; }
+      section { padding: 80px 0; }
+
+      .hero-headline { font-size: 48px; }
+
+      .hero-metrics {
+        grid-template-columns: minmax(0, 1fr);
+        max-width: 100%;
+      }
+
+      .compare-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .industries-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .pricing-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .deliverables-grid {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      }
+
+      .quote-doc {
+        padding: 24px 20px;
+      }
+
+      .quote-doc-header {
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .quote-doc-meta {
+        text-align: left;
+      }
+
+      footer {
+        flex-direction: column;
+        gap: 16px;
+        padding: 32px 24px;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .deliverables-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Cursor -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursor-ring"></div>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="#" class="nav-brand">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10 2L16 6V14L10 18L4 14V6L10 2Z" stroke="var(--orange-lt)" stroke-width="1" fill="none"/>
+        <path d="M10 6L14 8.5V13L10 15.5L6 13V8.5L10 6Z" fill="var(--orange-lt)" opacity="0.25"/>
+        <path d="M10 2L10 18M4 6L16 14M16 6L4 14" stroke="var(--orange-bd)" stroke-width="0.5"/>
+      </svg>
+      Senkode <span class="nav-brand-accent">/ QuoteFlow</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#flow">仕組み</a></li>
+      <li><a href="#code">コード</a></li>
+      <li><a href="#quote-output">出力イメージ</a></li>
+      <li><a href="#compare">効果比較</a></li>
+      <li><a href="#industries">業種別</a></li>
+      <li><a href="#pricing">料金</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-bg-grid"></div>
+    <div class="hero-glow"></div>
+    <div class="container hero-inner">
+
+      <div class="hero-badge reveal">
+        <span class="hero-badge-dot"></span>
+        Automation Tool / GAS &times; Claude API
+      </div>
+
+      <h1 class="hero-headline reveal reveal-delay-1">
+        見積書を<span class="hero-headline-accent">1時間</span>から<br>
+        <span class="hero-headline-accent">15分</span>へ
+      </h1>
+
+      <p class="hero-sub reveal reveal-delay-2">
+        顧客との打ち合わせメモをGoogleフォームに入力するだけ。Claude APIが項目を整理・金額を算出・文面を生成し、スプレッドシートに見積書を自動出力する。
+      </p>
+
+      <div class="hero-metrics reveal reveal-delay-3">
+        <div class="hero-metric">
+          <div class="hero-metric-num">-87%</div>
+          <div class="hero-metric-label">作業時間削減</div>
+        </div>
+        <div class="hero-metric">
+          <div class="hero-metric-num">15h</div>
+          <div class="hero-metric-label">月間削減時間 20本/月</div>
+        </div>
+        <div class="hero-metric">
+          <div class="hero-metric-num">¥400</div>
+          <div class="hero-metric-label">月間APIコスト 20本目安</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FLOW -->
+  <section id="flow">
+    <div class="container">
+      <span class="section-label reveal">Architecture / How It Works</span>
+      <h2 class="flow-title reveal reveal-delay-1">処理フロー</h2>
+
+      <div class="flow-steps">
+
+        <div class="flow-step reveal reveal-delay-1">
+          <div class="flow-step-connector">
+            <div class="flow-step-node">📝</div>
+            <div class="flow-step-line"></div>
+          </div>
+          <div class="flow-step-body">
+            <div class="flow-step-tag">Step 01 / Input</div>
+            <div class="flow-step-name">営業担当者 — 打ち合わせメモをGoogleフォームに入力</div>
+            <p class="flow-step-desc">顧客名・案件名・打ち合わせメモ（自由記述）・概算予算・希望納期を入力。スマートフォンからもアクセス可能。フォーム送信と同時に処理が自動起動する。</p>
+          </div>
+        </div>
+
+        <div class="flow-step reveal reveal-delay-2">
+          <div class="flow-step-connector">
+            <div class="flow-step-node">⚙️</div>
+            <div class="flow-step-line"></div>
+          </div>
+          <div class="flow-step-body">
+            <div class="flow-step-tag">Step 02 / Trigger</div>
+            <div class="flow-step-name">GAS — フォーム送信トリガー起動・項目の整理</div>
+            <p class="flow-step-desc">Google Apps Scriptがフォーム送信イベントを検知。入力データを取得してテキスト整形を実行。カテゴリ分類と構造化を行ってからClaudeへ送信する。</p>
+          </div>
+        </div>
+
+        <div class="flow-step reveal reveal-delay-3">
+          <div class="flow-step-connector">
+            <div class="flow-step-node">🤖</div>
+            <div class="flow-step-line"></div>
+          </div>
+          <div class="flow-step-body">
+            <div class="flow-step-tag">Step 03 / AI Generation</div>
+            <div class="flow-step-name">Claude API — 見積項目の展開・単価補完・文章生成（JSON返却）</div>
+            <p class="flow-step-desc">claude-haiku-4-5がメモから見積項目を自動展開。業種DBに基づいて単価を補完し、合計金額・支払条件・挨拶文をJSON形式で返却する。1件あたり平均20秒。</p>
+          </div>
+        </div>
+
+        <div class="flow-step reveal reveal-delay-4">
+          <div class="flow-step-connector">
+            <div class="flow-step-node">📊</div>
+            <div class="flow-step-line"></div>
+          </div>
+          <div class="flow-step-body">
+            <div class="flow-step-tag">Step 04 / Output</div>
+            <div class="flow-step-name">Googleスプレッドシート — 見積書テンプレートに自動入力</div>
+            <p class="flow-step-desc">事前に設定した見積書テンプレートシートへ、取得したJSONデータを自動で書き込む。顧客名・明細・合計・挨拶文がすべて整った状態で出力される。</p>
+          </div>
+        </div>
+
+        <div class="flow-step reveal reveal-delay-5">
+          <div class="flow-step-connector">
+            <div class="flow-step-node">📤</div>
+          </div>
+          <div class="flow-step-body">
+            <div class="flow-step-tag">Step 05 / Delivery</div>
+            <div class="flow-step-name">PDF出力 → 担当者へメール通知</div>
+            <p class="flow-step-desc">スプレッドシートをPDF化してGoogleドライブに保存。完了後、営業担当者へメールで通知とPDFリンクを自動送信。担当者はリンクを開いて確認・送付するだけ。</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CODE SNIPPET -->
+  <section id="code">
+    <div class="container">
+      <span class="section-label reveal">GAS Source Code</span>
+      <h2 class="code-title reveal reveal-delay-1">実装コード</h2>
+      <p class="code-sub reveal reveal-delay-2">Google Apps Script — QuoteFlow コア実装（claude-haiku-4-5 呼び出し）</p>
+
+      <div class="reveal reveal-delay-3">
+        <div class="code-window">
+          <div class="code-window-header">
+            <div class="code-window-dots">
+              <div class="code-window-dot"></div>
+              <div class="code-window-dot"></div>
+              <div class="code-window-dot"></div>
+            </div>
+            <span class="code-window-label">QuoteFlow.gs</span>
+          </div>
+          <div class="code-block"><span class="code-comment">// QuoteFlow — 見積書自動生成コア関数</span>
+<span class="code-keyword">function</span> <span class="code-fn">generateQuote</span>(e) {
+  <span class="code-keyword">const</span> input = e.namedValues;
+
+  <span class="code-keyword">const</span> projectInfo = {
+    <span class="code-prop">clientName</span>:  input[<span class="code-string">'顧客名'</span>][<span class="code-num">0</span>],
+    <span class="code-prop">projectName</span>: input[<span class="code-string">'案件名'</span>][<span class="code-num">0</span>],
+    <span class="code-prop">memo</span>:        input[<span class="code-string">'打ち合わせメモ（自由記述）'</span>][<span class="code-num">0</span>],
+    <span class="code-prop">budget</span>:      input[<span class="code-string">'概算予算'</span>][<span class="code-num">0</span>],
+    <span class="code-prop">deadline</span>:    input[<span class="code-string">'希望納期'</span>][<span class="code-num">0</span>]
+  };
+
+  <span class="code-comment">// Claude APIで見積項目を自動展開</span>
+  <span class="code-keyword">const</span> quoteItems = <span class="code-fn">expandQuoteItems</span>(projectInfo);
+
+  <span class="code-comment">// スプレッドシートに書き込み</span>
+  <span class="code-fn">writeQuoteToSheet</span>(projectInfo, quoteItems);
+
+  <span class="code-comment">// PDF化してメール送信</span>
+  <span class="code-keyword">const</span> pdfUrl = <span class="code-fn">exportAsPDF</span>();
+  <span class="code-fn">sendNotificationEmail</span>(projectInfo.clientName, pdfUrl);
+}
+
+<span class="code-keyword">function</span> <span class="code-fn">expandQuoteItems</span>(projectInfo) {
+  <span class="code-keyword">const</span> prompt = <span class="code-string">`
+以下の案件情報から、見積書の項目・数量・単価を生成してください。
+
+案件名: ${<span class="code-prop">projectInfo.projectName</span>}
+打ち合わせメモ: ${<span class="code-prop">projectInfo.memo</span>}
+概算予算: ${<span class="code-prop">projectInfo.budget</span>}円
+
+JSON形式で返してください:
+{
+  "items": [
+    { "category": "カテゴリ", "name": "項目名", "qty": 数量, "unit": "単位", "unit_price": 単価, "note": "備考" }
+  ],
+  "total_estimate": 合計金額,
+  "payment_terms": "支払い条件",
+  "validity_period": "見積有効期限",
+  "cover_message": "見積書の冒頭に入れる挨拶文（200字以内）"
+}`</span>;
+
+  <span class="code-keyword">const</span> response = UrlFetchApp.<span class="code-fn">fetch</span>(<span class="code-string">'https://api.anthropic.com/v1/messages'</span>, {
+    <span class="code-prop">method</span>:   <span class="code-string">'post'</span>,
+    <span class="code-prop">headers</span>: {
+      <span class="code-string">'x-api-key'</span>:         PropertiesService.<span class="code-fn">getScriptProperties</span>().<span class="code-fn">getProperty</span>(<span class="code-string">'CLAUDE_API_KEY'</span>),
+      <span class="code-string">'anthropic-version'</span>: <span class="code-string">'2023-06-01'</span>,
+      <span class="code-string">'content-type'</span>:      <span class="code-string">'application/json'</span>
+    },
+    <span class="code-prop">payload</span>: JSON.<span class="code-fn">stringify</span>({
+      <span class="code-prop">model</span>:      <span class="code-string">'claude-haiku-4-5-20251001'</span>,
+      <span class="code-prop">max_tokens</span>: <span class="code-num">1200</span>,
+      <span class="code-prop">messages</span>:   [{ <span class="code-prop">role</span>: <span class="code-string">'user'</span>, <span class="code-prop">content</span>: prompt }]
+    })
+  });
+
+  <span class="code-keyword">return</span> JSON.<span class="code-fn">parse</span>(JSON.<span class="code-fn">parse</span>(response.<span class="code-fn">getContentText</span>()).content[<span class="code-num">0</span>].text);
+}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUOTE OUTPUT -->
+  <section id="quote-output">
+    <div class="container">
+      <span class="section-label reveal">Output Preview</span>
+      <h2 class="quote-title reveal reveal-delay-1">見積書出力イメージ</h2>
+      <p class="quote-sub reveal reveal-delay-2">フォーム送信から約20秒。スプレッドシートに自動入力された状態の見積書イメージ。</p>
+
+      <div class="quote-wrapper reveal reveal-delay-3">
+        <div class="quote-header-bar">
+          <div class="quote-header-left">
+            <span class="quote-header-icon">📋</span>
+            <span class="quote-header-title">QuoteFlow — 自動生成見積書 / 株式会社サンプル商事 様</span>
+          </div>
+          <span class="quote-auto-badge">Auto Generated</span>
+        </div>
+
+        <div class="quote-doc">
+
+          <div class="quote-doc-header">
+            <div>
+              <div class="quote-doc-title">御見積書</div>
+              <div class="quote-doc-title-sub">QUOTATION DOCUMENT</div>
+            </div>
+            <div class="quote-doc-meta">
+              <div class="quote-doc-meta-row">
+                <span class="quote-doc-meta-key">発行日</span>
+                <span class="quote-doc-meta-val">2026年5月10日</span>
+              </div>
+              <div class="quote-doc-meta-row">
+                <span class="quote-doc-meta-key">見積番号</span>
+                <span class="quote-doc-meta-val">QF-2026-0042</span>
+              </div>
+              <div class="quote-doc-meta-row">
+                <span class="quote-doc-meta-key">有効期限</span>
+                <span class="quote-doc-meta-val">2026年6月10日</span>
+              </div>
+              <div class="quote-doc-meta-row">
+                <span class="quote-doc-meta-key">担当者</span>
+                <span class="quote-doc-meta-val">田中 誠</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="quote-doc-client">
+            <div class="quote-doc-client-label">お客様名</div>
+            <div class="quote-doc-client-name">株式会社サンプル商事 御中</div>
+          </div>
+
+          <div class="quote-doc-message">
+            平素より格別のご愛顧を賜り、誠にありがとうございます。このたびはコーポレートサイトリニューアルのご依頼をいただき、誠にありがとうございます。下記の通り御見積を申し上げます。ご不明な点がございましたら、お気軽にお申し付けください。
+          </div>
+
+          <div class="quote-table-wrap">
+            <table class="quote-table">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>項目</th>
+                  <th class="text-right">数量</th>
+                  <th>単位</th>
+                  <th class="text-right">単価</th>
+                  <th class="text-right">金額</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="quote-item-no">01</span></td>
+                  <td>
+                    <span class="quote-category">Design</span>
+                    <span class="quote-item-name">Webデザイン費（PC・SP対応）</span>
+                    <span class="quote-item-note">トップ + 下層5ページ分のデザインカンプ作成</span>
+                  </td>
+                  <td class="text-right">6</td>
+                  <td>ページ</td>
+                  <td class="text-right"><span class="quote-price">¥50,000</span></td>
+                  <td class="text-right"><span class="quote-price">¥300,000</span></td>
+                </tr>
+                <tr>
+                  <td><span class="quote-item-no">02</span></td>
+                  <td>
+                    <span class="quote-category">Coding</span>
+                    <span class="quote-item-name">HTML / CSS コーディング</span>
+                    <span class="quote-item-note">レスポンシブ対応・アニメーション実装含む</span>
+                  </td>
+                  <td class="text-right">6</td>
+                  <td>ページ</td>
+                  <td class="text-right"><span class="quote-price">¥40,000</span></td>
+                  <td class="text-right"><span class="quote-price">¥240,000</span></td>
+                </tr>
+                <tr>
+                  <td><span class="quote-item-no">03</span></td>
+                  <td>
+                    <span class="quote-category">CMS</span>
+                    <span class="quote-item-name">WordPress 構築・設定</span>
+                    <span class="quote-item-note">テーマカスタマイズ・プラグイン設定・管理画面解説</span>
+                  </td>
+                  <td class="text-right">1</td>
+                  <td>式</td>
+                  <td class="text-right"><span class="quote-price">¥80,000</span></td>
+                  <td class="text-right"><span class="quote-price">¥80,000</span></td>
+                </tr>
+                <tr>
+                  <td><span class="quote-item-no">04</span></td>
+                  <td>
+                    <span class="quote-category">Content</span>
+                    <span class="quote-item-name">ライティング・コンテンツ制作</span>
+                    <span class="quote-item-note">会社概要・サービス・採用ページのコピーライティング</span>
+                  </td>
+                  <td class="text-right">3</td>
+                  <td>ページ</td>
+                  <td class="text-right"><span class="quote-price">¥30,000</span></td>
+                  <td class="text-right"><span class="quote-price">¥90,000</span></td>
+                </tr>
+                <tr>
+                  <td><span class="quote-item-no">05</span></td>
+                  <td>
+                    <span class="quote-category">Launch</span>
+                    <span class="quote-item-name">サーバー設定・公開作業</span>
+                    <span class="quote-item-note">ドメイン・SSL設定・本番移行・表示確認</span>
+                  </td>
+                  <td class="text-right">1</td>
+                  <td>式</td>
+                  <td class="text-right"><span class="quote-price">¥30,000</span></td>
+                  <td class="text-right"><span class="quote-price">¥30,000</span></td>
+                </tr>
+                <tr>
+                  <td><span class="quote-item-no">06</span></td>
+                  <td>
+                    <span class="quote-category">Maintenance</span>
+                    <span class="quote-item-name">公開後3ヶ月保守サポート</span>
+                    <span class="quote-item-note">軽微な修正対応・セキュリティ更新・バックアップ管理</span>
+                  </td>
+                  <td class="text-right">3</td>
+                  <td>ヶ月</td>
+                  <td class="text-right"><span class="quote-price">¥15,000</span></td>
+                  <td class="text-right"><span class="quote-price">¥45,000</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="quote-total-section">
+            <div class="quote-total-box">
+              <div class="quote-total-row">
+                <span class="quote-total-key">小計</span>
+                <span class="quote-total-val">¥785,000</span>
+              </div>
+              <div class="quote-total-row">
+                <span class="quote-total-key">消費税（10%）</span>
+                <span class="quote-total-val">¥78,500</span>
+              </div>
+              <div class="quote-total-row">
+                <span class="quote-total-key">御見積総合計</span>
+                <span class="quote-total-val">¥863,500</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BEFORE / AFTER -->
+  <section id="compare">
+    <div class="container">
+      <span class="section-label reveal">Efficiency Comparison</span>
+      <h2 class="compare-title reveal reveal-delay-1">Before / After</h2>
+
+      <div class="compare-grid">
+
+        <div class="compare-card compare-before reveal reveal-delay-2">
+          <div class="compare-label">Before — 手動作成</div>
+          <div class="compare-heading">毎回1〜2時間の消耗作業</div>
+          <ul class="compare-items">
+            <li class="compare-item">
+              <span class="compare-item-icon">✗</span>
+              <div>
+                <span class="compare-item-value">打ち合わせ後1〜2時間</span>
+                <span class="compare-item-desc">Excelを開いて、項目を考えながら手入力。フォーマット調整だけで30分</span>
+              </div>
+            </li>
+            <li class="compare-item">
+              <span class="compare-item-icon">✗</span>
+              <div>
+                <span class="compare-item-value">単価を毎回調べる</span>
+                <span class="compare-item-desc">過去の見積書を探したり、ネットで相場を調べたり。記憶と感覚に頼る</span>
+              </div>
+            </li>
+            <li class="compare-item">
+              <span class="compare-item-icon">✗</span>
+              <div>
+                <span class="compare-item-value">ファイル管理が大変</span>
+                <span class="compare-item-desc">見積書_最終版_v3_修正.xlsx... どのファイルが最新か分からなくなる</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="compare-card compare-after reveal reveal-delay-3">
+          <div class="compare-label">After — QuoteFlow 自動化</div>
+          <div class="compare-heading">フォーム入力15分で完成</div>
+          <ul class="compare-items">
+            <li class="compare-item">
+              <span class="compare-item-icon">✓</span>
+              <div>
+                <span class="compare-item-value">15分</span>
+                <span class="compare-item-desc">フォーム入力5分 + 自動生成20秒 + 内容確認10分。打ち合わせ当日に送付できる</span>
+              </div>
+            </li>
+            <li class="compare-item">
+              <span class="compare-item-icon">✓</span>
+              <div>
+                <span class="compare-item-value">単価DBから自動補完</span>
+                <span class="compare-item-desc">業種・作業内容を読み取ってClaudeが単価を自動設定。毎回一定品質を維持</span>
+              </div>
+            </li>
+            <li class="compare-item">
+              <span class="compare-item-icon">✓</span>
+              <div>
+                <span class="compare-item-value">PDF自動メール送信</span>
+                <span class="compare-item-desc">Googleドライブに自動保存、担当者へリンクをメール通知。管理が一元化される</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- INDUSTRY CARDS -->
+  <section id="industries">
+    <div class="container">
+      <span class="section-label reveal">Use Cases / Industry</span>
+      <h2 class="industries-title reveal reveal-delay-1">カスタマイズ例（業種別）</h2>
+      <p class="industries-sub reveal reveal-delay-2">業種ごとの見積項目・単価パターンをプロンプトに組み込み、最初から的確な見積書を生成。</p>
+
+      <div class="industries-grid">
+
+        <div class="industry-card reveal reveal-delay-1">
+          <span class="industry-icon">🏗️</span>
+          <div class="industry-tag">Construction / Reform</div>
+          <div class="industry-name">建設・リフォーム</div>
+          <p class="industry-desc">打ち合わせメモから工事費・材料費・職人代・諸経費を自動展開。工事項目ごとに数量×単価で積算する。</p>
+          <ul class="industry-features">
+            <li class="industry-feature">外壁・屋根・内装・設備を自動カテゴリ分け</li>
+            <li class="industry-feature">材料費・施工費・管理費を分離して明示</li>
+            <li class="industry-feature">現場写真のテキスト説明から項目を生成</li>
+          </ul>
+        </div>
+
+        <div class="industry-card reveal reveal-delay-2">
+          <span class="industry-icon">💻</span>
+          <div class="industry-tag">Web / Design</div>
+          <div class="industry-name">Web制作・デザイン</div>
+          <p class="industry-desc">要件メモからページ数・機能要件・工数を自動計算。デザイン費・コーディング費・保守費を別建てで明示する。</p>
+          <ul class="industry-features">
+            <li class="industry-feature">ページ数と機能から自動工数算出</li>
+            <li class="industry-feature">制作・保守・更新を明確に分離</li>
+            <li class="industry-feature">CMSの有無で構成が自動切り替わる</li>
+          </ul>
+        </div>
+
+        <div class="industry-card reveal reveal-delay-3">
+          <span class="industry-icon">📈</span>
+          <div class="industry-tag">Consulting</div>
+          <div class="industry-name">コンサルティング</div>
+          <p class="industry-desc">提案内容・支援期間・稼働目安から月額・成功報酬・スポット費用を自動設定。複数プランの比較案も生成可能。</p>
+          <ul class="industry-features">
+            <li class="industry-feature">月額顧問・プロジェクト型・成果報酬の選択</li>
+            <li class="industry-feature">稼働時間から月額単価を逆算</li>
+            <li class="industry-feature">3段階プラン比較表を自動生成</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing">
+    <div class="container">
+      <span class="section-label reveal">Pricing / Deliverables</span>
+      <h2 class="pricing-title reveal reveal-delay-1">料金・納品物</h2>
+
+      <div class="pricing-grid reveal reveal-delay-2">
+
+        <div class="pricing-card pricing-card-main">
+          <div class="pricing-card-label">導入支援（初期費用）</div>
+          <div class="pricing-amount">¥120,000</div>
+          <div class="pricing-amount-unit">税別 / 一括</div>
+          <p class="pricing-desc">GAS設定・スプレッドシートテンプレ・テスト・マニュアルをすべて含む。追加費用なし。</p>
+          <ul class="pricing-items">
+            <li class="pricing-item">GASスクリプト フルセットアップ</li>
+            <li class="pricing-item">Googleフォーム 入力テンプレート</li>
+            <li class="pricing-item">見積書スプレッドシートテンプレ</li>
+            <li class="pricing-item">テスト5件 動作確認</li>
+            <li class="pricing-item">業種別プロンプトカスタマイズ</li>
+            <li class="pricing-item">設定マニュアル（PDF）</li>
+          </ul>
+        </div>
+
+        <div class="pricing-card">
+          <div class="pricing-card-label">月額ランニングコスト</div>
+          <div class="pricing-amount">¥0</div>
+          <div class="pricing-amount-unit">月額固定費なし</div>
+          <p class="pricing-desc">月額サブスクリプションは一切なし。かかるのはClaude APIの従量課金のみ。</p>
+          <ul class="pricing-items">
+            <li class="pricing-item">月20本処理の場合：約¥400</li>
+            <li class="pricing-item">月50本処理の場合：約¥1,000</li>
+            <li class="pricing-item">Google Workspace 費用は別途</li>
+            <li class="pricing-item">APIキーは貴社名義で取得</li>
+            <li class="pricing-item">コスト確認用ダッシュボードを設定</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="deliverables-section reveal reveal-delay-3">
+        <div class="deliverables-label">納品物一覧 / Deliverables</div>
+        <div class="deliverables-grid">
+          <div class="deliverable-item">
+            <div class="deliverable-icon">📜</div>
+            <div class="deliverable-name">GASスクリプト一式</div>
+          </div>
+          <div class="deliverable-item">
+            <div class="deliverable-icon">📊</div>
+            <div class="deliverable-name">見積書スプレッドシートテンプレート</div>
+          </div>
+          <div class="deliverable-item">
+            <div class="deliverable-icon">📋</div>
+            <div class="deliverable-name">入力フォームテンプレート</div>
+          </div>
+          <div class="deliverable-item">
+            <div class="deliverable-icon">📘</div>
+            <div class="deliverable-name">設定マニュアル（PDF）</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-brand">Senkode</span>
+    <span class="footer-copy">QuoteFlow — GAS &times; Claude API Automation Tool &copy; 2026</span>
+  </footer>
+
+  <!-- JS: Cursor + Scroll Reveal -->
+  <script>
+    // Custom Cursor
+    const cursor     = document.getElementById('cursor');
+    const cursorRing = document.getElementById('cursor-ring');
+    let mouseX = 0, mouseY = 0;
+    let ringX  = 0, ringY  = 0;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      cursor.style.left = mouseX + 'px';
+      cursor.style.top  = mouseY + 'px';
+    });
+
+    function animateRing() {
+      ringX += (mouseX - ringX) * 0.12;
+      ringY += (mouseY - ringY) * 0.12;
+      cursorRing.style.left = ringX + 'px';
+      cursorRing.style.top  = ringY + 'px';
+      requestAnimationFrame(animateRing);
+    }
+    animateRing();
+
+    document.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor.style.width  = '16px';
+        cursor.style.height = '16px';
+        cursorRing.style.width       = '52px';
+        cursorRing.style.height      = '52px';
+        cursorRing.style.borderColor = 'var(--orange)';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.style.width  = '10px';
+        cursor.style.height = '10px';
+        cursorRing.style.width       = '36px';
+        cursorRing.style.height      = '36px';
+        cursorRing.style.borderColor = 'var(--orange-bd)';
+      });
+    });
+
+    // Scroll Reveal
+    const reveals  = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+
+    reveals.forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>

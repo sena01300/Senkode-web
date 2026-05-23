@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GALLERY — CAFÉ MATIN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,300;1,400&family=Noto+Sans+JP:wght@300;400&family=Playfair+Display:ital,wght@1,400;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    :root {
+      --brown-75: rgba(61,43,31,0.75);
+    }
+
+    /* --- Filter --- */
+    .filter-nav {
+      display: flex; justify-content: center; gap: 8px;
+      margin-bottom: 56px;
+    }
+    .filter-btn {
+      padding: 8px 24px;
+      font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+      background: none; border: 1px solid rgba(61,43,31,0.2);
+      cursor: pointer; color: var(--brown-mid);
+      transition: background 0.3s, color 0.3s, border-color 0.3s;
+    }
+    .filter-btn.active,
+    .filter-btn:hover {
+      background: var(--terra); color: var(--white);
+      border-color: var(--terra);
+    }
+
+    /* --- Gallery Grid --- */
+    .gallery-grid {
+      columns: 3; column-gap: 12px;
+    }
+    .gallery-item {
+      break-inside: avoid;
+      margin-bottom: 12px;
+      overflow: hidden; position: relative; cursor: pointer;
+    }
+    .gallery-item img {
+      width: 100%; display: block;
+      transition: transform 0.5s cubic-bezier(0.16,1,0.3,1);
+    }
+    .gallery-item:hover img { transform: scale(1.05); }
+    .gallery-caption {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: linear-gradient(transparent, var(--brown-75));
+      color: var(--white);
+      padding: 32px 16px 16px;
+      font-size: 12px; letter-spacing: 1px;
+      opacity: 0; transform: translateY(8px);
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    .gallery-item:hover .gallery-caption { opacity: 1; transform: none; }
+    .gallery-item.hidden { display: none; }
+
+    @media (max-width: 768px) {
+      .gallery-grid { columns: 2; }
+      .filter-nav { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor-dot" id="cursor"></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">CAFÉ <span>MATIN</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">TOP</a></li>
+    <li><a href="menu.html">MENU</a></li>
+    <li><a href="concept.html">CONCEPT</a></li>
+    <li><a href="gallery.html" aria-current="page">GALLERY</a></li>
+    <li><a href="access.html">ACCESS</a></li>
+  </ul>
+</nav>
+
+<div class="page-hero">
+  <p class="page-hero-label">Gallery</p>
+  <h1 class="page-hero-title">空間と、料理と、人と。</h1>
+</div>
+
+<section class="section-pad">
+  <div class="filter-nav">
+    <button class="filter-btn active" data-filter="all">ALL</button>
+    <button class="filter-btn" data-filter="food">FOOD</button>
+    <button class="filter-btn" data-filter="space">SPACE</button>
+    <button class="filter-btn" data-filter="people">PEOPLE</button>
+  </div>
+
+  <div class="gallery-grid" id="galleryGrid">
+    <div class="gallery-item" data-cat="food">
+      <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=600&q=80" alt="Pastries" loading="lazy">
+      <div class="gallery-caption">Homemade Pastries</div>
+    </div>
+    <div class="gallery-item" data-cat="space">
+      <img src="https://images.unsplash.com/photo-1445116572660-236099ec97a0?w=600&q=80" alt="Café interior" loading="lazy">
+      <div class="gallery-caption">Morning Light</div>
+    </div>
+    <div class="gallery-item" data-cat="food">
+      <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=600&q=80" alt="Latte art" loading="lazy">
+      <div class="gallery-caption">Latte Art</div>
+    </div>
+    <div class="gallery-item" data-cat="people">
+      <img src="https://images.unsplash.com/photo-1541167760496-1628856ab772?w=600&q=80" alt="Customers" loading="lazy">
+      <div class="gallery-caption">Morning Regulars</div>
+    </div>
+    <div class="gallery-item" data-cat="food">
+      <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&q=80" alt="Bread" loading="lazy">
+      <div class="gallery-caption">Pain au Levain</div>
+    </div>
+    <div class="gallery-item" data-cat="space">
+      <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=600&q=80" alt="Café space" loading="lazy">
+      <div class="gallery-caption">Our Space</div>
+    </div>
+    <div class="gallery-item" data-cat="food">
+      <img src="https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?w=600&q=80" alt="Morning plate" loading="lazy">
+      <div class="gallery-caption">Morning Plate</div>
+    </div>
+    <div class="gallery-item" data-cat="space">
+      <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&q=80" alt="Counter" loading="lazy">
+      <div class="gallery-caption">The Counter</div>
+    </div>
+    <div class="gallery-item" data-cat="food">
+      <img src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=600&q=80" alt="Coffee beans" loading="lazy">
+      <div class="gallery-caption">Single Origin Beans</div>
+    </div>
+    <div class="gallery-item" data-cat="people">
+      <img src="https://images.unsplash.com/photo-1504630083234-14187a9df0f5?w=600&q=80" alt="Barista" loading="lazy">
+      <div class="gallery-caption">Our Barista</div>
+    </div>
+    <div class="gallery-item" data-cat="food">
+      <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=80" alt="Coffee steam" loading="lazy">
+      <div class="gallery-caption">First Cup</div>
+    </div>
+    <div class="gallery-item" data-cat="space">
+      <img src="https://images.unsplash.com/photo-1559925393-8be0ec4767c8?w=600&q=80" alt="Window seat" loading="lazy">
+      <div class="gallery-caption">Window Seat</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="footer-logo">CAFÉ MATIN</span>
+  <ul class="footer-links">
+    <li><a href="menu.html">MENU</a></li>
+    <li><a href="concept.html">CONCEPT</a></li>
+    <li><a href="gallery.html">GALLERY</a></li>
+    <li><a href="access.html">ACCESS</a></li>
+  </ul>
+  <span>© 2026 CAFÉ MATIN</span>
+</footer>
+
+<script>
+  const cursor = document.getElementById('cursor');
+  if (cursor) {
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+  }
+
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      document.querySelectorAll('.gallery-item').forEach(item => {
+        if (filter === 'all' || item.dataset.cat === filter) {
+          item.classList.remove('hidden');
+        } else {
+          item.classList.add('hidden');
+        }
+      });
+    });
+  });
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.05 });
+  document.querySelectorAll('.gallery-item').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

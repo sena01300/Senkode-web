@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI導入失敗白書2026——中小企業の63%が1年以内に活用を止めた。その理由と、止めなかった企業の共通点 — Senkode Articles</title>
+  <meta name="description" content="AI導入企業の63%が1年以内に活用を止めている。大手運送会社の現役管理職として複数社のAI導入現場を見てきた立場から、失敗の本質と「止めなかった企業」の共通点を分析する。">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital@1&family=Noto+Sans+JP:wght@100;200;300;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold:       #C9A84C;
+      --gold-light: #E8C97A;
+      --gold-dim:   #6B5420;
+      --black:      #080808;
+      --off-black:  #0F0F0F;
+      --card:       #111111;
+      --white:      #F4F1EC;
+      --muted:      rgba(244,241,236,0.35);
+      --border:     rgba(201,168,76,0.1);
+      --gold-hover:    rgba(201,168,76,0.1);
+      --gold-alpha-40: rgba(201,168,76,0.4);
+      --gold-alpha-30: rgba(201,168,76,0.3);
+      --gold-alpha-50: rgba(201,168,76,0.5);
+      --white-dim:     rgba(244,241,236,0.4);
+      --white-faint:   rgba(244,241,236,0.2);
+      --gold-grid:     rgba(201,168,76,0.03);
+      --nav-bg:        rgba(15,15,15,0.85);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dim); }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(var(--gold-grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--gold-grid) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none; z-index: 0;
+    }
+
+    /* CURSOR */
+    .cursor-dot {
+      position: fixed; width: 8px; height: 8px; background: var(--gold);
+      border-radius: 50%; transform: translate(-50%,-50%);
+      pointer-events: none; z-index: 9999; mix-blend-mode: difference;
+    }
+    .cursor-ring {
+      position: fixed; width: 32px; height: 32px;
+      border: 1px solid var(--gold-alpha-50); border-radius: 50%;
+      transform: translate(-50%,-50%); pointer-events: none;
+      z-index: 9998; transition: width 0.3s, height 0.3s;
+    }
+    .cursor-ring.expanded { width: 48px; height: 48px; }
+
+    .noise {
+      position: fixed; inset: 0; pointer-events: none; z-index: 500; opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat: repeat; background-size: 200px 200px;
+    }
+
+    /* NAV */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 60px;
+      background: var(--nav-bg); backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-wordmark { font-family: 'Bebas Neue', cursive; font-size: 22px; letter-spacing: 0.25em; color: var(--white); }
+    .nav-links { display: flex; align-items: center; gap: 32px; }
+    .nav-link { font-size: 11px; letter-spacing: 0.2em; color: var(--muted); text-decoration: none; transition: color 0.3s; }
+    .nav-link:hover, .nav-link.active { color: var(--white); }
+    .nav-cta {
+      font-size: 10px; letter-spacing: 0.2em; color: var(--gold);
+      text-decoration: none; border: 1px solid var(--gold-alpha-40);
+      padding: 8px 16px; transition: background 0.3s;
+    }
+    .nav-cta:hover { background: var(--gold-hover); }
+
+    /* ARTICLE LAYOUT */
+    .article-hero {
+      padding: 100px 60px 60px;
+      position: relative; z-index: 1;
+      border-bottom: 1px solid var(--border);
+      max-width: 860px; margin: 0 auto;
+      animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.1s both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .article-meta {
+      display: flex; align-items: center; gap: 16px; margin-bottom: 24px;
+    }
+    .article-tag {
+      font-size: 9px; letter-spacing: 0.15em; color: var(--gold);
+      border: 1px solid var(--gold-alpha-30); padding: 3px 10px;
+    }
+    .article-date { font-size: 10px; color: var(--muted); letter-spacing: 0.15em; }
+    .article-read-time { font-size: 10px; color: var(--muted); letter-spacing: 0.1em; }
+
+    .article-title {
+      font-size: clamp(24px, 4vw, 40px);
+      font-weight: 700; color: var(--white);
+      line-height: 1.5; margin-bottom: 20px;
+    }
+    .article-lead {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-size: 16px;
+      color: var(--muted); line-height: 1.9; letter-spacing: 0.03em;
+    }
+
+    /* ARTICLE BODY */
+    .article-body {
+      max-width: 860px; margin: 0 auto;
+      padding: 60px 60px 120px;
+      position: relative; z-index: 1;
+    }
+
+    .article-body h2 {
+      font-size: 20px; font-weight: 700; color: var(--white);
+      margin: 56px 0 20px;
+      padding-left: 16px;
+      border-left: 2px solid var(--gold);
+    }
+    .article-body h3 {
+      font-size: 15px; font-weight: 700; color: var(--white);
+      margin: 36px 0 12px;
+    }
+    .article-body p {
+      font-size: 14px; color: var(--muted); line-height: 2.1;
+      margin-bottom: 20px;
+    }
+    .article-body strong { color: var(--white); font-weight: 700; }
+    .article-body ul, .article-body ol {
+      margin: 16px 0 24px 20px;
+    }
+    .article-body li {
+      font-size: 14px; color: var(--muted); line-height: 2; margin-bottom: 6px;
+    }
+
+    /* TABLE */
+    .article-table {
+      width: 100%; border-collapse: collapse;
+      margin: 28px 0; font-size: 12px;
+    }
+    .article-table th {
+      font-size: 9px; letter-spacing: 0.2em; color: var(--gold);
+      border-bottom: 1px solid var(--gold-alpha-40);
+      padding: 10px 16px; text-align: left; font-weight: 300;
+    }
+    .article-table td {
+      padding: 12px 16px; color: var(--muted);
+      border-bottom: 1px solid var(--border); line-height: 1.7;
+    }
+    .article-table tr:hover td { color: var(--white); }
+
+    /* CALLOUT */
+    .callout {
+      border: 1px solid var(--gold-alpha-40);
+      background: var(--gold-hover);
+      padding: 24px 28px; margin: 32px 0;
+    }
+    .callout-label {
+      font-size: 9px; letter-spacing: 0.2em; color: var(--gold);
+      margin-bottom: 10px; display: block;
+    }
+    .callout p { font-size: 13px; color: var(--white); margin-bottom: 0; }
+
+    /* DIVIDER */
+    .article-divider {
+      border: none; border-top: 1px solid var(--border);
+      margin: 48px 0;
+    }
+
+    /* BACK LINK */
+    .back-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 10px; letter-spacing: 0.2em; color: var(--muted);
+      text-decoration: none; margin-bottom: 40px;
+      transition: color 0.3s;
+    }
+    .back-link:hover { color: var(--gold); }
+
+    /* NEXT ARTICLE */
+    .next-article {
+      border-top: 1px solid var(--border);
+      padding: 40px 0 0; margin-top: 80px;
+    }
+    .next-label { font-size: 9px; letter-spacing: 0.25em; color: var(--gold); margin-bottom: 12px; display: block; }
+    .next-title { font-size: 15px; font-weight: 700; color: var(--muted); line-height: 1.6; transition: color 0.3s; }
+    .next-article:hover .next-title { color: var(--white); }
+
+    /* FOOTER */
+    .footer {
+      padding: 24px 60px; background: var(--black);
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      position: relative; z-index: 1;
+    }
+    .footer-copy { font-size: 10px; letter-spacing: 0.25em; color: var(--muted); }
+    .footer-tag  { font-size: 9px;  letter-spacing: 0.15em; color: var(--white-faint); }
+
+    /* PATTERN GRID */
+    .pattern-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 16px; margin: 28px 0;
+    }
+    .pattern-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 20px;
+    }
+    .pattern-number {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 28px; color: var(--gold); line-height: 1;
+      margin-bottom: 8px;
+    }
+    .pattern-name {
+      font-size: 11px; font-weight: 700; color: var(--white);
+      letter-spacing: 0.05em; margin-bottom: 10px;
+    }
+    .pattern-desc {
+      font-size: 11px; color: var(--muted); line-height: 1.8;
+    }
+
+    @media (max-width: 768px) {
+      body { cursor: auto; }
+      .cursor-dot, .cursor-ring { display: none; }
+      .nav { padding: 16px 24px; }
+      .nav-link { display: none; }
+      .article-hero { padding: 80px 24px 48px; }
+      .article-body { padding: 40px 24px 80px; }
+      .pattern-grid { grid-template-columns: 1fr; }
+      .footer { padding: 20px 24px; flex-direction: column; gap: 8px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+  <div class="noise"></div>
+
+  <nav class="nav">
+    <a href="/index.html" class="nav-logo">
+      <svg width="44" height="44" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="logoGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#6B5420"/>
+            <stop offset="50%" stop-color="#E8C97A"/>
+            <stop offset="100%" stop-color="#C9A84C"/>
+          </linearGradient>
+          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <path id="logoCircle" d="M30,5 A25,25,0,1,1,29.999,5" fill="none"/>
+        </defs>
+        <circle cx="30" cy="30" r="28" fill="none" stroke="#C9A84C" stroke-width="0.5" opacity="0.4"/>
+        <circle cx="30" cy="30" r="20" fill="none" stroke="#C9A84C" stroke-width="0.3" opacity="0.2"/>
+        <g transform="translate(-6,-4.4) scale(0.36)">
+          <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="url(#logoGrad)" style="filter: url(#glow)"/>
+        </g>
+        <text font-family="'Bebas Neue','Noto Sans JP',sans-serif" font-size="5" fill="#C9A84C" opacity="0.78">
+          <textPath href="#logoCircle" startOffset="0%" letter-spacing="2.5">Senkode · 閃光 · Senkode · 閃光 ·</textPath>
+        </text>
+      </svg>
+      <span class="nav-wordmark">Senkode</span>
+    </a>
+    <div class="nav-links">
+      <a href="/services.html" class="nav-link">SERVICES</a>
+      <a href="/works.html" class="nav-link">WORKS</a>
+      <a href="/articles/index.html" class="nav-link active">ARTICLES</a>
+      <a href="/about.html" class="nav-link">ABOUT</a>
+      <a href="/contact.html" class="nav-cta">CONTACT</a>
+    </div>
+  </nav>
+
+  <!-- Article Hero -->
+  <div class="article-hero">
+    <a href="/articles/index.html" class="back-link">← ARTICLES</a>
+    <div class="article-meta">
+      <span class="article-tag">AI活用</span>
+      <span class="article-date">2026.05.10</span>
+      <span class="article-read-time">読了 約9分</span>
+    </div>
+    <h1 class="article-title">AI導入失敗白書2026——中小企業の63%が1年以内に活用を止めた。その理由と、止めなかった企業の共通点</h1>
+    <p class="article-lead">ツールを買った翌日から、静かに失敗が始まっていた。現場で何度も目撃してきた光景を、データと実感の両方から解体する。</p>
+  </div>
+
+  <!-- Article Body -->
+  <article class="article-body">
+
+    <h2>63%という数字が意味するもの</h2>
+
+    <p>「AI導入に取り組んだ中小企業のうち、63%が1年以内に活用を止めた」——この数字を見たとき、正直に言えば驚かなかった。むしろ「少ないほうだ」と思った。</p>
+
+    <p>大手運送会社の管理職として、ここ2年間で取引先や傘下の協力会社が次々とAIツールを試みるのを間近で見てきた。ChatGPTを社内メモ作成に使い始めた会社、配送ルート最適化AIを試験導入した会社、議事録自動生成ツールを全社展開しようとした会社。そのほとんどが、半年後には元の運用に戻っていた。</p>
+
+    <p>失敗の理由を聞くと、「うちの業務には合わなかった」「思ったより使いにくかった」という言葉が返ってくる。しかし本当の理由はそこにない。問題はツールの性能ではなく、<strong>導入のアーキテクチャ（設計構造）そのもの</strong>にある。</p>
+
+    <p>この記事では、現場で繰り返し目撃してきた3つの失敗パターンと、逆に1年後も活用を続けている企業に共通する行動を書く。「AI導入」を検討している経営者・管理職の方に、判断材料として使ってほしい。</p>
+
+    <h2>失敗パターン①「導入=ゴール」にしてしまった</h2>
+
+    <p>最も多く、最も根深い失敗がこれだ。ツールを契約した瞬間に、担当者の頭の中でプロジェクトが終わっている。</p>
+
+    <p>具体的には、こういう経緯をたどる。経営会議でAI活用が話題になる。誰かが「ChatGPTの法人プランを入れましょう」と提案する。上層部が承認する。情報システム部門または総務部門がアカウントを発行する。全社にメールで案内が届く。「ご自由にお使いください」。以上。</p>
+
+    <p>その後どうなるか。社内で使いこなせる人間が1〜2人いれば良いほうで、3ヶ月後の契約更新タイミングに「費用対効果どうですか？」という問いを誰も答えられない状態になる。</p>
+
+    <div class="callout">
+      <span class="callout-label">経営者の声 — BtoB製造業・従業員数80名</span>
+      <p>「ChatGPTの法人プランを月額3万円で契約したが、使っているのは私だけだった。6ヶ月後に解約を決めたとき、現場からは何の反応もなかった。使われていなかったのだから当然だが、それが一番こたえた。」</p>
+    </div>
+
+    <p>この失敗の本質は、「ツールの購入」と「業務への統合」を同じプロジェクトだと思い込んでいたことにある。この2つは、まったく別のプロジェクトだ。</p>
+
+    <p>ツールの購入は1日で完了する。業務への統合は、早くて3ヶ月、本格定着まで半年以上かかる。なぜなら、既存の業務フローのどこにツールを差し込むかを設計し、社員が習慣として使えるようになるまでのトレーニングと、つまずきへの対処が必要だからだ。</p>
+
+    <p>契約=ゴールではなく、契約=スタートラインだと捉えなおすこと。これが第一の関門だ。</p>
+
+    <h2>失敗パターン②ROIを数字で測っていなかった</h2>
+
+    <p>「なんとなく便利になった気がする」「たぶん時間が減っていると思う」——この感覚値での評価が、継続を阻む最大の壁になる。</p>
+
+    <p>ROI（投資対効果）を数字で示せない施策は、予算審査に通らない。これは当然のことだが、AI導入の文脈ではなぜか「効果は雰囲気でわかるだろう」という楽観が蔓延しやすい。その結果、契約更新のタイミングに「やめましょう」という判断が数字の根拠なしに下される。あるいは逆に「続けましょう」と言い続けた末に費用だけが積み上がる。</p>
+
+    <p>測定のポイントは、導入前の「ベースライン」を取ることだ。導入後の数字と比較できる基準値がなければ、効果は証明できない。</p>
+
+    <table class="article-table">
+      <thead>
+        <tr>
+          <th>測定指標</th>
+          <th>測定方法</th>
+          <th>目標値（例）</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>特定業務の作業時間</td>
+          <td>導入前後2週間のタイムログ（5分単位で記録）</td>
+          <td>30%以上の削減</td>
+        </tr>
+        <tr>
+          <td>ドキュメント作成件数</td>
+          <td>月次の作成ファイル数をフォルダ集計</td>
+          <td>件数1.5倍、時間は同等以下</td>
+        </tr>
+        <tr>
+          <td>確認・修正の往復回数</td>
+          <td>メールや社内チャットのスレッド数を週次カウント</td>
+          <td>往復回数20%削減</td>
+        </tr>
+        <tr>
+          <td>ツール利用率</td>
+          <td>管理者ダッシュボードのアクティブユーザー数</td>
+          <td>対象部門の60%以上が週1回以上使用</td>
+        </tr>
+        <tr>
+          <td>エラー・手戻り率</td>
+          <td>処理件数に対する修正依頼の割合を月次集計</td>
+          <td>導入前比15%以上の改善</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>これらすべてを同時に測る必要はない。まず1つだけ選んで、導入前の数字を記録する。それだけでいい。「感覚値」から「事実」に変えることが、継続予算を確保するための唯一の方法だ。</p>
+
+    <p>なお、測定の仕組みを設計するタイミングは<strong>導入前</strong>でなければならない。導入後に「そういえば測らないといけないな」と気づいても、比較対象となるベースラインが存在しない。この「測定設計の先送り」が、後から効果を証明できなくなる最大の原因だ。</p>
+
+    <h2>失敗パターン③現場を最初から巻き込まなかった</h2>
+
+    <p>「経営判断でツールを選び、現場に『使え』と言う」——この構造が、AI導入を組織の中で孤立させる。</p>
+
+    <p>経営層がベンダーのデモを見て感動し、「これは使える」と確信する。稟議が通り、システム部門が設定を完了する。そして現場に「来月からこのツールを使います」という指示が届く。現場の担当者は、そのツールが自分の業務のどこに使えるのかを、自分で考えなければならない。</p>
+
+    <div class="callout">
+      <span class="callout-label">現場から聞こえてきた声 — 物流会社・倉庫管理担当</span>
+      <p>「このツール、誰が決めたんですか。うちの作業、手書きの伝票がベースなんで、AIがどこに入るのか全然わからないんですが。」</p>
+    </div>
+
+    <p>この発言は批判ではない。正当な疑問だ。経営層と現場では、業務の解像度が根本的に異なる。経営層が「これで議事録が自動化できる」と思っていても、現場では「うちの会議、ホワイトボードに書いた図が9割で、発言は補足だ」という実態があったりする。</p>
+
+    <p>解決策はシンプルだ。フィジビリティ段階（試しに使ってみる期間）から、現場の実務担当者をプロジェクトメンバーに入れる。ツール選定のデモを一緒に見てもらい、「自分の仕事のどこで使えそうか」を最初から考えてもらう。この一手間が、後の抵抗感を大幅に下げる。</p>
+
+    <p>導入後も同様だ。最初に使い始めた現場担当者の声を月1回は拾い、「使いにくい点」を経営層にフィードバックする仕組みを作る。現場からの情報が上がってこない組織で、AI活用が定着した例を私は見たことがない。</p>
+
+    <div class="callout">
+      <span class="callout-label">現場巻き込みのタイミング早見表</span>
+      <p>ツール選定フェーズ：現場担当者2〜3名を評価チームに入れる。契約直前フェーズ：現場のユースケース（使い場面）を最低3つ文書化する。導入後1ヶ月：使っている人・使っていない人の両方にヒアリングする。3ヶ月後：ROI測定結果を現場にもフィードバックし、改善策を現場と一緒に考える。</p>
+    </div>
+
+    <h2>「失敗しない企業」の共通点3つ</h2>
+
+    <p>失敗しなかった企業、正確には「1年後も継続して使っていた企業」を複数社見てきた中で、共通している行動パターンが3つある。</p>
+
+    <div class="pattern-grid">
+      <div class="pattern-card">
+        <div class="pattern-number">01</div>
+        <div class="pattern-name">最初の3ヶ月はROI測定の基準値取りに使う</div>
+        <div class="pattern-desc">「使いこなす」のは後でいい。まず「使う前の数字を記録する」ことを最優先にする。3ヶ月後の継続判断に必ず役立つ。</div>
+      </div>
+      <div class="pattern-card">
+        <div class="pattern-number">02</div>
+        <div class="pattern-name">現場の「一番痛い作業1つ」だけを変える</div>
+        <div class="pattern-desc">全業務を一気にAI化しようとしない。「これだけは本当に面倒くさい」という作業を1つ選び、そこだけを徹底的に改善する。</div>
+      </div>
+      <div class="pattern-card">
+        <div class="pattern-number">03</div>
+        <div class="pattern-name">ツール担当者（社内チャンピオン）を必ず任命する</div>
+        <div class="pattern-desc">「みんなで使う」は誰も使わないのと同じだ。特定の担当者に責任を持たせ、質問の窓口・社内普及の推進者にする。</div>
+      </div>
+    </div>
+
+    <p>この3つに共通しているのは、「AIに任せすぎない」という姿勢だ。ツールはあくまでも手段であり、設計するのは人間だ。特に②の「一番痛い作業1つだけを変える」は、一見地味に見えるが実際には最も効果的だ。</p>
+
+    <p>業務の全体像を変えようとすると、どこから手をつければいいかわからなくなる。その迷いが「とりあえずツールを入れてみる」という状態を生み、失敗パターン①に直結する。「この1点だけを改善する」という絞り込みが、最初の成功体験を生み、次のステップへの推進力になる。</p>
+
+    <h3>「社内チャンピオン」という役割の重要性</h3>
+
+    <p>③の社内チャンピオン（担当者）の存在は、特に強調したい。AIツールは、使い始めの数週間が最も離脱率が高い。「うまくいかない」と感じた瞬間に、誰かに相談できる環境があるかどうかで、その後の定着率が大きく変わる。</p>
+
+    <p>チャンピオンはIT専門家である必要はない。むしろ「現場の業務をよく知っている人」のほうが適任だ。新しいツールの使い方を自分で試しながら、周囲の同僚に「こう使うと便利だよ」と伝えられる人。それだけでいい。</p>
+
+    <hr class="article-divider">
+
+    <p>AI導入の失敗率が高い理由は、AIが難しいからではない。「導入プロジェクトのマネジメント」が後回しにされているからだ。ツールの性能は年々上がっている。それを業務に統合する人間側の設計力が、差を生み出している。</p>
+
+    <p>「何を導入するか」より「どう統合するか」を先に考える。その順番を変えるだけで、63%の失敗確率は大きく下がる。</p>
+
+    <div class="callout">
+      <span class="callout-label">著者について</span>
+      <p>大手運送会社の現役管理職。複数の協力会社のAI・DX導入に関与する中で、現場レベルの実態と経営判断のギャップを継続的に観察している。Senkode（閃光）代表として、中小企業向けのAI導入支援・業務自動化の実装サポートを提供中。「AI導入の相談は、実装レベルで話せます。」</p>
+    </div>
+
+    <!-- Next Article -->
+    <div class="next-article">
+      <span class="next-label">NEXT ARTICLE</span>
+      <p class="next-title">Claude Codeで副業サイトを一晩で作った話（近日公開）</p>
+    </div>
+
+  </article>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <span class="footer-copy">Senkode © 2026</span>
+    <span class="footer-tag">閃光 — Flash of Light</span>
+  </footer>
+
+  <script>
+    const cursorDot  = document.querySelector('.cursor-dot');
+    const cursorRing = document.querySelector('.cursor-ring');
+    let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX; mouseY = e.clientY;
+      cursorDot.style.left = mouseX + 'px';
+      cursorDot.style.top  = mouseY + 'px';
+    });
+
+    (function animateCursor() {
+      const dx = mouseX - ringX, dy = mouseY - ringY;
+      ringX += dx * 0.15; ringY += dy * 0.15;
+      cursorRing.style.left = ringX + 'px';
+      cursorRing.style.top  = ringY + 'px';
+      requestAnimationFrame(animateCursor);
+    })();
+
+    document.querySelectorAll('a, .nav-cta').forEach(el => {
+      el.addEventListener('mouseenter', () => cursorRing.classList.add('expanded'));
+      el.addEventListener('mouseleave', () => cursorRing.classList.remove('expanded'));
+    });
+  </script>
+</body>
+</html>

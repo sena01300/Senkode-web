@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DXアカデミー | 製造業のための現場定着型DX研修</title>
+  <meta name="description" content="DX研修の9割が現場に定着しない。その理由は「現場を知らない講師」だから。製造業専門の伴走型DX研修で、研修後も使い続ける組織を作る。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@100;200;300;400;700&display=swap" rel="stylesheet">
+  <style>
+    [class*="grid"] > *, [class*="inner"] > *, [class*="wrap"] > * { min-width: 0; }
+
+    img, video, iframe { max-width: 100%; height: auto; }
+
+    html { overflow-x: hidden; }
+
+    :root {
+      --bg:        #060A12;
+      --bg-sub:    #0A0F1C;
+      --card:      #0E1525;
+      --card-hover:#121C30;
+      --blue:      #3B82F6;
+      --blue-lt:   #60A5FA;
+      --blue-glow: rgba(59,130,246,0.12);
+      --blue-bd:   rgba(59,130,246,0.22);
+      --orange:    #F97316;
+      --orange-bd: rgba(249,115,22,0.3);
+      --green:     #22C55E;
+      --green-bd:  rgba(34,197,94,0.25);
+      --text:      #E2E8F0;
+      --text-mid:  rgba(226,232,240,0.55);
+      --text-faint:rgba(226,232,240,0.22);
+      --bd:        rgba(59,130,246,0.1);
+      --nav-bg:    rgba(6,10,18,0.88);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--blue); }
+
+    /* CURSOR */
+    .cursor-dot  { position:fixed;width:6px;height:6px;background:var(--blue);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%); }
+    .cursor-ring { position:fixed;width:28px;height:28px;border:1px solid rgba(59,130,246,0.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width 0.25s,height 0.25s; }
+    .cursor-ring.big { width:44px;height:44px; }
+
+    /* GRID BG */
+    body::before {
+      content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+      background-image:linear-gradient(rgba(59,130,246,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(59,130,246,0.03) 1px,transparent 1px);
+      background-size:60px 60px;
+    }
+
+    /* NAV */
+    nav {
+      position:fixed;top:0;left:0;right:0;z-index:100;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:18px 60px;
+      background:var(--nav-bg);backdrop-filter:blur(12px);
+      border-bottom:1px solid var(--bd);
+    }
+    .nav-logo { display:flex;align-items:center;gap:10px;text-decoration:none; }
+    .nav-brand { font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:0.15em;color:var(--blue); }
+    .nav-sub   { font-size:9px;letter-spacing:0.2em;color:var(--text-faint); }
+    .nav-links { display:flex;align-items:center;gap:28px; }
+    .nav-link  { font-size:11px;letter-spacing:0.15em;color:var(--text-mid);text-decoration:none;transition:color 0.2s; }
+    .nav-link:hover { color:var(--text); }
+    .nav-cta {
+      font-size:11px;letter-spacing:0.1em;padding:9px 22px;
+      background:var(--blue);color:#fff;text-decoration:none;
+      transition:background 0.2s;
+    }
+    .nav-cta:hover { background:var(--blue-lt); }
+
+    /* REVEAL */
+    .reveal { opacity:0;transform:translateY(24px);transition:opacity 0.6s,transform 0.6s;   will-change: opacity, transform;
+    }
+    .reveal.visible { opacity:1;transform:none; }
+
+    /* ── HERO ── */
+    .hero {
+      position:relative;z-index:2;
+      min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+      padding:120px 60px 80px;text-align:center;
+    }
+    .hero-badge {
+      display:inline-flex;align-items:center;gap:8px;
+      border:1px solid var(--orange-bd);padding:6px 16px;margin-bottom:32px;
+      font-size:10px;letter-spacing:0.2em;color:var(--orange);
+    }
+    .hero-badge::before { content:'';width:6px;height:6px;background:var(--orange);border-radius:50%;animation:blink 1.4s ease-in-out infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+    .hero-eyebrow { font-size:11px;letter-spacing:0.3em;color:var(--blue-lt);margin-bottom:20px; }
+
+    .hero-title {
+      font-family:'Bebas Neue',sans-serif;
+      font-size:clamp(44px,8vw,96px);line-height:1;
+      letter-spacing:0.04em;margin-bottom:16px;
+    }
+    .hero-title .accent { color:var(--blue); }
+    .hero-title .warn   { color:var(--orange); }
+
+    .hero-sub {
+      font-size:clamp(13px,2vw,17px);font-weight:200;
+      color:var(--text-mid);max-width:640px;
+      width: 100%;line-height:2;margin:0 auto 48px;
+    }
+
+    .hero-stat-row {
+      display:flex;gap:48px;justify-content:center;flex-wrap:wrap;margin-bottom:52px;
+    }
+    .hero-stat { text-align:center; }
+    .hero-stat-num {
+      font-family:'Bebas Neue',sans-serif;font-size:52px;line-height:1;
+      color:var(--blue);letter-spacing:0.02em;display:block;
+    }
+    .hero-stat-label { font-size:10px;letter-spacing:0.15em;color:var(--text-faint);margin-top:4px;display:block; }
+
+    .hero-cta-row { display:flex;gap:16px;justify-content:center;flex-wrap:wrap; }
+    .btn-primary {
+      font-size:12px;letter-spacing:0.15em;padding:16px 40px;
+      background:var(--blue);color:#fff;text-decoration:none;
+      transition:background 0.2s,transform 0.2s;display:inline-block;
+    }
+    .btn-primary:hover { background:var(--blue-lt);transform:translateY(-2px); }
+    .btn-ghost {
+      font-size:12px;letter-spacing:0.15em;padding:16px 40px;
+      border:1px solid var(--blue-bd);color:var(--blue-lt);text-decoration:none;
+      transition:background 0.2s;display:inline-block;
+    }
+    .btn-ghost:hover { background:var(--blue-glow); }
+
+    /* ── PAIN SECTION ── */
+    .section { position:relative;z-index:2;padding:100px 60px; }
+    .section-inner { max-width:1100px;
+      width: 100%;margin:0 auto; }
+    .section-label { font-size:10px;letter-spacing:0.3em;color:var(--blue);margin-bottom:16px; }
+    .section-title {
+      font-family:'Bebas Neue',sans-serif;
+      font-size:clamp(32px,5vw,58px);letter-spacing:0.04em;
+      line-height:1.1;margin-bottom:48px;
+    }
+    .section-title .sub { font-family:'Noto Sans JP',sans-serif;font-size:0.45em;font-weight:200;display:block;color:var(--text-mid);letter-spacing:0.05em;margin-top:8px; }
+
+    .pain-grid { display:grid;grid-template-columns:repeat(3,minmax(0, 1fr));gap:2px; }
+    .pain-card {
+      background:var(--card);padding:36px 28px;position:relative;overflow:hidden;
+      border-bottom:2px solid transparent;transition:border-color 0.3s,background 0.3s;
+    }
+    .pain-card:hover { background:var(--card-hover);border-bottom-color:var(--orange); }
+    .pain-num {
+      font-family:'Bebas Neue',sans-serif;font-size:72px;
+      color:rgba(249,115,22,0.08);line-height:1;position:absolute;top:16px;right:20px;
+    }
+    .pain-icon { font-size:28px;margin-bottom:16px;display:block; }
+    .pain-title { font-size:15px;font-weight:400;margin-bottom:12px;letter-spacing:0.02em; }
+    .pain-body  { font-size:13px;line-height:2;color:var(--text-mid); }
+    .pain-quote {
+      margin-top:16px;padding:12px 16px;
+      background:rgba(249,115,22,0.06);border-left:2px solid var(--orange);
+      font-size:12px;color:var(--text-mid);font-style:italic;line-height:1.8;
+    }
+
+    /* ── WHY ── */
+    .why-grid { display:grid;grid-template-columns:minmax(0, 1fr) minmax(0, 1fr);gap:60px;align-items:center; }
+    .why-visual {
+      background:var(--card);border:1px solid var(--bd);padding:36px;
+    }
+    .maturity-bar { margin-bottom:20px; }
+    .maturity-label { font-size:11px;letter-spacing:0.1em;color:var(--text-mid);margin-bottom:8px;display:flex;justify-content:space-between; }
+    .bar-track { height:6px;background:rgba(255,255,255,0.05);position:relative; }
+    .bar-fill  { height:100%;background:linear-gradient(90deg,var(--blue),var(--blue-lt));transition:width 1.2s ease; }
+    .bar-fill.before { background:var(--orange);width:18%; }
+    .bar-fill.after  { background:linear-gradient(90deg,var(--blue),var(--green));width:76%; }
+
+    .bar-tag {
+      display:inline-block;font-size:9px;letter-spacing:0.1em;padding:2px 8px;margin-top:6px;
+    }
+    .bar-tag.before-tag { background:rgba(249,115,22,0.1);color:var(--orange); }
+    .bar-tag.after-tag  { background:rgba(59,130,246,0.1);color:var(--blue-lt); }
+
+    .why-list { list-style:none; }
+    .why-item { display:flex;gap:16px;align-items:flex-start;padding:20px 0;border-bottom:1px solid var(--bd); }
+    .why-item:last-child { border-bottom:none; }
+    .why-check { color:var(--green);font-size:18px;flex-shrink:0;margin-top:2px; }
+    .why-text h4 { font-size:15px;font-weight:300;margin-bottom:6px; }
+    .why-text p  { font-size:13px;color:var(--text-mid);line-height:1.9; }
+
+    /* ── PROGRAM ── */
+    .program-wrap { background:var(--bg-sub);padding:80px 60px; }
+    .phase-row {
+      display:grid;grid-template-columns:repeat(3,minmax(0, 1fr));gap:2px;
+      margin-top:48px;
+    }
+    .phase-card {
+      background:var(--card);padding:36px 28px;position:relative;
+      border-top:2px solid transparent;
+      transition:border-top-color 0.3s,background 0.3s;
+    }
+    .phase-card:hover { background:var(--card-hover); }
+    .phase-card.p1:hover { border-top-color:var(--blue); }
+    .phase-card.p2:hover { border-top-color:var(--green); }
+    .phase-card.p3:hover { border-top-color:var(--orange); }
+    .phase-badge {
+      display:inline-block;font-size:9px;letter-spacing:0.2em;
+      padding:4px 12px;margin-bottom:20px;
+    }
+    .phase-badge.b1 { background:var(--blue-glow);color:var(--blue-lt);border:1px solid var(--blue-bd); }
+    .phase-badge.b2 { background:var(--green-bd);color:var(--green); }
+    .phase-badge.b3 { background:rgba(249,115,22,0.08);color:var(--orange);border:1px solid var(--orange-bd); }
+    .phase-num {
+      font-family:'Bebas Neue',sans-serif;font-size:64px;color:rgba(255,255,255,0.04);
+      line-height:1;position:absolute;top:20px;right:20px;
+    }
+    .phase-title { font-size:18px;font-weight:300;margin-bottom:8px; }
+    .phase-sub   { font-size:11px;letter-spacing:0.1em;color:var(--text-faint);margin-bottom:20px; }
+    .phase-list  { list-style:none; }
+    .phase-list li {
+      font-size:13px;color:var(--text-mid);padding:8px 0;
+      border-bottom:1px solid rgba(255,255,255,0.04);
+      display:flex;align-items:center;gap:8px;line-height:1.7;
+    }
+    .phase-list li::before { content:'▸';color:var(--blue-lt);flex-shrink:0;font-size:10px; }
+    .phase-duration {
+      margin-top:24px;font-size:11px;letter-spacing:0.1em;
+      color:var(--text-faint);border-top:1px solid var(--bd);padding-top:16px;
+    }
+
+    /* ── RESULTS ── */
+    .result-grid { display:grid;grid-template-columns:repeat(4,minmax(0, 1fr));gap:2px; }
+    .result-card { background:var(--card);padding:36px 24px;text-align:center; }
+    .result-num  {
+      font-family:'Bebas Neue',sans-serif;font-size:56px;
+      color:var(--blue);line-height:1;display:block;margin-bottom:8px;
+    }
+    .result-unit { font-size:14px;color:var(--blue-lt); }
+    .result-label { font-size:11px;color:var(--text-mid);letter-spacing:0.05em;margin-top:4px;line-height:1.7; }
+
+    .case-row { display:grid;grid-template-columns:minmax(0, 1fr) minmax(0, 1fr);gap:2px;margin-top:2px; }
+    .case-card { background:var(--card);padding:36px 32px; }
+    .case-tag  { font-size:9px;letter-spacing:0.2em;color:var(--blue-lt);margin-bottom:12px;display:block; }
+    .case-co   { font-size:14px;font-weight:400;margin-bottom:20px; }
+    .case-quote {
+      font-size:14px;line-height:2;color:var(--text-mid);
+      border-left:2px solid var(--blue-bd);padding-left:16px;margin-bottom:20px;
+    }
+    .case-stats { display:flex;gap:24px;flex-wrap:wrap; }
+    .case-stat  { }
+    .case-stat-num { font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--green);display:block;line-height:1; }
+    .case-stat-label { font-size:10px;color:var(--text-faint);letter-spacing:0.1em; }
+
+    /* ── PRICE ── */
+    .price-grid { display:grid;grid-template-columns:repeat(3,minmax(0, 1fr));gap:2px; }
+    .price-card {
+      background:var(--card);padding:40px 32px;position:relative;
+      border:1px solid transparent;transition:border-color 0.3s;
+    }
+    .price-card.featured {
+      background:var(--card-hover);
+      border:1px solid var(--blue-bd);
+    }
+    .price-badge {
+      position:absolute;top:-1px;left:50%;transform:translateX(-50%);
+      font-size:9px;letter-spacing:0.2em;padding:4px 16px;
+      background:var(--blue);color:#fff;white-space:nowrap;
+    }
+    .price-plan  { font-size:10px;letter-spacing:0.25em;color:var(--text-faint);margin-bottom:12px; }
+    .price-name  { font-size:20px;font-weight:300;margin-bottom:24px; }
+    .price-num   {
+      font-family:'Bebas Neue',sans-serif;font-size:48px;
+      color:var(--text);line-height:1;margin-bottom:4px;
+    }
+    .price-unit  { font-size:11px;color:var(--text-faint);margin-bottom:28px; }
+    .price-divider { height:1px;background:var(--bd);margin-bottom:28px; }
+    .price-features { list-style:none; }
+    .price-features li {
+      font-size:13px;color:var(--text-mid);padding:9px 0;
+      display:flex;gap:10px;align-items:flex-start;
+      border-bottom:1px solid rgba(255,255,255,0.03);line-height:1.7;
+    }
+    .price-features li::before { content:'✓';color:var(--green);flex-shrink:0;margin-top:1px; }
+    .price-cta {
+      display:block;text-align:center;margin-top:28px;padding:13px;
+      font-size:12px;letter-spacing:0.1em;text-decoration:none;
+      background:var(--blue-glow);border:1px solid var(--blue-bd);color:var(--blue-lt);
+      transition:background 0.2s;
+    }
+    .price-cta:hover { background:rgba(59,130,246,0.2); }
+    .price-card.featured .price-cta { background:var(--blue);color:#fff;border-color:var(--blue); }
+    .price-card.featured .price-cta:hover { background:var(--blue-lt); }
+
+    /* ── FAQ ── */
+    .faq-list { max-width:760px;
+      width: 100%;margin:0 auto; }
+    .faq-item { border-bottom:1px solid var(--bd);padding:28px 0; }
+    .faq-q {
+      font-size:15px;font-weight:300;cursor:pointer;
+      display:flex;justify-content:space-between;align-items:center;gap:16px;
+    }
+    .faq-q::after { content:'＋';color:var(--blue);flex-shrink:0;transition:transform 0.3s; }
+    .faq-item.open .faq-q::after { transform:rotate(45deg); }
+    .faq-a {
+      max-height:0;overflow:hidden;transition:max-height 0.4s ease,padding 0.3s;
+      font-size:14px;color:var(--text-mid);line-height:2;
+    }
+    .faq-item.open .faq-a { max-height:300px;padding-top:16px; }
+
+    /* ── CTA SECTION ── */
+    .cta-section {
+      position:relative;z-index:2;padding:100px 60px;text-align:center;
+      background:var(--bg-sub);border-top:1px solid var(--bd);
+    }
+    .cta-title {
+      font-family:'Bebas Neue',sans-serif;
+      font-size:clamp(36px,6vw,72px);letter-spacing:0.04em;margin-bottom:16px;
+    }
+    .cta-sub { font-size:15px;color:var(--text-mid);line-height:2;margin-bottom:40px; }
+    .cta-note { font-size:11px;color:var(--text-faint);margin-top:16px;letter-spacing:0.05em; }
+
+    /* ── FOOTER ── */
+    footer {
+      position:relative;z-index:2;
+      padding:28px 60px;background:var(--bg);border-top:1px solid var(--bd);
+      display:flex;align-items:center;justify-content:space-between;
+    }
+    .footer-brand { font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:0.15em;color:var(--blue); }
+    .footer-copy  { font-size:10px;letter-spacing:0.1em;color:var(--text-faint); }
+
+    @media (max-width:768px) {
+      body { cursor:auto; }
+      .cursor-dot,.cursor-ring { display:none; }
+      nav { padding:14px 20px; }
+      .nav-links { gap:12px; }
+      .nav-link  { display:none; }
+      .hero,.section,.program-wrap,.cta-section { padding:80px 24px; }
+      .hero-stat-row { gap:24px; }
+      .pain-grid,.phase-row,.price-grid { grid-template-columns:minmax(0, 1fr); }
+      .result-grid { grid-template-columns:minmax(0, 1fr) minmax(0, 1fr); }
+      .case-row   { grid-template-columns:minmax(0, 1fr); }
+      .why-grid   { grid-template-columns:minmax(0, 1fr); }
+      footer { padding:20px 24px;flex-direction:column;gap:8px;text-align:center; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor-dot"></div>
+<div class="cursor-ring"></div>
+
+<nav>
+  <a href="#" class="nav-logo">
+    <div>
+      <div class="nav-brand">DX ACADEMY</div>
+      <div class="nav-sub">製造業専門 DX研修</div>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="#pain"    class="nav-link">課題</a>
+    <a href="#program" class="nav-link">プログラム</a>
+    <a href="#results" class="nav-link">実績</a>
+    <a href="#price"   class="nav-link">料金</a>
+    <a href="#cta" class="nav-cta">無料相談する</a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-badge">MANUFACTURING DX SPECIALIST</div>
+  <p class="hero-eyebrow">現場を知らない講師が教える「DX」を、もう買わなくていい</p>
+  <h1 class="hero-title reveal">
+    DX研修の<span class="warn">9割</span>が<br>
+    現場に<span class="accent">定着しない</span>
+  </h1>
+  <p class="hero-sub reveal">
+    研修後3ヶ月で元の業務フローに戻る——その繰り返しに、いくら費やしましたか。<br>
+    製造業DXは「知識のインプット」ではなく「現場プロセスの再設計」です。
+  </p>
+  <div class="hero-stat-row reveal">
+    <div class="hero-stat">
+      <span class="hero-stat-num">312<span style="font-size:0.5em;color:var(--text-mid)">社</span></span>
+      <span class="hero-stat-label">製造業への支援実績</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-num">87<span style="font-size:0.5em;color:var(--text-mid)">%</span></span>
+      <span class="hero-stat-label">研修後6ヶ月定着率</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-num">2.4<span style="font-size:0.5em;color:var(--text-mid)">倍</span></span>
+      <span class="hero-stat-label">業務処理速度の平均向上率</span>
+    </div>
+  </div>
+  <div class="hero-cta-row reveal">
+    <a href="#cta" class="btn-primary">無料診断を受ける</a>
+    <a href="#program" class="btn-ghost">プログラム詳細</a>
+  </div>
+</section>
+
+<!-- ── PAIN ── -->
+<section class="section" id="pain">
+  <div class="section-inner">
+    <p class="section-label reveal">PROBLEM</p>
+    <h2 class="section-title reveal">
+      中小製造業がDXで<br>躓く3つの壁
+      <span class="sub">「ツールを買った」「研修を受けた」——それだけで終わっていませんか</span>
+    </h2>
+    <div class="pain-grid">
+      <div class="pain-card reveal">
+        <div class="pain-num">01</div>
+        <span class="pain-icon">🏭</span>
+        <h3 class="pain-title">現場の「なぜやるのか」が腹落ちしていない</h3>
+        <p class="pain-body">経営層は「DX推進」を号令するが、現場には「今でも回っている」という感覚がある。導入の意義が伝わらないまま研修が始まると、終了後に確実に元に戻る。</p>
+        <div class="pain-quote">「研修でツールの使い方は覚えた。でも何のために使うのかがわからない」（製造業 現場主任）</div>
+      </div>
+      <div class="pain-card reveal">
+        <div class="pain-num">02</div>
+        <span class="pain-icon">📊</span>
+        <h3 class="pain-title">業務フローを変えずにツールだけ入れた</h3>
+        <p class="pain-body">SFAを入れたが営業は相変わらずExcelで管理。ERPを導入したが現場の紙帳票がなくならない。ツールの導入はDXではなく「ツール追加」に過ぎない。</p>
+        <div class="pain-quote">「システムが増えただけで、入力が2重になって余計に手間がかかっている」（品質管理 担当者）</div>
+      </div>
+      <div class="pain-card reveal">
+        <div class="pain-num">03</div>
+        <span class="pain-icon">🎓</span>
+        <h3 class="pain-title">研修会社が「製造業の現場」を知らない</h3>
+        <p class="pain-body">3S・4M・ポカヨケ・工程管理——製造業には固有の業務文脈がある。それを知らない講師が一般論でDXを教えても、現場に響く言葉にならない。</p>
+        <div class="pain-quote">「講師の言っていることは正しいんだろうけど、うちの現場の話じゃない気がした」（工場長）</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── WHY ── -->
+<section class="section" style="background:var(--bg-sub)">
+  <div class="section-inner">
+    <p class="section-label reveal">WHY DX ACADEMY</p>
+    <h2 class="section-title reveal">
+      定着率87%の理由
+      <span class="sub">研修の「前」と「後」で組織のDX成熟度がどう変わるか</span>
+    </h2>
+    <div class="why-grid">
+      <div class="why-visual reveal">
+        <div style="font-size:10px;letter-spacing:0.2em;color:var(--text-faint);margin-bottom:24px;">DX MATURITY SCORE — 平均導入企業</div>
+        <div class="maturity-bar">
+          <div class="maturity-label">
+            <span>業務可視化</span>
+            <span style="color:var(--text-faint)">導入前 → 6ヶ月後</span>
+          </div>
+          <div class="bar-track" style="margin-bottom:4px">
+            <div class="bar-fill before" id="bar1a"></div>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill after" id="bar1b"></div>
+          </div>
+          <span class="bar-tag before-tag">導入前 22%</span>
+          <span class="bar-tag after-tag">6ヶ月後 79%</span>
+        </div>
+        <div class="maturity-bar">
+          <div class="maturity-label"><span>データ活用度</span></div>
+          <div class="bar-track" style="margin-bottom:4px"><div class="bar-fill before" style="width:14%"></div></div>
+          <div class="bar-track"><div class="bar-fill after" style="width:68%"></div></div>
+          <span class="bar-tag before-tag">導入前 14%</span>
+          <span class="bar-tag after-tag">6ヶ月後 68%</span>
+        </div>
+        <div class="maturity-bar">
+          <div class="maturity-label"><span>現場の自律改善力</span></div>
+          <div class="bar-track" style="margin-bottom:4px"><div class="bar-fill before" style="width:20%"></div></div>
+          <div class="bar-track"><div class="bar-fill after" style="width:82%"></div></div>
+          <span class="bar-tag before-tag">導入前 20%</span>
+          <span class="bar-tag after-tag">6ヶ月後 82%</span>
+        </div>
+        <div style="margin-top:16px;font-size:10px;color:var(--text-faint);text-align:right">※ 2024〜2025年度 導入企業平均値</div>
+      </div>
+      <div>
+        <ul class="why-list">
+          <li class="why-item reveal">
+            <span class="why-check">✓</span>
+            <div class="why-text">
+              <h4>製造業専門のコンサルタントが担当</h4>
+              <p>全講師が製造業での実務経験10年以上。3S・工程管理・品質管理の現場言語で研修を設計します。</p>
+            </div>
+          </li>
+          <li class="why-item reveal">
+            <span class="why-check">✓</span>
+            <div class="why-text">
+              <h4>「業務フロー再設計」から始める</h4>
+              <p>ツールの使い方より先に「現状の業務のどこがボトルネックか」を可視化。変えるべき業務フローを特定してから研修を組み立てます。</p>
+            </div>
+          </li>
+          <li class="why-item reveal">
+            <span class="why-check">✓</span>
+            <div class="why-text">
+              <h4>研修後6ヶ月の伴走フォロー</h4>
+              <p>研修終了=支援終了ではありません。月次の定着確認とトラブルシュートを6ヶ月間継続します。</p>
+            </div>
+          </li>
+          <li class="why-item reveal">
+            <span class="why-check">✓</span>
+            <div class="why-text">
+              <h4>現場主導の「小さな成功体験」設計</h4>
+              <p>経営層ではなく現場から「楽になった」という声を先に作ります。草の根の支持が定着の鍵です。</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PROGRAM ── -->
+<section id="program" class="program-wrap">
+  <div class="section-inner">
+    <p class="section-label reveal">PROGRAM</p>
+    <h2 class="section-title reveal">
+      3フェーズの伴走型研修
+      <span class="sub">「知識を入れる」から「現場が自律改善する」まで設計する</span>
+    </h2>
+    <div class="phase-row">
+      <div class="phase-card p1 reveal">
+        <div class="phase-num">1</div>
+        <span class="phase-badge b1">PHASE 1</span>
+        <h3 class="phase-title">現状診断・業務の見える化</h3>
+        <p class="phase-sub">ASSESSMENT & VISUALIZATION</p>
+        <ul class="phase-list">
+          <li>工場現場の業務フロー棚卸し（現地ヒアリング）</li>
+          <li>ボトルネック特定とデジタル化優先順位の設定</li>
+          <li>DX成熟度アセスメント（スコアカード提供）</li>
+          <li>幹部・現場責任者へのビジョン共有セッション</li>
+          <li>3ヶ月ロードマップの策定と合意形成</li>
+        </ul>
+        <div class="phase-duration">⏱ 期間：1〜2ヶ月</div>
+      </div>
+      <div class="phase-card p2 reveal">
+        <div class="phase-num">2</div>
+        <span class="phase-badge b2">PHASE 2</span>
+        <h3 class="phase-title">ツール導入・現場実践研修</h3>
+        <p class="phase-sub">IMPLEMENTATION & TRAINING</p>
+        <ul class="phase-list">
+          <li>業種・規模に合わせたツール選定支援</li>
+          <li>現場スタッフ向けハンズオン研修（全5回）</li>
+          <li>管理職向けデータ活用・KPI設計ワーク</li>
+          <li>トラブルシュート対応（導入初期の手厚いサポート）</li>
+          <li>社内DX推進リーダーの育成</li>
+        </ul>
+        <div class="phase-duration">⏱ 期間：2〜3ヶ月</div>
+      </div>
+      <div class="phase-card p3 reveal">
+        <div class="phase-num">3</div>
+        <span class="phase-badge b3">PHASE 3</span>
+        <h3 class="phase-title">定着・自律改善フェーズ</h3>
+        <p class="phase-sub">ADOPTION & CONTINUOUS IMPROVEMENT</p>
+        <ul class="phase-list">
+          <li>月次定着確認ミーティング（6ヶ月間）</li>
+          <li>現場から出た改善アイデアの実装支援</li>
+          <li>AI活用（生成AI・画像AI）の導入検討支援</li>
+          <li>DX成熟度の再スコアリングと報告書</li>
+          <li>次フェーズの投資判断サポート</li>
+        </ul>
+        <div class="phase-duration">⏱ 期間：3〜6ヶ月</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── RESULTS ── -->
+<section class="section" id="results">
+  <div class="section-inner">
+    <p class="section-label reveal">RESULTS</p>
+    <h2 class="section-title reveal">
+      数字で見る導入効果
+      <span class="sub">312社の製造業への支援データより</span>
+    </h2>
+    <div class="result-grid">
+      <div class="result-card reveal">
+        <span class="result-num">87<span class="result-unit">%</span></span>
+        <div class="result-label">研修後6ヶ月の<br>業務定着率</div>
+      </div>
+      <div class="result-card reveal">
+        <span class="result-num">2.4<span class="result-unit">倍</span></span>
+        <div class="result-label">業務処理速度の<br>平均向上率</div>
+      </div>
+      <div class="result-card reveal">
+        <span class="result-num">34<span class="result-unit">%</span></span>
+        <div class="result-label">ペーパーワーク<br>削減率（平均）</div>
+      </div>
+      <div class="result-card reveal">
+        <span class="result-num">6.2<span class="result-unit">ヶ月</span></span>
+        <div class="result-label">初期投資回収<br>平均期間</div>
+      </div>
+    </div>
+    <div class="case-row" style="margin-top:2px;">
+      <div class="case-card reveal">
+        <span class="case-tag">CASE STUDY 01 — 金属部品製造 従業員68名</span>
+        <div class="case-co">株式会社○○製作所（愛知県）</div>
+        <div class="case-quote">「以前は月末の在庫確認に丸2日かかっていた。今はリアルタイムで数字が見えて、管理職が判断に集中できるようになった。現場からも『楽になった』という声が出てきてから、全員が前向きになった」</div>
+        <div class="case-stats">
+          <div class="case-stat"><span class="case-stat-num">-41h</span><span class="case-stat-label">月間事務作業削減</span></div>
+          <div class="case-stat"><span class="case-stat-num">+23%</span><span class="case-stat-label">生産計画精度向上</span></div>
+          <div class="case-stat"><span class="case-stat-num">5ヶ月</span><span class="case-stat-label">投資回収期間</span></div>
+        </div>
+      </div>
+      <div class="case-card reveal">
+        <span class="case-tag">CASE STUDY 02 — 食品加工 従業員120名</span>
+        <div class="case-co">△△フーズ株式会社（埼玉県）</div>
+        <div class="case-quote">「3回DX研修を受けてきたが、全部3ヶ月で元に戻った。今回初めて『業務フローから変える』という視点でやったら、現場が主体的に改善案を出してくるようになった。根本が違った」</div>
+        <div class="case-stats">
+          <div class="case-stat"><span class="case-stat-num">-28%</span><span class="case-stat-label">製造ライン停止時間</span></div>
+          <div class="case-stat"><span class="case-stat-num">+18%</span><span class="case-stat-label">品質検査効率</span></div>
+          <div class="case-stat"><span class="case-stat-num">7ヶ月</span><span class="case-stat-label">投資回収期間</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PRICE ── -->
+<section class="section" style="background:var(--bg-sub)" id="price">
+  <div class="section-inner">
+    <p class="section-label reveal">PRICING</p>
+    <h2 class="section-title reveal">
+      料金プラン
+      <span class="sub">企業規模・フェーズに合わせて選べる3プラン</span>
+    </h2>
+    <div class="price-grid">
+      <div class="price-card reveal">
+        <p class="price-plan">STARTER</p>
+        <h3 class="price-name">アセスメント<br>単体プラン</h3>
+        <div class="price-num">48<span style="font-size:0.4em;color:var(--text-mid)">万円</span></div>
+        <p class="price-unit">税別 / 一括</p>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li>現地ヒアリング（2日間）</li>
+          <li>DX成熟度アセスメントレポート</li>
+          <li>ボトルネック特定・優先順位マップ</li>
+          <li>3ヶ月ロードマップ策定</li>
+          <li>幹部向け報告プレゼン1回</li>
+        </ul>
+        <a href="#cta" class="price-cta">相談する</a>
+      </div>
+      <div class="price-card featured reveal">
+        <div class="price-badge">MOST POPULAR</div>
+        <p class="price-plan">STANDARD</p>
+        <h3 class="price-name">フルプログラム<br>（Phase 1〜3）</h3>
+        <div class="price-num">198<span style="font-size:0.4em;color:var(--text-mid)">万円</span></div>
+        <p class="price-unit">税別 / 6ヶ月</p>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li>STARTERの内容すべて</li>
+          <li>ツール選定・導入支援</li>
+          <li>現場研修 全5回（現地開催）</li>
+          <li>管理職ワークショップ 全3回</li>
+          <li>社内リーダー育成プログラム</li>
+          <li>月次定着フォロー（6ヶ月）</li>
+          <li>AI活用導入検討支援</li>
+        </ul>
+        <a href="#cta" class="price-cta">相談する</a>
+      </div>
+      <div class="price-card reveal">
+        <p class="price-plan">ENTERPRISE</p>
+        <h3 class="price-name">複数拠点・<br>カスタムプラン</h3>
+        <div class="price-num" style="font-size:32px;letter-spacing:0.02em;padding-top:8px">要相談</div>
+        <p class="price-unit">規模・拠点数に応じて</p>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li>STANDARDの内容すべて</li>
+          <li>複数工場・拠点への展開</li>
+          <li>専任コンサルタントのアサイン</li>
+          <li>幹部向け戦略会議への参加</li>
+          <li>IT補助金・助成金申請支援</li>
+          <li>長期パートナーシップ契約対応</li>
+        </ul>
+        <a href="#cta" class="price-cta">相談する</a>
+      </div>
+    </div>
+    <p style="text-align:center;margin-top:28px;font-size:12px;color:var(--text-faint);letter-spacing:0.05em;">
+      ※ IT導入補助金・ものづくり補助金の活用支援も行っています。補助金適用後の実質負担を無料相談でご確認いただけます。
+    </p>
+  </div>
+</section>
+
+<!-- ── FAQ ── -->
+<section class="section">
+  <div class="section-inner">
+    <p class="section-label reveal">FAQ</p>
+    <h2 class="section-title reveal" style="margin-bottom:48px">よくある質問</h2>
+    <div class="faq-list">
+      <div class="faq-item reveal">
+        <div class="faq-q">従業員数が少ない（30名以下）でも導入できますか？</div>
+        <div class="faq-a">はい、対応しています。従業員30〜50名規模の企業への支援実績が最も多く、費用対効果が出やすい規模です。STARTERプランからのスモールスタートが多いです。</div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q">IT補助金・ものづくり補助金は使えますか？</div>
+        <div class="faq-a">当社のサービスはIT導入補助金（ITツール導入支援枠）およびものづくり補助金の対象要件を満たすケースが多くあります。申請書類の作成支援も行いますので、まず無料相談でご状況をお聞かせください。</div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q">過去に別の研修会社でDX研修を受けたが定着しなかった。効果が出る根拠は？</div>
+        <div class="faq-a">定着しない最大の原因は「業務フローを変えずにツールだけ入れること」と「現場の自発的な動機がないこと」です。当社はPhase 1で業務フローの棚卸しから始め、現場が「なぜこれが必要か」を腹落ちする状態を作ってからツール研修に進みます。研修後6ヶ月の伴走フォローがあることも定着率87%の根拠です。</div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q">現場のITリテラシーが低く、高齢のスタッフが多い場合でも大丈夫ですか？</div>
+        <div class="faq-a">むしろそのような環境での支援が最も多いケースです。ITリテラシーの高低に関わらず使えるツール選定と、段階的なハンズオン研修で対応します。「スマホ操作に慣れていない」という前提でプログラムを設計します。</div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q">研修はオンラインですか、現地ですか？</div>
+        <div class="faq-a">Phase 1（現状診断）とPhase 2（現場研修）は必ず現地で実施します。製造業の現場は「実際に見て・触れて」初めて理解できることが多いためです。Phase 3（定着フォロー）の月次ミーティングはオンライン対応も可能です。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ── -->
+<section class="cta-section" id="cta">
+  <p class="section-label reveal">GET STARTED</p>
+  <h2 class="cta-title reveal">まず、現場を<span style="color:var(--blue)">診断</span>してください</h2>
+  <p class="cta-sub reveal">
+    60分の無料相談で「どこから手をつけるべきか」を明確にします。<br>
+    補助金活用の可否、費用感、期間——すべてこの場でお伝えします。
+  </p>
+  <a href="#" class="btn-primary reveal">無料診断を申し込む（60分）</a>
+  <p class="cta-note reveal">※ 営業電話はしません。相談後の継続は完全にお客様の判断に委ねます</p>
+</section>
+
+<footer>
+  <div class="footer-brand">DX ACADEMY</div>
+  <div class="footer-copy">© 2026 DX Academy. Powered by Senkode.</div>
+</footer>
+
+<script>
+  // CURSOR
+  const dot  = document.querySelector('.cursor-dot');
+  const ring = document.querySelector('.cursor-ring');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+  (function loop(){
+    rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
+    dot.style.left=mx+'px'; dot.style.top=my+'px';
+    ring.style.left=rx+'px'; ring.style.top=ry+'px';
+    requestAnimationFrame(loop);
+  })();
+  document.querySelectorAll('a,button').forEach(el=>{
+    el.addEventListener('mouseenter',()=>ring.classList.add('big'));
+    el.addEventListener('mouseleave',()=>ring.classList.remove('big'));
+  });
+
+  // SCROLL REVEAL
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});
+  },{threshold:0.08});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+  // FAQ
+  document.querySelectorAll('.faq-item').forEach(item=>{
+    item.querySelector('.faq-q').addEventListener('click',()=>{
+      const isOpen=item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+      if(!isOpen) item.classList.add('open');
+    });
+  });
+</script>
+</body>
+</html>

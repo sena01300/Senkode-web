@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>クラウドワークスに30件以上応募して気づいたこと — Senkode Articles</title>
+  <meta name="description" content="AI副業の「本当の壁」。ライティング・AI活用コンサル・Web制作を片っ端から応募した実録。単価・年齢制限・クライアントの質から見えてきた戦略。">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital@1&family=Noto+Sans+JP:wght@100;200;300;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold:       #C9A84C;
+      --gold-light: #E8C97A;
+      --gold-dim:   #6B5420;
+      --black:      #080808;
+      --off-black:  #0F0F0F;
+      --card:       #111111;
+      --white:      #F4F1EC;
+      --muted:      rgba(244,241,236,0.35);
+      --border:     rgba(201,168,76,0.1);
+      --gold-hover:    rgba(201,168,76,0.1);
+      --gold-alpha-40: rgba(201,168,76,0.4);
+      --gold-alpha-30: rgba(201,168,76,0.3);
+      --gold-alpha-50: rgba(201,168,76,0.5);
+      --white-dim:     rgba(244,241,236,0.4);
+      --white-faint:   rgba(244,241,236,0.2);
+      --gold-grid:     rgba(201,168,76,0.03);
+      --nav-bg:        rgba(15,15,15,0.85);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dim); }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(var(--gold-grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--gold-grid) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none; z-index: 0;
+    }
+
+    /* CURSOR */
+    .cursor-dot {
+      position: fixed; width: 8px; height: 8px; background: var(--gold);
+      border-radius: 50%; transform: translate(-50%,-50%);
+      pointer-events: none; z-index: 9999; mix-blend-mode: difference;
+    }
+    .cursor-ring {
+      position: fixed; width: 32px; height: 32px;
+      border: 1px solid var(--gold-alpha-50); border-radius: 50%;
+      transform: translate(-50%,-50%); pointer-events: none;
+      z-index: 9998; transition: width 0.3s, height 0.3s;
+    }
+    .cursor-ring.expanded { width: 48px; height: 48px; }
+
+    .noise {
+      position: fixed; inset: 0; pointer-events: none; z-index: 500; opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat: repeat; background-size: 200px 200px;
+    }
+
+    /* NAV */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 60px;
+      background: var(--nav-bg); backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-wordmark { font-family: 'Bebas Neue', cursive; font-size: 22px; letter-spacing: 0.25em; color: var(--white); }
+    .nav-links { display: flex; align-items: center; gap: 32px; }
+    .nav-link { font-size: 11px; letter-spacing: 0.2em; color: var(--muted); text-decoration: none; transition: color 0.3s; }
+    .nav-link:hover, .nav-link.active { color: var(--white); }
+    .nav-cta {
+      font-size: 10px; letter-spacing: 0.2em; color: var(--gold);
+      text-decoration: none; border: 1px solid var(--gold-alpha-40);
+      padding: 8px 16px; transition: background 0.3s;
+    }
+    .nav-cta:hover { background: var(--gold-hover); }
+
+    /* ARTICLE LAYOUT */
+    .article-hero {
+      padding: 100px 60px 60px;
+      position: relative; z-index: 1;
+      border-bottom: 1px solid var(--border);
+      max-width: 860px; margin: 0 auto;
+      animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.1s both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .article-meta {
+      display: flex; align-items: center; gap: 16px; margin-bottom: 24px;
+    }
+    .article-tag {
+      font-size: 9px; letter-spacing: 0.15em; color: var(--gold);
+      border: 1px solid var(--gold-alpha-30); padding: 3px 10px;
+    }
+    .article-date { font-size: 10px; color: var(--muted); letter-spacing: 0.15em; }
+    .article-read-time { font-size: 10px; color: var(--muted); letter-spacing: 0.1em; }
+
+    .article-title {
+      font-size: clamp(24px, 4vw, 40px);
+      font-weight: 700; color: var(--white);
+      line-height: 1.5; margin-bottom: 20px;
+    }
+    .article-lead {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-size: 16px;
+      color: var(--muted); line-height: 1.9; letter-spacing: 0.03em;
+    }
+
+    /* ARTICLE BODY */
+    .article-body {
+      max-width: 860px; margin: 0 auto;
+      padding: 60px 60px 120px;
+      position: relative; z-index: 1;
+    }
+
+    .article-body h2 {
+      font-size: 20px; font-weight: 700; color: var(--white);
+      margin: 56px 0 20px;
+      padding-left: 16px;
+      border-left: 2px solid var(--gold);
+    }
+    .article-body h3 {
+      font-size: 15px; font-weight: 700; color: var(--white);
+      margin: 36px 0 12px;
+    }
+    .article-body p {
+      font-size: 14px; color: var(--muted); line-height: 2.1;
+      margin-bottom: 20px;
+    }
+    .article-body strong { color: var(--white); font-weight: 700; }
+    .article-body ul, .article-body ol {
+      margin: 16px 0 24px 20px;
+    }
+    .article-body li {
+      font-size: 14px; color: var(--muted); line-height: 2; margin-bottom: 6px;
+    }
+
+    /* TABLE */
+    .article-table {
+      width: 100%; border-collapse: collapse;
+      margin: 28px 0; font-size: 12px;
+    }
+    .article-table th {
+      font-size: 9px; letter-spacing: 0.2em; color: var(--gold);
+      border-bottom: 1px solid var(--gold-alpha-40);
+      padding: 10px 16px; text-align: left; font-weight: 300;
+    }
+    .article-table td {
+      padding: 12px 16px; color: var(--muted);
+      border-bottom: 1px solid var(--border); line-height: 1.7;
+    }
+    .article-table tr:hover td { color: var(--white); }
+
+    /* CALLOUT */
+    .callout {
+      border: 1px solid var(--gold-alpha-40);
+      background: var(--gold-hover);
+      padding: 24px 28px; margin: 32px 0;
+    }
+    .callout-label {
+      font-size: 9px; letter-spacing: 0.2em; color: var(--gold);
+      margin-bottom: 10px; display: block;
+    }
+    .callout p { font-size: 13px; color: var(--white); margin-bottom: 0; }
+
+    /* DIVIDER */
+    .article-divider {
+      border: none; border-top: 1px solid var(--border);
+      margin: 48px 0;
+    }
+
+    /* BACK LINK */
+    .back-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 10px; letter-spacing: 0.2em; color: var(--muted);
+      text-decoration: none; margin-bottom: 40px;
+      transition: color 0.3s;
+    }
+    .back-link:hover { color: var(--gold); }
+
+    /* NEXT ARTICLE */
+    .next-article {
+      border-top: 1px solid var(--border);
+      padding: 40px 0 0; margin-top: 80px;
+    }
+    .next-label { font-size: 9px; letter-spacing: 0.25em; color: var(--gold); margin-bottom: 12px; display: block; }
+    .next-title { font-size: 15px; font-weight: 700; color: var(--muted); line-height: 1.6; transition: color 0.3s; }
+    .next-article:hover .next-title { color: var(--white); }
+
+    /* FOOTER */
+    .footer {
+      padding: 24px 60px; background: var(--black);
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      position: relative; z-index: 1;
+    }
+    .footer-copy { font-size: 10px; letter-spacing: 0.25em; color: var(--muted); }
+    .footer-tag  { font-size: 9px;  letter-spacing: 0.15em; color: var(--white-faint); }
+
+    @media (max-width: 768px) {
+      body { cursor: auto; }
+      .cursor-dot, .cursor-ring { display: none; }
+      .nav { padding: 16px 24px; }
+      .nav-link { display: none; }
+      .article-hero { padding: 80px 24px 48px; }
+      .article-body { padding: 40px 24px 80px; }
+      .footer { padding: 20px 24px; flex-direction: column; gap: 8px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+  <div class="noise"></div>
+
+  <nav class="nav">
+    <a href="/index.html" class="nav-logo">
+      <svg width="44" height="44" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="logoGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#6B5420"/>
+            <stop offset="50%" stop-color="#E8C97A"/>
+            <stop offset="100%" stop-color="#C9A84C"/>
+          </linearGradient>
+          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <path id="logoCircle" d="M30,5 A25,25,0,1,1,29.999,5" fill="none"/>
+        </defs>
+        <circle cx="30" cy="30" r="28" fill="none" stroke="#C9A84C" stroke-width="0.5" opacity="0.4"/>
+        <circle cx="30" cy="30" r="20" fill="none" stroke="#C9A84C" stroke-width="0.3" opacity="0.2"/>
+        <g transform="translate(-6,-4.4) scale(0.36)">
+          <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="url(#logoGrad)" style="filter: url(#glow)"/>
+        </g>
+        <text font-family="'Bebas Neue','Noto Sans JP',sans-serif" font-size="5" fill="#C9A84C" opacity="0.78">
+          <textPath href="#logoCircle" startOffset="0%" letter-spacing="2.5">Senkode · 閃光 · Senkode · 閃光 ·</textPath>
+        </text>
+      </svg>
+      <span class="nav-wordmark">Senkode</span>
+    </a>
+    <div class="nav-links">
+      <a href="/services.html" class="nav-link">SERVICES</a>
+      <a href="/works.html" class="nav-link">WORKS</a>
+      <a href="/articles/index.html" class="nav-link active">ARTICLES</a>
+      <a href="/about.html" class="nav-link">ABOUT</a>
+      <a href="/contact.html" class="nav-cta">CONTACT</a>
+    </div>
+  </nav>
+
+  <!-- Article Hero -->
+  <div class="article-hero">
+    <a href="/articles/index.html" class="back-link">← ARTICLES</a>
+    <div class="article-meta">
+      <span class="article-tag">副業・案件</span>
+      <span class="article-date">2026.05.09</span>
+      <span class="article-read-time">読了 約6分</span>
+    </div>
+    <h1 class="article-title">クラウドワークスに30件以上応募して気づいたこと——AI副業の「本当の壁」</h1>
+    <p class="article-lead">「AIを使えば副業で稼げる」と信じて始めた。ライティング・AI活用コンサル・Web制作を片っ端から応募した結果、1件も受注できなかった。でもその失敗が、本当に必要なものを教えてくれた。</p>
+  </div>
+
+  <!-- Article Body -->
+  <article class="article-body">
+
+    <h2>まず、何をやったか</h2>
+
+    <p>2026年5月。クラウドワークスとランサーズで、AIライティング・SEO記事・AI活用コンサル・Web制作の案件を手当たり次第に探した。</p>
+
+    <p>毎日15〜30分、新着順で確認し、条件が合いそうな案件を見つけたら即応募。提案文はSenkodeのサービスと実績をベースに、案件ごとに調整した。</p>
+
+    <p>結果：<strong>GO判定が出たのは1件のみ。それも「AI活用×不動産DXの集客戦略」という高単価案件で、受注できたかはまだわからない。</strong></p>
+
+    <h2>NG案件がほぼすべてだった理由</h2>
+
+    <p>スクリーニングで弾いた案件のパターンはこうだ。</p>
+
+    <table class="article-table">
+      <thead>
+        <tr>
+          <th>NG理由</th>
+          <th>具体例</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>単価が基準以下</td>
+          <td>1記事100円・文字単価0.5円未満のライティング案件が大半</td>
+        </tr>
+        <tr>
+          <td>クライアントの信頼性が低い</td>
+          <td>本人確認未提出・評価ゼロ・完了率不明</td>
+        </tr>
+        <tr>
+          <td>稼働時間が副業と両立不可</td>
+          <td>「週20〜30時間以上」必須の常駐型案件</td>
+        </tr>
+        <tr>
+          <td>専門外または需要のないジャンル</td>
+          <td>ライフスタイル・美容・恋愛ブログ記事など</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>正直に言う。<strong>クラウドワークスのライティング案件の8〜9割は、スクリーニングした瞬間にNGになる。</strong>残った案件の中で、さらにクライアントの質・単価・ジャンルを絞ると、週に1〜2件しか残らない。</p>
+
+    <h2>「平均的なAI副業者」には需要がない</h2>
+
+    <p>これが一番のポイントだ。</p>
+
+    <p>ライティングもできる。Web制作もできる。AI自動化もできる。でも「全部が平均的」では、クライアントから見ると「誰でもいい人」になってしまう。</p>
+
+    <div class="callout">
+      <span class="callout-label">気づき</span>
+      <p>クライアントが選ぶのは「スキルのある人」ではなく「自分の課題を解決してくれると確信できる人」。実績ゼロの段階では、その確信を与える手段がない。</p>
+    </div>
+
+    <p>物流管理職10年という肩書きを使っていたが、それ自体を買いたい人がクラウドワークスにはほぼいない。「物流×AI」は面白い組み合わせだが、それだけで案件が取れる強さにはなっていない。</p>
+
+    <h2>では何が必要か</h2>
+
+    <p>この失敗から、3つのことを再設計することにした。</p>
+
+    <h3>1. ポジショニングの再設計</h3>
+    <p>「物流管理職」ではなく「AI副業実践者」として立つ。副業で稼ぎたいサラリーマンが欲しいのは「業界の専門知識」ではなく「自分より少し先を走っている人の実録」だ。このブログがその武器になる。</p>
+
+    <h3>2. senkode.jpを「集客装置」にする</h3>
+    <p>クラウドワークスで探してもらうのではなく、Google・AI検索で見つけてもらう状態を作る。そのためにブログ記事を積み上げ、サービスページを整え、問い合わせ導線を作る。</p>
+
+    <h3>3. 案件獲得と並行して「見せられる実績」を増やす</h3>
+    <p>自動化システム・Web制作・ブログ記事——すべてポートフォリオになる。動いているものが増えるほど、提案文の説得力が上がる。</p>
+
+    <hr class="article-divider">
+
+    <p>クラウドワークスへの応募は続ける。でもそれだけに依存しない。週2回の新着確認をルーティンに組み込みながら、senkode.jpの強化・ブログ積み上げ・自動化実績の拡充を並行して進める。</p>
+
+    <p><strong>「案件が来ない間に何もしない」は最悪の選択だ。何もしない時間が、差を広げる。</strong></p>
+
+    <!-- Next Article -->
+    <div class="next-article">
+      <span class="next-label">NEXT ARTICLE</span>
+      <a href="/articles/003-x-automation.html" style="text-decoration:none;"><p class="next-title">X投稿を自動化したら、「何を言いたいか」が一番難しかった——GAS×Claude API 3ルート構築の全記録</p></a>
+    </div>
+
+  </article>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <span class="footer-copy">Senkode © 2026</span>
+    <span class="footer-tag">閃光 — Flash of Light</span>
+  </footer>
+
+  <script>
+    const cursorDot  = document.querySelector('.cursor-dot');
+    const cursorRing = document.querySelector('.cursor-ring');
+    let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX; mouseY = e.clientY;
+      cursorDot.style.left = mouseX + 'px';
+      cursorDot.style.top  = mouseY + 'px';
+    });
+
+    (function animateCursor() {
+      const dx = mouseX - ringX, dy = mouseY - ringY;
+      ringX += dx * 0.15; ringY += dy * 0.15;
+      cursorRing.style.left = ringX + 'px';
+      cursorRing.style.top  = ringY + 'px';
+      requestAnimationFrame(animateCursor);
+    })();
+
+    document.querySelectorAll('a, .btn-primary, .nav-cta').forEach(el => {
+      el.addEventListener('mouseenter', () => cursorRing.classList.add('expanded'));
+      el.addEventListener('mouseleave', () => cursorRing.classList.remove('expanded'));
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About — Senkode</title>
+  <meta name="description" content="Senkodeの創業者JUNの経歴・経営哲学・ビジョン。大手運送会社の現役管理職がAIで制作会社を立ち上げた理由。">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital@1&family=Noto+Sans+JP:wght@100;200;300;700&display=swap" rel="stylesheet">
+  <style>
+    [class*="grid"] > *, [class*="inner"] > *, [class*="wrap"] > * { min-width: 0; }
+
+    img, video, iframe { max-width: 100%; height: auto; }
+
+    html { overflow-x: hidden; }
+
+    :root {
+      --gold:       #C9A84C;
+      --gold-light: #E8C97A;
+      --gold-dim:   #6B5420;
+      --black:      #080808;
+      --off-black:  #0F0F0F;
+      --card:       #111111;
+      --white:      #F4F1EC;
+      --muted:      rgba(244,241,236,0.35);
+      --border:     rgba(201,168,76,0.1);
+      --gold-hover:    rgba(201,168,76,0.1);
+      --gold-alpha-40: rgba(201,168,76,0.4);
+      --gold-alpha-30: rgba(201,168,76,0.3);
+      --gold-alpha-50: rgba(201,168,76,0.5);
+      --white-dim:     rgba(244,241,236,0.4);
+      --white-faint:   rgba(244,241,236,0.2);
+      --gold-grid:     rgba(201,168,76,0.03);
+      --nav-bg:        rgba(15,15,15,0.85);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    p, li, h1, h2, h3, h4, span, div, td, dt, dd, label {
+      word-break: keep-all;
+      overflow-wrap: break-word;
+      line-break: strict;
+    }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: none;
+      word-break: keep-all;
+      overflow-wrap: break-word;
+      line-break: strict;
+    }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dim); }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(var(--gold-grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--gold-grid) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none; z-index: 0;
+    }
+
+    .reveal {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
+      will-change: opacity, transform;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* CURSOR */
+    .cursor-dot {
+      position: fixed; width: 8px; height: 8px; background: var(--gold);
+      border-radius: 50%; transform: translate(-50%,-50%);
+      pointer-events: none; z-index: 9999; mix-blend-mode: difference;
+    }
+    .cursor-ring {
+      position: fixed; width: 32px; height: 32px;
+      border: 1px solid var(--gold-alpha-50); border-radius: 50%;
+      transform: translate(-50%,-50%); pointer-events: none;
+      z-index: 9998; transition: width 0.3s, height 0.3s;
+    }
+    .cursor-ring.expanded { width: 48px; height: 48px; }
+
+    /* NOISE */
+    .noise {
+      position: fixed; inset: 0; pointer-events: none; z-index: 500; opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat: repeat; background-size: 200px 200px;
+    }
+
+    /* NAV */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 60px;
+      background: var(--nav-bg); backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-wordmark { font-family: 'Bebas Neue', cursive; font-size: 22px; letter-spacing: 0.25em; color: var(--white); }
+    .nav-links { display: flex; align-items: center; gap: 32px; }
+    .nav-link { font-size: 11px; letter-spacing: 0.2em; color: var(--muted); text-decoration: none; transition: color 0.3s; }
+    .nav-link:hover, .nav-link.active { color: var(--white); }
+    .nav-cta {
+      font-size: 10px; letter-spacing: 0.2em; color: var(--gold);
+      text-decoration: none; border: 1px solid var(--gold-alpha-40);
+      padding: 8px 16px; transition: background 0.3s;
+    }
+    .nav-cta:hover { background: var(--gold-hover); }
+
+    /* PAGE HERO */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .page-hero {
+      padding: 120px 60px 80px;
+      position: relative; z-index: 1;
+      border-bottom: 1px solid var(--border);
+      animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.1s both;
+    }
+    .page-label {
+      font-size: 10px; letter-spacing: 0.35em; color: var(--gold);
+      font-weight: 100; margin-bottom: 16px;
+    }
+    .page-title {
+      font-family: 'Bebas Neue', cursive;
+      font-size: clamp(56px, 10vw, 120px);
+      letter-spacing: 0.08em; color: var(--white);
+      line-height: 0.9; margin-bottom: 20px;
+    }
+    .page-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-size: 16px;
+      letter-spacing: 0.15em; color: var(--muted);
+    }
+
+    /* PHILOSOPHY */
+    .philosophy {
+      padding: 120px 60px;
+      position: relative; z-index: 1;
+    }
+    .philosophy-inner {
+      max-width: 1100px;
+      width: 100%; margin: 0 auto;
+      display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 80px; align-items: start;
+    }
+    .philosophy-left {}
+    .section-label { font-size: 10px; letter-spacing: 0.35em; color: var(--gold); font-weight: 100; margin-bottom: 16px; }
+    .block-title {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 700; font-size: clamp(22px, 3vw, 32px);
+      letter-spacing: 0.06em; color: var(--white);
+      line-height: 1.5; margin-bottom: 32px;
+    }
+    .block-title span { color: var(--gold); }
+    .block-body {
+      font-size: 13px; color: var(--muted);
+      line-height: 2.2; font-weight: 200;
+    }
+    .block-body p { margin-bottom: 20px; }
+    .block-body p:last-child { margin-bottom: 0; }
+
+    /* QUOTE PULL */
+    .pull-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(18px, 2.5vw, 24px);
+      color: var(--white);
+      line-height: 1.8;
+      letter-spacing: 0.04em;
+      border-left: 2px solid var(--gold);
+      padding-left: 28px;
+      margin: 40px 0;
+    }
+    .pull-quote span { color: var(--gold); }
+
+    /* PROFILE */
+    .profile {
+      padding: 0 60px 120px;
+      position: relative; z-index: 1;
+    }
+    .profile-inner {
+      max-width: 1100px;
+      width: 100%; margin: 0 auto;
+    }
+    .profile-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 56px 64px;
+      display: grid;
+      grid-template-columns: 200px minmax(0, 1fr);
+      gap: 56px;
+      align-items: start;
+    }
+    .profile-badge {
+      display: flex; flex-direction: column; align-items: center; gap: 16px;
+    }
+    .profile-name {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 28px; letter-spacing: 0.2em; color: var(--white);
+      text-align: center;
+    }
+    .profile-title {
+      font-size: 10px; letter-spacing: 0.2em; color: var(--gold);
+      text-align: center; line-height: 1.8;
+    }
+    .profile-right {}
+    .profile-items {
+      display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px 40px;
+      margin-bottom: 32px;
+    }
+    .profile-item {}
+    .profile-item-label {
+      font-size: 9px; letter-spacing: 0.3em; color: var(--gold);
+      margin-bottom: 6px; display: block;
+    }
+    .profile-item-value {
+      font-size: 12px; color: var(--white); line-height: 1.7; font-weight: 300;
+    }
+    .profile-desc {
+      font-size: 12px; color: var(--muted); line-height: 2; border-top: 1px solid var(--border); padding-top: 24px;
+    }
+
+    /* VISION NUMBERS */
+    .vision-section {
+      padding: 120px 60px;
+      background: var(--off-black);
+      position: relative; z-index: 1;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .vision-inner { max-width: 1100px;
+      width: 100%; margin: 0 auto; }
+    .vision-header { text-align: center; margin-bottom: 64px; }
+    .vision-title {
+      font-family: 'Bebas Neue', cursive;
+      font-size: clamp(36px, 6vw, 72px);
+      letter-spacing: 0.06em; color: var(--white); line-height: 1;
+    }
+    .vision-title span { color: var(--gold); }
+    .vision-sub { font-size: 12px; color: var(--muted); letter-spacing: 0.15em; margin-top: 12px; }
+
+    .phase-list {
+      display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 2px;
+    }
+    .phase-item {
+      background: var(--card); border: 1px solid var(--border); padding: 32px 24px;
+      position: relative; overflow: hidden;
+    }
+    .phase-item.current { border-color: rgba(201,168,76,0.3); }
+    .phase-item.current::before {
+      content: 'NOW';
+      position: absolute; top: 12px; right: 12px;
+      font-size: 8px; letter-spacing: 0.2em; color: var(--gold);
+      border: 1px solid var(--gold-alpha-30); padding: 2px 6px;
+    }
+    .phase-num {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 11px; letter-spacing: 0.25em; color: var(--gold); margin-bottom: 12px;
+    }
+    .phase-scale {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 22px; letter-spacing: 0.05em; color: var(--white);
+      margin-bottom: 8px; line-height: 1;
+    }
+    .phase-desc { font-size: 11px; color: var(--muted); line-height: 1.7; }
+
+    /* VALUES */
+    .values {
+      padding: 120px 60px;
+      position: relative; z-index: 1;
+    }
+    .values-inner { max-width: 1100px;
+      width: 100%; margin: 0 auto; }
+    .values-header { text-align: center; margin-bottom: 64px; }
+    .values-grid {
+      display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2px;
+    }
+    .value-card {
+      background: var(--card); border: 1px solid var(--border); padding: 40px 36px;
+      position: relative; overflow: hidden;
+    }
+    .value-card::before {
+      content: ''; position: absolute; top: 0; left: -100%;
+      width: 100%; height: 2px; background: var(--gold);
+      transition: left 0.5s ease;
+    }
+    .value-card:hover::before { left: 100%; }
+    .value-en {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 40px; letter-spacing: 0.08em; color: var(--gold);
+      opacity: 0.15; line-height: 1; margin-bottom: 8px;
+    }
+    .value-ja {
+      font-size: 15px; font-weight: 700; color: var(--white);
+      letter-spacing: 0.08em; margin-bottom: 12px;
+    }
+    .value-desc { font-size: 12px; color: var(--muted); line-height: 1.9; }
+
+    /* CTA */
+    .cta {
+      padding: 120px 60px; text-align: center;
+      position: relative; z-index: 1;
+    }
+    .cta::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+    .cta-label { font-size: 10px; letter-spacing: 0.35em; color: var(--gold); margin-bottom: 16px; font-weight: 100; }
+    .cta-title {
+      font-family: 'Noto Sans JP', sans-serif; font-weight: 700;
+      font-size: clamp(20px, 3vw, 32px); letter-spacing: 0.06em;
+      color: var(--white); margin-bottom: 12px;
+    }
+    .cta-sub { font-size: 12px; color: var(--muted); margin-bottom: 32px; line-height: 1.9; }
+    .btn-primary {
+      display: inline-block; padding: 14px 32px;
+      border: 1px solid var(--gold); color: var(--gold);
+      text-decoration: none; font-size: 11px;
+      letter-spacing: 0.2em; transition: background 0.3s;
+    }
+    .btn-primary:hover { background: var(--gold-hover); }
+
+    /* FOOTER */
+    .footer {
+      padding: 24px 60px; background: var(--off-black);
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      position: relative; z-index: 1;
+    }
+    .footer-copy { font-size: 10px; letter-spacing: 0.25em; color: var(--muted); }
+    .footer-tag  { font-size: 9px;  letter-spacing: 0.15em; color: var(--white-faint); }
+
+    /* TABLET */
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .nav { padding: 20px 40px; }
+      .page-hero { padding: 100px 40px 60px; }
+      .about-section { padding: 80px 40px; }
+      .footer { padding: 24px 40px; }
+    }
+
+    /* MOBILE */
+    @media (max-width: 768px) {
+      body { cursor: auto; }
+      .cursor-dot, .cursor-ring { display: none; }
+      .nav { padding: 16px 24px; }
+      .nav-links { gap: 16px; }
+      .nav-link { display: none; }
+      .page-hero { padding: 80px 24px 60px; }
+      .philosophy { padding: 80px 24px; }
+      .philosophy-inner { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+      .profile { padding: 0 24px 80px; }
+      .profile-card { grid-template-columns: minmax(0, 1fr); gap: 32px; padding: 32px 24px; }
+      .profile-items { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+      .vision-section { padding: 80px 24px; }
+      .phase-list { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+      .values { padding: 80px 24px; }
+      .values-grid { grid-template-columns: minmax(0, 1fr); }
+      .cta { padding: 80px 24px; }
+      .footer { padding: 20px 24px; flex-direction: column; gap: 8px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+  <div class="noise"></div>
+
+  <!-- Nav -->
+  <nav class="nav">
+    <a href="index.html" class="nav-logo">
+      <svg width="44" height="44" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="logoGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#6B5420"/>
+            <stop offset="50%" stop-color="#E8C97A"/>
+            <stop offset="100%" stop-color="#C9A84C"/>
+          </linearGradient>
+          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <path id="logoCircle" d="M30,5 A25,25,0,1,1,29.999,5" fill="none"/>
+        </defs>
+        <circle cx="30" cy="30" r="28" fill="none" stroke="#C9A84C" stroke-width="0.5" opacity="0.4"/>
+        <circle cx="30" cy="30" r="20" fill="none" stroke="#C9A84C" stroke-width="0.3" opacity="0.2"/>
+        <g transform="translate(-6,-4.4) scale(0.36)">
+          <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="url(#logoGrad)" style="filter:url(#glow)"/>
+        </g>
+        <text font-family="'Bebas Neue','Noto Sans JP',sans-serif" font-size="5" fill="#C9A84C" opacity="0.78">
+          <textPath href="#logoCircle" startOffset="0%" letter-spacing="2.5">Senkode · 閃光 · Senkode · 閃光 ·</textPath>
+        </text>
+      </svg>
+      <span class="nav-wordmark">Senkode</span>
+    </a>
+    <div class="nav-links">
+      <a href="services.html" class="nav-link">SERVICES</a>
+      <a href="works.html" class="nav-link">WORKS</a>
+      <a href="about.html" class="nav-link active">ABOUT</a>
+      <a href="organization.html" class="nav-link">ORGANIZATION</a>
+      <a href="contact.html" class="nav-cta">CONTACT</a>
+    </div>
+  </nav>
+
+  <!-- Page Hero -->
+  <section class="page-hero">
+    <p class="page-label">OUR STORY</p>
+    <h1 class="page-title">About</h1>
+    <p class="page-sub">Senkodeとは何か——そして、なぜ存在するのか</p>
+  </section>
+
+  <!-- Philosophy -->
+  <section class="philosophy">
+    <div class="philosophy-inner">
+      <div class="philosophy-left reveal">
+        <p class="section-label">PHILOSOPHY</p>
+        <h2 class="block-title">一人では何も成し遂げられない。<br><span>みんなで成長し、繁栄を分かち合う。</span></h2>
+        <div class="pull-quote">
+          「Senkodeに関わって良かった」と、クライアントだけでなく<span>一緒に働く人にも</span>言われる会社を作る。
+        </div>
+        <div class="block-body">
+          <p>Senkodeは「効率が上がるから」「利益が増えるから」だけで判断しない。関わるすべての人が豊かになるかどうかを、常に意思決定の軸に置いています。</p>
+          <p>「一回きりの仕事」ではなく、プロジェクトを繰り返すたびにチームが賢くなり、会社が成長する仕組みで動いています。</p>
+        </div>
+      </div>
+      <div class="philosophy-right reveal" style="--delay:0.1s">
+        <p class="section-label">WHY AI</p>
+        <h2 class="block-title">AIは手段であり、<br><span>目的は「あなたの事業の勝利」だ。</span></h2>
+        <div class="block-body">
+          <p>Senkodeが提供するのはAIツールではなく、AIを活用した「成果」です。ライティング・Web制作・戦略——どの領域でもAIを制作フローに組み込み、スピードとクオリティを同時に最大化します。</p>
+          <p>私たちはAIの進化に合わせてサービスを常にアップデートします。あなたの事業が時代に置き去りにされないよう、伴走し続けることがSenkodeの存在意義です。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Profile -->
+  <section class="profile">
+    <div class="profile-inner">
+      <div class="profile-card reveal">
+        <div class="profile-badge">
+          <svg width="120" height="120" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="pGrad" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#6B5420"/>
+                <stop offset="50%" stop-color="#E8C97A"/>
+                <stop offset="100%" stop-color="#C9A84C"/>
+              </linearGradient>
+              <filter id="pGlow" x="-30%" y="-30%" width="160%" height="160%">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"/>
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+            <circle cx="100" cy="100" r="96" fill="none" stroke="#C9A84C" stroke-width="0.8" opacity="0.3"/>
+            <circle cx="100" cy="100" r="72" fill="none" stroke="#C9A84C" stroke-width="0.4" opacity="0.15"/>
+            <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="url(#pGrad)" filter="url(#pGlow)"/>
+          </svg>
+          <p class="profile-name">JUN</p>
+          <p class="profile-title"><span style="display:block">Founder & CEO</span><span style="display:block">Chief AI Director</span></p>
+        </div>
+        <div class="profile-right">
+          <div class="profile-items">
+            <div class="profile-item">
+              <span class="profile-item-label">BACKGROUND</span>
+              <span class="profile-item-value">大手運送会社 現役管理職（10年以上）</span>
+            </div>
+            <div class="profile-item">
+              <span class="profile-item-label">EXPERTISE</span>
+              <span class="profile-item-value">業務効率化・KPI管理・オペレーション改善</span>
+            </div>
+            <div class="profile-item">
+              <span class="profile-item-label">AI TOOLS</span>
+              <span class="profile-item-value">Claude Code / ChatGPT / Copilot</span>
+            </div>
+            <div class="profile-item">
+              <span class="profile-item-label">DOMAIN</span>
+              <span class="profile-item-value">物流・DX・AI活用・ビジネス戦略</span>
+            </div>
+          </div>
+          <p class="profile-desc">大手運送会社の現役管理職として、物流・DX・業務効率化の現場を10年以上担いながら、AIを活用した制作・コンサルティングを提供。ShiftAIスクールでAIライティングを体系的に習得し、Claude Code・ChatGPTを制作フローに完全統合。「現場で使える」一次情報と、AIの圧倒的な処理速度を掛け合わせたアウトプットが強みです。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Vision / Growth Phases -->
+  <section class="vision-section">
+    <div class="vision-inner">
+      <div class="vision-header reveal">
+        <p class="section-label">GROWTH VISION</p>
+        <h2 class="vision-title">目標は<span>年商100億円</span>。</h2>
+        <p class="vision-sub">今日のPhase 0が、未来の100億への土台になる</p>
+      </div>
+      <div class="phase-list">
+        <div class="phase-item current reveal">
+          <p class="phase-num">PHASE 0</p>
+          <p class="phase-scale">副業水準</p>
+          <p class="phase-desc">クラウドワークスで最初の実績を作る通過点</p>
+        </div>
+        <div class="phase-item reveal" style="--delay:0.05s">
+          <p class="phase-num">PHASE 1</p>
+          <p class="phase-scale">月100万円</p>
+          <p class="phase-desc">Senkodeブランドで指名受注が始まる</p>
+        </div>
+        <div class="phase-item reveal" style="--delay:0.1s">
+          <p class="phase-num">PHASE 2</p>
+          <p class="phase-scale">年商1億円</p>
+          <p class="phase-desc">法人化・チーム化・サービスの型化</p>
+        </div>
+        <div class="phase-item reveal" style="--delay:0.15s">
+          <p class="phase-num">PHASE 3</p>
+          <p class="phase-scale">年商10億円</p>
+          <p class="phase-desc">複数サービスライン・外部パートナー展開</p>
+        </div>
+        <div class="phase-item reveal" style="--delay:0.2s">
+          <p class="phase-num">PHASE 4</p>
+          <p class="phase-scale">年商100億円</p>
+          <p class="phase-desc">M&A・資本提携・業界を動かす存在へ</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Values -->
+  <section class="values">
+    <div class="values-inner">
+      <div class="values-header reveal">
+        <p class="section-label">OUR VALUES</p>
+        <h2 class="block-title" style="text-align:center">Senkodeが大切にすること</h2>
+      </div>
+      <div class="values-grid">
+        <div class="value-card reveal">
+          <p class="value-en">SPEED</p>
+          <h3 class="value-ja">スピード</h3>
+          <p class="value-desc">「早めに」は禁止語。必ず日付で動く。思考も実行も、閃光の速さで。</p>
+        </div>
+        <div class="value-card reveal" style="--delay:0.05s">
+          <p class="value-en">ORIGINALITY</p>
+          <h3 class="value-ja">独創性</h3>
+          <p class="value-desc">どこにでもある答えは出さない。競合が作れないアウトプットを出す。</p>
+        </div>
+        <div class="value-card reveal" style="--delay:0.1s">
+          <p class="value-en">EXECUTION</p>
+          <h3 class="value-ja">一気通貫</h3>
+          <p class="value-desc">戦略だけで終わらない。実装・成果まで伴走する。</p>
+        </div>
+        <div class="value-card reveal" style="--delay:0.15s">
+          <p class="value-en">PREMIUM</p>
+          <h3 class="value-ja">プレミアム感</h3>
+          <p class="value-desc">仕事の水準・見た目・言葉のすべてにSenkodeブランドを宿らせる。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="reveal">
+      <p class="cta-label">GET STARTED</p>
+      <h2 class="cta-title">AI時代の第一歩を、今日踏み出す。</h2>
+      <p class="cta-sub">まずは無料相談から。24時間以内にご返信します。</p>
+      <a href="contact.html" class="btn-primary">無料相談を申し込む →</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <span class="footer-copy">Senkode © 2026</span>
+    <span class="footer-tag">閃光 — Flash of Light</span>
+  </footer>
+
+  <script>
+    // Cursor
+    const cursorDot  = document.querySelector('.cursor-dot');
+    const cursorRing = document.querySelector('.cursor-ring');
+    let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0, rafId = null;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX; mouseY = e.clientY;
+      cursorDot.style.left = mouseX + 'px';
+      cursorDot.style.top  = mouseY + 'px';
+      if (rafId === null) { ringX = mouseX; ringY = mouseY; rafId = requestAnimationFrame(loop); }
+    });
+    function loop() {
+      const dx = mouseX - ringX, dy = mouseY - ringY;
+      if (Math.abs(dx) > 0.05 || Math.abs(dy) > 0.05) {
+        ringX += dx * 0.15; ringY += dy * 0.15;
+        cursorRing.style.left = ringX + 'px';
+        cursorRing.style.top  = ringY + 'px';
+      }
+      rafId = requestAnimationFrame(loop);
+    }
+
+    // Hover expand
+    document.querySelectorAll('.value-card, .phase-item, .btn-primary').forEach(el => {
+      el.addEventListener('mouseenter', () => cursorRing.classList.add('expanded'));
+      el.addEventListener('mouseleave', () => cursorRing.classList.remove('expanded'));
+    });
+
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

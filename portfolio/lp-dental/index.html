@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>やさしい歯科 — 歯医者が怖い人のための歯科医院</title>
+  <meta name="description" content="「痛みが怖くて行けない」「昔トラウマがある」そんな方こそ来てください。無痛治療・丁寧な説明・途中でやめてOK。歯医者嫌いのための歯科医院。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@1,300;1,400&family=Noto+Sans+JP:wght@100;200;300;400&display=swap" rel="stylesheet">
+  <style>
+    [class*="grid"] > *, [class*="inner"] > *, [class*="wrap"] > * { min-width: 0; }
+
+    img, video, iframe { max-width: 100%; height: auto; }
+
+    html { overflow-x: hidden; }
+
+    /* ===== DESIGN TOKENS ===== */
+    :root {
+      --rose:       #F43F5E;
+      --rose-lt:    #FB7185;
+      --rose-dim:   #9F1239;
+      --rose-glow:  rgba(244,63,94,0.10);
+      --rose-grid:  rgba(244,63,94,0.025);
+      --rose-border:rgba(244,63,94,0.15);
+      --rose-card:  rgba(244,63,94,0.06);
+      --bg:         #0A0407;
+      --off-bg:     #0F0609;
+      --card:       #130408;
+      --card-mid:   #1A060B;
+      --white:      #FDF2F4;
+      --muted:      rgba(253,242,244,0.38);
+      --muted-sm:   rgba(253,242,244,0.22);
+      --border:     rgba(244,63,94,0.12);
+    }
+
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ===== GRID TEXTURE ===== */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(var(--rose-grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--rose-grid) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none; z-index: 0;
+    }
+
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--rose-dim); }
+
+    /* ===== CUSTOM CURSOR ===== */
+    .cursor {
+      position: fixed; z-index: 9999;
+      width: 10px; height: 10px;
+      background: var(--rose);
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      transition: width 0.2s, height 0.2s, background 0.2s;
+      mix-blend-mode: screen;
+    }
+    .cursor-ring {
+      position: fixed; z-index: 9998;
+      width: 36px; height: 36px;
+      border: 1px solid var(--rose-lt);
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      transition: width 0.35s cubic-bezier(0.16,1,0.3,1),
+                  height 0.35s cubic-bezier(0.16,1,0.3,1),
+                  border-color 0.3s;
+      opacity: 0.55;
+    }
+    body:has(a:hover) .cursor-ring,
+    body:has(button:hover) .cursor-ring {
+      width: 56px; height: 56px;
+      border-color: var(--rose);
+    }
+
+    /* ===== SCROLL REVEAL ===== */
+    .reveal {
+      opacity: 0; transform: translateY(40px);
+      transition: opacity 0.85s cubic-bezier(0.16,1,0.3,1),
+                  transform 0.85s cubic-bezier(0.16,1,0.3,1);
+      will-change: opacity, transform;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ===== UTILITY ===== */
+    .rose { color: var(--rose); }
+    .tag {
+      display: inline-flex; align-items: center; gap: 12px;
+      font-size: 10px; letter-spacing: 4px; color: var(--rose);
+      font-weight: 200; text-transform: uppercase; margin-bottom: 28px;
+    }
+    .tag::before { content: ''; width: 28px; height: 1px; background: var(--rose); }
+
+    section { position: relative; z-index: 1; }
+
+    /* ===== HEADER ===== */
+    header {
+      position: fixed; top: 0; width: 100%; z-index: 200;
+      background: rgba(10,4,7,0.88);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 60px; height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .logo {
+      display: flex; align-items: center; gap: 14px;
+      text-decoration: none;
+    }
+    .logo-text {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px; letter-spacing: 5px;
+      color: var(--white);
+    }
+    .logo-text span { color: var(--rose); }
+
+    nav { display: flex; align-items: center; gap: 28px; }
+    nav a {
+      color: var(--muted); text-decoration: none;
+      font-size: 11px; letter-spacing: 2px;
+      transition: color 0.3s; font-weight: 200;
+    }
+    nav a:hover { color: var(--white); }
+
+    .nav-cta {
+      background: var(--rose); color: var(--bg) !important;
+      font-size: 11px !important; font-weight: 400 !important;
+      letter-spacing: 2px; padding: 10px 24px;
+      transition: background 0.3s !important;
+    }
+    .nav-cta:hover { background: var(--rose-lt) !important; }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh;
+      padding: 140px 60px 100px;
+      display: flex; align-items: center;
+      position: relative; z-index: 1; overflow: hidden;
+    }
+
+    .hero-glow {
+      position: absolute;
+      top: -100px; left: -200px;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(244,63,94,0.08) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .hero-glow-2 {
+      position: absolute;
+      bottom: -100px; right: -100px;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(244,63,94,0.05) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .hero-line {
+      position: absolute;
+      left: 58px; top: 80px; bottom: 80px;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--rose) 30%, var(--rose) 70%, transparent);
+      opacity: 0.3;
+    }
+
+    .hero-inner {
+      position: relative; z-index: 1;
+      max-width: 800px;
+    }
+
+    .hero-eyebrow {
+      font-size: 10px; letter-spacing: 5px; color: var(--rose);
+      font-weight: 200;
+      display: flex; align-items: center; gap: 16px; margin-bottom: 36px;
+      opacity: 0; transform: translateX(-20px);
+      animation: heroIn 0.8s 0.2s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    .hero-eyebrow::before { content: ''; width: 40px; height: 1px; background: var(--rose); }
+
+    @keyframes heroIn { to { opacity: 1; transform: none; } }
+
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(58px, 8.5vw, 116px);
+      line-height: 0.88; letter-spacing: 2px;
+      margin-bottom: 16px;
+      opacity: 0; transform: translateY(20px);
+      animation: heroIn 1s 0.3s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    h1 .line-sub {
+      display: block; font-size: clamp(26px, 3.5vw, 48px);
+      color: var(--muted); letter-spacing: 4px; margin-top: 12px;
+      font-weight: 300;
+    }
+    h1 .line-rose {
+      display: block;
+      background: linear-gradient(90deg, var(--rose-dim), var(--rose-lt), var(--rose));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-catchcopy {
+      font-size: 13px; font-weight: 100; letter-spacing: 3px;
+      color: var(--muted); margin-bottom: 20px; margin-top: 8px;
+      opacity: 0; transform: translateY(12px);
+      animation: heroIn 0.9s 0.45s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+
+    .hero-divider {
+      width: 48px; height: 1px; background: var(--rose);
+      margin-bottom: 32px;
+      opacity: 0; transform: scaleX(0); transform-origin: left;
+      animation: dividerIn 0.9s 0.55s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    @keyframes dividerIn { to { opacity: 0.5; transform: scaleX(1); } }
+
+    .hero-lead {
+      font-size: 15px; line-height: 2.2; color: var(--muted);
+      max-width: 500px; margin-bottom: 52px; font-weight: 200;
+      opacity: 0; transform: translateY(14px);
+      animation: heroIn 1s 0.6s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+
+    .hero-actions {
+      display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+      opacity: 0; transform: translateY(12px);
+      animation: heroIn 1s 0.75s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+
+    .btn-primary {
+      background: var(--rose); color: var(--bg);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 12px; font-weight: 400; letter-spacing: 3px;
+      padding: 18px 48px; border: none; cursor: none;
+      transition: all 0.3s; text-decoration: none; display: inline-block;
+      position: relative; overflow: hidden;
+    }
+    .btn-primary::after {
+      content: ''; position: absolute; inset: 0;
+      background: var(--rose-lt);
+      transform: translateX(-100%); transition: transform 0.35s cubic-bezier(0.16,1,0.3,1);
+    }
+    .btn-primary:hover::after { transform: translateX(0); }
+    .btn-primary span { position: relative; z-index: 1; }
+
+    .btn-ghost {
+      color: var(--muted); font-size: 12px; letter-spacing: 2px; font-weight: 200;
+      text-decoration: none; display: flex; align-items: center; gap: 8px;
+      transition: color 0.3s; cursor: none;
+    }
+    .btn-ghost::after { content: '→'; transition: transform 0.3s; }
+    .btn-ghost:hover { color: var(--white); }
+    .btn-ghost:hover::after { transform: translateX(5px); }
+
+    /* Hero floating badge */
+    .hero-badge {
+      position: absolute; right: 60px; top: 50%;
+      transform: translateY(-50%);
+      background: var(--card-mid);
+      border: 1px solid var(--rose-border);
+      padding: 36px 32px; width: 260px;
+      backdrop-filter: blur(12px);
+      opacity: 0;
+      animation: heroIn 1s 0.85s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    .hero-badge::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--rose-dim), var(--rose-lt));
+    }
+    .badge-label {
+      font-size: 9px; letter-spacing: 4px; color: var(--rose);
+      text-transform: uppercase; margin-bottom: 20px; font-weight: 200;
+    }
+    .badge-item {
+      padding: 14px 0; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 12px;
+    }
+    .badge-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .badge-icon { font-size: 18px; flex-shrink: 0; }
+    .badge-text { font-size: 12px; color: var(--muted); line-height: 1.5; font-weight: 200; }
+    .badge-text strong { color: var(--white); font-weight: 300; display: block; }
+
+    /* ===== PAIN SECTION ===== */
+    .pain {
+      padding: 120px 60px;
+      background: var(--off-bg);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-header {
+      text-align: center; margin-bottom: 72px;
+    }
+
+    h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(40px, 5vw, 68px);
+      letter-spacing: 3px; line-height: 1.05;
+      margin-bottom: 16px;
+    }
+    h2 .h2-rose {
+      background: linear-gradient(90deg, var(--rose-dim), var(--rose-lt));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .section-lead {
+      font-size: 14px; color: var(--muted); line-height: 2;
+      max-width: 480px;
+      width: 100%; margin: 0 auto; font-weight: 200;
+    }
+
+    .pain-grid {
+      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px;
+      max-width: 1000px;
+      width: 100%; margin: 0 auto;
+    }
+
+    .pain-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 40px 32px;
+      position: relative; overflow: hidden;
+      transition: border-color 0.35s, transform 0.35s;
+    }
+    .pain-card::before {
+      content: ''; position: absolute;
+      bottom: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--rose-dim), var(--rose));
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+    }
+    .pain-card:hover { border-color: var(--rose-border); transform: translateY(-6px); }
+    .pain-card:hover::before { transform: scaleX(1); }
+
+    .pain-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 64px; line-height: 1;
+      background: linear-gradient(180deg, var(--rose-dim), rgba(244,63,94,0.1));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 16px;
+    }
+
+    .pain-quote {
+      font-size: 15px; font-weight: 300; color: var(--white);
+      line-height: 1.8; margin-bottom: 14px;
+      font-style: italic; letter-spacing: 0.5px;
+    }
+    .pain-quote::before { content: '"'; color: var(--rose); font-size: 20px; }
+    .pain-quote::after  { content: '"'; color: var(--rose); font-size: 20px; }
+
+    .pain-desc {
+      font-size: 12px; color: var(--muted); line-height: 1.9; font-weight: 200;
+    }
+
+    /* ===== WHY SECTION ===== */
+    .why {
+      padding: 120px 60px;
+    }
+
+    .why-grid {
+      display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 64px;
+      max-width: 1000px;
+      width: 100%; margin: 0 auto; align-items: start;
+    }
+
+    .why-list { display: flex; flex-direction: column; gap: 32px; }
+
+    .why-item {
+      display: flex; gap: 20px; align-items: flex-start;
+      padding: 28px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      position: relative; overflow: hidden;
+      transition: border-color 0.35s;
+    }
+    .why-item::after {
+      content: ''; position: absolute;
+      left: 0; top: 0; bottom: 0; width: 3px;
+      background: var(--rose);
+      transform: scaleY(0); transform-origin: top;
+      transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+    }
+    .why-item:hover { border-color: var(--rose-border); }
+    .why-item:hover::after { transform: scaleY(1); }
+
+    .why-icon {
+      font-size: 28px; flex-shrink: 0; width: 44px;
+      text-align: center; padding-top: 2px;
+    }
+    .why-label {
+      font-size: 11px; letter-spacing: 3px; color: var(--rose);
+      font-weight: 200; text-transform: uppercase; margin-bottom: 8px;
+    }
+    .why-text {
+      font-size: 14px; color: var(--white); font-weight: 300;
+      line-height: 1.8; margin-bottom: 8px;
+    }
+    .why-sub {
+      font-size: 12px; color: var(--muted); font-weight: 200; line-height: 1.7;
+    }
+
+    .why-vs {
+      background: var(--card-mid);
+      border: 1px solid var(--rose-border);
+      padding: 36px 28px; position: relative;
+    }
+    .why-vs::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--rose-dim), var(--rose-lt));
+    }
+    .vs-title {
+      font-size: 10px; letter-spacing: 4px; color: var(--rose);
+      font-weight: 200; text-transform: uppercase; margin-bottom: 24px;
+    }
+    .vs-row {
+      display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      gap: 12px; align-items: center;
+      padding: 16px 0; border-bottom: 1px solid var(--border);
+    }
+    .vs-row:last-child { border-bottom: none; }
+    .vs-bad {
+      font-size: 12px; color: var(--muted); font-weight: 200; line-height: 1.6;
+    }
+    .vs-mid {
+      font-size: 9px; letter-spacing: 1px; color: var(--muted-sm);
+      text-align: center; padding: 0 8px;
+    }
+    .vs-good {
+      font-size: 12px; color: var(--white); font-weight: 300; line-height: 1.6;
+      text-align: right;
+    }
+    .vs-good .accent { color: var(--rose-lt); }
+
+    /* ===== SOLUTION SECTION ===== */
+    .solution {
+      padding: 120px 60px;
+      background: var(--off-bg);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .solution-grid {
+      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2px;
+      max-width: 1000px;
+      width: 100%; margin: 0 auto;
+    }
+
+    .sol-card {
+      background: var(--card);
+      padding: 48px 32px;
+      position: relative; overflow: hidden;
+      transition: background 0.35s;
+    }
+    .sol-card:hover { background: var(--card-mid); }
+
+    .sol-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 80px; line-height: 1;
+      color: var(--rose-glow);
+      position: absolute; top: 16px; right: 20px;
+      font-size: 100px;
+      background: linear-gradient(180deg, rgba(244,63,94,0.15), rgba(244,63,94,0.02));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      pointer-events: none; user-select: none;
+    }
+
+    .sol-badge {
+      display: inline-block;
+      background: var(--rose); color: var(--bg);
+      font-size: 9px; letter-spacing: 3px; font-weight: 400;
+      padding: 5px 14px; margin-bottom: 24px;
+      text-transform: uppercase;
+    }
+
+    .sol-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px; letter-spacing: 2px;
+      margin-bottom: 12px; line-height: 1.1;
+    }
+    .sol-title .accent { color: var(--rose); }
+
+    .sol-body {
+      font-size: 13px; color: var(--muted); line-height: 2;
+      font-weight: 200;
+    }
+
+    .sol-divider {
+      width: 32px; height: 1px; background: var(--rose);
+      opacity: 0.4; margin: 20px 0;
+    }
+
+    .sol-note {
+      font-size: 11px; color: var(--rose-lt);
+      font-weight: 200; letter-spacing: 1px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .sol-note::before { content: '✓'; font-size: 13px; }
+
+    /* ===== EVIDENCE SECTION ===== */
+    .evidence {
+      padding: 120px 60px;
+    }
+
+    .voice-grid {
+      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px;
+      max-width: 1000px;
+      width: 100%; margin: 0 auto 80px;
+    }
+
+    .voice-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 36px 28px;
+      position: relative; overflow: hidden;
+      transition: transform 0.35s, border-color 0.35s;
+    }
+    .voice-card:hover { transform: translateY(-6px); border-color: var(--rose-border); }
+    .voice-card::before {
+      content: '"';
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 80px; line-height: 1;
+      color: var(--rose); opacity: 0.12;
+      position: absolute; top: 12px; left: 20px;
+      pointer-events: none;
+    }
+
+    .voice-rating {
+      font-size: 13px; color: var(--rose-lt); margin-bottom: 16px; letter-spacing: 2px;
+    }
+    .voice-text {
+      font-size: 13px; color: var(--muted); line-height: 2;
+      font-weight: 200; margin-bottom: 24px; position: relative; z-index: 1;
+    }
+    .voice-author {
+      display: flex; align-items: center; gap: 12px;
+      border-top: 1px solid var(--border); padding-top: 16px;
+    }
+    .voice-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--rose-dim), var(--rose));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; color: var(--white); font-weight: 300;
+      flex-shrink: 0;
+    }
+    .voice-name { font-size: 12px; color: var(--white); font-weight: 300; }
+    .voice-meta { font-size: 11px; color: var(--muted-sm); margin-top: 2px; font-weight: 200; }
+
+    /* Before/After cases */
+    .cases-grid {
+      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px;
+      max-width: 1000px;
+      width: 100%; margin: 0 auto;
+    }
+
+    .case-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      transition: transform 0.35s, border-color 0.35s;
+    }
+    .case-card:hover { transform: translateY(-4px); border-color: var(--rose-border); }
+
+    .case-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .case-type {
+      font-size: 9px; letter-spacing: 3px; color: var(--rose); font-weight: 200;
+    }
+    .case-period {
+      font-size: 10px; color: var(--muted-sm); font-weight: 200;
+    }
+
+    .case-body { padding: 24px; }
+    .case-row { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 8px; align-items: center; margin-bottom: 14px; }
+    .case-before { font-size: 12px; color: var(--muted); font-weight: 200; }
+    .case-arrow { color: var(--rose); font-size: 14px; }
+    .case-after { font-size: 12px; color: var(--white); font-weight: 300; text-align: right; }
+    .case-result {
+      margin-top: 14px; padding-top: 14px;
+      border-top: 1px solid var(--border);
+      font-size: 11px; color: var(--rose-lt); font-weight: 200;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .case-result::before { content: '●'; font-size: 8px; }
+
+    /* ===== FLOW SECTION ===== */
+    .flow {
+      padding: 120px 60px;
+      background: var(--off-bg);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .flow-grid {
+      display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0; max-width: 1000px;
+      width: 100%; margin: 0 auto;
+      position: relative;
+    }
+
+    .flow-grid::before {
+      content: ''; position: absolute;
+      top: 52px; left: 12.5%; right: 12.5%;
+      height: 1px;
+      background: linear-gradient(90deg,
+        var(--rose-dim), var(--rose), var(--rose-dim), var(--rose), var(--rose-dim));
+      opacity: 0.4;
+    }
+
+    .flow-step {
+      padding: 28px 20px 32px; text-align: center;
+      position: relative;
+    }
+
+    .flow-icon-wrap {
+      width: 56px; height: 56px; border-radius: 50%;
+      border: 1px solid var(--rose-border);
+      background: var(--card);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+      position: relative; z-index: 1;
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .flow-step:hover .flow-icon-wrap {
+      background: var(--rose-glow); border-color: var(--rose);
+    }
+    .flow-icon { font-size: 22px; }
+
+    .flow-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 11px; letter-spacing: 3px;
+      color: var(--rose); margin-bottom: 10px;
+    }
+    .flow-title { font-size: 15px; color: var(--white); font-weight: 300; margin-bottom: 10px; }
+    .flow-body { font-size: 12px; color: var(--muted); font-weight: 200; line-height: 1.8; }
+
+    /* ===== PLAN SECTION ===== */
+    .plan {
+      padding: 120px 60px;
+    }
+
+    .plan-grid {
+      display: grid; grid-template-columns: minmax(0, 1fr) 2fr; gap: 40px;
+      max-width: 1000px;
+      width: 100%; margin: 0 auto;
+    }
+
+    .plan-first {
+      background: var(--card-mid);
+      border: 1px solid var(--rose-border);
+      padding: 40px 32px; position: relative; overflow: hidden;
+    }
+    .plan-first::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--rose-dim), var(--rose-lt));
+    }
+
+    .plan-badge {
+      display: inline-block;
+      background: var(--rose); color: var(--bg);
+      font-size: 9px; letter-spacing: 3px; font-weight: 400;
+      padding: 5px 14px; margin-bottom: 20px;
+    }
+    .plan-name { font-size: 13px; color: var(--muted); font-weight: 200; margin-bottom: 12px; }
+    .plan-price {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 52px; color: var(--rose-lt); line-height: 1;
+      margin-bottom: 4px;
+    }
+    .plan-price-note { font-size: 11px; color: var(--muted-sm); margin-bottom: 24px; }
+    .plan-includes {
+      list-style: none; display: flex; flex-direction: column; gap: 10px;
+    }
+    .plan-includes li {
+      font-size: 12px; color: var(--muted); font-weight: 200;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .plan-includes li::before {
+      content: '✓'; color: var(--rose); font-size: 12px; flex-shrink: 0;
+    }
+
+    .plan-menu {
+      display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px;
+    }
+
+    .menu-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 22px 20px;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .menu-item:hover { border-color: var(--rose-border); transform: translateY(-3px); }
+    .menu-cat {
+      font-size: 9px; letter-spacing: 3px; color: var(--rose);
+      font-weight: 200; margin-bottom: 10px;
+    }
+    .menu-name { font-size: 14px; color: var(--white); font-weight: 300; margin-bottom: 6px; }
+    .menu-price { font-size: 13px; color: var(--rose-lt); font-weight: 200; }
+    .menu-note { font-size: 11px; color: var(--muted-sm); margin-top: 4px; font-weight: 200; }
+
+    /* ===== FAQ SECTION ===== */
+    .faq {
+      padding: 120px 60px;
+      background: var(--off-bg);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .faq-list {
+      max-width: 720px;
+      width: 100%; margin: 0 auto;
+      display: flex; flex-direction: column; gap: 2px;
+    }
+
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      transition: border-color 0.3s;
+    }
+    .faq-item:hover { border-color: var(--rose-border); }
+
+    .faq-q {
+      padding: 24px 28px;
+      display: flex; justify-content: space-between; align-items: center;
+      cursor: none; user-select: none;
+    }
+
+    .faq-q-text {
+      font-size: 14px; color: var(--white); font-weight: 300;
+      display: flex; gap: 16px; align-items: flex-start;
+    }
+    .faq-q-mark {
+      color: var(--rose); font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px; line-height: 1.2; flex-shrink: 0;
+    }
+    .faq-toggle {
+      color: var(--rose); font-size: 20px; flex-shrink: 0;
+      transition: transform 0.35s; line-height: 1;
+    }
+    .faq-item.open .faq-toggle { transform: rotate(45deg); }
+
+    .faq-a {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.45s cubic-bezier(0.16,1,0.3,1);
+    }
+    .faq-item.open .faq-a { max-height: 300px; }
+
+    .faq-a-inner {
+      padding: 0 28px 24px 60px;
+      font-size: 13px; color: var(--muted); line-height: 2;
+      font-weight: 200; border-top: 1px solid var(--border);
+      padding-top: 20px;
+    }
+
+    /* ===== CTA FINAL ===== */
+    .cta-final {
+      padding: 140px 60px;
+      text-align: center; position: relative; overflow: hidden;
+    }
+
+    .cta-glow {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px; height: 400px;
+      background: radial-gradient(ellipse, rgba(244,63,94,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .cta-final h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(44px, 6vw, 80px);
+      letter-spacing: 3px; margin-bottom: 24px;
+      position: relative; z-index: 1;
+    }
+
+    .cta-final .lead {
+      font-size: 15px; color: var(--muted); font-weight: 200;
+      max-width: 460px;
+      width: 100%; margin: 0 auto 48px; line-height: 2.1;
+      position: relative; z-index: 1;
+    }
+
+    .cta-actions {
+      display: flex; justify-content: center; align-items: center;
+      gap: 24px; flex-wrap: wrap; position: relative; z-index: 1;
+    }
+
+    .cta-note {
+      margin-top: 32px; font-size: 12px; color: var(--muted-sm);
+      font-weight: 200; letter-spacing: 1px; position: relative; z-index: 1;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      padding: 40px 60px;
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      position: relative; z-index: 1;
+    }
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px; letter-spacing: 5px; color: var(--muted);
+    }
+    .footer-logo span { color: var(--rose); }
+    .footer-copy {
+      font-size: 11px; color: var(--muted-sm); font-weight: 200; letter-spacing: 1px;
+    }
+    .footer-links {
+      display: flex; gap: 24px;
+    }
+    .footer-links a {
+      font-size: 11px; color: var(--muted-sm); text-decoration: none;
+      font-weight: 200; letter-spacing: 1px; transition: color 0.3s;
+    }
+    .footer-links a:hover { color: var(--muted); }
+
+    /* ===== MOBILE RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      header { padding: 0 24px; }
+      nav .nav-links { display: none; }
+
+      .hero { padding: 100px 24px 80px; }
+      .hero-badge { display: none; }
+      .hero-line { display: none; }
+
+      .pain { padding: 80px 24px; }
+      .pain-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+
+      .why { padding: 80px 24px; }
+      .why-grid { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+
+      .solution { padding: 80px 24px; }
+      .solution-grid { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+
+      .evidence { padding: 80px 24px; }
+      .voice-grid { grid-template-columns: minmax(0, 1fr); }
+      .cases-grid { grid-template-columns: minmax(0, 1fr); }
+
+      .flow { padding: 80px 24px; }
+      .flow-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+      .flow-grid::before { display: none; }
+
+      .plan { padding: 80px 24px; }
+      .plan-grid { grid-template-columns: minmax(0, 1fr); }
+      .plan-menu { grid-template-columns: minmax(0, 1fr); }
+
+      .faq { padding: 80px 24px; }
+
+      .cta-final { padding: 80px 24px; }
+      .cta-actions { flex-direction: column; align-items: center; }
+
+      footer { flex-direction: column; gap: 16px; padding: 32px 24px; text-align: center; }
+      .footer-links { flex-direction: column; gap: 12px; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- HEADER -->
+<header>
+  <a href="#" class="logo">
+    <svg width="28" height="36" viewBox="0 60 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="logoGrad" x1="69" y1="40" x2="131" y2="151" gradientUnits="userSpaceOnUse">
+          <stop offset="0%"   stop-color="#6B5420"/>
+          <stop offset="50%"  stop-color="#E8C97A"/>
+          <stop offset="100%" stop-color="#C9A84C"/>
+        </linearGradient>
+      </defs>
+      <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="url(#logoGrad)"/>
+    </svg>
+    <span class="logo-text">YASASHII<span> DENTAL</span></span>
+  </a>
+
+  <nav class="nav-links" style="display:flex;align-items:center;gap:28px;">
+    <a href="#pain">お悩み</a>
+    <a href="#solution">3つの安心</a>
+    <a href="#evidence">患者の声</a>
+    <a href="#flow">初診の流れ</a>
+    <a href="#plan">料金</a>
+    <a href="#faq">FAQ</a>
+    <a href="#cta" class="nav-cta">初診予約</a>
+  </nav>
+</header>
+
+<!-- ========== HERO ========== -->
+<section class="hero" id="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-glow-2"></div>
+  <div class="hero-line"></div>
+
+  <div class="hero-inner">
+    <div class="hero-eyebrow">DENTAL CLINIC FOR THE FEARFUL — SINCE 2018</div>
+
+    <h1>
+      <span class="line-rose">歯医者が</span>
+      <span>怖い人の</span>
+      <span>ための</span>
+      <span class="line-sub">歯科医院</span>
+    </h1>
+
+    <p class="hero-catchcopy">DENTAL CLINIC FOR THOSE WHO ARE SCARED</p>
+    <div class="hero-divider"></div>
+
+    <p class="hero-lead">
+      「また今度でいいか」と先延ばしにしてきた、あなたへ。
+      怖いのは当然です。でも放置するほど、治療は複雑になります。
+      まず話を聞かせてください——治療しなくてもいい初診があります。
+    </p>
+
+    <div class="hero-actions">
+      <a href="#cta" class="btn-primary"><span>初診を予約する（無料相談あり）</span></a>
+      <a href="#flow" class="btn-ghost">初診の流れを見る</a>
+    </div>
+  </div>
+
+  <!-- floating badge -->
+  <div class="hero-badge">
+    <div class="badge-label">3 PROMISES</div>
+    <div class="badge-item">
+      <span class="badge-icon">💉</span>
+      <div class="badge-text">
+        <strong>痛みゼロ宣言</strong>
+        麻酔が効いてから処置開始
+      </div>
+    </div>
+    <div class="badge-item">
+      <span class="badge-icon">📋</span>
+      <div class="badge-text">
+        <strong>治療前に必ず説明</strong>
+        承諾なしに治療しません
+      </div>
+    </div>
+    <div class="badge-item">
+      <span class="badge-icon">🤚</span>
+      <div class="badge-text">
+        <strong>途中でやめてOK</strong>
+        無理なら次回に回せます
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== PAIN ========== -->
+<section class="pain" id="pain">
+  <div class="section-header reveal">
+    <div class="tag">PATIENT VOICES</div>
+    <h2>「怖くて<span class="h2-rose">行けない」</span></h2>
+    <p class="section-lead">あなただけじゃない。歯医者を避けてきた30〜50代のリアルな声です。</p>
+  </div>
+
+  <div class="pain-grid">
+    <div class="pain-card reveal">
+      <div class="pain-num">01</div>
+      <p class="pain-quote">注射が怖すぎて10年行ってない</p>
+      <p class="pain-desc">麻酔の注射が怖いから歯が痛くても我慢。でも歯はどんどん悪化していく……という悪循環に陥っていませんか？</p>
+    </div>
+    <div class="pain-card reveal">
+      <div class="pain-num">02</div>
+      <p class="pain-quote">昔ひどい思いをしてトラウマになった</p>
+      <p class="pain-desc">子どもの頃に「痛いのに続けられた」経験がある方は多い。そのトラウマが大人になっても歯科恐怖症を引き起こします。</p>
+    </div>
+    <div class="pain-card reveal">
+      <div class="pain-num">03</div>
+      <p class="pain-quote">どこまで治療が必要か不安で怖い</p>
+      <p class="pain-desc">「行ったら大事になりそう」「費用がいくらかかるかわからない」不確実性への恐怖が通院をさらに遠ざけます。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== WHY ========== -->
+<section class="why" id="why">
+  <div class="section-header reveal">
+    <div class="tag">ROOT CAUSE</div>
+    <h2>なぜ<span class="h2-rose">怖い</span>のか</h2>
+    <p class="section-lead">恐怖の原因を知れば、怖さは半減します。従来の歯科と何が違うかを比較します。</p>
+  </div>
+
+  <div class="why-grid">
+    <div class="why-list">
+      <div class="why-item reveal">
+        <span class="why-icon">😣</span>
+        <div>
+          <div class="why-label">CAUSE 01</div>
+          <div class="why-text">麻酔が効く前に処置が始まる</div>
+          <div class="why-sub">一般的な歯科では待ち時間短縮のため、麻酔が十分に効く前に処置を開始するケースがあります。</div>
+        </div>
+      </div>
+      <div class="why-item reveal">
+        <span class="why-icon">🔇</span>
+        <div>
+          <div class="why-label">CAUSE 02</div>
+          <div class="why-text">説明がなく、何をされるかわからない</div>
+          <div class="why-sub">「口を開けていてください」だけで進む診療。患者が受け身のままでは不安が増幅します。</div>
+        </div>
+      </div>
+      <div class="why-item reveal">
+        <span class="why-icon">⏱</span>
+        <div>
+          <div class="why-label">CAUSE 03</div>
+          <div class="why-text">「嫌だ」と言える雰囲気がない</div>
+          <div class="why-sub">治療を止めたいときに言い出せない空気感が、身体的な恐怖より精神的な苦痛を与えます。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="why-vs reveal">
+      <div class="vs-title">STANDARD vs YASASHII DENTAL</div>
+      <div class="vs-row">
+        <div class="vs-bad">麻酔前から処置開始</div>
+        <div class="vs-mid">→</div>
+        <div class="vs-good"><span class="accent">麻酔完全確認後</span>に開始</div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-bad">説明なし・受け身の診療</div>
+        <div class="vs-mid">→</div>
+        <div class="vs-good">全工程を<span class="accent">事前説明</span></div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-bad">途中でやめられない雰囲気</div>
+        <div class="vs-mid">→</div>
+        <div class="vs-good">ハンドサインで<span class="accent">即停止</span></div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-bad">費用が当日まで不明</div>
+        <div class="vs-mid">→</div>
+        <div class="vs-good">治療前に<span class="accent">費用確認</span></div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-bad">キャンセルしにくい雰囲気</div>
+        <div class="vs-mid">→</div>
+        <div class="vs-good">LINE・電話で<span class="accent">気軽に変更可</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SOLUTION ========== -->
+<section class="solution" id="solution">
+  <div class="section-header reveal">
+    <div class="tag">3 PROMISES</div>
+    <h2>3つの<span class="h2-rose">安心</span>保証</h2>
+    <p class="section-lead">当院が守る3つの約束。これができなければ治療費は頂きません。</p>
+  </div>
+
+  <div class="solution-grid">
+    <div class="sol-card reveal">
+      <div class="sol-num">01</div>
+      <div class="sol-badge">PROMISE 01</div>
+      <div class="sol-title"><span class="accent">痛みゼロ</span>宣言</div>
+      <div class="sol-divider"></div>
+      <p class="sol-body">表面麻酔→局所麻酔の2段階で「注射の痛み」も最小化。麻酔が十分に効いたことをご自身で確認してから処置を開始します。</p>
+      <div class="sol-note">麻酔確認テストを全患者に実施</div>
+    </div>
+    <div class="sol-card reveal">
+      <div class="sol-num">02</div>
+      <div class="sol-badge">PROMISE 02</div>
+      <div class="sol-title">治療前<span class="accent">必ず説明</span></div>
+      <div class="sol-divider"></div>
+      <p class="sol-body">何をするか・なぜするか・どのくらいかかるか——全てをご説明し、同意をいただいてから治療を開始します。「わかった」と思えるまで質問できます。</p>
+      <div class="sol-note">治療計画書を文書でお渡しします</div>
+    </div>
+    <div class="sol-card reveal">
+      <div class="sol-num">03</div>
+      <div class="sol-badge">PROMISE 03</div>
+      <div class="sol-title">途中で<span class="accent">やめてOK</span></div>
+      <div class="sol-divider"></div>
+      <p class="sol-body">「やっぱり怖い」と感じたら、ハンドサイン1つで即停止。無理に続けません。その日できる範囲だけ進め、次回に持ち越してOKです。</p>
+      <div class="sol-note">ペース調整は患者さん主導</div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== EVIDENCE ========== -->
+<section class="evidence" id="evidence">
+  <div class="section-header reveal">
+    <div class="tag">PATIENT VOICES</div>
+    <h2>来院患者の<span class="h2-rose">声</span></h2>
+    <p class="section-lead">「歯医者嫌い」だった方たちのリアルな感想です。</p>
+  </div>
+
+  <div class="voice-grid">
+    <div class="voice-card reveal">
+      <div class="voice-rating">★★★★★</div>
+      <p class="voice-text">15年ぶりに歯医者に行けました。最初は「今日は相談だけでいいですよ」と言ってくれて、プレッシャーが全くなかった。次のアポも自分から取りました。</p>
+      <div class="voice-author">
+        <div class="voice-avatar">M</div>
+        <div>
+          <div class="voice-name">M.K. さん</div>
+          <div class="voice-meta">42歳・会社員 / 歯科恐怖症歴15年</div>
+        </div>
+      </div>
+    </div>
+    <div class="voice-card reveal">
+      <div class="voice-rating">★★★★★</div>
+      <p class="voice-text">麻酔の注射が怖くて来られなかったのですが、ジェルを塗ってから注射したので全然痛くなかった。「え、もう終わり？」という感じでした。</p>
+      <div class="voice-author">
+        <div class="voice-avatar">T</div>
+        <div>
+          <div class="voice-name">T.S. さん</div>
+          <div class="voice-meta">38歳・主婦 / 注射恐怖</div>
+        </div>
+      </div>
+    </div>
+    <div class="voice-card reveal">
+      <div class="voice-rating">★★★★★</div>
+      <p class="voice-text">治療前に「今日はここまでやります」と説明してくれるのが安心。途中でハンドサインを出したら本当に止まってくれた。信頼できる先生です。</p>
+      <div class="voice-author">
+        <div class="voice-avatar">R</div>
+        <div>
+          <div class="voice-name">R.N. さん</div>
+          <div class="voice-meta">51歳・自営業 / トラウマあり</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Before/After -->
+  <div class="section-header reveal" style="margin-top:80px;">
+    <div class="tag">BEFORE / AFTER</div>
+    <h2>治療<span class="h2-rose">事例</span></h2>
+  </div>
+
+  <div class="cases-grid">
+    <div class="case-card reveal">
+      <div class="case-header">
+        <span class="case-type">CASE 01 — むし歯治療</span>
+        <span class="case-period">通院3回</span>
+      </div>
+      <div class="case-body">
+        <div class="case-row">
+          <span class="case-before">C2（象牙質まで到達）</span>
+          <span class="case-arrow">→</span>
+          <span class="case-after">コンポジットレジン充填</span>
+        </div>
+        <div class="case-row">
+          <span class="case-before">痛みで眠れない</span>
+          <span class="case-arrow">→</span>
+          <span class="case-after">痛みなし・機能回復</span>
+        </div>
+        <div class="case-result">初診相談から2週間で治療完了</div>
+      </div>
+    </div>
+    <div class="case-card reveal">
+      <div class="case-header">
+        <span class="case-type">CASE 02 — 歯周病ケア</span>
+        <span class="case-period">通院5回</span>
+      </div>
+      <div class="case-body">
+        <div class="case-row">
+          <span class="case-before">歯茎から出血・口臭</span>
+          <span class="case-arrow">→</span>
+          <span class="case-after">スケーリング+指導</span>
+        </div>
+        <div class="case-row">
+          <span class="case-before">プローブ深4〜5mm</span>
+          <span class="case-arrow">→</span>
+          <span class="case-after">3mm以下に改善</span>
+        </div>
+        <div class="case-result">3ヶ月後検査で数値が正常域に</div>
+      </div>
+    </div>
+    <div class="case-card reveal">
+      <div class="case-header">
+        <span class="case-type">CASE 03 — 欠損補綴</span>
+        <span class="case-period">通院4回</span>
+      </div>
+      <div class="case-body">
+        <div class="case-row">
+          <span class="case-before">奥歯1本欠損・咀嚼困難</span>
+          <span class="case-arrow">→</span>
+          <span class="case-after">部分入れ歯</span>
+        </div>
+        <div class="case-row">
+          <span class="case-before">食事が苦痛</span>
+          <span class="case-arrow">→</span>
+          <span class="case-after">普通に食べられる</span>
+        </div>
+        <div class="case-result">費用・期間を事前に詳細説明済み</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FLOW ========== -->
+<section class="flow" id="flow">
+  <div class="section-header reveal">
+    <div class="tag">FIRST VISIT</div>
+    <h2>初診の<span class="h2-rose">流れ</span></h2>
+    <p class="section-lead">初めての方でも迷わないよう、4ステップでご案内します。</p>
+  </div>
+
+  <div class="flow-grid">
+    <div class="flow-step reveal">
+      <div class="flow-icon-wrap"><span class="flow-icon">📞</span></div>
+      <div class="flow-num">STEP 01</div>
+      <div class="flow-title">予約する</div>
+      <div class="flow-body">電話・LINE・WEBフォームから。「不安なことを話したい」だけでもOKです。</div>
+    </div>
+    <div class="flow-step reveal">
+      <div class="flow-icon-wrap"><span class="flow-icon">📝</span></div>
+      <div class="flow-num">STEP 02</div>
+      <div class="flow-title">問診・相談</div>
+      <div class="flow-body">怖いこと・過去の経験を教えてください。その日の治療レベルを一緒に決めます。</div>
+    </div>
+    <div class="flow-step reveal">
+      <div class="flow-icon-wrap"><span class="flow-icon">🔍</span></div>
+      <div class="flow-num">STEP 03</div>
+      <div class="flow-title">検査・説明</div>
+      <div class="flow-body">レントゲン・口腔内の状態を確認。治療計画と費用を文書でご説明します。</div>
+    </div>
+    <div class="flow-step reveal">
+      <div class="flow-icon-wrap"><span class="flow-icon">✅</span></div>
+      <div class="flow-num">STEP 04</div>
+      <div class="flow-title">治療開始 or 帰宅</div>
+      <div class="flow-body">「今日は話だけでいい」も全く問題なし。次回の予約だけして帰ることもできます。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== PLAN ========== -->
+<section class="plan" id="plan">
+  <div class="section-header reveal">
+    <div class="tag">PRICING</div>
+    <h2>初診料・<span class="h2-rose">料金</span>目安</h2>
+    <p class="section-lead">費用の不安をなくすために、全て事前にご説明します。保険診療対応。</p>
+  </div>
+
+  <div class="plan-grid">
+    <div class="plan-first reveal">
+      <div class="plan-badge">FIRST VISIT</div>
+      <div class="plan-name">初診料（保険適用）</div>
+      <div class="plan-price">¥3,000</div>
+      <div class="plan-price-note">〜（3割負担の場合）</div>
+      <ul class="plan-includes">
+        <li>問診・口腔内検査</li>
+        <li>レントゲン撮影（必要な場合）</li>
+        <li>治療計画の説明・文書お渡し</li>
+        <li>不安・恐怖の相談タイム</li>
+        <li>「今日は帰る」も無料</li>
+      </ul>
+    </div>
+
+    <div class="plan-menu">
+      <div class="menu-item reveal">
+        <div class="menu-cat">BASIC</div>
+        <div class="menu-name">むし歯治療</div>
+        <div class="menu-price">¥1,500〜</div>
+        <div class="menu-note">保険適用 / 範囲により変動</div>
+      </div>
+      <div class="menu-item reveal">
+        <div class="menu-cat">BASIC</div>
+        <div class="menu-name">歯石除去・クリーニング</div>
+        <div class="menu-price">¥3,000〜</div>
+        <div class="menu-note">保険適用 / 状態により変動</div>
+      </div>
+      <div class="menu-item reveal">
+        <div class="menu-cat">STANDARD</div>
+        <div class="menu-name">歯周病治療</div>
+        <div class="menu-price">¥1,000〜/回</div>
+        <div class="menu-note">保険適用 / 複数回必要な場合あり</div>
+      </div>
+      <div class="menu-item reveal">
+        <div class="menu-cat">STANDARD</div>
+        <div class="menu-name">被せ物・詰め物</div>
+        <div class="menu-price">¥5,000〜</div>
+        <div class="menu-note">保険 / セラミック選択可</div>
+      </div>
+      <div class="menu-item reveal">
+        <div class="menu-cat">ADVANCED</div>
+        <div class="menu-name">根管治療（神経の治療）</div>
+        <div class="menu-price">¥10,000〜</div>
+        <div class="menu-note">保険適用 / 歯の状態による</div>
+      </div>
+      <div class="menu-item reveal">
+        <div class="menu-cat">ADVANCED</div>
+        <div class="menu-name">入れ歯・ブリッジ</div>
+        <div class="menu-price">¥15,000〜</div>
+        <div class="menu-note">保険適用 / 素材選択あり</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FAQ ========== -->
+<section class="faq" id="faq">
+  <div class="section-header reveal">
+    <div class="tag">FAQ</div>
+    <h2>よくある<span class="h2-rose">質問</span></h2>
+    <p class="section-lead">不安を解消してから来院ください。どんな質問も歓迎です。</p>
+  </div>
+
+  <div class="faq-list">
+    <div class="faq-item reveal">
+      <div class="faq-q">
+        <span class="faq-q-text"><span class="faq-q-mark">Q</span>本当に「今日は治療しない」でいいですか？</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">
+        <div class="faq-a-inner">はい、全く問題ありません。「まず話を聞いてほしい」「どんな状態か確認だけしたい」という来院は大歓迎です。当日の治療レベルは完全に患者さんが決めます。初診当日に「やっぱり帰ります」も無料です。</div>
+      </div>
+    </div>
+
+    <div class="faq-item reveal">
+      <div class="faq-q">
+        <span class="faq-q-text"><span class="faq-q-mark">Q</span>麻酔の注射自体が怖いのですが大丈夫ですか？</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">
+        <div class="faq-a-inner">表面麻酔ジェルを注射部位に塗布し、麻酔が効いてから細い針を使用します。「チクッとする」感覚はほぼなくなります。また注射のスピードをゆっくりにすることで注入時の痛みも最小化しています。過去に強い恐怖を感じた方には笑気麻酔のご案内も可能です。</div>
+      </div>
+    </div>
+
+    <div class="faq-item reveal">
+      <div class="faq-q">
+        <span class="faq-q-text"><span class="faq-q-mark">Q</span>費用が心配です。治療前に総額を教えてもらえますか？</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">
+        <div class="faq-a-inner">初診時に検査結果をもとに治療計画書を作成し、想定費用を文書でお渡しします。「いくらかかるかわからない」という不安を持ったまま治療は進めません。当日の追加治療も費用確認なしには行いません。</div>
+      </div>
+    </div>
+
+    <div class="faq-item reveal">
+      <div class="faq-q">
+        <span class="faq-q-text"><span class="faq-q-mark">Q</span>予約のキャンセルや変更はできますか？</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">
+        <div class="faq-a-inner">もちろんです。LINE・電話・WEBフォームから前日まで変更可能です。「緊張してきたから今日はやっぱりやめたい」という直前キャンセルも理解します。キャンセル料は頂きません。次回の予約も気軽にご相談ください。</div>
+      </div>
+    </div>
+
+    <div class="faq-item reveal">
+      <div class="faq-q">
+        <span class="faq-q-text"><span class="faq-q-mark">Q</span>子どもの頃のトラウマがある場合、特別な配慮はありますか？</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">
+        <div class="faq-a-inner">初診問診票に「過去の歯科体験で怖かったこと」を記入いただく欄があります。担当医がその情報をもとに、特に気をつける点を事前に把握した上で診療します。必要に応じて笑気麻酔・静脈内鎮静（眠った状態での治療）もご相談可能です。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== CTA FINAL ========== -->
+<section class="cta-final" id="cta">
+  <div class="cta-glow"></div>
+
+  <div class="tag reveal" style="justify-content:center;">FIRST STEP</div>
+  <h2 class="reveal">
+    <span style="color:var(--muted);display:block;font-size:clamp(20px,3vw,36px);margin-bottom:8px;">怖くていいんです。</span>
+    <span class="h2-rose">まず話しに来てください。</span>
+  </h2>
+
+  <p class="lead reveal">治療しなくてもいい初診があります。
+    あなたのペースで、あなたが決めた範囲だけ進めます。
+    「相談だけ」でも、一歩踏み出した勇気を歓迎します。</p>
+
+  <div class="cta-actions reveal">
+    <a href="tel:03-0000-0000" class="btn-primary">
+      <span>📞 お電話で予約する</span>
+    </a>
+    <a href="#" class="btn-primary" style="background:var(--card-mid);border:1px solid var(--rose-border);color:var(--rose);">
+      <span>LINE で予約・相談する</span>
+    </a>
+    <a href="#" class="btn-primary" style="background:transparent;border:1px solid var(--rose-border);color:var(--rose-lt);">
+      <span>WEB フォームから予約</span>
+    </a>
+  </div>
+
+  <p class="cta-note reveal">診療時間：月〜金 9:00〜19:00 / 土 9:00〜17:00（日曜・祝日休診）
+    東京都港区芝浦〇〇丁目〇-〇 / 最寄：田町駅徒歩5分</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">YASASHII<span> DENTAL</span></div>
+  <div class="footer-copy">© 2025 Yasashii Dental. All rights reserved.</div>
+  <div class="footer-links">
+    <a href="#">プライバシーポリシー</a>
+    <a href="#">特定商取引法</a>
+    <a href="#">採用情報</a>
+  </div>
+</footer>
+
+<!-- ===== SCRIPTS ===== -->
+<script>
+  // Custom cursor
+  const cursor     = document.getElementById('cursor');
+  const cursorRing = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px';
+    cursor.style.top  = my + 'px';
+  });
+
+  (function animateRing() {
+    rx += (mx - rx) * 0.1;
+    ry += (my - ry) * 0.1;
+    cursorRing.style.left = rx + 'px';
+    cursorRing.style.top  = ry + 'px';
+    requestAnimationFrame(animateRing);
+  })();
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+  revealEls.forEach(el => io.observe(el));
+
+  // FAQ accordion
+  document.querySelectorAll('.faq-q').forEach(q => {
+    q.addEventListener('click', () => {
+      const item = q.closest('.faq-item');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>採用AI自動化 提案書｜株式会社グローバルリンク様 — Senkode</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+  <style>
+    [class*="grid"] > *, [class*="inner"] > *, [class*="wrap"] > * { min-width: 0; }
+
+    img, video, iframe { max-width: 100%; height: auto; }
+
+    html { overflow-x: hidden; }
+
+    :root {
+      --black:   #0A0A0A;
+      --dark:    #111111;
+      --card:    #191919;
+      --gold:    #C9A84C;
+      --gold-d:  #6B5420;
+      --gold-a:  rgba(201,168,76,0.12);
+      --gold-b:  rgba(201,168,76,0.3);
+      --white:   #F4F1EC;
+      --muted:   rgba(244,241,236,0.4);
+      --border:  rgba(201,168,76,0.1);
+      --ok:      #4ADE80;
+      --ok-a:    rgba(74,222,128,0.12);
+      --ng:      #F87171;
+      --ng-a:    rgba(248,113,113,0.12);
+      --warn:    #FBBF24;
+      --warn-a:  rgba(251,191,36,0.12);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      overflow-x: hidden;
+      background: var(--black); color: var(--white);
+      font-family: 'Noto Sans JP', sans-serif; font-weight: 300;
+      line-height: 1.7;
+    }
+
+    /* ── SLIDE WRAPPER ── */
+    .slide {
+      min-height: 100vh; padding: 80px 80px;
+      display: flex; flex-direction: column; justify-content: center;
+      position: relative; border-bottom: 1px solid var(--border);
+    }
+    .slide-inner { max-width: 1100px; margin: 0 auto; width: 100%; }
+    .slide-num {
+      position: absolute; top: 32px; right: 48px;
+      font-family: 'Bebas Neue', cursive;
+      font-size: 13px; letter-spacing: 0.3em; color: var(--gold-d);
+    }
+
+    /* ── TYPOGRAPHY ── */
+    .label {
+      font-size: 10px; letter-spacing: 0.35em; color: var(--gold);
+      margin-bottom: 16px; display: block; font-weight: 400;
+    }
+    .h1 {
+      font-family: 'Bebas Neue', cursive;
+      font-size: clamp(48px, 7vw, 88px);
+      letter-spacing: 0.06em; line-height: 1; color: var(--white);
+    }
+    .h2 {
+      font-size: clamp(24px, 3.5vw, 40px);
+      font-weight: 700; color: var(--white); line-height: 1.35;
+    }
+    .h3 { font-size: 18px; font-weight: 700; color: var(--white); line-height: 1.5; }
+    .lead { font-size: 16px; color: var(--muted); line-height: 1.9; }
+    .body-text { font-size: 14px; color: var(--muted); line-height: 2.1; }
+    strong { color: var(--white); font-weight: 700; }
+
+    /* ── COVER ── */
+    .slide--cover { background: var(--black); }
+    .slide--cover::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 80% 50%, rgba(201,168,76,0.06) 0%, transparent 65%);
+    }
+    .cover-date { font-size: 11px; letter-spacing: 0.2em; color: var(--muted); margin-bottom: 48px; }
+    .cover-title-en {
+      font-family: 'Bebas Neue', cursive;
+      font-size: clamp(40px, 8vw, 96px);
+      letter-spacing: 0.06em; line-height: 0.9; color: var(--white);
+      margin-bottom: 24px;
+    }
+    .cover-title-jp { font-size: clamp(16px, 2.5vw, 24px); font-weight: 700; color: var(--muted); margin-bottom: 48px; }
+    .cover-meta {
+      display: flex; gap: 48px; padding-top: 40px;
+      border-top: 1px solid var(--border);
+    }
+    .meta-item-label { font-size: 9px; letter-spacing: 0.25em; color: var(--gold); margin-bottom: 6px; display: block; }
+    .meta-item-value { font-size: 14px; color: var(--white); }
+    .cover-logo {
+      position: absolute; bottom: 48px; right: 80px;
+      font-family: 'Bebas Neue', cursive;
+      font-size: 18px; letter-spacing: 0.3em; color: var(--gold-d);
+    }
+
+    /* ── DIAGNOSIS ── */
+    .diagnosis-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; margin-top: 48px; }
+    .diag-block { padding: 32px; border: 1px solid var(--border); background: var(--card); }
+    .diag-block-label { font-size: 9px; letter-spacing: 0.25em; margin-bottom: 16px; display: block; }
+    .diag-block-label--problem { color: var(--ng); }
+    .diag-block-label--root { color: var(--warn); }
+    .diag-item {
+      display: flex; gap: 12px; align-items: flex-start;
+      padding: 12px 0; border-bottom: 1px solid var(--border);
+    }
+    .diag-item:last-child { border-bottom: none; }
+    .diag-icon { flex-shrink: 0; font-size: 16px; margin-top: 2px; }
+    .diag-text { font-size: 13px; color: var(--muted); line-height: 1.8; }
+
+    /* ── FLOW ── */
+    .flow-section { margin-top: 48px; }
+    .flow-row {
+      display: grid; grid-template-columns: 160px minmax(0, 1fr);
+      gap: 0; margin-bottom: 2px;
+    }
+    .flow-phase {
+      background: var(--card); border: 1px solid var(--border);
+      padding: 20px 24px; display: flex; align-items: center;
+      justify-content: center; text-align: center;
+    }
+    .flow-phase-name { font-size: 12px; font-weight: 700; color: var(--white); letter-spacing: 0.1em; }
+    .flow-phase-count { font-size: 10px; color: var(--muted); margin-top: 4px; }
+    .flow-tasks { display: flex; gap: 2px; flex: 1; }
+    .flow-task {
+      flex: 1; padding: 16px 14px; font-size: 12px; line-height: 1.6;
+      border: 1px solid var(--border);
+    }
+    .flow-task-name { font-weight: 700; margin-bottom: 4px; }
+    .flow-task-time { font-size: 10px; color: var(--muted); }
+    .flow-task--human { background: var(--card); }
+    .flow-task--human .flow-task-name { color: var(--white); }
+    .flow-task--ai { background: var(--gold-a); border-color: var(--gold-b); }
+    .flow-task--ai .flow-task-name { color: var(--gold); }
+    .flow-task--hybrid { background: var(--warn-a); border-color: rgba(251,191,36,0.3); }
+    .flow-task--hybrid .flow-task-name { color: var(--warn); }
+    .flow-legend {
+      display: flex; gap: 24px; margin-top: 20px; flex-wrap: wrap;
+    }
+    .legend-item { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--muted); }
+    .legend-dot { width: 10px; height: 10px; flex-shrink: 0; }
+    .legend-dot--human { background: var(--card); border: 1px solid var(--border); }
+    .legend-dot--ai { background: var(--gold-a); border: 1px solid var(--gold-b); }
+    .legend-dot--hybrid { background: var(--warn-a); border: 1px solid rgba(251,191,36,0.3); }
+
+    /* ── IMPACT ── */
+    .impact-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2px; margin-top: 48px; }
+    .impact-card { background: var(--card); border: 1px solid var(--border); padding: 32px 24px; }
+    .impact-num {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 52px; letter-spacing: 0.05em; color: var(--gold); line-height: 1;
+    }
+    .impact-unit { font-size: 16px; }
+    .impact-label { font-size: 12px; color: var(--muted); margin-top: 8px; line-height: 1.6; }
+    .impact-note { font-size: 10px; color: var(--gold-d); margin-top: 8px; }
+
+    /* ── ROADMAP ── */
+    .roadmap { margin-top: 48px; }
+    .roadmap-phase {
+      display: grid; grid-template-columns: 120px minmax(0, 1fr);
+      gap: 2px; margin-bottom: 2px;
+    }
+    .roadmap-label {
+      background: var(--card); border: 1px solid var(--border);
+      padding: 24px 20px; display: flex; flex-direction: column;
+      justify-content: center; align-items: center; text-align: center; gap: 6px;
+    }
+    .roadmap-label-period { font-size: 10px; letter-spacing: 0.15em; color: var(--gold); }
+    .roadmap-label-name { font-size: 13px; font-weight: 700; color: var(--white); }
+    .roadmap-items {
+      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2px;
+    }
+    .roadmap-item {
+      padding: 20px 20px; font-size: 12px; border: 1px solid var(--border);
+    }
+    .roadmap-item--phase1 { background: rgba(201,168,76,0.06); }
+    .roadmap-item--phase2 { background: rgba(74,222,128,0.05); }
+    .roadmap-item--phase3 { background: rgba(147,197,253,0.05); }
+    .roadmap-item-task { font-weight: 700; color: var(--white); margin-bottom: 6px; }
+    .roadmap-item-desc { color: var(--muted); line-height: 1.7; font-size: 11px; }
+
+    /* ── FEE ── */
+    .fee-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2px; margin-top: 48px; }
+    .fee-card { background: var(--card); border: 1px solid var(--border); padding: 32px 28px; }
+    .fee-card.featured { border-color: var(--gold); border-width: 1px; }
+    .fee-plan { font-size: 10px; letter-spacing: 0.25em; color: var(--gold); margin-bottom: 12px; display: block; }
+    .fee-name { font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 20px; }
+    .fee-price {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 44px; color: var(--gold); line-height: 1;
+    }
+    .fee-price span { font-size: 16px; }
+    .fee-note { font-size: 11px; color: var(--muted); margin: 8px 0 24px; }
+    .fee-list { list-style: none; }
+    .fee-list li {
+      font-size: 12px; color: var(--muted); padding: 8px 0;
+      border-bottom: 1px solid var(--border); display: flex; gap: 8px; line-height: 1.7;
+    }
+    .fee-list li::before { content: '—'; color: var(--gold-d); flex-shrink: 0; }
+
+    /* ── OBJECTION ── */
+    .objection-list { margin-top: 40px; display: flex; flex-direction: column; gap: 2px; }
+    .obj-item { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2px; }
+    .obj-q { background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.2); padding: 24px 28px; }
+    .obj-a { background: var(--card); border: 1px solid var(--border); padding: 24px 28px; }
+    .obj-label { font-size: 9px; letter-spacing: 0.2em; margin-bottom: 10px; display: block; }
+    .obj-label--q { color: var(--ng); }
+    .obj-label--a { color: var(--ok); }
+    .obj-text { font-size: 13px; line-height: 1.9; }
+    .obj-q .obj-text { color: rgba(248,113,113,0.9); }
+    .obj-a .obj-text { color: var(--muted); }
+
+    /* ── NEXT STEP ── */
+    .nextstep-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2px; margin-top: 48px; }
+    .step-card { background: var(--card); border: 1px solid var(--border); padding: 32px 28px; }
+    .step-num-big {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 56px; color: var(--gold); opacity: 0.3;
+      line-height: 1; margin-bottom: 16px;
+    }
+    .step-title { font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 12px; }
+    .step-desc { font-size: 13px; color: var(--muted); line-height: 1.9; }
+    .step-date { font-size: 10px; letter-spacing: 0.15em; color: var(--gold); margin-top: 16px; }
+
+    /* ── CLOSING ── */
+    .slide--closing { background: var(--dark); text-align: center; }
+    .closing-quote {
+      font-size: clamp(18px, 3vw, 32px); font-weight: 700; color: var(--white);
+      line-height: 1.6; margin: 40px 0;
+      padding: 40px; border: 1px solid var(--border);
+    }
+    .closing-quote em { font-style: normal; color: var(--gold); }
+
+    @media (max-width: 900px) {
+      .slide { padding: 60px 32px; }
+      .diagnosis-grid { grid-template-columns: minmax(0, 1fr); }
+      .flow-row { grid-template-columns: minmax(0, 1fr); }
+      .flow-tasks { flex-direction: column; }
+      .impact-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+      .roadmap-phase { grid-template-columns: minmax(0, 1fr); }
+      .roadmap-items { grid-template-columns: minmax(0, 1fr); }
+      .fee-grid { grid-template-columns: minmax(0, 1fr); }
+      .obj-item { grid-template-columns: minmax(0, 1fr); }
+      .nextstep-grid { grid-template-columns: minmax(0, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .slide { padding: 48px 20px; }
+      .slide-inner { max-width: 100%; }
+      .cover-title-en { font-size: clamp(28px, 8vw, 48px); }
+      .cover-meta { flex-direction: column; gap: 16px; }
+      .impact-grid { grid-template-columns: minmax(0, 1fr); }
+      .h2 { font-size: clamp(16px, 4.5vw, 22px); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SLIDE 01: COVER -->
+  <section class="slide slide--cover">
+    <div class="slide-inner">
+      <p class="cover-date">2026.05 — CONFIDENTIAL</p>
+      <div class="cover-title-en">HIRING<br>AI AUTOMATION</div>
+      <div class="cover-title-jp">採用業務 AI自動化 提案書</div>
+      <div class="cover-meta">
+        <div>
+          <span class="meta-item-label">PREPARED FOR</span>
+          <div class="meta-item-value">株式会社グローバルリンク<br>人事部長 佐藤 様</div>
+        </div>
+        <div>
+          <span class="meta-item-label">PREPARED BY</span>
+          <div class="meta-item-value">Senkode<br>AI業務自動化コンサルタント 中谷</div>
+        </div>
+        <div>
+          <span class="meta-item-label">SCOPE</span>
+          <div class="meta-item-value">採用フロー全体の<br>AI化設計・実装支援</div>
+        </div>
+      </div>
+    </div>
+    <div class="cover-logo">Senkode</div>
+    <div class="slide-num">01 / 07</div>
+  </section>
+
+  <!-- SLIDE 02: DIAGNOSIS -->
+  <section class="slide">
+    <div class="slide-inner">
+      <span class="label">DIAGNOSIS — 現状診断</span>
+      <h2 class="h2">問題は「人手不足」ではない。<br>「判断が必要ない作業に、判断できる人が使われている」</h2>
+      <div class="diagnosis-grid">
+        <div class="diag-block">
+          <span class="diag-block-label diag-block-label--problem">表面に見えている問題</span>
+          <div class="diag-item">
+            <span class="diag-icon">📮</span>
+            <span class="diag-text">月200件の応募に対し、<strong>書類確認だけで1人あたり週15〜20時間</strong>が消える</span>
+          </div>
+          <div class="diag-item">
+            <span class="diag-icon">📅</span>
+            <span class="diag-text">面接日程の調整メールが1往復平均<strong>3.2回</strong>。1件あたり30〜45分</span>
+          </div>
+          <div class="diag-item">
+            <span class="diag-icon">😶</span>
+            <span class="diag-text">不合格者へのフィードバック連絡が後回しになり、<strong>採用ブランドが静かに傷ついている</strong></span>
+          </div>
+        </div>
+        <div class="diag-block">
+          <span class="diag-block-label diag-block-label--root">本質的な原因</span>
+          <div class="diag-item">
+            <span class="diag-icon">⚡</span>
+            <span class="diag-text">「パターンが決まっている作業」に<strong>人間の判断力が浪費されている</strong>。AIが最も得意な領域に人が使われている状態</span>
+          </div>
+          <div class="diag-item">
+            <span class="diag-icon">🔍</span>
+            <span class="diag-text">人事2名の<strong>本来の仕事（候補者の見極め・採用戦略設計）</strong>に時間が使えていない</span>
+          </div>
+          <div class="diag-item">
+            <span class="diag-icon">💡</span>
+            <span class="diag-text">ツールを入れる前に「<strong>どこに人間の判断が必要か</strong>」を設計しないと、AIを入れても工数は変わらない</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-num">02 / 07</div>
+  </section>
+
+  <!-- SLIDE 03: FLOW REDESIGN -->
+  <section class="slide">
+    <div class="slide-inner">
+      <span class="label">FLOW REDESIGN — 採用フロー再設計</span>
+      <h2 class="h2">AIが担う部分と、人間が担う部分を分ける。</h2>
+      <div class="flow-section">
+        <div class="flow-row">
+          <div class="flow-phase">
+            <div class="flow-phase-name">フェーズ1</div>
+            <div class="flow-phase-count">応募受付</div>
+          </div>
+          <div class="flow-tasks">
+            <div class="flow-task flow-task--ai">
+              <div class="flow-task-name">応募データ自動整形</div>
+              <div class="flow-task-time">AI → 即時</div>
+            </div>
+            <div class="flow-task flow-task--ai">
+              <div class="flow-task-name">自動受付メール送信</div>
+              <div class="flow-task-time">AI → 即時</div>
+            </div>
+            <div class="flow-task flow-task--ai">
+              <div class="flow-task-name">スプレッドシートへ自動記録</div>
+              <div class="flow-task-time">AI → 即時</div>
+            </div>
+          </div>
+        </div>
+        <div class="flow-row">
+          <div class="flow-phase">
+            <div class="flow-phase-name">フェーズ2</div>
+            <div class="flow-phase-count">書類選考</div>
+          </div>
+          <div class="flow-tasks">
+            <div class="flow-task flow-task--ai">
+              <div class="flow-task-name">要件スコアリング</div>
+              <div class="flow-task-time">AI → 5秒/件</div>
+            </div>
+            <div class="flow-task flow-task--hybrid">
+              <div class="flow-task-name">ボーダーライン候補の確認</div>
+              <div class="flow-task-time">人間 + AI補助</div>
+            </div>
+            <div class="flow-task flow-task--human">
+              <div class="flow-task-name">最終通過・不合格判断</div>
+              <div class="flow-task-time">人間（5分/件）</div>
+            </div>
+          </div>
+        </div>
+        <div class="flow-row">
+          <div class="flow-phase">
+            <div class="flow-phase-name">フェーズ3</div>
+            <div class="flow-phase-count">面接調整</div>
+          </div>
+          <div class="flow-tasks">
+            <div class="flow-task flow-task--ai">
+              <div class="flow-task-name">日程調整メール自動送信</div>
+              <div class="flow-task-time">AI → 即時</div>
+            </div>
+            <div class="flow-task flow-task--ai">
+              <div class="flow-task-name">カレンダー自動ブロック</div>
+              <div class="flow-task-time">AI → 即時</div>
+            </div>
+            <div class="flow-task flow-task--ai">
+              <div class="flow-task-name">前日リマインド自動送信</div>
+              <div class="flow-task-time">AI → 自動</div>
+            </div>
+          </div>
+        </div>
+        <div class="flow-row">
+          <div class="flow-phase">
+            <div class="flow-phase-name">フェーズ4</div>
+            <div class="flow-phase-count">面接・選考</div>
+          </div>
+          <div class="flow-tasks">
+            <div class="flow-task flow-task--ai">
+              <div class="flow-task-name">候補者サマリー自動生成</div>
+              <div class="flow-task-time">AI → 面接前</div>
+            </div>
+            <div class="flow-task flow-task--human">
+              <div class="flow-task-name">面接実施・評価</div>
+              <div class="flow-task-time">人間（コア業務）</div>
+            </div>
+            <div class="flow-task flow-task--ai">
+              <div class="flow-task-name">評価シート自動集計</div>
+              <div class="flow-task-time">AI → 即時</div>
+            </div>
+          </div>
+        </div>
+        <div class="flow-row">
+          <div class="flow-phase">
+            <div class="flow-phase-name">フェーズ5</div>
+            <div class="flow-phase-count">結果連絡</div>
+          </div>
+          <div class="flow-tasks">
+            <div class="flow-task flow-task--hybrid">
+              <div class="flow-task-name">合否連絡文の下書き生成</div>
+              <div class="flow-task-time">AI下書き → 人間確認</div>
+            </div>
+            <div class="flow-task flow-task--ai">
+              <div class="flow-task-name">不合格者への自動連絡</div>
+              <div class="flow-task-time">AI → 24時間以内</div>
+            </div>
+            <div class="flow-task flow-task--ai">
+              <div class="flow-task-name">採用レポート自動生成</div>
+              <div class="flow-task-time">AI → 月次</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flow-legend">
+        <div class="legend-item"><div class="legend-dot legend-dot--ai"></div>AIが担う（自動化）</div>
+        <div class="legend-item"><div class="legend-dot legend-dot--hybrid"></div>AIが補助・人間が確認</div>
+        <div class="legend-item"><div class="legend-dot legend-dot--human"></div>人間が担う（判断が必要）</div>
+      </div>
+    </div>
+    <div class="slide-num">03 / 07</div>
+  </section>
+
+  <!-- SLIDE 04: IMPACT -->
+  <section class="slide">
+    <div class="slide-inner">
+      <span class="label">EXPECTED IMPACT — 期待効果</span>
+      <h2 class="h2">工数を削るのではなく、<br>人間の時間を「判断」に集中させる。</h2>
+      <div class="impact-grid">
+        <div class="impact-card">
+          <div class="impact-num">75<span>%</span></div>
+          <div class="impact-label">書類選考の工数削減</div>
+          <div class="impact-note">スコアリングをAIが担うことで、人間の確認時間を集中化</div>
+        </div>
+        <div class="impact-card">
+          <div class="impact-num">0<span>回</span></div>
+          <div class="impact-label">日程調整メールの往復</div>
+          <div class="impact-note">自動調整システムで候補者がURLから日程選択</div>
+        </div>
+        <div class="impact-card">
+          <div class="impact-num">24<span>h</span></div>
+          <div class="impact-label">以内に全候補者へ連絡</div>
+          <div class="impact-note">不合格連絡の遅れによる採用ブランド毀損を防ぐ</div>
+        </div>
+        <div class="impact-card">
+          <div class="impact-num">+30<span>h</span></div>
+          <div class="impact-label">人事2名の月間余剰時間</div>
+          <div class="impact-note">採用戦略・候補者体験設計に再投資できる時間</div>
+        </div>
+      </div>
+      <div style="margin-top:32px;padding:24px 28px;border:1px solid var(--border);background:var(--card)">
+        <p class="body-text"><strong>重要：</strong>これらの数字は「削減」が目的ではありません。浮いた30時間を「採用の質を上げる判断」に使うことで、<strong>採用コストあたりの定着率・パフォーマンスが上がる</strong>のが本当のゴールです。AIで採用を「楽にする」のではなく、「強くする」という設計思想で進めます。</p>
+      </div>
+    </div>
+    <div class="slide-num">04 / 07</div>
+  </section>
+
+  <!-- SLIDE 05: ROADMAP -->
+  <section class="slide">
+    <div class="slide-inner">
+      <span class="label">ROADMAP — 実装ロードマップ</span>
+      <h2 class="h2">一気にやらない。3フェーズで確実に定着させる。</h2>
+      <div class="roadmap">
+        <div class="roadmap-phase">
+          <div class="roadmap-label">
+            <span class="roadmap-label-period">Month 1</span>
+            <span class="roadmap-label-name">基盤構築</span>
+          </div>
+          <div class="roadmap-items">
+            <div class="roadmap-item roadmap-item--phase1">
+              <div class="roadmap-item-task">応募データ自動整形</div>
+              <div class="roadmap-item-desc">GASで応募フォームの回答を自動整形・スプレッドシートへ記録</div>
+            </div>
+            <div class="roadmap-item roadmap-item--phase1">
+              <div class="roadmap-item-task">自動受付メール設定</div>
+              <div class="roadmap-item-desc">応募直後の自動返信テンプレートを整備。候補者体験の第一印象を改善</div>
+            </div>
+            <div class="roadmap-item roadmap-item--phase1">
+              <div class="roadmap-item-task">効果測定の仕組みを作る</div>
+              <div class="roadmap-item-desc">自動化前後の工数を計測するダッシュボードを構築</div>
+            </div>
+          </div>
+        </div>
+        <div class="roadmap-phase">
+          <div class="roadmap-label">
+            <span class="roadmap-label-period">Month 2</span>
+            <span class="roadmap-label-name">コア自動化</span>
+          </div>
+          <div class="roadmap-items">
+            <div class="roadmap-item roadmap-item--phase2">
+              <div class="roadmap-item-task">AIスコアリング導入</div>
+              <div class="roadmap-item-desc">Claude APIで書類をスコアリング。判断基準はヒアリングで設計</div>
+            </div>
+            <div class="roadmap-item roadmap-item--phase2">
+              <div class="roadmap-item-task">日程調整自動化</div>
+              <div class="roadmap-item-desc">Calendlyまたは自作URLで候補者が自分で面接枠を選択</div>
+            </div>
+            <div class="roadmap-item roadmap-item--phase2">
+              <div class="roadmap-item-task">合否連絡テンプレ自動生成</div>
+              <div class="roadwork-item-desc">AIが文脈に応じた連絡文を生成。人間が1文追加して送信</div>
+            </div>
+          </div>
+        </div>
+        <div class="roadmap-phase">
+          <div class="roadmap-label">
+            <span class="roadmap-label-period">Month 3</span>
+            <span class="roadmap-label-name">高度化・定着</span>
+          </div>
+          <div class="roadmap-items">
+            <div class="roadmap-item roadmap-item--phase3">
+              <div class="roadmap-item-task">採用レポート自動生成</div>
+              <div class="roadmap-item-desc">月次の応募数・通過率・採用コストを自動集計・レポート出力</div>
+            </div>
+            <div class="roadmap-item roadmap-item--phase3">
+              <div class="roadmap-item-task">候補者サマリー自動生成</div>
+              <div class="roadmap-item-desc">面接前に「この人のポイント」をAIがA4一枚で要約</div>
+            </div>
+            <div class="roadmap-item roadmap-item--phase3">
+              <div class="roadmap-item-task">改善サイクル確立</div>
+              <div class="roadmap-item-desc">3ヶ月のデータをもとに、スコアリング基準と自動化フローを最適化</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-num">05 / 07</div>
+  </section>
+
+  <!-- SLIDE 06: FEE + OBJECTION -->
+  <section class="slide">
+    <div class="slide-inner">
+      <span class="label">FEE & CONCERNS — 費用・よくある懸念</span>
+      <h2 class="h2">費用と、言いにくい懸念を先に全部話す。</h2>
+      <div class="fee-grid">
+        <div class="fee-card">
+          <span class="fee-plan">PHASE 1</span>
+          <div class="fee-name">基盤構築</div>
+          <div class="fee-price">¥150,000<span> 一括</span></div>
+          <p class="fee-note">Month 1の設計・実装・テスト込み</p>
+          <ul class="fee-list">
+            <li>現状フロー調査・ヒアリング（2回）</li>
+            <li>GAS自動化スクリプト構築</li>
+            <li>受付メールテンプレート設計</li>
+            <li>効果測定ダッシュボード構築</li>
+            <li>操作マニュアル納品</li>
+          </ul>
+        </div>
+        <div class="fee-card featured">
+          <span class="fee-plan">PHASE 1〜3 FULL</span>
+          <div class="fee-name">フル支援（推奨）</div>
+          <div class="fee-price">¥80,000<span>/月 × 3ヶ月</span></div>
+          <p class="fee-note">設計から定着まで伴走。月次改善込み</p>
+          <ul class="fee-list">
+            <li>Phase 1〜3 全実装</li>
+            <li>月1回レビュー（Zoom 60分）</li>
+            <li>Claude API・GAS費用別途</li>
+            <li>3ヶ月後に効果測定レポート</li>
+            <li>追加改善2回まで無料対応</li>
+          </ul>
+        </div>
+        <div class="fee-card">
+          <span class="fee-plan">ONGOING</span>
+          <div class="fee-name">月次保守・改善</div>
+          <div class="fee-price">¥30,000<span>/月</span></div>
+          <p class="fee-note">Phase 3完了後の継続サポート</p>
+          <ul class="fee-list">
+            <li>月次レポートの確認・提案</li>
+            <li>スコアリング基準の調整</li>
+            <li>小規模追加改善対応</li>
+            <li>チャット相談（無制限）</li>
+          </ul>
+        </div>
+      </div>
+      <div class="objection-list" style="margin-top:32px">
+        <div class="obj-item">
+          <div class="obj-q">
+            <span class="obj-label obj-label--q">CONCERN</span>
+            <p class="obj-text">「AIに選考させたら、良い人材を見落としそうで怖い」</p>
+          </div>
+          <div class="obj-a">
+            <span class="obj-label obj-label--a">ANSWER</span>
+            <p class="obj-text" style="color:var(--muted)">AIは「明らかに要件を満たさない応募者」を除外するだけです。<strong>最終判断は必ず人間</strong>。AIがやるのは「人間が判断すべき候補者を絞り込む」作業です。見落としではなく、見るべき候補者の質が上がります。</p>
+          </div>
+        </div>
+        <div class="obj-item">
+          <div class="obj-q">
+            <span class="obj-label obj-label--q">CONCERN</span>
+            <p class="obj-text">「システムが複雑になって、結局使わなくなりそう」</p>
+          </div>
+          <div class="obj-a">
+            <span class="obj-label obj-label--a">ANSWER</span>
+            <p class="obj-text" style="color:var(--muted)">人事担当者が触るのは<strong>Googleスプレッドシートとメールだけ</strong>です。裏側の自動化は全部こちらが構築・保守します。「難しいシステムが入ってくる」のではなく「今と同じツールで仕事が減る」感覚で使えます。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-num">06 / 07</div>
+  </section>
+
+  <!-- SLIDE 07: NEXT STEP + CLOSING -->
+  <section class="slide">
+    <div class="slide-inner">
+      <span class="label">NEXT STEP — 次のアクション</span>
+      <h2 class="h2">今日決めなくていい。<br>まず「現状フロー」を一緒に書き出すことから始めましょう。</h2>
+      <div class="nextstep-grid">
+        <div class="step-card">
+          <div class="step-num-big">01</div>
+          <div class="step-title">現状フローの棚卸し（60分）</div>
+          <p class="step-desc">人事の方に実際の採用フローを聞かせてください。何に時間がかかっているか、どこに詰まりがあるかを一緒に可視化します。</p>
+          <div class="step-date">来週中 → Zoom 60分</div>
+        </div>
+        <div class="step-card">
+          <div class="step-num-big">02</div>
+          <div class="step-title">自動化スコープの確定</div>
+          <p class="step-desc">フローを見た上で「どこをAI化するか・しないか」を決めます。全部自動化しない方がいい箇所も必ずあります。そこを正直に伝えます。</p>
+          <div class="step-date">2週間後 → 提案書v2</div>
+        </div>
+        <div class="step-card">
+          <div class="step-num-big">03</div>
+          <div class="step-title">Phase 1 を小さく始める</div>
+          <p class="step-desc">まず1ヶ月、応募受付の自動化だけ試してみる——という選択肢もあります。費用対効果を体感してから継続判断できます。</p>
+          <div class="step-date">ご希望に応じて柔軟に</div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-num">07 / 07</div>
+  </section>
+
+  <!-- CLOSING -->
+  <section class="slide slide--closing">
+    <div class="slide-inner" style="text-align:center">
+      <span class="label">SENKODE</span>
+      <div class="closing-quote">
+        「ツールを売りに来たのではありません。<br>
+        <em>あなたの採用が、強くなるための設計</em>を持ってきました。」
+      </div>
+      <p class="lead" style="margin-bottom:32px">まずは現状フローの棚卸しから。費用は一切かかりません。</p>
+      <div style="font-size:13px;color:var(--muted);letter-spacing:0.15em">
+        Senkode 中谷 — senkode.jp — contact@senkode.jp
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>

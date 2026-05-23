@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Organization — Senkode</title>
+  <meta name="description" content="Senkodeの組織構造。JUNを頂点にC-Suiteと9つの業界特化AIエージェント事業部が自律的に成長し続ける。">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital@1&family=Noto+Sans+JP:wght@100;200;300;700&display=swap" rel="stylesheet">
+  <style>
+    img, video, iframe { max-width: 100%; height: auto; }
+
+    html { overflow-x: hidden; }
+
+    :root {
+      --gold:       #C9A84C;
+      --gold-light: #E8C97A;
+      --gold-dim:   #6B5420;
+      --black:      #080808;
+      --off-black:  #0F0F0F;
+      --card:       #111111;
+      --white:      #F4F1EC;
+      --muted:      rgba(244,241,236,0.35);
+      --border:     rgba(201,168,76,0.1);
+      --gold-hover:    rgba(201,168,76,0.1);
+      --gold-alpha-40: rgba(201,168,76,0.4);
+      --gold-alpha-30: rgba(201,168,76,0.3);
+      --gold-alpha-50: rgba(201,168,76,0.5);
+      --gold-grid:     rgba(201,168,76,0.03);
+      --nav-bg:        rgba(15,15,15,0.85);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    p, li, h1, h2, h3, h4, span, div, td, dt, dd, label {
+      word-break: keep-all;
+      overflow-wrap: break-word;
+      line-break: strict;
+    }
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: none;
+      word-break: keep-all;
+      overflow-wrap: break-word;
+      line-break: strict;
+    }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dim); }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(var(--gold-grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--gold-grid) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none; z-index: 0;
+    }
+
+    .reveal {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
+      transition-delay: var(--delay, 0s);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* CURSOR */
+    .cursor-dot {
+      position: fixed; width: 8px; height: 8px; background: var(--gold);
+      border-radius: 50%; transform: translate(-50%,-50%);
+      pointer-events: none; z-index: 9999; mix-blend-mode: difference;
+    }
+    .cursor-ring {
+      position: fixed; width: 32px; height: 32px;
+      border: 1px solid var(--gold-alpha-50); border-radius: 50%;
+      transform: translate(-50%,-50%); pointer-events: none;
+      z-index: 9998; transition: width 0.3s, height 0.3s;
+    }
+    .cursor-ring.expanded { width: 48px; height: 48px; }
+
+    /* NOISE */
+    .noise {
+      position: fixed; inset: 0; pointer-events: none; z-index: 500; opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat: repeat; background-size: 200px 200px;
+    }
+
+    /* NAV */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 60px;
+      background: var(--nav-bg); backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-wordmark { font-family: 'Bebas Neue', cursive; font-size: 22px; letter-spacing: 0.25em; color: var(--white); }
+    .nav-links { display: flex; align-items: center; gap: 32px; }
+    .nav-link { font-size: 11px; letter-spacing: 0.2em; color: var(--muted); text-decoration: none; transition: color 0.3s; }
+    .nav-link:hover, .nav-link.active { color: var(--white); }
+    .nav-cta {
+      font-size: 10px; letter-spacing: 0.2em; color: var(--gold);
+      text-decoration: none; border: 1px solid var(--gold-alpha-40);
+      padding: 8px 16px; transition: background 0.3s;
+    }
+    .nav-cta:hover { background: var(--gold-hover); }
+
+    /* PAGE HERO */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .page-hero {
+      padding: 120px 60px 80px;
+      position: relative; z-index: 1;
+      border-bottom: 1px solid var(--border);
+      animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.1s both;
+    }
+    .page-label {
+      font-size: 10px; letter-spacing: 0.35em; color: var(--gold);
+      font-weight: 100; margin-bottom: 16px;
+    }
+    .page-title {
+      font-family: 'Bebas Neue', cursive;
+      font-size: clamp(56px, 10vw, 120px);
+      letter-spacing: 0.08em; color: var(--white);
+      line-height: 0.9; margin-bottom: 20px;
+    }
+    .page-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-size: 16px;
+      letter-spacing: 0.15em; color: var(--muted);
+    }
+
+    /* COMMON */
+    .section-label { font-size: 10px; letter-spacing: 0.35em; color: var(--gold); font-weight: 100; margin-bottom: 16px; }
+    .section-title {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 700; font-size: clamp(22px, 3vw, 32px);
+      letter-spacing: 0.04em; color: var(--white);
+      margin-bottom: 48px;
+    }
+    .section-title span { color: var(--gold); }
+
+    /* CSUITE */
+    .csuite {
+      padding: 140px 60px;
+      position: relative; z-index: 1;
+    }
+    .csuite-header { margin-bottom: 64px; }
+    .csuite-ceo {
+      background: var(--card);
+      border: 1px solid var(--gold-alpha-40);
+      padding: 48px 56px;
+      display: flex;
+      align-items: center;
+      gap: 48px;
+      max-width: 900px;
+      margin: 0 auto 2px;
+      position: relative;
+      overflow: hidden;
+    }
+    .csuite-ceo::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--gold-dim), var(--gold-light), var(--gold));
+    }
+    .ceo-badge {
+      flex-shrink: 0;
+      display: flex; flex-direction: column; align-items: center; gap: 12px;
+    }
+    .ceo-name {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 24px; letter-spacing: 0.25em; color: var(--white);
+    }
+    .ceo-role {
+      font-size: 10px; letter-spacing: 0.2em; color: var(--gold);
+      text-align: center; line-height: 1.8;
+    }
+    .ceo-desc {
+      font-size: 13px; color: var(--muted); line-height: 2.2; font-weight: 200;
+    }
+
+    .csuite-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 2px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .csuite-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 36px 28px;
+      position: relative;
+      overflow: hidden;
+    }
+    .csuite-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 2px;
+      background: var(--gold);
+      transition: left 0.5s ease;
+    }
+    .csuite-card:hover::before { left: 100%; }
+    .csuite-role-code {
+      font-size: 10px; letter-spacing: 0.3em; color: var(--gold);
+      display: block; margin-bottom: 16px;
+    }
+    .csuite-role-title {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 12px; font-weight: 300;
+      color: var(--white); margin-bottom: 8px;
+      letter-spacing: 0.08em;
+    }
+    .csuite-domain {
+      font-size: 11px; color: var(--muted); line-height: 1.8;
+    }
+
+    /* DIVISIONS */
+    .org-divisions {
+      padding: 0 60px 140px;
+      position: relative; z-index: 1;
+    }
+    .org-divisions-header { margin-bottom: 48px; }
+    .div-list { display: flex; flex-direction: column; gap: 2px; max-width: 1400px; margin: 0 auto; }
+    .div-row {
+      background: var(--card);
+      border: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: 160px 1fr auto;
+      gap: 40px;
+      align-items: center;
+      padding: 32px 40px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s;
+    }
+    .div-row::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 2px;
+      background: var(--gold);
+      transition: left 0.5s ease;
+    }
+    .div-row:hover::before { left: 100%; }
+    .div-row:hover { border-color: rgba(201,168,76,0.25); }
+    .div-code-block { flex-shrink: 0; }
+    .div-num {
+      font-size: 10px; letter-spacing: 0.3em; color: var(--gold);
+      display: block; margin-bottom: 6px;
+    }
+    .div-biz {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300; font-size: 18px;
+      color: var(--white); letter-spacing: 0.04em;
+    }
+    .div-body { }
+    .div-desc {
+      font-size: 12px; color: var(--muted);
+      line-height: 1.9; margin-bottom: 14px; font-weight: 200;
+    }
+    .div-agents { display: flex; gap: 8px; flex-wrap: wrap; }
+    .div-agent-tag {
+      font-size: 9px; letter-spacing: 0.2em; color: var(--gold);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      background: rgba(201,168,76,0.04);
+    }
+    .div-suite {
+      font-size: 10px; letter-spacing: 0.2em; color: var(--muted);
+      white-space: nowrap; text-align: right;
+    }
+
+    /* SYSTEM */
+    .org-system {
+      padding: 0 60px 140px;
+      position: relative; z-index: 1;
+    }
+    .org-system-header { margin-bottom: 48px; }
+    .system-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .system-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 48px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    .system-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .system-card:hover::before { opacity: 1; }
+    .system-icon {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 48px; letter-spacing: 0.05em;
+      color: var(--gold-dim); margin-bottom: 24px;
+      line-height: 1;
+    }
+    .system-label {
+      font-size: 10px; letter-spacing: 0.3em; color: var(--gold);
+      margin-bottom: 12px;
+    }
+    .system-title {
+      font-size: 18px; font-weight: 300;
+      color: var(--white); margin-bottom: 16px;
+      letter-spacing: 0.04em;
+    }
+    .system-desc {
+      font-size: 12px; color: var(--muted); line-height: 2; font-weight: 200;
+    }
+
+    /* CTA */
+    .cta {
+      padding: 140px 60px;
+      text-align: center;
+      position: relative; z-index: 1;
+      border-top: 1px solid var(--border);
+    }
+    .cta-label {
+      font-size: 10px; letter-spacing: 0.35em; color: var(--gold);
+      margin-bottom: 24px;
+    }
+    .cta-title {
+      font-family: 'Bebas Neue', cursive;
+      font-size: clamp(32px, 5vw, 56px);
+      letter-spacing: 0.06em; color: var(--white);
+      margin-bottom: 16px;
+    }
+    .cta-sub {
+      font-size: 13px; color: var(--muted); margin-bottom: 40px;
+    }
+    .btn-primary {
+      display: inline-block;
+      font-size: 11px; letter-spacing: 0.25em;
+      color: var(--black); background: var(--gold);
+      padding: 16px 40px; text-decoration: none;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+
+    /* FOOTER */
+    .footer {
+      padding: 32px 60px;
+      display: flex; justify-content: space-between; align-items: center;
+      border-top: 1px solid var(--border);
+      position: relative; z-index: 1;
+    }
+    .footer-copy { font-size: 11px; color: var(--muted); letter-spacing: 0.1em; }
+    .footer-tag  { font-size: 11px; color: var(--muted); letter-spacing: 0.1em; }
+
+    /* TABLET */
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .nav { padding: 20px 40px; }
+      .page-hero { padding: 100px 40px 60px; }
+      .org-section { padding: 80px 40px; }
+      .footer { padding: 24px 40px; }
+    }
+
+    /* MOBILE */
+    @media (max-width: 768px) {
+      body { cursor: auto; }
+      .cursor-dot, .cursor-ring { display: none; }
+      .nav { padding: 16px 24px; }
+      .nav-links { gap: 16px; }
+      .nav-link { display: none; }
+      .page-hero { padding: 80px 24px 60px; }
+      .csuite { padding: 80px 24px; }
+      .csuite-ceo { flex-direction: column; padding: 32px 28px; text-align: center; }
+      .csuite-grid { grid-template-columns: repeat(2, 1fr); }
+      .org-divisions { padding: 0 24px 80px; }
+      .div-row { grid-template-columns: 1fr; gap: 16px; padding: 24px; }
+      .div-suite { text-align: left; }
+      .org-system { padding: 0 24px 80px; }
+      .system-grid { grid-template-columns: 1fr; }
+      .cta { padding: 80px 24px; }
+      .footer { padding: 24px; flex-direction: column; gap: 8px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+  <div class="noise"></div>
+
+  <nav class="nav">
+    <a href="index.html" class="nav-logo">
+      <svg width="44" height="44" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="logoGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#6B5420"/>
+            <stop offset="50%" stop-color="#E8C97A"/>
+            <stop offset="100%" stop-color="#C9A84C"/>
+          </linearGradient>
+          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <path id="logoCircle" d="M30,5 A25,25,0,1,1,29.999,5" fill="none"/>
+        </defs>
+        <circle cx="30" cy="30" r="28" fill="none" stroke="#C9A84C" stroke-width="0.5" opacity="0.4"/>
+        <circle cx="30" cy="30" r="20" fill="none" stroke="#C9A84C" stroke-width="0.3" opacity="0.2"/>
+        <g transform="translate(-6,-4.4) scale(0.36)">
+          <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="url(#logoGrad)" style="filter:url(#glow)"/>
+        </g>
+        <text font-family="'Bebas Neue','Noto Sans JP',sans-serif" font-size="5" fill="#C9A84C" opacity="0.78">
+          <textPath href="#logoCircle" startOffset="0%" letter-spacing="2.5">Senkode · 閃光 · Senkode · 閃光 ·</textPath>
+        </text>
+      </svg>
+      <span class="nav-wordmark">Senkode</span>
+    </a>
+    <div class="nav-links">
+      <a href="services.html" class="nav-link">SERVICES</a>
+      <a href="works.html" class="nav-link">WORKS</a>
+      <a href="about.html" class="nav-link">ABOUT</a>
+      <a href="organization.html" class="nav-link active">ORGANIZATION</a>
+      <a href="contact.html" class="nav-cta">CONTACT</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="page-hero">
+    <p class="page-label">STRUCTURE</p>
+    <h1 class="page-title">Organization</h1>
+    <p class="page-sub">JUNが率いる、AIエージェントで構成された自律型組織</p>
+  </section>
+
+  <!-- C-Suite -->
+  <section class="csuite">
+    <div class="csuite-header reveal">
+      <p class="section-label">C-SUITE</p>
+      <h2 class="section-title">経営チーム — <span>全員AIエージェント</span></h2>
+    </div>
+
+    <div class="csuite-ceo reveal">
+      <div class="ceo-badge">
+        <svg width="80" height="80" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="ceoGrad" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#6B5420"/>
+              <stop offset="50%" stop-color="#E8C97A"/>
+              <stop offset="100%" stop-color="#C9A84C"/>
+            </linearGradient>
+            <filter id="ceoGlow" x="-30%" y="-30%" width="160%" height="160%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+          <circle cx="100" cy="100" r="96" fill="none" stroke="#C9A84C" stroke-width="0.8" opacity="0.3"/>
+          <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="url(#ceoGrad)" filter="url(#ceoGlow)"/>
+        </svg>
+        <p class="ceo-name">JUN</p>
+        <p class="ceo-role"><span style="display:block">CEO</span><span style="display:block">Chief AI Director</span></p>
+      </div>
+      <p class="ceo-desc">大手運送会社の現役管理職として業務効率化・KPI管理を10年以上担う。AIを制作フローに完全統合し、C-Suiteと9つの事業部を統括。最終意思決定者として全プロジェクトの品質と方向性を管理する。</p>
+    </div>
+
+    <div class="csuite-grid">
+      <div class="csuite-card reveal">
+        <span class="csuite-role-code">CTO</span>
+        <p class="csuite-role-title">Chief Technology Officer</p>
+        <p class="csuite-domain">技術戦略・AI基盤・システム管理。DIVISION 07（IT・SaaS）を管轄。</p>
+      </div>
+      <div class="csuite-card reveal" style="--delay:0.08s">
+        <span class="csuite-role-code">CMO</span>
+        <p class="csuite-role-title">Chief Marketing Officer</p>
+        <p class="csuite-domain">マーケ・集客・コンテンツ戦略。医療・EC・飲食事業部を管轄。</p>
+      </div>
+      <div class="csuite-card reveal" style="--delay:0.16s">
+        <span class="csuite-role-code">CSO</span>
+        <p class="csuite-role-title">Chief Strategy Officer</p>
+        <p class="csuite-domain">戦略・コンサル・新規事業開発。士業・人材事業部を管轄。</p>
+      </div>
+      <div class="csuite-card reveal" style="--delay:0.24s">
+        <span class="csuite-role-code">CPO</span>
+        <p class="csuite-role-title">Chief Production Officer</p>
+        <p class="csuite-domain">制作品質・納品オペレーション。不動産・ウェルネス・Webデザインを管轄。</p>
+      </div>
+      <div class="csuite-card reveal" style="--delay:0.32s">
+        <span class="csuite-role-code">CFO</span>
+        <p class="csuite-role-title">Chief Financial Officer</p>
+        <p class="csuite-domain">収益・単価・財務管理。全9事業部横断で収益最適化を担う。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Divisions -->
+  <section class="org-divisions">
+    <div class="org-divisions-header reveal">
+      <p class="section-label">DIVISIONS</p>
+      <h2 class="section-title">9つの業界特化事業部</h2>
+    </div>
+    <div class="div-list">
+      <div class="div-row reveal">
+        <div class="div-code-block">
+          <span class="div-num">DIVISION 01</span>
+          <p class="div-biz">医療・クリニック</p>
+        </div>
+        <div class="div-body">
+          <p class="div-desc">クリニック・病院・美容医療のAI制作ディレクション。E-E-A-T基準のSEOから患者目線のLPまで一貫対応。</p>
+          <div class="div-agents">
+            <span class="div-agent-tag">MED-01 SEO</span>
+            <span class="div-agent-tag">MED-02 LP</span>
+            <span class="div-agent-tag">MED-03 動画</span>
+          </div>
+        </div>
+        <span class="div-suite">CMO管轄</span>
+      </div>
+      <div class="div-row reveal" style="--delay:0.04s">
+        <div class="div-code-block">
+          <span class="div-num">DIVISION 02</span>
+          <p class="div-biz">不動産・建設</p>
+        </div>
+        <div class="div-body">
+          <p class="div-desc">不動産・建設・リノベーション業向けLP・SEO・会社案内。信頼と実績を前面に押し出すコンテンツ設計。</p>
+          <div class="div-agents">
+            <span class="div-agent-tag">EST-01 LP</span>
+            <span class="div-agent-tag">EST-02 SEO</span>
+            <span class="div-agent-tag">EST-03 会社案内</span>
+          </div>
+        </div>
+        <span class="div-suite">CPO管轄</span>
+      </div>
+      <div class="div-row reveal" style="--delay:0.08s">
+        <div class="div-code-block">
+          <span class="div-num">DIVISION 03</span>
+          <p class="div-biz">EC・D2C</p>
+        </div>
+        <div class="div-body">
+          <p class="div-desc">EC・D2C・オンラインショップ向けの商品LP・SEO・SNS動画。購買転換率を最大化するコンテンツを高速制作。</p>
+          <div class="div-agents">
+            <span class="div-agent-tag">COM-01 商品LP</span>
+            <span class="div-agent-tag">COM-02 SEO</span>
+            <span class="div-agent-tag">COM-03 SNS動画</span>
+          </div>
+        </div>
+        <span class="div-suite">CMO管轄</span>
+      </div>
+      <div class="div-row reveal" style="--delay:0.12s">
+        <div class="div-code-block">
+          <span class="div-num">DIVISION 04</span>
+          <p class="div-biz">士業・コンサル</p>
+        </div>
+        <div class="div-body">
+          <p class="div-desc">弁護士・税理士・社労士・コンサルタント向けのサイト制作・専門SEO・信頼コンテンツ。専門性と権威性を訴求。</p>
+          <div class="div-agents">
+            <span class="div-agent-tag">LEG-01 サイト</span>
+            <span class="div-agent-tag">LEG-02 専門SEO</span>
+            <span class="div-agent-tag">LEG-03 信頼コンテンツ</span>
+          </div>
+        </div>
+        <span class="div-suite">CSO管轄</span>
+      </div>
+      <div class="div-row reveal" style="--delay:0.16s">
+        <div class="div-code-block">
+          <span class="div-num">DIVISION 05</span>
+          <p class="div-biz">人材・採用</p>
+        </div>
+        <div class="div-body">
+          <p class="div-desc">採用LP・会社案内・採用動画の一気通貫制作。求職者に刺さるコンテンツで採用コストを削減。</p>
+          <div class="div-agents">
+            <span class="div-agent-tag">HR-01 採用LP</span>
+            <span class="div-agent-tag">HR-02 会社案内</span>
+            <span class="div-agent-tag">HR-03 採用動画</span>
+          </div>
+        </div>
+        <span class="div-suite">CSO管轄</span>
+      </div>
+      <div class="div-row reveal" style="--delay:0.2s">
+        <div class="div-code-block">
+          <span class="div-num">DIVISION 06</span>
+          <p class="div-biz">飲食・ホテル・観光</p>
+        </div>
+        <div class="div-body">
+          <p class="div-desc">レストラン・ホテル・観光業向け集客LP・グルメSEO・PR動画。予約・来店を直接促すコンテンツ設計。</p>
+          <div class="div-agents">
+            <span class="div-agent-tag">HOS-01 集客LP</span>
+            <span class="div-agent-tag">HOS-02 グルメSEO</span>
+            <span class="div-agent-tag">HOS-03 PR動画</span>
+          </div>
+        </div>
+        <span class="div-suite">CMO管轄</span>
+      </div>
+      <div class="div-row reveal" style="--delay:0.24s">
+        <div class="div-code-block">
+          <span class="div-num">DIVISION 07</span>
+          <p class="div-biz">IT・SaaS</p>
+        </div>
+        <div class="div-body">
+          <p class="div-desc">IT企業・SaaS・スタートアップ向けの技術コンテンツ・SaaS LP・ピッチ動画。開発者にも刺さる技術的訴求。</p>
+          <div class="div-agents">
+            <span class="div-agent-tag">TEC-01 技術コンテンツ</span>
+            <span class="div-agent-tag">TEC-02 SaaS LP</span>
+            <span class="div-agent-tag">TEC-03 ピッチ動画</span>
+          </div>
+        </div>
+        <span class="div-suite">CTO管轄</span>
+      </div>
+      <div class="div-row reveal" style="--delay:0.28s">
+        <div class="div-code-block">
+          <span class="div-num">DIVISION 08</span>
+          <p class="div-biz">ウェルネス・美容</p>
+        </div>
+        <div class="div-body">
+          <p class="div-desc">ジム・エステ・美容サロン・スパ向けのLP・SEO・体験動画。ライフスタイルブランドとしての世界観を訴求。</p>
+          <div class="div-agents">
+            <span class="div-agent-tag">WEL-01 ジム・エステLP</span>
+            <span class="div-agent-tag">WEL-02 SEO</span>
+            <span class="div-agent-tag">WEL-03 体験動画</span>
+          </div>
+        </div>
+        <span class="div-suite">CPO管轄</span>
+      </div>
+      <div class="div-row reveal" style="--delay:0.32s">
+        <div class="div-code-block">
+          <span class="div-num">DIVISION 09</span>
+          <p class="div-biz">Webデザイン（専門）</p>
+        </div>
+        <div class="div-body">
+          <p class="div-desc">UI/UXデザイン・HTML/CSS/JSコーディング・PageSpeed最適化の専門事業部。他部署の制作品質を技術面から支える。</p>
+          <div class="div-agents">
+            <span class="div-agent-tag">WEB-01 UI/UXデザイン</span>
+            <span class="div-agent-tag">WEB-02 HTML/CSS/JS</span>
+            <span class="div-agent-tag">WEB-03 PageSpeed最適化</span>
+          </div>
+        </div>
+        <span class="div-suite">CPO管轄</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- System -->
+  <section class="org-system">
+    <div class="org-system-header reveal">
+      <p class="section-label">SYSTEM</p>
+      <h2 class="section-title">自律成長の仕組み</h2>
+    </div>
+    <div class="system-grid">
+      <div class="system-card reveal">
+        <p class="system-icon">SKILL</p>
+        <p class="system-label">AI SKILLS</p>
+        <h3 class="system-title">Claudeスキルで実装</h3>
+        <p class="system-desc">各C-Suite・各事業部はClaudeスキルファイルとして実装されている。呼び出すと即座に専門エージェントとして起動し、業界固有の知識とルールに従ってアウトプットを生成する。</p>
+      </div>
+      <div class="system-card reveal" style="--delay:0.1s">
+        <p class="system-icon">CRON</p>
+        <p class="system-label">WEEKLY AUTOMATION</p>
+        <h3 class="system-title">週次で自動稼働</h3>
+        <p class="system-desc">毎週月曜9時、各事業部が自律的に起動。最新の業界トレンドをリサーチし、クライアント向け提案書ドラフトを自動生成・保存する。JUNが確認し、案件に使用する。</p>
+      </div>
+      <div class="system-card reveal" style="--delay:0.2s">
+        <p class="system-icon">MEM</p>
+        <p class="system-label">MEMORY ACCUMULATION</p>
+        <h3 class="system-title">案件ごとに知識が蓄積</h3>
+        <p class="system-desc">各事業部はmemory.mdを持ち、案件実績・成功パターン・改善知見を蓄積する。次の稼働時にこれを読み込むことで、回を重ねるごとに提案精度が向上していく。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="reveal">
+      <p class="cta-label">GET STARTED</p>
+      <h2 class="cta-title">あなたの業界に特化した事業部が動き出す。</h2>
+      <p class="cta-sub">まずは無料相談から。24時間以内にご返信します。</p>
+      <a href="contact.html" class="btn-primary">無料相談を申し込む →</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <span class="footer-copy">Senkode © 2026</span>
+    <span class="footer-tag">閃光 — Flash of Light</span>
+  </footer>
+
+  <script>
+    // Cursor
+    const cursorDot  = document.querySelector('.cursor-dot');
+    const cursorRing = document.querySelector('.cursor-ring');
+    let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0, rafId = null;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX; mouseY = e.clientY;
+      cursorDot.style.left = mouseX + 'px';
+      cursorDot.style.top  = mouseY + 'px';
+      if (rafId === null) { ringX = mouseX; ringY = mouseY; rafId = requestAnimationFrame(loop); }
+    });
+    function loop() {
+      const dx = mouseX - ringX, dy = mouseY - ringY;
+      if (Math.abs(dx) > 0.05 || Math.abs(dy) > 0.05) {
+        ringX += dx * 0.15; ringY += dy * 0.15;
+        cursorRing.style.left = ringX + 'px';
+        cursorRing.style.top  = ringY + 'px';
+      }
+      rafId = requestAnimationFrame(loop);
+    }
+
+    // Hover expand
+    document.querySelectorAll('.csuite-card, .csuite-ceo, .div-row, .system-card, .btn-primary').forEach(el => {
+      el.addEventListener('mouseenter', () => cursorRing.classList.add('expanded'));
+      el.addEventListener('mouseleave', () => cursorRing.classList.remove('expanded'));
+    });
+
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+      });
+    }, { threshold: 0.06 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

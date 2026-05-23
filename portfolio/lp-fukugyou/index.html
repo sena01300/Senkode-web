@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SHIFT BASE — 現役管理職が伴走する副業スタートプログラム</title>
+  <meta name="description" content="51歳の現役管理職が実践中のリアルなロードマップ。本業を続けながら月5万円の副収入を作る3ヶ月プログラム。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@1,400;1,600&family=Noto+Sans+JP:wght@100;200;300;400;700&display=swap" rel="stylesheet">
+  <style>
+    [class*="grid"] > *, [class*="inner"] > *, [class*="wrap"] > * { min-width: 0; }
+
+    img, video, iframe { max-width: 100%; height: auto; }
+
+    html { overflow-x: hidden; }
+
+    :root {
+      --gold:       #10B981;
+      --gold-light: #6EE7B7;
+      --gold-dim:   #065F46;
+      --black:      #080808;
+      --off-black:  #080E0C;
+      --card:       #0D1410;
+      --white:      #F0FDF8;
+      --muted:      rgba(240,253,248,0.4);
+      --muted-sm:   rgba(240,253,248,0.25);
+      --border:     rgba(16,185,129,0.14);
+      --gold-glow:  rgba(16,185,129,0.06);
+      --gold-grid:  rgba(16,185,129,0.025);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(var(--gold-grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--gold-grid) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none; z-index: 0;
+    }
+
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
+
+    .reveal {
+      opacity: 0; transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
+      will-change: opacity, transform;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    .gold { color: var(--gold); }
+    .tag {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: 10px; letter-spacing: 4px; color: var(--gold);
+      font-weight: 300; text-transform: uppercase; margin-bottom: 24px;
+    }
+    .tag::before { content: ''; width: 24px; height: 1px; background: var(--gold); }
+
+    /* ===== HEADER ===== */
+    header {
+      position: fixed; top: 0; width: 100%; z-index: 200;
+      background: rgba(8,8,8,0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 60px; height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px; letter-spacing: 5px;
+    }
+    .logo-accent { color: var(--gold); }
+
+    nav { display: flex; align-items: center; gap: 32px; }
+    nav a {
+      color: var(--muted); text-decoration: none;
+      font-size: 11px; letter-spacing: 2px; font-weight: 300;
+      transition: color 0.3s;
+    }
+    nav a:hover { color: var(--white); }
+
+    .nav-cta {
+      background: var(--gold); color: var(--black) !important;
+      font-size: 11px !important; font-weight: 700 !important;
+      letter-spacing: 2px; padding: 10px 24px;
+      transition: background 0.3s !important;
+    }
+    .nav-cta:hover { background: var(--gold-light) !important; }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh;
+      padding: 140px 60px 100px;
+      position: relative; z-index: 1;
+      display: flex; align-items: center;
+      overflow: hidden;
+    }
+
+    .hero-inner { max-width: 760px; }
+
+    .hero-eyebrow {
+      font-size: 10px; letter-spacing: 5px; color: var(--gold);
+      text-transform: uppercase; margin-bottom: 36px;
+      display: flex; align-items: center; gap: 16px;
+      opacity: 0; transform: translateX(-20px);
+      animation: slideIn 0.8s 0.2s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    .hero-eyebrow::before { content: ''; width: 40px; height: 1px; background: var(--gold); }
+
+    @keyframes slideIn { to { opacity: 1; transform: none; } }
+
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(56px, 7vw, 96px);
+      line-height: 0.95; letter-spacing: 2px;
+      margin-bottom: 40px;
+      opacity: 0; transform: translateY(20px);
+      animation: slideIn 0.9s 0.35s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+
+    h1 .accent {
+      display: block;
+      background: linear-gradient(90deg, var(--gold-dim), var(--gold-light), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-story {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 18px; line-height: 1.9; color: var(--muted);
+      max-width: 560px; margin-bottom: 16px;
+      border-left: 2px solid var(--gold-dim); padding-left: 24px;
+      opacity: 0; transform: translateY(20px);
+      animation: slideIn 1s 0.5s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+
+    .hero-story-name {
+      font-size: 11px; letter-spacing: 3px; color: var(--gold);
+      padding-left: 24px; margin-bottom: 48px;
+      opacity: 0; animation: slideIn 1s 0.55s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+
+    .hero-actions {
+      display: flex; align-items: center; gap: 28px; flex-wrap: wrap;
+      opacity: 0; animation: slideIn 1s 0.7s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+
+    .btn-primary {
+      background: var(--gold); color: var(--black);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 12px; font-weight: 700; letter-spacing: 3px;
+      padding: 18px 44px; border: none; cursor: pointer;
+      transition: all 0.3s; text-decoration: none; display: inline-block;
+      position: relative; overflow: hidden;
+    }
+    .btn-primary::after {
+      content: ''; position: absolute; inset: 0;
+      background: var(--gold-light);
+      transform: translateX(-100%); transition: transform 0.3s;
+    }
+    .btn-primary:hover::after { transform: translateX(0); }
+    .btn-primary span { position: relative; z-index: 1; }
+
+    .btn-outline {
+      color: var(--muted); font-size: 12px; letter-spacing: 2px;
+      text-decoration: none; display: flex; align-items: center; gap: 8px;
+      transition: color 0.3s;
+    }
+    .btn-outline::after { content: '→'; transition: transform 0.3s; }
+    .btn-outline:hover { color: var(--white); }
+    .btn-outline:hover::after { transform: translateX(4px); }
+
+    /* Large BG text */
+    .hero-bg-word {
+      position: absolute; right: -60px; top: 50%;
+      transform: translateY(-50%);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 280px; line-height: 1;
+      color: var(--gold); opacity: 0.025;
+      letter-spacing: -8px; pointer-events: none;
+      user-select: none; white-space: nowrap;
+    }
+
+    /* ===== REALITY STRIP ===== */
+    .reality {
+      background: var(--off-black);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 56px 60px;
+      position: relative; z-index: 1;
+    }
+
+    .reality-inner {
+      display: grid; grid-template-columns: 280px minmax(0, 1fr);
+      gap: 60px; align-items: center;
+      max-width: 960px;
+      width: 100%; margin: 0 auto;
+    }
+
+    .reality-label {
+      font-size: 10px; letter-spacing: 4px; color: var(--gold);
+      text-transform: uppercase; margin-bottom: 16px;
+    }
+
+    .reality-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 80px; line-height: 1;
+      background: linear-gradient(180deg, var(--gold-light), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+    }
+
+    .reality-desc {
+      font-size: 13px; color: var(--muted); line-height: 2;
+    }
+
+    .reality-list {
+      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    .reality-item {
+      padding: 24px;
+      border: 1px solid var(--border);
+      background: var(--card);
+    }
+
+    .reality-item strong {
+      display: block; font-size: 14px; font-weight: 400;
+      margin-bottom: 8px; letter-spacing: 0.5px;
+    }
+
+    .reality-item p {
+      font-size: 12px; color: var(--muted); line-height: 1.8;
+    }
+
+    /* ===== SECTIONS ===== */
+    .section {
+      padding: 140px 60px;
+      position: relative; z-index: 1;
+    }
+
+    .section-alt { background: var(--off-black); }
+    .section-header { margin-bottom: 80px; }
+
+    h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(40px, 4.5vw, 60px);
+      letter-spacing: 3px; line-height: 1.05;
+      margin-bottom: 20px;
+    }
+
+    .section-lead {
+      font-size: 15px; color: var(--muted); line-height: 2;
+      max-width: 520px;
+    }
+
+    /* ===== INSTRUCTOR ===== */
+    .instructor-wrap {
+      display: grid; grid-template-columns: minmax(0, 1fr) 380px;
+      gap: 60px; align-items: start;
+    }
+
+    .instructor-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 52px;
+      position: relative; overflow: hidden;
+    }
+
+    .instructor-card::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--gold-dim), var(--gold-light), var(--gold-dim));
+    }
+
+    .instructor-avatar-wrap {
+      display: flex; align-items: center; gap: 24px;
+      margin-bottom: 36px;
+    }
+
+    .instructor-avatar {
+      width: 80px; height: 80px;
+      background: linear-gradient(135deg, var(--gold-dim), var(--card));
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 32px; color: var(--gold);
+      flex-shrink: 0;
+    }
+
+    .instructor-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 32px; letter-spacing: 3px; margin-bottom: 4px;
+    }
+
+    .instructor-role {
+      font-size: 12px; color: var(--gold); letter-spacing: 1px;
+      line-height: 1.6;
+    }
+
+    .instructor-bio {
+      font-size: 14px; color: var(--muted); line-height: 2.2;
+      margin-bottom: 32px;
+    }
+
+    .instructor-tags {
+      display: flex; gap: 8px; flex-wrap: wrap;
+    }
+
+    .i-tag {
+      font-size: 11px; letter-spacing: 1px; color: var(--gold);
+      border: 1px solid rgba(16,185,129,0.3); padding: 4px 12px;
+    }
+
+    .my-journey {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 36px;
+    }
+
+    .journey-title {
+      font-size: 11px; letter-spacing: 3px; color: var(--gold);
+      text-transform: uppercase; margin-bottom: 24px;
+    }
+
+    .journey-steps {
+      display: flex; flex-direction: column; gap: 0;
+    }
+
+    .journey-step {
+      display: grid; grid-template-columns: 60px minmax(0, 1fr);
+      gap: 16px; align-items: start;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .journey-step:last-child { border-bottom: none; }
+
+    .journey-period {
+      font-size: 11px; color: var(--gold); letter-spacing: 1px;
+      padding-top: 2px;
+    }
+
+    .journey-event strong {
+      display: block; font-size: 13px; font-weight: 400;
+      margin-bottom: 4px;
+    }
+
+    .journey-event p {
+      font-size: 12px; color: var(--muted); line-height: 1.7;
+    }
+
+    /* ===== PROBLEMS ===== */
+    .prob-grid {
+      display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 2px;
+    }
+
+    .prob-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 44px 40px;
+      display: flex; gap: 24px;
+      transition: border-color 0.3s;
+    }
+    .prob-item:hover { border-color: rgba(16,185,129,0.3); }
+
+    .prob-icon-big { font-size: 32px; flex-shrink: 0; opacity: 0.5; }
+
+    .prob-item h3 {
+      font-size: 17px; font-weight: 400; letter-spacing: 0.5px;
+      margin-bottom: 12px; line-height: 1.5;
+    }
+
+    .prob-item p {
+      font-size: 13px; color: var(--muted); line-height: 2;
+    }
+
+    /* ===== PROGRAM ===== */
+    .program-grid {
+      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 2px;
+    }
+
+    .prog-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 48px 36px;
+      position: relative; overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .prog-card:hover { border-color: rgba(16,185,129,0.35); transform: translateY(-4px); }
+
+    .prog-card::before {
+      content: ''; position: absolute;
+      top: 0; left: -100%; width: 100%; height: 2px;
+      background: var(--gold); transition: left 0.5s;
+    }
+    .prog-card:hover::before { left: 100%; }
+
+    .prog-month {
+      font-size: 10px; letter-spacing: 4px; color: var(--gold);
+      text-transform: uppercase; margin-bottom: 20px;
+    }
+
+    .prog-title {
+      font-size: 20px; font-weight: 400; letter-spacing: 1px;
+      margin-bottom: 16px; line-height: 1.4;
+    }
+
+    .prog-body {
+      font-size: 13px; color: var(--muted); line-height: 2;
+      margin-bottom: 24px;
+    }
+
+    .prog-items {
+      display: flex; flex-direction: column; gap: 8px;
+    }
+
+    .prog-item {
+      font-size: 12px; color: rgba(16,185,129,0.7);
+      padding-left: 14px;
+      border-left: 2px solid var(--gold-dim);
+      line-height: 1.5;
+    }
+
+    .prog-card .prog-num-bg {
+      position: absolute; bottom: -20px; right: 20px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 120px; color: var(--gold); opacity: 0.04;
+      line-height: 1; pointer-events: none; user-select: none;
+    }
+
+    /* ===== PRICE ===== */
+    .price-wrap {
+      display: grid; grid-template-columns: minmax(0, 1fr) 400px;
+      gap: 60px; align-items: start;
+    }
+
+    .price-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 60px 52px;
+      position: relative; overflow: hidden;
+    }
+
+    .price-card::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--gold-dim), var(--gold-light), var(--gold-dim));
+    }
+
+    .price-badge {
+      display: inline-block;
+      background: var(--gold); color: var(--black);
+      font-size: 10px; font-weight: 700; letter-spacing: 3px;
+      padding: 4px 16px; margin-bottom: 32px;
+    }
+
+    .price-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 32px; letter-spacing: 4px; color: var(--gold);
+      margin-bottom: 8px;
+    }
+
+    .price-sub {
+      font-size: 13px; color: var(--muted); margin-bottom: 40px;
+    }
+
+    .price-amount {
+      display: flex; align-items: baseline; gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .price-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 88px; line-height: 1;
+      background: linear-gradient(180deg, var(--gold-light), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .price-unit { font-size: 22px; color: var(--muted); }
+
+    .price-note {
+      font-size: 12px; color: var(--muted-sm); margin-bottom: 40px;
+    }
+
+    .price-list {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 14px;
+      margin-bottom: 40px;
+    }
+
+    .price-list li {
+      display: flex; align-items: flex-start; gap: 12px;
+      font-size: 14px; line-height: 1.6;
+    }
+
+    .price-list li::before {
+      content: '◆'; color: var(--gold); font-size: 9px;
+      flex-shrink: 0; margin-top: 5px;
+    }
+
+    /* FAQ */
+    .faq-list { display: flex; flex-direction: column; gap: 2px; }
+
+    .faq-item { background: var(--card); border: 1px solid var(--border); }
+
+    .faq-q {
+      padding: 22px 28px;
+      display: flex; justify-content: space-between; align-items: center;
+      cursor: pointer; font-size: 14px; letter-spacing: 0.5px; gap: 16px;
+      transition: background 0.3s;
+    }
+    .faq-q:hover { background: rgba(16,185,129,0.03); }
+
+    .faq-q-pre { color: var(--gold); font-family: 'Bebas Neue', sans-serif; font-size: 18px; flex-shrink: 0; }
+    .faq-q-text { flex: 1; line-height: 1.5; }
+    .faq-toggle { color: var(--gold); font-size: 22px; flex-shrink: 0; transition: transform 0.3s; line-height: 1; }
+    .faq-item.open .faq-toggle { transform: rotate(45deg); }
+
+    .faq-a {
+      padding: 0 28px; max-height: 0; overflow: hidden;
+      font-size: 13px; color: var(--muted); line-height: 2;
+      transition: max-height 0.4s ease, padding 0.3s;
+    }
+    .faq-item.open .faq-a { max-height: 250px; padding: 0 28px 24px; }
+
+    /* ===== CTA ===== */
+    .cta-section {
+      padding: 160px 60px;
+      position: relative; z-index: 1; overflow: hidden;
+      text-align: center;
+    }
+
+    .cta-section::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 900px 600px at 50% 50%, rgba(16,185,129,0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .cta-inner { max-width: 640px;
+      width: 100%; margin: 0 auto; }
+    .cta-inner h2 { margin-bottom: 24px; }
+    .cta-inner > p { font-size: 15px; color: var(--muted); line-height: 2; margin-bottom: 56px; }
+
+    .contact-form {
+      display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px;
+      text-align: left;
+    }
+
+    .form-field { position: relative; }
+    .form-field.full { grid-column: 1 / -1; }
+
+    .form-field label {
+      display: block; font-size: 10px; letter-spacing: 3px;
+      color: var(--gold); text-transform: uppercase; margin-bottom: 8px;
+    }
+
+    .form-field input,
+    .form-field select,
+    .form-field textarea {
+      width: 100%;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--white);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 14px; font-weight: 300;
+      padding: 16px 20px; outline: none;
+      transition: border-color 0.3s; appearance: none;
+    }
+    .form-field input::placeholder,
+    .form-field textarea::placeholder { color: rgba(244,241,236,0.2); }
+    .form-field input:focus,
+    .form-field select:focus,
+    .form-field textarea:focus { border-color: rgba(16,185,129,0.6); }
+    .form-field select option { background: var(--card); color: var(--white); }
+    .form-field textarea { height: 100px; resize: none; }
+
+    .submit-row {
+      grid-column: 1 / -1;
+      display: flex; flex-direction: column; align-items: center; gap: 14px;
+      margin-top: 8px;
+    }
+    .submit-note { font-size: 11px; color: var(--muted-sm); letter-spacing: 1px; }
+
+    /* ===== FOOTER ===== */
+    footer {
+      padding: 40px 60px;
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      position: relative; z-index: 1;
+    }
+
+    .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 4px; color: var(--muted-sm); }
+    footer p { font-size: 11px; color: var(--muted-sm); letter-spacing: 1px; }
+    .portfolio-badge { font-size: 10px; letter-spacing: 3px; color: var(--gold-dim); text-transform: uppercase; border: 1px solid rgba(6,95,70,0.4); padding: 5px 14px; }
+
+    /* ===== MOBILE STICKY CTA ===== */
+    .mobile-cta {
+      display: none;
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 300;
+      background: rgba(8,8,8,0.95); backdrop-filter: blur(10px);
+      border-top: 1px solid var(--border); padding: 16px 24px;
+      transition: opacity 0.3s;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1024px) {
+      .instructor-wrap { grid-template-columns: minmax(0, 1fr); }
+      .price-wrap { grid-template-columns: minmax(0, 1fr); }
+      .reality-inner { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+      .reality-list { grid-template-columns: minmax(0, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      header { padding: 0 24px; }
+      nav a:not(.nav-cta) { display: none; }
+
+      .hero { padding: 100px 24px 80px; }
+      h1 { font-size: 52px; }
+      .hero-bg-word { display: none; }
+
+      .reality { padding: 40px 24px; }
+      .section { padding: 80px 24px; }
+
+      .prob-grid { grid-template-columns: minmax(0, 1fr); }
+      .prob-item { padding: 32px 20px; }
+
+      .program-grid { grid-template-columns: minmax(0, 1fr); }
+      .prog-card { padding: 36px 24px; }
+
+      .price-card { padding: 40px 28px; }
+
+      .cta-section { padding: 80px 24px 120px; }
+      .contact-form { grid-template-columns: minmax(0, 1fr); }
+
+      footer { flex-direction: column; gap: 16px; text-align: center; padding: 32px 24px; }
+
+      .mobile-cta { display: block; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo"><span class="logo-accent">SHIFT</span>&nbsp;BASE</div>
+    <nav>
+      <a href="#about">プログラムとは</a>
+      <a href="#program">内容</a>
+      <a href="#price">料金</a>
+      <a href="#faq">FAQ</a>
+      <a href="#contact" class="nav-cta">無料説明会</a>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-eyebrow">Side Income Program for Working Adults</div>
+      <h1>
+        本業を続けながら、<br>
+        <span class="accent">月5万円の</span><br>
+        副収入を作る。
+      </h1>
+      <p class="hero-story">
+        「副業に興味はあるけど、何から始めればいいかわからない。」<br>
+        私も2年前まで、まったく同じ状態でした。51歳、大手運送会社の現役管理職。<br>
+        AIスクールに入り、失敗しながら学んで、今ようやく動き始めた。<br>
+        その等身大のロードマップを、あなたにも渡したいと思っています。
+      </p>
+      <p class="hero-story-name">— J. Nakamura, 講師・現役管理職51歳</p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-primary"><span>無料説明会を予約する</span></a>
+        <a href="#about" class="btn-outline">プログラムを詳しく見る</a>
+      </div>
+    </div>
+    <div class="hero-bg-word">SHIFT</div>
+  </section>
+
+  <!-- REALITY -->
+  <div class="reality reveal">
+    <div class="reality-inner">
+      <div>
+        <div class="reality-label">現実の数字</div>
+        <div class="reality-num">73%</div>
+        <p class="reality-desc">「副業を始めたい」と思っている会社員のうち、実際に行動できている人はわずか27%。理由の多くは「何から始めるかわからない」です。</p>
+      </div>
+      <div class="reality-list">
+        <div class="reality-item">
+          <strong>行動できない理由 1位</strong>
+          <p>何から始めればいいかわからない（38%）</p>
+        </div>
+        <div class="reality-item">
+          <strong>行動できない理由 2位</strong>
+          <p>時間がない・疲れてやる気が出ない（29%）</p>
+        </div>
+        <div class="reality-item">
+          <strong>行動できない理由 3位</strong>
+          <p>スクールへの高額投資に踏み切れない（24%）</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INSTRUCTOR -->
+  <section class="section" id="about">
+    <div class="section-header reveal">
+      <div class="tag">Instructor</div>
+      <h2>教えるのは<span class="gold">「現在進行形」</span>の当事者</h2>
+      <p class="section-lead">「稼ぎ方を教えます」ではなく「一緒に試行錯誤します」。<br>成功談より、失敗と学びのリアルをお伝えします。</p>
+    </div>
+    <div class="instructor-wrap">
+      <div class="instructor-card reveal">
+        <div class="instructor-avatar-wrap">
+          <div class="instructor-avatar">JN</div>
+          <div>
+            <div class="instructor-name">J. NAKAMURA</div>
+            <div class="instructor-role">大手運送会社 現役管理職（51歳）<br>AIスクール（ShiftAI）修了 / 副業ライター</div>
+          </div>
+        </div>
+        <p class="instructor-bio">
+          新卒から運送会社一筋30年。管理職として業務効率化・KPI管理・チーム運営に携わる傍ら、2024年よりAIスクールに通い始める。「現状維持は衰退」という信念のもと、51歳でゼロからWebライティングと副業を開始。失敗も多いが、少しずつ実績を積み上げている。このプログラムは自分自身の試行錯誤をそのままカリキュラム化したもの。
+        </p>
+        <div class="instructor-tags">
+          <span class="i-tag">管理職10年以上</span>
+          <span class="i-tag">AI活用ライティング</span>
+          <span class="i-tag">副業スタート経験</span>
+          <span class="i-tag">50代の現役</span>
+        </div>
+      </div>
+      <div class="my-journey reveal" style="transition-delay:0.15s">
+        <div class="journey-title">My Journey</div>
+        <div class="journey-steps">
+          <div class="journey-step">
+            <div class="journey-period">2024.01</div>
+            <div class="journey-event">
+              <strong>「このままでいいのか」と感じ始める</strong>
+              <p>管理職として安定はしているが、収入は頭打ち。老後に漠然とした不安を感じる。</p>
+            </div>
+          </div>
+          <div class="journey-step">
+            <div class="journey-period">2024.04</div>
+            <div class="journey-event">
+              <strong>AIスクール（ShiftAI）に入学</strong>
+              <p>「AIで副業ができる」という言葉に半信半疑のまま入学。最初の3ヶ月は全然わからなかった。</p>
+            </div>
+          </div>
+          <div class="journey-step">
+            <div class="journey-period">2024.08</div>
+            <div class="journey-event">
+              <strong>クラウドワークスに登録・初応募</strong>
+              <p>20社以上に応募して全落選。「実績ゼロは選ばれない」という現実を知る。</p>
+            </div>
+          </div>
+          <div class="journey-step">
+            <div class="journey-period">2024.11</div>
+            <div class="journey-event">
+              <strong>ポートフォリオ制作 → 初受注</strong>
+              <p>架空案件のLP制作でポートフォリオを作り直したところ、初めて採用された。</p>
+            </div>
+          </div>
+          <div class="journey-step">
+            <div class="journey-period">2025〜</div>
+            <div class="journey-event">
+              <strong>継続案件を徐々に積み上げ中</strong>
+              <p>月収は波があるが、月3〜5万円の副収入を安定させることを目標に継続中。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROBLEMS -->
+  <section class="section section-alt" id="problem">
+    <div class="section-header reveal">
+      <div class="tag">Problems</div>
+      <h2>副業が続かない<span class="gold">本当の理由</span></h2>
+    </div>
+    <div class="prob-grid">
+      <div class="prob-item reveal">
+        <div class="prob-icon-big">⏳</div>
+        <div>
+          <h3>本業が忙しく、<br>継続できない</h3>
+          <p>帰宅後は疲れていて何もできない。週末も休息が必要。「スキマ時間を使う」と言うが、その使い方が具体的にわからない。</p>
+        </div>
+      </div>
+      <div class="prob-item reveal" style="transition-delay:0.1s">
+        <div class="prob-icon-big">🎯</div>
+        <div>
+          <h3>何を副業にすべきか、<br>迷い続けている</h3>
+          <p>ライティング、動画編集、プログラミング…情報が多すぎて判断できない。調べるだけで疲れて、結局何もしないまま数ヶ月が過ぎる。</p>
+        </div>
+      </div>
+      <div class="prob-item reveal" style="transition-delay:0.1s">
+        <div class="prob-icon-big">💸</div>
+        <div>
+          <h3>高額スクールへの<br>投資に踏み切れない</h3>
+          <p>「30万払ったのに稼げなかった」という声も聞く。かといって独学では成果が出ない。この板挟みで動けなくなっている。</p>
+        </div>
+      </div>
+      <div class="prob-item reveal" style="transition-delay:0.2s">
+        <div class="prob-icon-big">📉</div>
+        <div>
+          <h3>「実績ゼロ」で<br>選んでもらえない</h3>
+          <p>クラウドソーシングに登録したが、採用されない。ポートフォリオを作ろうにも何を作ればいいかわからず手が止まる。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROGRAM -->
+  <section class="section" id="program">
+    <div class="section-header reveal">
+      <div class="tag">Program</div>
+      <h2>3ヶ月で<span class="gold">最初の受注</span>を作る</h2>
+      <p class="section-lead">「月収100万を目指す」ではなく、「最初の1件を受注する」にフォーカス。<br>小さな成功体験が、次への自信になります。</p>
+    </div>
+    <div class="program-grid">
+      <div class="prog-card reveal">
+        <div class="prog-month">Month 01</div>
+        <h3 class="prog-title">自分の「売れる強み」を<br>言語化する</h3>
+        <p class="prog-body">本業の経験・知識を副業で売れる形に変換。自己分析と市場調査で「自分だけのポジション」を特定します。</p>
+        <div class="prog-items">
+          <div class="prog-item">強み棚卸しワーク（テンプレート付き）</div>
+          <div class="prog-item">副業ジャンル選定の優先順位づけ</div>
+          <div class="prog-item">ポートフォリオ設計・構成決め</div>
+        </div>
+        <div class="prog-num-bg">1</div>
+      </div>
+      <div class="prog-card reveal" style="transition-delay:0.12s">
+        <div class="prog-month">Month 02</div>
+        <h3 class="prog-title">ポートフォリオを<br>実際に制作する</h3>
+        <p class="prog-body">架空案件のポートフォリオ制作から応募文作成まで。AI（Claude・ChatGPT）を活用した効率的なフローで高品質な作品を作ります。</p>
+        <div class="prog-items">
+          <div class="prog-item">ポートフォリオ制作・フィードバック</div>
+          <div class="prog-item">AI活用テンプレート一式提供</div>
+          <div class="prog-item">刺さる提案文の書き方</div>
+        </div>
+        <div class="prog-num-bg">2</div>
+      </div>
+      <div class="prog-card reveal" style="transition-delay:0.24s">
+        <div class="prog-month">Month 03</div>
+        <h3 class="prog-title">初受注〜継続案件<br>への橋渡し</h3>
+        <p class="prog-body">実際の案件応募を伴走サポート。初受注後の納品・やり取り・評価獲得まで、「初めて」のすべてを全力でサポートします。</p>
+        <div class="prog-items">
+          <div class="prog-item">案件応募実践（月5件レビュー付き）</div>
+          <div class="prog-item">クライアントとのやり取り練習</div>
+          <div class="prog-item">継続受注の仕組み設計</div>
+        </div>
+        <div class="prog-num-bg">3</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICE & FAQ -->
+  <section class="section section-alt" id="price">
+    <div class="section-header reveal">
+      <div class="tag">Price</div>
+      <h2>シンプルな<span class="gold">料金プラン</span></h2>
+    </div>
+    <div class="price-wrap">
+      <div class="price-card reveal">
+        <span class="price-badge">Standard Plan</span>
+        <div class="price-name">3ヶ月 伴走プログラム</div>
+        <p class="price-sub">ゴールまで、全力で伴走します</p>
+        <div class="price-amount">
+          <span class="price-num">49,800</span>
+          <span class="price-unit">円</span>
+        </div>
+        <p class="price-note">（税込） / 3ヶ月一括　または　月払い 17,800円×3回</p>
+        <ul class="price-list">
+          <li>月2回のオンライン個別セッション（60分×6回）</li>
+          <li>Slackでの無制限質問対応（3ヶ月間）</li>
+          <li>ポートフォリオへのフィードバック（無制限）</li>
+          <li>応募文レビュー（月5件まで）</li>
+          <li>AIツール活用テンプレート一式（永久利用可）</li>
+          <li>受講後3ヶ月のフォローアップ付き</li>
+        </ul>
+        <a href="#contact" class="btn-primary" style="width:100%;text-align:center;display:block"><span>無料説明会で詳しく聞く</span></a>
+      </div>
+      <div id="faq">
+        <div class="section-header reveal">
+          <div class="tag">FAQ</div>
+          <h2 style="font-size:clamp(28px,3vw,40px)">よくある<span class="gold">質問</span></h2>
+        </div>
+        <div class="faq-list">
+          <div class="faq-item reveal">
+            <div class="faq-q">
+              <span class="faq-q-pre">Q</span>
+              <span class="faq-q-text">本業が忙しくても続けられますか？</span>
+              <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-a">はい。セッションはオンライン・録画視聴可で、質問はSlackでいつでもできます。週3〜5時間のスキマ時間が確保できれば進められる設計です。</div>
+          </div>
+          <div class="faq-item reveal" style="transition-delay:0.05s">
+            <div class="faq-q">
+              <span class="faq-q-pre">Q</span>
+              <span class="faq-q-text">ITが苦手でも大丈夫ですか？</span>
+              <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-a">大丈夫です。スマートフォンとPCが使えれば問題ありません。講師自身も40代後半からAIを使い始めた、同じスタート地点の人間です。</div>
+          </div>
+          <div class="faq-item reveal" style="transition-delay:0.1s">
+            <div class="faq-q">
+              <span class="faq-q-pre">Q</span>
+              <span class="faq-q-text">3ヶ月で本当に受注できますか？</span>
+              <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-a">「必ずできる」とは言えません。ただ、初受注までの障壁（ポートフォリオ・提案文・クライアントとのやり取り）を一緒に取り除くことに全力を尽くします。</div>
+          </div>
+          <div class="faq-item reveal" style="transition-delay:0.15s">
+            <div class="faq-q">
+              <span class="faq-q-pre">Q</span>
+              <span class="faq-q-text">会社にバレませんか？</span>
+              <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-a">副業の確定申告・住民税の納付方法など、会社に知られにくくする対策もお伝えします。ただし、事前に就業規則のご確認をお願いしています。</div>
+          </div>
+          <div class="faq-item reveal" style="transition-delay:0.2s">
+            <div class="faq-q">
+              <span class="faq-q-pre">Q</span>
+              <span class="faq-q-text">40〜50代でも遅くないですか？</span>
+              <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-a">遅くありません。むしろ本業での経験・人脈・知識は、若い世代にはない強みです。クライアントにとって「現場を知る人の文章」には価値があります。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section" id="contact">
+    <div class="cta-inner">
+      <div class="reveal">
+        <div class="tag">Contact</div>
+        <h2>まず<span class="gold">無料説明会</span>に参加する</h2>
+        <p>60分で「あなただけの副業ロードマップ」を作ります。<br>入会の強制は一切ありません。<br>「迷っている段階」でのご相談も大歓迎です。</p>
+      </div>
+      <div class="contact-form reveal" style="transition-delay:0.15s">
+        <div class="form-field">
+          <label>お名前</label>
+          <input type="text" placeholder="山田 太郎">
+        </div>
+        <div class="form-field">
+          <label>メールアドレス</label>
+          <input type="email" placeholder="info@example.com">
+        </div>
+        <div class="form-field">
+          <label>ご年齢</label>
+          <select>
+            <option value="" disabled selected>選択してください</option>
+            <option>30代</option>
+            <option>40代</option>
+            <option>50代</option>
+            <option>60代以上</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>気になる副業ジャンル</label>
+          <select>
+            <option value="" disabled selected>選択してください</option>
+            <option>Webライティング</option>
+            <option>Web制作・コーディング</option>
+            <option>SNS運用代行</option>
+            <option>まだ決まっていない</option>
+          </select>
+        </div>
+        <div class="form-field full">
+          <label>気になっていること・不安なこと（任意）</label>
+          <textarea placeholder="「何から始めればいいかわからない」「忙しくて時間が取れるか不安」など、何でもどうぞ"></textarea>
+        </div>
+        <div class="submit-row">
+          <a href="#" class="btn-primary" style="width:100%;text-align:center"><span>無料説明会に申し込む（完全無料）</span></a>
+          <p class="submit-note">返信は48時間以内 ・ 強引な営業は一切行いません</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">SHIFT BASE</div>
+    <p>© 2026 SHIFT BASE. All rights reserved.</p>
+    <span class="portfolio-badge">Portfolio — Senkode</span>
+  </footer>
+
+  <!-- MOBILE STICKY CTA -->
+  <div class="mobile-cta">
+    <a href="#contact" class="btn-primary" style="width:100%;text-align:center;display:block"><span>無料説明会を予約する</span></a>
+  </div>
+
+  <script>
+    // Scroll reveal
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+    // FAQ
+    document.querySelectorAll('.faq-q').forEach(q => {
+      q.addEventListener('click', () => q.closest('.faq-item').classList.toggle('open'));
+    });
+
+    // Mobile CTA hide when in contact
+    const ctaContact = document.getElementById('contact');
+    const mCta = document.querySelector('.mobile-cta');
+    if (mCta && ctaContact) {
+      new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          mCta.style.opacity = e.isIntersecting ? '0' : '1';
+          mCta.style.pointerEvents = e.isIntersecting ? 'none' : 'auto';
+        });
+      }, { threshold: 0.1 }).observe(ctaContact);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>田中税理士事務所｜AI記帳×税務サポート — フリーランス・個人事業主専門</title>
+  <meta name="description" content="AIが帳簿を読み、税理士が判断する。フリーランス・個人事業主の確定申告・記帳代行を月額9,800円から。AI活用で月次報告が最短3日。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700;900&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    [class*="grid"] > *, [class*="inner"] > *, [class*="wrap"] > * { min-width: 0; }
+
+    img, video, iframe { max-width: 100%; height: auto; }
+
+    html { overflow-x: hidden; }
+
+    :root {
+      --navy:    #0D1B2A;
+      --navy-2:  #1A2E44;
+      --navy-3:  #243B55;
+      --accent:  #2563EB;
+      --accent-light: #3B82F6;
+      --gold:    #C9A84C;
+      --white:   #FAFAFA;
+      --gray:    #6B7280;
+      --gray-light: #F3F4F6;
+      --border:  #E5E7EB;
+      --text:    #1F2937;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--white); color: var(--text); font-family: 'Noto Sans JP', sans-serif; font-weight: 300; overflow-x: hidden; }
+
+    /* ── HEADER ── */
+    .header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 40px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .logo { font-weight: 700; font-size: 16px; color: var(--navy); letter-spacing: 0.05em; }
+    .logo span { color: var(--accent); }
+    .header-cta {
+      background: var(--accent); color: #fff;
+      padding: 10px 24px; font-size: 13px; font-weight: 700;
+      border: none; cursor: pointer; text-decoration: none;
+      display: inline-block; transition: background 0.2s;
+    }
+    .header-cta:hover { background: var(--accent-light); }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--navy);
+      padding: 100px 40px 80px;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 70% 50%, rgba(37,99,235,0.15) 0%, transparent 70%);
+    }
+    .hero-inner { max-width: 960px;
+      width: 100%; margin: 0 auto; position: relative; z-index: 1; }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(37,99,235,0.2);
+      border: 1px solid rgba(37,99,235,0.4);
+      color: #93C5FD; font-size: 11px; letter-spacing: 0.15em;
+      padding: 4px 14px; margin-bottom: 32px;
+    }
+    .hero-copy {
+      font-family: 'Noto Serif JP', serif;
+      font-size: clamp(28px, 5vw, 52px);
+      font-weight: 700; color: #fff;
+      line-height: 1.4; margin-bottom: 12px;
+    }
+    .hero-copy em {
+      font-style: normal;
+      background: linear-gradient(90deg, #60A5FA, #93C5FD);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub {
+      font-size: clamp(14px, 2vw, 18px);
+      color: rgba(255,255,255,0.55);
+      font-family: 'Noto Serif JP', serif;
+      font-weight: 400; line-height: 1.8;
+      margin-bottom: 40px;
+    }
+    .hero-cta-wrap { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+    .btn-primary {
+      background: var(--accent); color: #fff;
+      padding: 16px 36px; font-size: 15px; font-weight: 700;
+      text-decoration: none; transition: background 0.2s; display: inline-block;
+    }
+    .btn-primary:hover { background: var(--accent-light); }
+    .btn-ghost {
+      color: rgba(255,255,255,0.6); font-size: 13px;
+      text-decoration: none; display: flex; align-items: center; gap: 6px;
+      transition: color 0.2s;
+    }
+    .btn-ghost:hover { color: #fff; }
+    .hero-stats {
+      display: flex; gap: 40px; margin-top: 56px;
+      padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.1);
+      flex-wrap: wrap;
+    }
+    .stat-num {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 32px; font-weight: 700;
+      color: #fff; line-height: 1;
+    }
+    .stat-num span { font-size: 16px; }
+    .stat-label { font-size: 11px; color: rgba(255,255,255,0.45); margin-top: 6px; letter-spacing: 0.1em; }
+
+    /* ── PAIN ── */
+    .pain { padding: 80px 40px; background: var(--gray-light); }
+    .pain-inner { max-width: 960px;
+      width: 100%; margin: 0 auto; }
+    .section-label {
+      font-size: 11px; letter-spacing: 0.25em; color: var(--accent);
+      margin-bottom: 12px; display: block; font-weight: 400;
+    }
+    .section-title {
+      font-family: 'Noto Serif JP', serif;
+      font-size: clamp(22px, 3.5vw, 36px);
+      font-weight: 700; color: var(--navy);
+      line-height: 1.5; margin-bottom: 48px;
+    }
+    .pain-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2px; }
+    .pain-card {
+      background: #fff; padding: 32px 28px;
+      border-top: 3px solid var(--border);
+      transition: border-color 0.3s;
+    }
+    .pain-card:hover { border-top-color: var(--accent); }
+    .pain-icon { font-size: 28px; margin-bottom: 16px; }
+    .pain-title { font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 10px; line-height: 1.5; }
+    .pain-text { font-size: 13px; color: var(--gray); line-height: 1.9; }
+
+    /* ── SOLUTION ── */
+    .solution { padding: 80px 40px; background: var(--navy); }
+    .solution-inner { max-width: 960px;
+      width: 100%; margin: 0 auto; }
+    .solution .section-label { color: #60A5FA; }
+    .solution .section-title { color: #fff; }
+    .solution-flow {
+      display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 2px; margin-bottom: 56px;
+    }
+    .flow-step {
+      background: var(--navy-2); padding: 28px 24px;
+      position: relative;
+    }
+    .flow-step::after {
+      content: '→';
+      position: absolute; right: -12px; top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255,255,255,0.2); font-size: 18px; z-index: 1;
+    }
+    .flow-step:last-child::after { display: none; }
+    .flow-num {
+      font-size: 11px; letter-spacing: 0.2em; color: #60A5FA;
+      margin-bottom: 12px; display: block;
+    }
+    .flow-title { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 8px; line-height: 1.5; }
+    .flow-desc { font-size: 11px; color: rgba(255,255,255,0.45); line-height: 1.8; }
+    .ai-badge {
+      display: inline-block; background: rgba(37,99,235,0.3);
+      border: 1px solid rgba(37,99,235,0.5);
+      color: #93C5FD; font-size: 9px; letter-spacing: 0.15em;
+      padding: 2px 8px; margin-bottom: 8px;
+    }
+    .solution-point {
+      background: var(--navy-2); padding: 32px;
+      border-left: 2px solid var(--accent);
+    }
+    .solution-point p {
+      font-size: 14px; color: rgba(255,255,255,0.65); line-height: 2.1;
+    }
+    .solution-point strong { color: #fff; font-weight: 700; }
+
+    /* ── PRICE ── */
+    .price { padding: 80px 40px; background: var(--white); }
+    .price-inner { max-width: 960px;
+      width: 100%; margin: 0 auto; }
+    .price-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2px; }
+    .price-card {
+      border: 1px solid var(--border); padding: 36px 28px;
+      position: relative; transition: border-color 0.3s;
+    }
+    .price-card:hover { border-color: var(--accent); }
+    .price-card.featured {
+      border-color: var(--accent); border-width: 2px;
+    }
+    .price-badge {
+      position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
+      background: var(--accent); color: #fff;
+      font-size: 10px; letter-spacing: 0.15em;
+      padding: 4px 16px; white-space: nowrap;
+    }
+    .price-plan { font-size: 12px; letter-spacing: 0.2em; color: var(--gray); margin-bottom: 12px; display: block; }
+    .price-name { font-size: 20px; font-weight: 700; color: var(--navy); margin-bottom: 20px; }
+    .price-num {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 36px; font-weight: 700; color: var(--navy); line-height: 1;
+    }
+    .price-num span { font-size: 14px; font-weight: 300; }
+    .price-note { font-size: 11px; color: var(--gray); margin: 8px 0 24px; }
+    .price-list { list-style: none; }
+    .price-list li {
+      font-size: 13px; color: var(--gray); padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: flex-start; gap: 8px; line-height: 1.7;
+    }
+    .price-list li::before { content: '✓'; color: var(--accent); flex-shrink: 0; font-weight: 700; }
+
+    /* ── FAQ ── */
+    .faq { padding: 80px 40px; background: var(--gray-light); }
+    .faq-inner { max-width: 720px;
+      width: 100%; margin: 0 auto; }
+    .faq-item { background: #fff; margin-bottom: 2px; }
+    .faq-q {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 24px; cursor: pointer; gap: 16px;
+    }
+    .faq-question { font-size: 14px; font-weight: 700; color: var(--navy); line-height: 1.6; }
+    .faq-icon { color: var(--accent); font-size: 20px; flex-shrink: 0; transition: transform 0.3s; }
+    .faq-item.open .faq-icon { transform: rotate(45deg); }
+    .faq-answer {
+      font-size: 13px; color: var(--gray); line-height: 2;
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.16,1,0.3,1), padding 0.3s;
+    }
+    .faq-item.open .faq-answer { max-height: 300px; padding: 0 24px 24px; }
+
+    /* ── CTA ── */
+    .cta-section {
+      padding: 100px 40px;
+      background: var(--navy);
+      text-align: center;
+    }
+    .cta-section .section-title { color: #fff; margin-bottom: 12px; }
+    .cta-section .section-label { color: #60A5FA; }
+    .cta-lead { font-size: 14px; color: rgba(255,255,255,0.5); margin-bottom: 40px; line-height: 1.9; }
+
+    /* ── FORM ── */
+    .form-wrap { max-width: 560px;
+      width: 100%; margin: 0 auto; }
+    .form-row { margin-bottom: 16px; text-align: left; }
+    .form-label { font-size: 12px; color: rgba(255,255,255,0.6); display: block; margin-bottom: 6px; letter-spacing: 0.1em; }
+    .form-input, .form-select, .form-textarea {
+      width: 100%; background: var(--navy-2);
+      border: 1px solid rgba(255,255,255,0.1); color: #fff;
+      padding: 12px 16px; font-size: 14px; font-family: inherit;
+      transition: border-color 0.3s;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      outline: none; border-color: var(--accent);
+    }
+    .form-select option { background: var(--navy-2); }
+    .form-textarea { min-height: 100px; resize: vertical; }
+    .form-submit {
+      width: 100%; background: var(--accent); color: #fff;
+      border: none; padding: 16px; font-size: 15px; font-weight: 700;
+      cursor: pointer; margin-top: 8px; transition: background 0.2s;
+      font-family: inherit; letter-spacing: 0.05em;
+    }
+    .form-submit:hover { background: var(--accent-light); }
+    .form-note { font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 12px; }
+
+    /* ── FOOTER ── */
+    .footer {
+      padding: 24px 40px; background: #07111C;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .footer-copy { font-size: 11px; color: rgba(255,255,255,0.3); }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a { font-size: 11px; color: rgba(255,255,255,0.3); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: rgba(255,255,255,0.7); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .header { padding: 14px 20px; }
+      .hero { padding: 72px 20px 60px; }
+      .hero-stats { gap: 24px; }
+      .pain { padding: 60px 20px; }
+      .pain-grid { grid-template-columns: minmax(0, 1fr); }
+      .solution { padding: 60px 20px; }
+      .solution-flow { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+      .flow-step::after { display: none; }
+      .price { padding: 60px 20px; }
+      .price-grid { grid-template-columns: minmax(0, 1fr); }
+      .faq { padding: 60px 20px; }
+      .cta-section { padding: 72px 20px; }
+      .footer { flex-direction: column; gap: 12px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">田中税理士事務所<span>｜AI記帳</span></div>
+    <a href="#contact" class="header-cta">無料相談を予約する</a>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-badge">AI × 税務サポート — フリーランス専門</div>
+      <h1 class="hero-copy">
+        帳簿は、<em>AIが読む。</em><br>
+        あなたの不安は、税理士が聞く。
+      </h1>
+      <p class="hero-sub">
+        領収書の山を前に固まっていませんか。<br>
+        AIが書類を読み込み、税理士が判断する——新しい体制で、<br>
+        確定申告の「面倒くさい」を、丸ごと引き受けます。
+      </p>
+      <div class="hero-cta-wrap">
+        <a href="#contact" class="btn-primary">無料相談を予約する（30分）</a>
+        <a href="#price" class="btn-ghost">料金を見る →</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="stat-num">月額<span>9,800</span>円〜</div>
+          <div class="stat-label">記帳代行＋確定申告込み</div>
+        </div>
+        <div>
+          <div class="stat-num">最短<span>3</span>日</div>
+          <div class="stat-label">月次レポート提出（AI処理）</div>
+        </div>
+        <div>
+          <div class="stat-num"><span>6</span>年</div>
+          <div class="stat-label">個人事業主・フリーランス専門</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pain -->
+  <section class="pain">
+    <div class="pain-inner">
+      <span class="section-label">PROBLEM</span>
+      <h2 class="section-title">こんな状況、心当たりありませんか。</h2>
+      <div class="pain-grid">
+        <div class="pain-card">
+          <div class="pain-icon">📂</div>
+          <div class="pain-title">領収書が1年分、封筒に突っ込んだまま</div>
+          <p class="pain-text">「いつか整理しよう」が3月まで続く。気づいたら青色申告の締め切りが目の前で、毎年同じ後悔をしている。</p>
+        </div>
+        <div class="pain-card">
+          <div class="pain-icon">💸</div>
+          <div class="pain-title">経費で落とせるものが、実はよくわからない</div>
+          <p class="pain-text">「これって経費になる？」と毎回迷う。結局よくわからないから申告しない。知らないうちに税金を余分に払っている可能性がある。</p>
+        </div>
+        <div class="pain-card">
+          <div class="pain-icon">😰</div>
+          <div class="pain-title">税理士に頼みたいが、料金が不透明で怖い</div>
+          <p class="pain-text">問い合わせたら何十万も請求されそう、という思い込みで動けない。フリーランスに向いた税理士がどこにいるかもわからない。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Solution -->
+  <section class="solution">
+    <div class="solution-inner">
+      <span class="section-label">SOLUTION</span>
+      <h2 class="section-title">AIが処理する。税理士が守る。<br>あなたは本業に集中する。</h2>
+      <div class="solution-flow">
+        <div class="flow-step">
+          <span class="ai-badge">AI処理</span>
+          <div class="flow-num">STEP 01</div>
+          <div class="flow-title">書類をスマホで撮る</div>
+          <p class="flow-desc">領収書・請求書を専用アプリで撮影。郵送不要。</p>
+        </div>
+        <div class="flow-step">
+          <span class="ai-badge">AI処理</span>
+          <div class="flow-num">STEP 02</div>
+          <div class="flow-title">AIが自動で読み取り・分類</div>
+          <p class="flow-desc">OCR＋AIが金額・勘定科目を自動入力。転記ミスゼロ。</p>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">STEP 03</div>
+          <div class="flow-title">税理士が確認・最適化</div>
+          <p class="flow-desc">節税の抜け漏れチェック。AI任せにしない人間の目。</p>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">STEP 04</div>
+          <div class="flow-title">月次レポートを送付</div>
+          <p class="flow-desc">最短3日で今月の収支・税額の見込みを報告。</p>
+        </div>
+      </div>
+      <div class="solution-point">
+        <p>「AIに任せると間違えそう」という不安はわかります。だからこそ、<strong>最終確認は必ず税理士が行います。</strong> AIは「処理速度と網羅性」、税理士は「判断と責任」——それぞれの強みを分担することで、<strong>速くて、正確で、安い</strong>を同時に実現しています。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Price -->
+  <section class="price" id="price">
+    <div class="price-inner">
+      <span class="section-label">PRICE</span>
+      <h2 class="section-title">明朗会計。追加費用なし。</h2>
+      <div class="price-grid">
+        <div class="price-card">
+          <span class="price-plan">LIGHT</span>
+          <div class="price-name">ライトプラン</div>
+          <div class="price-num">¥9,800<span>/月</span></div>
+          <p class="price-note">年商500万円未満・副業・開業1年以内</p>
+          <ul class="price-list">
+            <li>記帳代行（月50件まで）</li>
+            <li>月次レポート送付</li>
+            <li>確定申告書作成・提出</li>
+            <li>チャット相談（月5回）</li>
+          </ul>
+        </div>
+        <div class="price-card featured">
+          <div class="price-badge">MOST POPULAR</div>
+          <span class="price-plan">STANDARD</span>
+          <div class="price-name">スタンダードプラン</div>
+          <div class="price-num">¥19,800<span>/月</span></div>
+          <p class="price-note">年商500万〜2,000万円・フリーランス本業</p>
+          <ul class="price-list">
+            <li>記帳代行（月150件まで）</li>
+            <li>月次レポート＋節税提案</li>
+            <li>確定申告書作成・提出</li>
+            <li>チャット相談（無制限）</li>
+            <li>年1回Zoom面談（60分）</li>
+          </ul>
+        </div>
+        <div class="price-card">
+          <span class="price-plan">PREMIUM</span>
+          <div class="price-name">プレミアムプラン</div>
+          <div class="price-num">¥39,800<span>/月</span></div>
+          <p class="price-note">年商2,000万円以上・法人化検討中</p>
+          <ul class="price-list">
+            <li>記帳代行（件数無制限）</li>
+            <li>月次レポート＋経営分析</li>
+            <li>確定申告書作成・提出</li>
+            <li>電話・チャット相談（無制限）</li>
+            <li>年2回Zoom面談（90分）</li>
+            <li>法人化・節税戦略立案</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq">
+    <div class="faq-inner">
+      <span class="section-label">FAQ</span>
+      <h2 class="section-title" style="text-align:center;margin-bottom:40px;">よくある質問</h2>
+
+      <div class="faq-item">
+        <div class="faq-q">
+          <span class="faq-question">AIが帳簿を処理するって、本当に正確ですか？</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">AI処理の精度は95%以上ですが、残り5%の確認と最終判断は必ず税理士が行います。AIは「速く処理する道具」、判断は人間——この役割分担が私たちの品質基準です。AIに丸投げはしません。</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">
+          <span class="faq-question">領収書の量が多くて恥ずかしいのですが……</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">むしろ、そのための記帳代行です。1年分まとめて送っていただいても対応可能です。「整理してから相談しよう」と思う必要はありません。整理できない状態のまま持ってきてください。</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">
+          <span class="faq-question">途中解約はできますか？</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">1ヶ月前告知で解約可能です。年間契約の縛りはありません。まず試してみて、合わなければやめられる——それくらいの気軽さで始めてください。</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">
+          <span class="faq-question">開業したばかりで売上が少ないのですが……</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">開業直後こそ、正しい帳簿の習慣をつけるタイミングです。ライトプランは月9,800円から。「売上が増えてから」ではなく、小さいうちから正しく積み上げる方が、後々の節税額が大きくなります。</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CTA / Contact -->
+  <section class="cta-section" id="contact">
+    <span class="section-label">FREE CONSULTATION</span>
+    <h2 class="section-title">まず、話すだけでいい。</h2>
+    <p class="cta-lead">30分の無料相談で、あなたの状況を聞かせてください。<br>その場でプランの提案と、だいたいの費用をお伝えします。</p>
+    <div class="form-wrap">
+      <form action="https://formspree.io/f/meevvdrl" method="POST">
+        <div class="form-row">
+          <label class="form-label">お名前</label>
+          <input type="text" name="name" class="form-input" placeholder="山田 太郎" required>
+        </div>
+        <div class="form-row">
+          <label class="form-label">メールアドレス</label>
+          <input type="email" name="email" class="form-input" placeholder="your@email.com" required>
+        </div>
+        <div class="form-row">
+          <label class="form-label">ご職業</label>
+          <select name="job" class="form-select">
+            <option value="">選択してください</option>
+            <option>フリーランス（デザイナー・ライター等）</option>
+            <option>エンジニア・ITフリーランス</option>
+            <option>個人事業主（小売・飲食等）</option>
+            <option>副業中のサラリーマン</option>
+            <option>その他</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label class="form-label">ご相談内容（任意）</label>
+          <textarea name="message" class="form-textarea" placeholder="気になっていること・現在の状況など、何でもお書きください"></textarea>
+        </div>
+        <button type="submit" class="form-submit">無料相談を申し込む（30分・完全無料）</button>
+        <p class="form-note">※ 24時間以内にメールでご連絡します。セールスは一切しません。</p>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-copy">田中税理士事務所 © 2026｜AI記帳×税務サポート</div>
+    <div class="footer-links">
+      <a href="#">プライバシーポリシー</a>
+      <a href="#">特定商取引法</a>
+    </div>
+  </footer>
+
+  <script>
+    // FAQ accordion
+    document.querySelectorAll('.faq-item').forEach(item => {
+      item.querySelector('.faq-q').addEventListener('click', () => {
+        item.classList.toggle('open');
+      });
+    });
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  </script>
+</body>
+</html>

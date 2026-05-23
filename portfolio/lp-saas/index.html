@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AUTOMATE.SH — AI業務自動化プラットフォーム</title>
+  <meta name="description" content="Claude APIを活用したAI業務自動化プラットフォーム。Notion・GAS・Slack連携。導入初日から89%の工数削減を実現。">
+  <style>
+    [class*="grid"] > *, [class*="inner"] > *, [class*="wrap"] > * { min-width: 0; }
+
+    img, video, iframe { max-width: 100%; height: auto; }
+
+    html { overflow-x: hidden; }
+
+    :root {
+      --bg:            #050D05;
+      --bg-sub:        #020903;
+      --green:         #00FF88;
+      --green-dim:     rgba(0,255,136,0.4);
+      --green-faint:   rgba(0,255,136,0.12);
+      --green-border:  rgba(0,255,136,0.12);
+      --green-glow:    rgba(0,255,136,0.4);
+      --text:          rgba(0,255,136,0.85);
+      --text-mid:      rgba(0,255,136,0.5);
+      --text-faint:    rgba(0,255,136,0.25);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Courier New', 'Consolas', monospace;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent, transparent 3px,
+        rgba(0,255,136,0.012) 3px, rgba(0,255,136,0.012) 4px
+      );
+      pointer-events: none; z-index: 9999;
+    }
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--green-dim); }
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease;   will-change: opacity, transform;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+    .glow { text-shadow: 0 0 20px var(--green-glow); }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+    .cursor-blink { display:inline-block; width:8px; height:14px; background:var(--green); vertical-align:middle; animation:blink 1s step-end infinite; }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none !important; }
+      .hero-grid { grid-template-columns: minmax(0, 1fr) !important; padding: 60px 24px !important; gap: 32px !important; }
+      .features-grid { grid-template-columns: minmax(0, 1fr) !important; }
+      .sticky-left { position: relative !important; top: auto !important; height: auto !important; }
+      .results-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important; }
+      .section-pad { padding-left: 24px !important; padding-right: 24px !important; }
+      .cta-btns { flex-direction: column !important; align-items: center !important; }
+      footer { flex-direction: column !important; gap: 10px !important; text-align: center; padding: 24px !important; }
+      #horizontal-track { flex-direction: column !important; transform: none !important; }
+      .h-panel { min-width: 100% !important; padding: 0 24px !important; margin-bottom: 48px; }
+      .count-up { font-size: clamp(36px, 10vw, 60px) !important; }
+    }
+  </style>
+</head>
+<body>
+
+<nav style="position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:16px 60px;background:rgba(5,13,5,0.92);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--green-border);">
+  <div style="font-size:13px;letter-spacing:4px;color:var(--green);" class="glow">AUTOMATE.SH</div>
+  <div class="nav-links" style="display:flex;gap:32px;font-size:10px;letter-spacing:3px;color:var(--text-mid);">
+    <a href="#how" style="color:inherit;text-decoration:none;">HOW IT WORKS</a>
+    <a href="#features" style="color:inherit;text-decoration:none;">FEATURES</a>
+    <a href="#results" style="color:inherit;text-decoration:none;">RESULTS</a>
+    <a href="#cta" style="color:inherit;text-decoration:none;">GET STARTED</a>
+  </div>
+  <a href="#cta" style="font-size:10px;letter-spacing:2px;border:1px solid var(--green-border);color:var(--green);padding:8px 20px;text-decoration:none;">$ START</a>
+</nav>
+
+<section class="hero-grid" style="min-height:100vh;display:grid;grid-template-columns:minmax(0, 1fr) minmax(0, 1fr);align-items:center;padding:0 60px;gap:60px;position:relative;overflow:hidden;">
+  <div style="position:absolute;top:-100px;left:-100px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(0,255,136,0.04) 0%,transparent 70%);pointer-events:none;"></div>
+  <div>
+    <p style="font-size:9px;letter-spacing:5px;color:var(--text-mid);margin-bottom:20px;" class="reveal">// AI-POWERED BUSINESS AUTOMATION</p>
+    <h1 style="font-size:clamp(44px,7vw,80px);font-weight:900;line-height:1.0;color:var(--green);letter-spacing:-2px;margin-bottom:24px;" class="reveal glow">AUTOMATE<br>EVERYTHING.</h1>
+    <p style="font-size:13px;line-height:1.9;color:var(--text-mid);max-width:380px;margin-bottom:36px;" class="reveal">Claude APIが業務フローを自動分析。Notion・GAS・Slackと接続し、<br>導入初日から工数の89%を削減します。</p>
+    <div class="cta-btns" style="display:flex;gap:16px;align-items:center;">
+      <a href="#cta" style="font-size:11px;letter-spacing:2px;background:var(--green);color:var(--bg);padding:14px 32px;text-decoration:none;font-weight:700;">$ npm run automate --free</a>
+      <a href="#how" style="font-size:10px;letter-spacing:2px;color:var(--text-mid);text-decoration:none;">$ scroll to begin ↓</a>
+    </div>
+  </div>
+  <div style="background:var(--bg-sub);border:1px solid var(--green-border);">
+    <div style="padding:10px 16px;background:rgba(0,255,136,0.04);border-bottom:1px solid var(--green-border);display:flex;align-items:center;gap:8px;">
+      <div style="width:10px;height:10px;border-radius:50%;background:rgba(255,80,80,0.5);"></div>
+      <div style="width:10px;height:10px;border-radius:50%;background:rgba(255,200,0,0.5);"></div>
+      <div style="width:10px;height:10px;border-radius:50%;background:rgba(0,255,136,0.4);"></div>
+      <span style="font-size:10px;letter-spacing:2px;color:var(--text-faint);margin-left:8px;">automate.sh — zsh</span>
+    </div>
+    <div id="terminal-output" style="padding:20px 24px;min-height:260px;font-size:11px;line-height:2;"></div>
+  </div>
+</section>
+
+<section id="how" style="padding:120px 0;overflow:hidden;position:relative;border-top:1px solid var(--green-border);">
+  <div class="section-pad" style="padding:0 60px;margin-bottom:60px;">
+    <p style="font-size:9px;letter-spacing:5px;color:var(--text-mid);margin-bottom:12px;" class="reveal">// HOW IT WORKS</p>
+    <h2 style="font-size:clamp(28px,4vw,44px);font-weight:900;color:var(--green);letter-spacing:-1px;" class="reveal glow">3 STEPS TO AUTOMATE.</h2>
+  </div>
+  <div id="horizontal-track" style="display:flex;transition:transform 0.6s cubic-bezier(0.16,1,0.3,1);">
+    <div class="h-panel" style="min-width:60vw;padding:0 60px;border-right:1px solid var(--green-border);position:relative;">
+      <div style="font-size:100px;font-weight:900;color:rgba(0,255,136,0.06);line-height:1;position:absolute;top:0;right:60px;pointer-events:none;">01</div>
+      <p style="font-size:9px;letter-spacing:5px;color:var(--text-mid);margin-bottom:16px;">STEP 01 — IDENTIFY</p>
+      <h3 style="font-size:clamp(28px,4vw,48px);font-weight:900;color:var(--green);letter-spacing:-1px;margin-bottom:24px;" class="glow">FIND<br>BOTTLENECKS.</h3>
+      <p style="font-size:14px;line-height:1.9;color:var(--text-mid);max-width:420px;">AIが既存の業務フローを自動スキャン。どのタスクが時間を奪っているかを可視化し、自動化優先度をスコアリングします。</p>
+      <div style="margin-top:32px;font-size:11px;color:var(--text-faint);letter-spacing:2px;">→ NEXT: BUILD</div>
+    </div>
+    <div class="h-panel" style="min-width:60vw;padding:0 60px;border-right:1px solid var(--green-border);position:relative;">
+      <div style="font-size:100px;font-weight:900;color:rgba(0,255,136,0.06);line-height:1;position:absolute;top:0;right:60px;pointer-events:none;">02</div>
+      <p style="font-size:9px;letter-spacing:5px;color:var(--text-mid);margin-bottom:16px;">STEP 02 — BUILD</p>
+      <h3 style="font-size:clamp(28px,4vw,48px);font-weight:900;color:var(--green);letter-spacing:-1px;margin-bottom:24px;" class="glow">DESIGN<br>WORKFLOWS.</h3>
+      <p style="font-size:14px;line-height:1.9;color:var(--text-mid);max-width:420px;">コードは一行も不要。自然言語でフローを記述するだけで、Claude APIが実行可能なワークフローを自動生成します。</p>
+      <div style="margin-top:32px;font-size:11px;color:var(--text-faint);letter-spacing:2px;">→ NEXT: DEPLOY</div>
+    </div>
+    <div class="h-panel" style="min-width:60vw;padding:0 60px;position:relative;">
+      <div style="font-size:100px;font-weight:900;color:rgba(0,255,136,0.06);line-height:1;position:absolute;top:0;right:60px;pointer-events:none;">03</div>
+      <p style="font-size:9px;letter-spacing:5px;color:var(--text-mid);margin-bottom:16px;">STEP 03 — DEPLOY</p>
+      <h3 style="font-size:clamp(28px,4vw,48px);font-weight:900;color:var(--green);letter-spacing:-1px;margin-bottom:24px;" class="glow">SHIP &amp;<br>MONITOR.</h3>
+      <p style="font-size:14px;line-height:1.9;color:var(--text-mid);max-width:420px;">ワンクリックで本番環境へデプロイ。リアルタイムモニタリングとアラートで、24時間自動で動き続けます。</p>
+      <div style="margin-top:32px;font-size:11px;color:var(--text-faint);letter-spacing:2px;">↓ SEE FEATURES</div>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px;padding:32px 60px 0;">
+    <div class="step-dot" data-step="0" role="button" tabindex="0" aria-label="Step 1: IDENTIFY" style="width:32px;height:3px;background:var(--green);border-radius:2px;cursor:pointer;transition:all 0.3s;"></div>
+    <div class="step-dot" data-step="1" role="button" tabindex="0" aria-label="Step 2: BUILD" style="width:16px;height:3px;background:var(--green-faint);border-radius:2px;cursor:pointer;transition:all 0.3s;"></div>
+    <div class="step-dot" data-step="2" role="button" tabindex="0" aria-label="Step 3: DEPLOY" style="width:16px;height:3px;background:var(--green-faint);border-radius:2px;cursor:pointer;transition:all 0.3s;"></div>
+    <span style="font-size:9px;letter-spacing:3px;color:var(--text-faint);margin-left:8px;">SCROLL OR CLICK</span>
+  </div>
+</section>
+
+<section id="features" class="features-grid" style="display:grid;grid-template-columns:2fr 3fr;min-height:100vh;border-top:1px solid var(--green-border);">
+  <div class="sticky-left" style="position:sticky;top:64px;height:calc(100vh - 64px);background:var(--bg-sub);border-right:1px solid var(--green-border);padding:48px 40px;display:flex;flex-direction:column;overflow:hidden;">
+    <p style="font-size:9px;letter-spacing:4px;color:var(--text-faint);margin-bottom:24px;">// LIVE TERMINAL</p>
+    <div id="sticky-terminal" style="font-size:11px;line-height:2;flex:1;overflow:hidden;"></div>
+  </div>
+  <div style="padding:80px 60px;">
+    <p style="font-size:9px;letter-spacing:5px;color:var(--text-mid);margin-bottom:12px;" class="reveal">// FEATURES</p>
+    <h2 style="font-size:clamp(28px,4vw,44px);font-weight:900;color:var(--green);letter-spacing:-1px;margin-bottom:80px;" class="reveal glow">WHAT WE BUILD.</h2>
+    <div style="border-top:1px solid var(--green-border);padding:48px 0;" class="reveal">
+      <p style="font-size:9px;letter-spacing:4px;color:var(--text-faint);margin-bottom:12px;">01 / CORE</p>
+      <h3 style="font-size:28px;font-weight:900;color:var(--green);letter-spacing:-0.5px;margin-bottom:16px;" class="glow">CLAUDE API<br>INTEGRATION</h3>
+      <p style="font-size:14px;line-height:1.9;color:var(--text-mid);">自然言語で業務を定義するだけで、Claude APIが実行可能なフローを生成。プロンプトエンジニアリングは不要。あなたのビジネス文脈を自動学習します。</p>
+    </div>
+    <div style="border-top:1px solid var(--green-border);padding:48px 0;" class="reveal">
+      <p style="font-size:9px;letter-spacing:4px;color:var(--text-faint);margin-bottom:12px;">02 / CONNECT</p>
+      <h3 style="font-size:28px;font-weight:900;color:var(--green);letter-spacing:-0.5px;margin-bottom:16px;" class="glow">MULTI-TOOL<br>SYNC</h3>
+      <p style="font-size:14px;line-height:1.9;color:var(--text-mid);">Notion・Google Apps Script・Slack・Gmailをネイティブ接続。データが自動で流れ、通知・更新・記録が全てゼロタッチで完結します。</p>
+    </div>
+    <div style="border-top:1px solid var(--green-border);padding:48px 0;" class="reveal">
+      <p style="font-size:9px;letter-spacing:4px;color:var(--text-faint);margin-bottom:12px;">03 / MONITOR</p>
+      <h3 style="font-size:28px;font-weight:900;color:var(--green);letter-spacing:-0.5px;margin-bottom:16px;" class="glow">REAL-TIME<br>DASHBOARD</h3>
+      <p style="font-size:14px;line-height:1.9;color:var(--text-mid);">全ワークフローの稼働状況をリアルタイムで可視化。エラーは即座にSlack通知。24時間365日、人の目が届かない時間も自動で監視します。</p>
+    </div>
+    <div style="border-top:1px solid var(--green-border);border-bottom:1px solid var(--green-border);padding:48px 0;" class="reveal">
+      <p style="font-size:9px;letter-spacing:4px;color:var(--text-faint);margin-bottom:12px;">04 / SCALE</p>
+      <h3 style="font-size:28px;font-weight:900;color:var(--green);letter-spacing:-0.5px;margin-bottom:16px;" class="glow">ZERO-CODE<br>DEPLOY</h3>
+      <p style="font-size:14px;line-height:1.9;color:var(--text-mid);">エンジニア不要。ワンクリックで本番デプロイ。チームが5人でも500人でも、同じUI・同じ速度で運用できます。</p>
+    </div>
+  </div>
+</section>
+
+<section id="results" class="section-pad" style="padding:120px 60px;background:var(--bg-sub);border-top:1px solid var(--green-border);">
+  <div style="max-width:1100px;margin:0 auto;">
+    <p style="font-size:9px;letter-spacing:5px;color:var(--text-mid);margin-bottom:12px;" class="reveal">// RESULTS</p>
+    <h2 style="font-size:clamp(28px,4vw,44px);font-weight:900;color:var(--green);letter-spacing:-1px;margin-bottom:80px;" class="reveal glow">NUMBERS DON'T LIE.</h2>
+    <div class="results-grid" style="display:grid;grid-template-columns:repeat(4,minmax(0, 1fr));gap:1px;background:var(--green-border);">
+      <div style="background:var(--bg);padding:48px 32px;text-align:center;" class="reveal">
+        <div class="count-up glow" data-target="89" data-suffix="%" style="font-size:60px;font-weight:900;color:var(--green);line-height:1;letter-spacing:-2px;">0%</div>
+        <div style="font-size:10px;letter-spacing:3px;color:var(--text-mid);margin-top:12px;">TIME SAVED</div>
+      </div>
+      <div style="background:var(--bg);padding:48px 32px;text-align:center;" class="reveal">
+        <div class="count-up glow" data-target="4.2" data-prefix="¥" data-suffix="M" style="font-size:60px;font-weight:900;color:var(--green);line-height:1;letter-spacing:-2px;">¥0M</div>
+        <div style="font-size:10px;letter-spacing:3px;color:var(--text-mid);margin-top:12px;">COST REDUCED / MO</div>
+      </div>
+      <div style="background:var(--bg);padding:48px 32px;text-align:center;" class="reveal">
+        <div class="count-up glow" data-target="1.8" data-suffix="s" style="font-size:60px;font-weight:900;color:var(--green);line-height:1;letter-spacing:-2px;">0s</div>
+        <div style="font-size:10px;letter-spacing:3px;color:var(--text-mid);margin-top:12px;">DEPLOY TIME</div>
+      </div>
+      <div style="background:var(--bg);padding:48px 32px;text-align:center;" class="reveal">
+        <div class="count-up glow" data-target="99.9" data-suffix="%" style="font-size:60px;font-weight:900;color:var(--green);line-height:1;letter-spacing:-2px;">0%</div>
+        <div style="font-size:10px;letter-spacing:3px;color:var(--text-mid);margin-top:12px;">UPTIME</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="cta" class="section-pad" style="padding:160px 60px;background:var(--bg);border-top:1px solid var(--green-border);text-align:center;position:relative;overflow:hidden;">
+  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(0,255,136,0.04) 0%,transparent 70%);pointer-events:none;"></div>
+  <p style="font-size:9px;letter-spacing:5px;color:var(--text-mid);margin-bottom:16px;" class="reveal">// GET STARTED</p>
+  <h2 style="font-size:clamp(36px,6vw,72px);font-weight:900;color:var(--green);letter-spacing:-2px;margin-bottom:20px;" class="reveal glow">START AUTOMATING<br>TODAY.</h2>
+  <p style="font-size:14px;line-height:1.9;color:var(--text-mid);margin-bottom:48px;" class="reveal">初期費用ゼロ。最短1日で導入完了。<br>まずは無料の自動化診断から始めてください。</p>
+  <div class="cta-btns" style="display:flex;gap:16px;justify-content:center;" class="reveal">
+    <a href="#" style="font-size:12px;letter-spacing:2px;font-weight:700;background:var(--green);color:var(--bg);padding:16px 48px;text-decoration:none;">$ npm run automate --free</a>
+    <a href="#" style="font-size:12px;letter-spacing:2px;border:1px solid var(--green-border);color:var(--text-mid);padding:16px 32px;text-decoration:none;">デモを見る</a>
+  </div>
+</section>
+
+<footer style="padding:32px 60px;background:var(--bg-sub);border-top:1px solid var(--green-border);display:flex;align-items:center;justify-content:space-between;">
+  <div style="font-size:12px;letter-spacing:4px;color:var(--green);" class="glow">AUTOMATE.SH</div>
+  <div style="font-size:10px;letter-spacing:2px;color:var(--text-faint);">// POWERED BY CLAUDE API</div>
+  <div style="font-size:10px;letter-spacing:1px;color:var(--text-faint);">© 2026 Senkode</div>
+</footer>
+
+<script>
+// スクロールリビール
+const revealObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+// HEROターミナル タイプライター
+const termLines = [
+  { text: '$ ./automate --analyze --target=./workflows', color: 'var(--green)', delay: 500 },
+  { text: '-> Scanning 847 business processes...', color: 'var(--text-mid)', delay: 1200 },
+  { text: '✓ Bottlenecks identified: 23', color: 'var(--green)', delay: 2000 },
+  { text: '$ deploy --all --env=production', color: 'var(--green)', delay: 2800 },
+  { text: '-> Building automation pipelines...', color: 'var(--text-mid)', delay: 3500 },
+  { text: '✓ Deployed in 1.8s', color: 'var(--green)', delay: 4300 },
+  { text: '✓ Time saved: 89%', color: 'var(--green)', delay: 5000 },
+];
+const termOutput = document.getElementById('terminal-output');
+const initLine = document.createElement('div');
+initLine.style.color = 'var(--text-faint)';
+initLine.style.fontSize = '11px';
+initLine.style.lineHeight = '2';
+initLine.textContent = 'Last login: Mon May 4 09:00:00 on ttys001';
+termOutput.appendChild(initLine);
+
+termLines.forEach(({ text, color, delay }) => {
+  setTimeout(() => {
+    const div = document.createElement('div');
+    div.style.color = color;
+    div.style.fontSize = '11px';
+    div.style.lineHeight = '2';
+    div.textContent = text;
+    termOutput.appendChild(div);
+  }, delay);
+});
+
+setTimeout(() => {
+  const cursorLine = document.createElement('div');
+  cursorLine.style.color = 'var(--green)';
+  cursorLine.style.fontSize = '11px';
+  cursorLine.style.lineHeight = '2';
+  const promptSpan = document.createElement('span');
+  promptSpan.textContent = '$ ';
+  const cursor = document.createElement('span');
+  cursor.className = 'cursor-blink';
+  cursorLine.appendChild(promptSpan);
+  cursorLine.appendChild(cursor);
+  termOutput.appendChild(cursorLine);
+}, 5800);
+
+// 横スクロール
+const track = document.getElementById('horizontal-track');
+const dots = document.querySelectorAll('.step-dot');
+const panels = document.querySelectorAll('.h-panel');
+let currentStep = 0;
+const totalSteps = panels.length;
+let panelWidth = panels[0] ? panels[0].offsetWidth : 0;
+window.addEventListener('resize', () => { panelWidth = panels[0] ? panels[0].offsetWidth : 0; });
+
+function goToStep(n) {
+  currentStep = Math.max(0, Math.min(n, totalSteps - 1));
+  track.style.transform = 'translateX(-' + (currentStep * panelWidth) + 'px)';
+  dots.forEach((d, i) => {
+    d.style.width = i === currentStep ? '32px' : '16px';
+    d.style.background = i === currentStep ? 'var(--green)' : 'var(--green-faint)';
+  });
+}
+dots.forEach(d => {
+  d.addEventListener('click', () => goToStep(parseInt(d.dataset.step)));
+  d.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goToStep(parseInt(d.dataset.step)); } });
+});
+
+const howSection = document.getElementById('how');
+let scrollLocked = false;
+window.addEventListener('wheel', (e) => {
+  const rect = howSection.getBoundingClientRect();
+  const inSection = rect.top <= 100 && rect.bottom >= window.innerHeight * 0.5;
+  if (!inSection) return;
+  if (scrollLocked) { e.preventDefault(); return; }
+  if (e.deltaY > 0 && currentStep < totalSteps - 1) {
+    e.preventDefault();
+    scrollLocked = true;
+    goToStep(currentStep + 1);
+    setTimeout(() => { scrollLocked = false; }, 800);
+  } else if (e.deltaY < 0 && currentStep > 0) {
+    e.preventDefault();
+    scrollLocked = true;
+    goToStep(currentStep - 1);
+    setTimeout(() => { scrollLocked = false; }, 800);
+  }
+}, { passive: false });
+
+// カウントアップ
+const countObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    const el = e.target;
+    const target = parseFloat(el.dataset.target);
+    const prefix = el.dataset.prefix || '';
+    const suffix = el.dataset.suffix || '';
+    const isDecimal = target % 1 !== 0;
+    const duration = 1800;
+    const start = performance.now();
+    function update(now) {
+      const t = Math.min((now - start) / duration, 1);
+      const ease = 1 - Math.pow(1 - t, 3);
+      const val = target * ease;
+      el.textContent = prefix + (isDecimal ? val.toFixed(1) : Math.floor(val)) + suffix;
+      if (t < 1) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+    countObserver.unobserve(el);
+  });
+}, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.count-up').forEach(el => countObserver.observe(el));
+
+// Sticky左ターミナル
+const stickyTerm = document.getElementById('sticky-terminal');
+const stickyLines = [
+  { text: '$ feature --list --verbose', color: 'var(--text-mid)' },
+  { text: '-> Loading modules...', color: 'var(--text-faint)' },
+  { text: '✓ claude-api v2.0 connected', color: 'var(--green)' },
+  { text: '✓ notion-sync active', color: 'var(--green)' },
+  { text: '✓ gas-bridge ready', color: 'var(--green)' },
+  { text: '✓ slack-webhook live', color: 'var(--green)' },
+];
+stickyLines.forEach(({ text, color }, i) => {
+  setTimeout(() => {
+    const div = document.createElement('div');
+    div.style.color = color;
+    div.style.fontSize = '11px';
+    div.style.lineHeight = '2';
+    div.textContent = text;
+    stickyTerm.appendChild(div);
+  }, i * 500 + 1000);
+});
+setTimeout(() => {
+  const statusLine = document.createElement('div');
+  statusLine.style.color = 'var(--green)';
+  statusLine.style.fontSize = '11px';
+  statusLine.style.lineHeight = '2';
+  statusLine.textContent = '$ status --all';
+  stickyTerm.appendChild(statusLine);
+  const result = document.createElement('div');
+  result.style.color = 'var(--green)';
+  result.style.fontSize = '11px';
+  result.style.lineHeight = '2';
+  result.textContent = '● 4/4 modules running';
+  stickyTerm.appendChild(result);
+  const cursorLine = document.createElement('div');
+  cursorLine.style.color = 'var(--green)';
+  cursorLine.style.fontSize = '11px';
+  cursorLine.style.lineHeight = '2';
+  const prompt = document.createElement('span');
+  prompt.textContent = '$ ';
+  const cur = document.createElement('span');
+  cur.className = 'cursor-blink';
+  cursorLine.appendChild(prompt);
+  cursorLine.appendChild(cur);
+  stickyTerm.appendChild(cursorLine);
+}, 5000);
+</script>
+</body>
+</html>

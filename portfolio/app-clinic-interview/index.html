@@ -1,0 +1,1519 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI問診要約システム 要件定義書 | Senkode Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@100;200;300&display=swap" rel="stylesheet">
+  <style>
+    [class*="grid"] > *, [class*="inner"] > *, [class*="wrap"] > * { min-width: 0; }
+
+    img, video, iframe { max-width: 100%; height: auto; }
+
+    html { overflow-x: hidden; }
+
+    :root {
+      --bg:        #060C12;
+      --bg-sub:    #0A1018;
+      --card:      #0E1520;
+      --teal:      #14B8A6;
+      --teal-lt:   #2DD4BF;
+      --teal-bd:   rgba(20,184,166,0.25);
+      --teal-glow: rgba(20,184,166,0.1);
+      --blue:      #3B82F6;
+      --orange:    #F59E0B;
+      --red:       #EF4444;
+      --text:      #E8F4F4;
+      --text-mid:  rgba(232,244,244,0.55);
+      --text-faint:rgba(232,244,244,0.22);
+      --bd:        rgba(20,184,166,0.12);
+      --nav-bg:    rgba(6,12,18,0.92);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      scroll-behavior: smooth;
+      cursor: none;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 200;
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+
+    /* ─── Custom cursor ─── */
+    #cursor {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background: var(--teal);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width .2s, height .2s, opacity .2s;
+    }
+    #cursor-ring {
+      position: fixed;
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--teal-bd);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: transform .12s ease-out, width .2s, height .2s;
+    }
+
+    /* ─── Navigation ─── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: var(--nav-bg);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--bd);
+      padding: 0 48px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      color: var(--teal);
+      letter-spacing: .1em;
+    }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--text-mid);
+      text-decoration: none;
+      font-size: .75rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--teal); }
+
+    /* ─── Scroll reveal ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity .7s ease, transform .7s ease;
+      will-change: opacity, transform;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── Layout ─── */
+    .container {
+      max-width: 1100px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 48px;
+    }
+
+    section {
+      padding: 96px 0;
+      border-top: 1px solid var(--bd);
+    }
+
+    /* ─── HERO ─── */
+    #hero {
+      padding: 160px 0 96px;
+      border-top: none;
+      position: relative;
+      overflow: hidden;
+    }
+    #hero::before {
+      content: '';
+      position: absolute;
+      top: -200px;
+      right: -200px;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, var(--teal-glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--teal-bd);
+      background: var(--teal-glow);
+      color: var(--teal-lt);
+      font-size: .7rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 2px;
+      margin-bottom: 32px;
+    }
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--teal);
+      border-radius: 50%;
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .3; }
+    }
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      line-height: 1.05;
+      letter-spacing: .04em;
+      color: var(--text);
+      margin-bottom: 40px;
+    }
+    .hero-title span {
+      color: var(--teal);
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      background: var(--bd);
+      border: 1px solid var(--bd);
+      margin-bottom: 48px;
+    }
+    .info-item {
+      background: var(--bg-sub);
+      padding: 20px 24px;
+    }
+    .info-label {
+      font-size: .65rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 6px;
+    }
+    .info-value {
+      font-size: .9rem;
+      font-weight: 300;
+      color: var(--text);
+    }
+    .hero-summary {
+      background: var(--card);
+      border-left: 3px solid var(--teal);
+      padding: 24px 32px;
+      font-size: .95rem;
+      color: var(--text-mid);
+      max-width: 800px;
+    }
+    .hero-summary strong {
+      color: var(--teal-lt);
+      font-weight: 300;
+    }
+
+    /* ─── Section heading ─── */
+    .section-label {
+      font-size: .65rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.4rem;
+      letter-spacing: .06em;
+      color: var(--text);
+      margin-bottom: 40px;
+    }
+
+    /* ─── Cards grid ─── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--bd);
+      padding: 28px;
+      transition: border-color .3s, transform .3s;
+    }
+    .card:hover {
+      border-color: var(--teal-bd);
+      transform: translateY(-4px);
+    }
+    .card-icon {
+      font-size: 1.4rem;
+      margin-bottom: 12px;
+    }
+    .card-title {
+      font-size: .8rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 10px;
+    }
+    .card-body {
+      font-size: .85rem;
+      color: var(--text-mid);
+      line-height: 1.7;
+    }
+
+    /* ─── Callout box ─── */
+    .callout {
+      background: var(--teal-glow);
+      border-left: 3px solid var(--teal);
+      border: 1px solid var(--teal-bd);
+      border-left: 3px solid var(--teal);
+      padding: 20px 28px;
+      margin: 24px 0;
+      font-size: .875rem;
+      color: var(--text-mid);
+    }
+    .callout strong {
+      color: var(--teal-lt);
+      font-weight: 300;
+    }
+
+    /* ─── KPI numbers ─── */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 32px;
+    }
+    .kpi-box {
+      background: var(--bg-sub);
+      border: 1px solid var(--bd);
+      padding: 28px 24px;
+      text-align: center;
+    }
+    .kpi-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      color: var(--teal);
+      line-height: 1;
+    }
+    .kpi-unit {
+      font-size: .75rem;
+      color: var(--teal-lt);
+      letter-spacing: .1em;
+    }
+    .kpi-label {
+      font-size: .78rem;
+      color: var(--text-mid);
+      margin-top: 8px;
+    }
+
+    /* ─── System diagram ─── */
+    .diagram-wrap {
+      background: var(--bg-sub);
+      border: 1px solid var(--bd);
+      padding: 40px 48px;
+      font-family: 'Noto Sans JP', monospace;
+      font-weight: 200;
+      font-size: .85rem;
+      overflow-x: auto;
+    }
+    .diagram-node {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 12px 0;
+    }
+    .node-box {
+      border: 1px solid var(--teal-bd);
+      background: var(--card);
+      color: var(--teal-lt);
+      padding: 8px 20px;
+      font-size: .82rem;
+      letter-spacing: .06em;
+      white-space: nowrap;
+      min-width: 260px;
+    }
+    .node-desc {
+      color: var(--text-faint);
+      font-size: .78rem;
+    }
+    .node-arrow {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 0 4px 32px;
+      color: var(--teal);
+      font-size: .75rem;
+    }
+    .node-arrow::before {
+      content: '↓';
+      font-size: 1rem;
+    }
+    .node-note {
+      color: var(--text-faint);
+    }
+
+    /* ─── Tables ─── */
+    .tbl-wrap {
+      overflow-x: auto;
+      margin: 24px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .85rem;
+    }
+    thead th {
+      background: var(--card);
+      color: var(--teal);
+      font-weight: 300;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      font-size: .7rem;
+      padding: 14px 20px;
+      text-align: left;
+      border-bottom: 1px solid var(--teal-bd);
+    }
+    tbody tr {
+      border-bottom: 1px solid var(--bd);
+      transition: background .2s;
+    }
+    tbody tr:hover {
+      background: var(--teal-glow);
+    }
+    tbody td {
+      padding: 14px 20px;
+      color: var(--text-mid);
+      vertical-align: top;
+    }
+    tbody td:first-child {
+      color: var(--text);
+      font-weight: 300;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .65rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 2px;
+    }
+    .tag-high { background: rgba(239,68,68,0.12); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
+    .tag-med  { background: rgba(245,158,11,0.12); color: var(--orange); border: 1px solid rgba(245,158,11,0.3); }
+    .tag-low  { background: rgba(20,184,166,0.12); color: var(--teal); border: 1px solid var(--teal-bd); }
+    .tag-ph   { background: rgba(59,130,246,0.12); color: var(--blue); border: 1px solid rgba(59,130,246,0.3); }
+
+    /* ─── Wireframe mocks ─── */
+    .wireframe-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 24px;
+    }
+    .wireframe-grid .wf-full {
+      grid-column: 1 / -1;
+    }
+    .wf-device {
+      border: 1px solid var(--teal-bd);
+      background: var(--bg-sub);
+      overflow: hidden;
+    }
+    .wf-titlebar {
+      background: var(--card);
+      padding: 10px 16px;
+      font-size: .65rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--teal);
+      border-bottom: 1px solid var(--bd);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .wf-dots {
+      display: flex;
+      gap: 5px;
+    }
+    .wf-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--text-faint);
+    }
+    .wf-body {
+      padding: 20px;
+    }
+
+    /* Patient form wireframe */
+    .wf-form-header {
+      background: var(--teal-glow);
+      border: 1px solid var(--teal-bd);
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      font-size: .78rem;
+      color: var(--teal-lt);
+      text-align: center;
+      letter-spacing: .08em;
+    }
+    .wf-step-bar {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 20px;
+    }
+    .wf-step {
+      flex: 1;
+      height: 4px;
+      background: var(--bd);
+      border-radius: 2px;
+    }
+    .wf-step.active { background: var(--teal); }
+    .wf-field {
+      margin-bottom: 12px;
+    }
+    .wf-label {
+      font-size: .65rem;
+      color: var(--text-mid);
+      letter-spacing: .08em;
+      margin-bottom: 4px;
+    }
+    .wf-input {
+      height: 36px;
+      background: var(--card);
+      border: 1px solid var(--bd);
+      width: 100%;
+    }
+    .wf-input-lg {
+      height: 72px;
+      background: var(--card);
+      border: 1px solid var(--bd);
+      width: 100%;
+    }
+    .wf-quick-select {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .wf-chip {
+      background: var(--card);
+      border: 1px solid var(--bd);
+      padding: 4px 12px;
+      font-size: .65rem;
+      color: var(--text-faint);
+      border-radius: 2px;
+    }
+    .wf-chip.sel {
+      border-color: var(--teal-bd);
+      color: var(--teal-lt);
+      background: var(--teal-glow);
+    }
+    .wf-btn {
+      margin-top: 16px;
+      height: 42px;
+      background: var(--teal);
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .75rem;
+      letter-spacing: .1em;
+      color: var(--bg);
+      font-weight: 300;
+    }
+
+    /* Dashboard wireframe */
+    .wf-dash-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .wf-dash-title {
+      font-size: .75rem;
+      color: var(--text);
+      letter-spacing: .08em;
+    }
+    .wf-dash-count {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      color: var(--teal);
+    }
+    .wf-patient-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      background: var(--card);
+      border: 1px solid var(--bd);
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: border-color .2s;
+    }
+    .wf-patient-row:hover {
+      border-color: var(--teal-bd);
+    }
+    .wf-urgency {
+      width: 6px;
+      height: 36px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+    .u-high { background: var(--red); }
+    .u-med  { background: var(--orange); }
+    .u-low  { background: var(--teal); }
+    .wf-pt-name {
+      font-size: .78rem;
+      color: var(--text);
+      flex: 1;
+    }
+    .wf-pt-summary {
+      font-size: .68rem;
+      color: var(--text-faint);
+    }
+    .wf-pt-tag {
+      font-size: .6rem;
+      padding: 2px 8px;
+    }
+
+    /* Detail wireframe */
+    .wf-detail-top {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .wf-detail-card {
+      flex: 1;
+      background: var(--card);
+      border: 1px solid var(--bd);
+      padding: 14px;
+    }
+    .wf-detail-label {
+      font-size: .6rem;
+      color: var(--teal);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .wf-detail-val {
+      font-size: .78rem;
+      color: var(--text);
+    }
+    .wf-alert-box {
+      background: rgba(239,68,68,0.08);
+      border: 1px solid rgba(239,68,68,0.25);
+      padding: 10px 14px;
+      margin-bottom: 10px;
+      font-size: .72rem;
+      color: var(--red);
+    }
+    .wf-key-points {
+      margin-top: 12px;
+    }
+    .wf-kp-item {
+      display: flex;
+      gap: 8px;
+      font-size: .72rem;
+      color: var(--text-mid);
+      padding: 5px 0;
+      border-bottom: 1px solid var(--bd);
+    }
+    .wf-kp-item::before {
+      content: '·';
+      color: var(--teal);
+    }
+    .wf-diff-badge {
+      font-size: .6rem;
+      padding: 2px 8px;
+      background: rgba(59,130,246,0.1);
+      border: 1px solid rgba(59,130,246,0.2);
+      color: var(--blue);
+    }
+
+    /* ─── Prompt block ─── */
+    .prompt-block {
+      background: var(--bg);
+      border: 1px solid var(--bd);
+      padding: 32px 36px;
+      font-family: 'Noto Sans JP', monospace;
+      font-weight: 100;
+      font-size: .82rem;
+      line-height: 1.9;
+      color: var(--text-mid);
+      position: relative;
+      overflow-x: auto;
+    }
+    .prompt-block::before {
+      content: 'PROMPT DESIGN';
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      font-size: .6rem;
+      letter-spacing: .15em;
+      color: var(--text-faint);
+    }
+    .prompt-key { color: var(--teal-lt); }
+    .prompt-val { color: var(--orange); }
+    .prompt-comment { color: var(--text-faint); }
+
+    /* ─── Phase timeline ─── */
+    .phase-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .phase-card {
+      background: var(--card);
+      border: 1px solid var(--bd);
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+    .phase-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+    }
+    .phase-1::before { background: var(--teal); }
+    .phase-2::before { background: var(--blue); }
+    .phase-3::before { background: var(--orange); }
+    .phase-label {
+      font-size: .6rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 8px;
+    }
+    .phase-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: .05em;
+      margin-bottom: 16px;
+    }
+    .phase-1 .phase-name { color: var(--teal); }
+    .phase-2 .phase-name { color: var(--blue); }
+    .phase-3 .phase-name { color: var(--orange); }
+    .phase-scope {
+      font-size: .8rem;
+      color: var(--text-mid);
+      margin-bottom: 20px;
+      line-height: 1.7;
+    }
+    .phase-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: .75rem;
+    }
+    .phase-weeks {
+      color: var(--text-mid);
+    }
+    .phase-cost {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: .05em;
+    }
+    .phase-1 .phase-cost { color: var(--teal); }
+    .phase-2 .phase-cost { color: var(--blue); }
+    .phase-3 .phase-cost { color: var(--orange); }
+
+    /* ─── Tech stack ─── */
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 32px;
+    }
+    .tech-item {
+      background: var(--card);
+      border: 1px solid var(--bd);
+      padding: 20px 16px;
+      text-align: center;
+      transition: border-color .3s;
+    }
+    .tech-item:hover {
+      border-color: var(--teal-bd);
+    }
+    .tech-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: .06em;
+      color: var(--teal);
+      margin-bottom: 6px;
+    }
+    .tech-role {
+      font-size: .68rem;
+      color: var(--text-faint);
+    }
+
+    /* ─── Footer ─── */
+    footer {
+      background: var(--bg-sub);
+      border-top: 1px solid var(--bd);
+      padding: 48px;
+      text-align: center;
+    }
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      color: var(--teal);
+      letter-spacing: .1em;
+      margin-bottom: 12px;
+    }
+    .footer-tagline {
+      font-size: .75rem;
+      color: var(--text-faint);
+      letter-spacing: .12em;
+    }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .container { padding: 0 20px; }
+      section { padding: 64px 0; }
+      #hero { padding: 120px 0 64px; }
+      .info-bar { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+      .card-grid { grid-template-columns: minmax(0, 1fr); }
+      .kpi-row { grid-template-columns: minmax(0, 1fr); }
+      .wireframe-grid { grid-template-columns: minmax(0, 1fr); }
+      .phase-grid { grid-template-columns: minmax(0, 1fr); }
+      .tech-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- Navigation -->
+<nav>
+  <div class="nav-logo">SENKODE</div>
+  <ul class="nav-links">
+    <li><a href="#overview">概要</a></li>
+    <li><a href="#architecture">構成図</a></li>
+    <li><a href="#requirements">機能要件</a></li>
+    <li><a href="#wireframes">画面仕様</a></li>
+    <li><a href="#prompt">プロンプト設計</a></li>
+    <li><a href="#phases">フェーズ</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="container">
+    <div class="badge reveal">
+      <span class="badge-dot"></span>
+      APP REQUIREMENTS / 医療クリニック向け
+    </div>
+    <h1 class="hero-title reveal">
+      AI問診要約<br><span>システム</span><br>要件定義書
+    </h1>
+    <div class="info-bar reveal">
+      <div class="info-item">
+        <div class="info-label">クライアント種別</div>
+        <div class="info-value">地方内科クリニック</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">対象ユーザー</div>
+        <div class="info-value">院長・患者</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">想定規模</div>
+        <div class="info-value">1日 60〜80名</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">作成日</div>
+        <div class="info-value">2026-05-10</div>
+      </div>
+    </div>
+    <div class="hero-summary reveal">
+      <strong>現状：</strong>問診票確認・転記に<strong>3分 × 60名 = 180分/日</strong>を消費。
+      AIが全患者の問診情報を構造化サマリーに変換し、
+      医師が診察前<strong>30秒</strong>でアセスメントを完了できる体制へ転換する。
+    </div>
+  </div>
+</section>
+
+<!-- OVERVIEW -->
+<section id="overview">
+  <div class="container">
+    <div class="section-label reveal">01 — PROJECT OVERVIEW</div>
+    <h2 class="section-title reveal">プロジェクト概要</h2>
+
+    <div class="card-grid">
+      <div class="card reveal">
+        <div class="card-icon">🩺</div>
+        <div class="card-title">課題 01 — 問診転記コスト</div>
+        <div class="card-body">
+          紙の問診票をカルテに手入力する作業が1患者あたり平均3分。
+          60名診療時には計180分（3時間）の純損失が発生している。
+        </div>
+      </div>
+      <div class="card reveal">
+        <div class="card-icon">⚠️</div>
+        <div class="card-title">課題 02 — 見落としリスク</div>
+        <div class="card-body">
+          混雑時の迅速な問診確認では、服薬歴・アレルギー情報の
+          見落としが発生しうる。患者安全上の潜在リスクを内包する。
+        </div>
+      </div>
+      <div class="card reveal">
+        <div class="card-icon">📋</div>
+        <div class="card-title">課題 03 — 患者体験のばらつき</div>
+        <div class="card-body">
+          待合室での紙の問診票は記入負担が高く、
+          高齢患者は記入漏れが多い。デジタル化でアシスト機能を提供する。
+        </div>
+      </div>
+    </div>
+
+    <div class="callout reveal">
+      <strong>解決アプローチ：</strong>
+      患者がタブレットで入力した問診情報を Claude API（claude-sonnet-4-6）がリアルタイムで構造化要約。
+      医師は診察前に専用ダッシュボードで全患者の緊急度順サマリーを確認できる。
+      紙・転記・見落としの三重コストを一括解消する。
+    </div>
+
+    <div class="kpi-row">
+      <div class="kpi-box reveal">
+        <div class="kpi-number">83<span class="kpi-unit">%</span></div>
+        <div class="kpi-label">問診確認時間削減率<br>（180分 → 30秒 × 60名 = 30分）</div>
+      </div>
+      <div class="kpi-box reveal">
+        <div class="kpi-number">↑<span class="kpi-unit"> HIGH</span></div>
+        <div class="kpi-label">アレルギー・服薬情報の強調表示で<br>医師の確認精度が向上</div>
+      </div>
+      <div class="kpi-box reveal">
+        <div class="kpi-number">30<span class="kpi-unit">秒</span></div>
+        <div class="kpi-label">AIサマリーによる<br>1患者あたりの事前確認時間</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ARCHITECTURE -->
+<section id="architecture">
+  <div class="container">
+    <div class="section-label reveal">02 — SYSTEM ARCHITECTURE</div>
+    <h2 class="section-title reveal">システム構成図</h2>
+
+    <div class="diagram-wrap reveal">
+      <div class="diagram-node">
+        <div class="node-box">患者タブレット</div>
+        <div class="node-desc">問診票入力インターフェース（Next.js / React）</div>
+      </div>
+      <div class="node-arrow">
+        <span class="node-note">POST /api/interview — 問診データ送信</span>
+      </div>
+      <div class="diagram-node">
+        <div class="node-box">フロントエンド API レイヤー</div>
+        <div class="node-desc">入力バリデーション・セッション管理</div>
+      </div>
+      <div class="node-arrow">
+        <span class="node-note">プロンプト組み立て → Claude API 呼び出し</span>
+      </div>
+      <div class="diagram-node">
+        <div class="node-box">バックエンド（Vercel Functions）</div>
+        <div class="node-desc">サーバーレス・エッジ処理・認証チェック</div>
+      </div>
+      <div class="node-arrow">
+        <span class="node-note">構造化プロンプト送信（system + user）</span>
+      </div>
+      <div class="diagram-node">
+        <div class="node-box">Claude API（claude-sonnet-4-6）</div>
+        <div class="node-desc">構造化サマリー生成・緊急度判定・JSON 返却（8〜12秒）</div>
+      </div>
+      <div class="node-arrow">
+        <span class="node-note">サマリー JSON 保存・患者 ID 紐付け</span>
+      </div>
+      <div class="diagram-node">
+        <div class="node-box">データベース（Supabase）</div>
+        <div class="node-desc">問診データ・AI 要約・履歴管理。RLS でアクセス制御</div>
+      </div>
+      <div class="node-arrow">
+        <span class="node-note">リアルタイム更新（Supabase Realtime）</span>
+      </div>
+      <div class="diagram-node">
+        <div class="node-box">医師ダッシュボード（Next.js）</div>
+        <div class="node-desc">待合患者の緊急度順サマリー一覧・前回差分表示</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FUNCTIONAL REQUIREMENTS -->
+<section id="requirements">
+  <div class="container">
+    <div class="section-label reveal">03 — FUNCTIONAL REQUIREMENTS</div>
+    <h2 class="section-title reveal">機能要件</h2>
+
+    <!-- 患者側 -->
+    <h3 style="font-family: 'Bebas Neue', sans-serif; font-size:1.3rem; letter-spacing:.06em; color: var(--teal); margin-bottom: 16px;" class="reveal">A. 患者側 — 問診入力画面</h3>
+    <div class="tbl-wrap reveal">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:30%">機能</th>
+            <th style="width:40%">詳細仕様</th>
+            <th style="width:15%">優先度</th>
+            <th style="width:15%">フェーズ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>タブレット最適化 UI</td>
+            <td>10インチ基準・大型タッチターゲット（min 48px）・日本語 IME 最適化</td>
+            <td><span class="tag tag-high">HIGH</span></td>
+            <td><span class="tag tag-ph">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>主訴・症状入力</td>
+            <td>自由記述テキストエリア + よく使われる症状のクイック選択チップ（最大 16 項目）</td>
+            <td><span class="tag tag-high">HIGH</span></td>
+            <td><span class="tag tag-ph">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>服薬歴入力</td>
+            <td>薬名テキスト入力（補完候補表示）・「なし」トグル・追加ボタンで複数対応</td>
+            <td><span class="tag tag-high">HIGH</span></td>
+            <td><span class="tag tag-ph">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>アレルギー入力</td>
+            <td>薬剤・食物・その他の分類別入力・「なし」確認トグル</td>
+            <td><span class="tag tag-high">HIGH</span></td>
+            <td><span class="tag tag-ph">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>既往歴入力</td>
+            <td>疾患名テキスト入力 + 主要疾患のプリセット選択（高血圧・糖尿病 等）</td>
+            <td><span class="tag tag-med">MED</span></td>
+            <td><span class="tag tag-ph">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>QRコード発行</td>
+            <td>入力完了時に受付連携用 QR を発行。受付スキャンで患者 ID を確定する</td>
+            <td><span class="tag tag-med">MED</span></td>
+            <td><span class="tag tag-ph">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>多言語対応</td>
+            <td>日本語・英語・中国語（繁体）の切り替えボタン</td>
+            <td><span class="tag tag-low">LOW</span></td>
+            <td><span class="tag tag-ph">Phase 2</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- AI処理 -->
+    <h3 style="font-family: 'Bebas Neue', sans-serif; font-size:1.3rem; letter-spacing:.06em; color: var(--blue); margin-bottom: 16px; margin-top: 40px;" class="reveal">B. AI処理 — Claude API 統合</h3>
+    <div class="tbl-wrap reveal">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:30%">機能</th>
+            <th style="width:40%">詳細仕様</th>
+            <th style="width:15%">優先度</th>
+            <th style="width:15%">フェーズ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>問診内容の構造化変換</td>
+            <td>自由記述を JSON 形式の構造化サマリーへ変換。one_line_summary・key_points・detailed_summary を出力</td>
+            <td><span class="tag tag-high">HIGH</span></td>
+            <td><span class="tag tag-ph">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>緊急度フラグ自動付与</td>
+            <td>HIGH（即時対応）/ MEDIUM（通常優先）/ LOW（安定）の 3 段階。症状・バイタル・既往歴を総合判定</td>
+            <td><span class="tag tag-high">HIGH</span></td>
+            <td><span class="tag tag-ph">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>アレルギー・服薬アラート</td>
+            <td>服薬中の薬とアレルギー情報を medication_alert フィールドに必ず明記。ダッシュボードで赤枠強調表示</td>
+            <td><span class="tag tag-high">HIGH</span></td>
+            <td><span class="tag tag-ph">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>処理時間</td>
+            <td>Claude API 呼び出し〜JSON 返却まで 8〜12秒以内。タイムアウト 15 秒で再試行（最大 2 回）</td>
+            <td><span class="tag tag-high">HIGH</span></td>
+            <td><span class="tag tag-ph">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>エラーハンドリング</td>
+            <td>API 障害時はフォールバック UI を表示しつつ、生の問診データをダッシュボードに表示する</td>
+            <td><span class="tag tag-med">MED</span></td>
+            <td><span class="tag tag-ph">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>要約精度モニタリング</td>
+            <td>院長が「良い要約」「要改善」をフラグし、プロンプト改善に活用できるフィードバック機能</td>
+            <td><span class="tag tag-low">LOW</span></td>
+            <td><span class="tag tag-ph">Phase 2</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 医師ダッシュボード -->
+    <h3 style="font-family: 'Bebas Neue', sans-serif; font-size:1.3rem; letter-spacing:.06em; color: var(--orange); margin-bottom: 16px; margin-top: 40px;" class="reveal">C. 医師ダッシュボード</h3>
+    <div class="tbl-wrap reveal">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:30%">機能</th>
+            <th style="width:40%">詳細仕様</th>
+            <th style="width:15%">優先度</th>
+            <th style="width:15%">フェーズ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>待合患者サマリー一覧</td>
+            <td>リアルタイム更新（Supabase Realtime）。緊急度カラーバー・氏名・one_line_summary を表示</td>
+            <td><span class="tag tag-high">HIGH</span></td>
+            <td><span class="tag tag-ph">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>緊急度順ソート</td>
+            <td>HIGH → MEDIUM → LOW の順にデフォルトソート。来院時刻順への切り替えも可能</td>
+            <td><span class="tag tag-high">HIGH</span></td>
+            <td><span class="tag tag-ph">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>詳細サマリー表示</td>
+            <td>患者タップで詳細ペインを展開。key_points・medication_alert・detailed_summary を表示</td>
+            <td><span class="tag tag-high">HIGH</span></td>
+            <td><span class="tag tag-ph">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>前回来院との差分表示</td>
+            <td>前回の問診サマリーとの差分をハイライト表示。「前回と同様」「新たな症状あり」を視覚化</td>
+            <td><span class="tag tag-med">MED</span></td>
+            <td><span class="tag tag-ph">Phase 2</span></td>
+          </tr>
+          <tr>
+            <td>診察完了マーク</td>
+            <td>診察が完了した患者を一覧から非表示にする。日次でリセット</td>
+            <td><span class="tag tag-med">MED</span></td>
+            <td><span class="tag tag-ph">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td>患者履歴検索</td>
+            <td>氏名・生年月日での検索。過去の問診サマリー一覧を日付順で表示</td>
+            <td><span class="tag tag-low">LOW</span></td>
+            <td><span class="tag tag-ph">Phase 2</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 非機能要件 -->
+    <h3 style="font-family: 'Bebas Neue', sans-serif; font-size:1.3rem; letter-spacing:.06em; color: var(--text); margin-bottom: 16px; margin-top: 56px;" class="reveal">D. 非機能要件</h3>
+    <div class="tbl-wrap reveal">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:20%">項目</th>
+            <th style="width:35%">要件</th>
+            <th style="width:45%">対応方法</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>セキュリティ</td>
+            <td>医療情報の完全暗号化・HTTPS 必須・不正アクセス遮断</td>
+            <td>Supabase RLS（行レベルセキュリティ）によるデータアクセス制御。TLS 1.3 通信。API キーはサーバーサイド管理のみ。ログイン：院内 IP 制限 + パスワード認証</td>
+          </tr>
+          <tr>
+            <td>個人情報保護</td>
+            <td>個人情報保護法・医療情報の安全管理ガイドラインへの準拠</td>
+            <td>問診データの保存期間を院長と協議の上で設定（推奨 5 年）。患者への説明・同意取得フローを問診開始前に実装。第三者提供は行わない</td>
+          </tr>
+          <tr>
+            <td>パフォーマンス</td>
+            <td>AI 応答 8 秒以内・ダッシュボード初期表示 1 秒以内</td>
+            <td>Vercel Edge Network によるグローバル CDN 配信。画像遅延読み込み。Supabase インデックス最適化。Claude API のストリーミングレスポンス対応</td>
+          </tr>
+          <tr>
+            <td>可用性</td>
+            <td>SLA 99.5%以上（診療時間中の障害は診療に直接影響するため）</td>
+            <td>Vercel のサーバーレス冗長構成。Claude API 障害時のフォールバック（生の問診データを直接表示）。Supabase の自動バックアップ（1 日 1 回）</td>
+          </tr>
+          <tr>
+            <td>保守性</td>
+            <td>院長・スタッフが操作できる管理画面。技術者不在でも運用継続</td>
+            <td>Supabase 管理コンソールでデータ閲覧・エクスポート可能。プロンプトのみの変更は管理画面から院長が直接編集可能にする（Phase 2）</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- WIREFRAMES -->
+<section id="wireframes">
+  <div class="container">
+    <div class="section-label reveal">04 — SCREEN SPECIFICATIONS</div>
+    <h2 class="section-title reveal">画面仕様 / ワイヤーフレーム</h2>
+
+    <div class="wireframe-grid">
+
+      <!-- Screen 1: Patient input -->
+      <div class="wf-device reveal">
+        <div class="wf-titlebar">
+          <span>問診入力画面 — 患者向け（タブレット）</span>
+          <div class="wf-dots">
+            <div class="wf-dot"></div>
+            <div class="wf-dot"></div>
+            <div class="wf-dot" style="background: var(--teal);"></div>
+          </div>
+        </div>
+        <div class="wf-body">
+          <div class="wf-form-header">AI問診入力 / Step 2 of 4 — 症状</div>
+          <div class="wf-step-bar">
+            <div class="wf-step active"></div>
+            <div class="wf-step active"></div>
+            <div class="wf-step"></div>
+            <div class="wf-step"></div>
+          </div>
+          <div class="wf-field">
+            <div class="wf-label">今日はどこが気になりますか？（主訴）</div>
+            <div class="wf-input-lg"></div>
+            <div class="wf-quick-select">
+              <div class="wf-chip sel">発熱</div>
+              <div class="wf-chip sel">咳</div>
+              <div class="wf-chip">頭痛</div>
+              <div class="wf-chip">腹痛</div>
+              <div class="wf-chip">倦怠感</div>
+              <div class="wf-chip">喉の痛み</div>
+              <div class="wf-chip">めまい</div>
+              <div class="wf-chip">その他</div>
+            </div>
+          </div>
+          <div class="wf-field">
+            <div class="wf-label">いつ頃から？</div>
+            <div class="wf-input"></div>
+          </div>
+          <div class="wf-btn">次へ →</div>
+        </div>
+      </div>
+
+      <!-- Screen 2: Doctor dashboard -->
+      <div class="wf-device reveal">
+        <div class="wf-titlebar">
+          <span>サマリー一覧 — 医師向け（PC）</span>
+          <div class="wf-dots">
+            <div class="wf-dot"></div>
+            <div class="wf-dot"></div>
+            <div class="wf-dot" style="background: var(--teal);"></div>
+          </div>
+        </div>
+        <div class="wf-body">
+          <div class="wf-dash-header">
+            <div class="wf-dash-title">待合患者 — 2026-05-10 午前</div>
+            <div class="wf-dash-count">6<span style="font-size:.65rem; color: var(--text-faint); font-family: 'Noto Sans JP'"> 名待機中</span></div>
+          </div>
+          <div class="wf-patient-row">
+            <div class="wf-urgency u-high"></div>
+            <div style="flex:1">
+              <div class="wf-pt-name">山田 太郎 <span style="font-size:.65rem; color: var(--text-faint);">62歳 男性</span></div>
+              <div class="wf-pt-summary">胸痛・息切れを主訴。高血圧の既往あり。カルシウム拮抗薬服用中</div>
+            </div>
+            <span class="tag tag-high wf-pt-tag">HIGH</span>
+          </div>
+          <div class="wf-patient-row">
+            <div class="wf-urgency u-med"></div>
+            <div style="flex:1">
+              <div class="wf-pt-name">佐藤 花子 <span style="font-size:.65rem; color: var(--text-faint);">38歳 女性</span></div>
+              <div class="wf-pt-summary">発熱・咳・倦怠感 3日間継続。ペニシリンアレルギーあり</div>
+            </div>
+            <span class="tag tag-med wf-pt-tag">MED</span>
+          </div>
+          <div class="wf-patient-row">
+            <div class="wf-urgency u-low"></div>
+            <div style="flex:1">
+              <div class="wf-pt-name">鈴木 一郎 <span style="font-size:.65rem; color: var(--text-faint);">29歳 男性</span></div>
+              <div class="wf-pt-summary">軽度の喉の痛み。既往歴なし。服薬なし</div>
+            </div>
+            <span class="tag tag-low wf-pt-tag">LOW</span>
+          </div>
+          <div class="wf-patient-row" style="opacity:.4">
+            <div class="wf-urgency u-low"></div>
+            <div style="flex:1">
+              <div class="wf-pt-name">田中 美咲 <span style="font-size:.65rem; color: var(--text-faint);">45歳 女性</span></div>
+              <div class="wf-pt-summary">定期処方。血圧安定。変化なし</div>
+            </div>
+            <span class="tag tag-low wf-pt-tag">LOW</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Screen 3: Detail view (full width) -->
+      <div class="wf-device wf-full reveal">
+        <div class="wf-titlebar">
+          <span>個別サマリー詳細 — 医師向け（PC）/ 佐藤 花子</span>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <span class="wf-diff-badge">前回と差分あり</span>
+            <div class="wf-dots">
+              <div class="wf-dot"></div>
+              <div class="wf-dot"></div>
+              <div class="wf-dot" style="background: var(--teal);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="wf-body">
+          <div class="wf-alert-box">
+            ⚠️ アレルギー注意：ペニシリン系抗生物質（アレルギー歴あり） — 処方時は代替薬を選択すること
+          </div>
+          <div class="wf-detail-top">
+            <div class="wf-detail-card">
+              <div class="wf-detail-label">緊急度</div>
+              <div class="wf-detail-val"><span class="tag tag-med">MEDIUM</span></div>
+            </div>
+            <div class="wf-detail-card">
+              <div class="wf-detail-label">one line summary</div>
+              <div class="wf-detail-val">発熱・咳・倦怠感を主訴とする38歳女性。ペニシリンアレルギーあり。インフル検査を検討</div>
+            </div>
+            <div class="wf-detail-card">
+              <div class="wf-detail-label">前回来院</div>
+              <div class="wf-detail-val">2026-03-12 / 喉の痛み（回復）</div>
+            </div>
+          </div>
+          <div class="wf-key-points">
+            <div style="font-size:.65rem; color: var(--teal); letter-spacing:.12em; margin-bottom:8px;">KEY POINTS</div>
+            <div class="wf-kp-item">発熱（38.2℃）・咳・倦怠感が 3 日間持続。前回と比べ新たな症状</div>
+            <div class="wf-kp-item">ペニシリン系抗生物質に対するアレルギー既往。代替薬での対応が必要</div>
+            <div class="wf-kp-item">現在の服薬なし。職場での感染者接触歴あり</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PROMPT DESIGN -->
+<section id="prompt">
+  <div class="container">
+    <div class="section-label reveal">05 — PROMPT ENGINEERING</div>
+    <h2 class="section-title reveal">プロンプト設計</h2>
+
+    <div class="callout reveal">
+      <strong>設計方針：</strong>
+      医師の思考フローに合わせた出力順序（緊急度 → 一行サマリー → 注意事項 → 詳細）を定義する。
+      JSON 出力を強制することで、ダッシュボード側でのパース処理を安定させる。
+    </div>
+
+    <div class="prompt-block reveal">
+      <span class="prompt-key">system</span>: <span class="prompt-comment">|</span>
+      あなたは内科クリニックの医師をサポートするAIアシスタントです。
+      患者の問診情報を、医師が診察前30秒で確認できる簡潔なサマリーに変換してください。
+
+      <span class="prompt-comment"># 出力ルール</span>
+      - 必ずJSONのみで出力する（説明文・Markdown不要）
+      - urgent_levelは HIGH / MEDIUM / LOW の3段階のみ
+      - one_line_summaryは40字以内で完結させる
+      - key_pointsは最重要事項を2〜3個に絞る
+      - medication_alertが「なし」でも必ずフィールドを含める
+      - detailed_summaryは200字以内
+
+      ---
+
+      <span class="prompt-key">user</span>: <span class="prompt-comment">|</span>
+      【問診情報】
+      主訴: <span class="prompt-val">{chief_complaint}</span>
+      症状詳細: <span class="prompt-val">{symptoms}</span>
+      いつから: <span class="prompt-val">{onset}</span>
+      服薬中の薬: <span class="prompt-val">{medications}</span>
+      アレルギー: <span class="prompt-val">{allergies}</span>
+      既往歴: <span class="prompt-val">{medical_history}</span>
+      年齢・性別: <span class="prompt-val">{age}</span>歳 / <span class="prompt-val">{gender}</span>
+
+      ---
+
+      <span class="prompt-comment"># 期待するJSON出力形式</span>
+      {
+        <span class="prompt-key">"urgent_level"</span>: <span class="prompt-val">"HIGH | MEDIUM | LOW"</span>,
+        <span class="prompt-key">"one_line_summary"</span>: <span class="prompt-val">"〇〇を主訴とする〇〇代。[特記事項]"</span>,
+        <span class="prompt-key">"key_points"</span>: [<span class="prompt-val">"重要事項1"</span>, <span class="prompt-val">"重要事項2"</span>],
+        <span class="prompt-key">"medication_alert"</span>: <span class="prompt-val">"アレルギー・服薬の注意事項（なし の場合も明記）"</span>,
+        <span class="prompt-key">"detailed_summary"</span>: <span class="prompt-val">"200字以内の詳細サマリー"</span>
+      }
+    </div>
+
+    <div class="callout reveal" style="margin-top: 32px;">
+      <strong>緊急度判定ロジック（参考）：</strong>
+      HIGH — 胸痛・意識障害・強い呼吸困難・重篤なアレルギー反応が疑われる場合。
+      MEDIUM — 38℃以上の発熱・24時間以上継続する腹痛・服薬歴との相互作用リスクがある場合。
+      LOW — 軽症・経過観察レベル・定期処方のみ。
+    </div>
+  </div>
+</section>
+
+<!-- PHASES -->
+<section id="phases">
+  <div class="container">
+    <div class="section-label reveal">06 — DEVELOPMENT ROADMAP</div>
+    <h2 class="section-title reveal">開発フェーズ・工数</h2>
+
+    <div class="phase-grid">
+      <div class="phase-card phase-1 reveal">
+        <div class="phase-label">PHASE 01 / MVP</div>
+        <div class="phase-name">コア機能</div>
+        <div class="phase-scope">
+          タブレット問診入力画面の実装。
+          Claude API 連携によるリアルタイム AI 要約生成。
+          医師向けダッシュボード基本版（一覧・詳細・緊急度ソート）。
+          Supabase によるデータ永続化・RLS 設定。
+        </div>
+        <div class="phase-meta">
+          <span class="phase-weeks">6 週間</span>
+          <span class="phase-cost">¥1,200,000</span>
+        </div>
+      </div>
+      <div class="phase-card phase-2 reveal">
+        <div class="phase-label">PHASE 02 / GROWTH</div>
+        <div class="phase-name">患者管理・履歴</div>
+        <div class="phase-scope">
+          患者 ID 管理・来院履歴の蓄積。
+          前回来院サマリーとの差分表示機能。
+          患者検索・フィルタリング機能。
+          プロンプトフィードバック収集機能。
+        </div>
+        <div class="phase-meta">
+          <span class="phase-weeks">4 週間</span>
+          <span class="phase-cost">¥800,000</span>
+        </div>
+      </div>
+      <div class="phase-card phase-3 reveal">
+        <div class="phase-label">PHASE 03 / SCALE</div>
+        <div class="phase-name">分析・連携</div>
+        <div class="phase-scope">
+          月次レポート（頻出症状・緊急度分布）の自動生成。
+          複数院展開対応（マルチテナント構成）。
+          電子カルテ API 連携（対応システムのみ）。
+          多言語問診対応（英語・中国語）。
+        </div>
+        <div class="phase-meta">
+          <span class="phase-weeks">6 週間</span>
+          <span class="phase-cost">¥1,200,000</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout reveal" style="margin-top: 32px;">
+      <strong>合計：</strong> 16 週間 / ¥3,200,000（税抜）。
+      Phase 1 の MVPのみ先行着手も可能。
+      各フェーズは独立しており、進捗に応じて Phase 2 以降のスコープを調整できる。
+    </div>
+
+    <!-- Tech stack -->
+    <div class="section-label reveal" style="margin-top: 64px;">TECHNOLOGY STACK</div>
+    <div class="tech-grid">
+      <div class="tech-item reveal">
+        <div class="tech-name">Next.js</div>
+        <div class="tech-role">フロントエンド / App Router</div>
+      </div>
+      <div class="tech-item reveal">
+        <div class="tech-name">Supabase</div>
+        <div class="tech-role">DB / Auth / Realtime</div>
+      </div>
+      <div class="tech-item reveal">
+        <div class="tech-name">Claude API</div>
+        <div class="tech-role">AI 要約生成エンジン</div>
+      </div>
+      <div class="tech-item reveal">
+        <div class="tech-name">Vercel</div>
+        <div class="tech-role">ホスティング / Functions</div>
+      </div>
+      <div class="tech-item reveal">
+        <div class="tech-name">TypeScript</div>
+        <div class="tech-role">型安全開発</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-logo">SENKODE</div>
+  <div class="footer-tagline">ONE FLASH OF INSIGHT. ENCODED FOREVER.</div>
+  <div style="margin-top: 24px; font-size: .72rem; color: var(--text-faint);">
+    This document is a portfolio specimen by Senkode. &nbsp;|&nbsp; 2026-05-10
+  </div>
+</footer>
+
+<script>
+  // ─── Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  let mouseX = 0, mouseY = 0;
+  let ringX = 0, ringY = 0;
+
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    cursor.style.left = mouseX + 'px';
+    cursor.style.top  = mouseY + 'px';
+  });
+
+  function animateRing() {
+    ringX += (mouseX - ringX) * 0.14;
+    ringY += (mouseY - ringY) * 0.14;
+    ring.style.left = ringX + 'px';
+    ring.style.top  = ringY + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  document.querySelectorAll('a, button, .card, .wf-patient-row, .tech-item').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.width  = '18px';
+      cursor.style.height = '18px';
+      ring.style.width    = '56px';
+      ring.style.height   = '56px';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.width  = '10px';
+      cursor.style.height = '10px';
+      ring.style.width    = '36px';
+      ring.style.height   = '36px';
+    });
+  });
+
+  // ─── Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  revealEls.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

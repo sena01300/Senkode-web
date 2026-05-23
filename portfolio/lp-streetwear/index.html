@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VOID TOKYO — SS 2026</title>
+<meta name="description" content="VOID TOKYO — ストリートウェア SS 2026コレクション。限定ドロップ。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@100;300;700;900&display=swap" rel="stylesheet">
+<style>
+    [class*="grid"] > *, [class*="inner"] > *, [class*="wrap"] > * { min-width: 0; }
+
+    img, video, iframe { max-width: 100%; height: auto; }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html { overflow-x: hidden; }
+
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --red:   #ff0000;
+  --red-muted: rgba(255,0,0,0.5);
+  --black: #080808;
+  --card:  #111111;
+  --white: #f0f0f0;
+  --muted: rgba(240,240,240,0.35);
+  --border: rgba(255,255,255,0.06);
+  --white-faint: rgba(255,255,255,0.2);
+  --white-very-faint: rgba(255,255,255,0.15);
+}
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 300;
+  cursor: none;
+  overflow-x: hidden;
+}
+
+/* CURSOR */
+.cursor {
+  position: fixed; width: 6px; height: 6px;
+  background: var(--red); border-radius: 50%;
+  pointer-events: none; z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: width 0.2s, height 0.2s;
+}
+.cursor-ring {
+  position: fixed; width: 28px; height: 28px;
+  border: 1px solid var(--red-muted); border-radius: 50%;
+  pointer-events: none; z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s, height 0.3s, top 0.08s, left 0.08s;
+}
+body:has(a:hover) .cursor-ring,
+body:has(button:hover) .cursor-ring { width: 48px; height: 48px; }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 24px 40px;
+  mix-blend-mode: difference;
+}
+.nav-logo {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 18px; letter-spacing: 6px;
+  color: var(--white); text-decoration: none;
+}
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a {
+  font-size: 9px; letter-spacing: 4px;
+  color: var(--muted); text-decoration: none;
+  transition: color 0.3s;
+}
+.nav-links a:hover { color: var(--white); }
+
+/* HERO */
+.hero {
+  height: 100vh; min-height: 600px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+  background: var(--black);
+}
+.hero-bg-text {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(120px, 22vw, 280px);
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255,255,255,0.03);
+  letter-spacing: -8px;
+  pointer-events: none;
+  user-select: none;
+}
+.hero-content { position: relative; z-index: 1; text-align: center; }
+.hero-line-top,
+.hero-line-bottom {
+  width: 2px; height: clamp(40px, 6vh, 80px);
+  background: var(--red); margin: 0 auto;
+}
+.hero-title-outline {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(80px, 14vw, 160px);
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--white);
+  letter-spacing: -4px;
+  line-height: 0.9;
+  display: block;
+}
+.hero-title-solid {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(80px, 14vw, 160px);
+  color: var(--white);
+  letter-spacing: -4px;
+  line-height: 0.9;
+  display: block;
+}
+.hero-tagline {
+  font-size: 9px; letter-spacing: 8px;
+  color: var(--muted); margin-top: 24px;
+  text-transform: uppercase;
+}
+.hero-scroll {
+  position: absolute; bottom: 32px; left: 50%;
+  transform: translateX(-50%);
+  font-size: 8px; letter-spacing: 4px;
+  color: var(--white-faint);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.hero-scroll::after {
+  content: '';
+  width: 1px; height: 40px;
+  background: linear-gradient(var(--red), transparent);
+}
+
+@media (max-width: 768px) {
+  nav { padding: 16px 20px; }
+  .nav-links { gap: 16px; }
+  .cursor, .cursor-ring { display: none; }
+  body { cursor: auto; }
+  .hero-tagline { letter-spacing: 4px; font-size: 8px; }
+}
+
+/* MARQUEE */
+.marquee-section {
+  background: var(--red);
+  height: 40px; overflow: hidden;
+  display: flex; align-items: center;
+}
+.marquee-track {
+  display: flex; gap: 0;
+  animation: marquee 18s linear infinite;
+  white-space: nowrap;
+}
+.marquee-track span {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 13px; letter-spacing: 4px;
+  color: var(--black); padding: 0 24px;
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* FEATURED */
+.featured {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  min-height: 80vh;
+}
+.featured-image {
+  background: var(--card);
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+  min-height: 480px;
+}
+.featured-image-placeholder {
+  width: 260px; height: 340px;
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 12px;
+}
+.featured-image-placeholder span {
+  font-size: 8px; letter-spacing: 4px;
+  color: var(--white-very-faint);
+}
+.featured-info {
+  padding: 80px 60px;
+  display: flex; flex-direction: column; justify-content: center;
+  border-left: 1px solid var(--border);
+}
+.featured-label {
+  font-size: 8px; letter-spacing: 6px;
+  color: var(--red); margin-bottom: 24px;
+}
+.featured-name {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(36px, 5vw, 64px);
+  letter-spacing: -1px; line-height: 0.9;
+  margin-bottom: 24px;
+}
+.featured-desc {
+  font-size: 12px; line-height: 2;
+  color: var(--muted); margin-bottom: 40px;
+  max-width: 320px;
+}
+.featured-price {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 32px; letter-spacing: 2px;
+  color: var(--white); margin-bottom: 32px;
+}
+.btn-outline {
+  display: inline-block;
+  padding: 14px 32px;
+  border: 1px solid rgba(255,255,255,0.3);
+  font-size: 9px; letter-spacing: 6px;
+  color: var(--white); text-decoration: none;
+  transition: background 0.3s, color 0.3s;
+  cursor: none;
+}
+.btn-outline:hover { background: var(--white); color: var(--black); }
+
+@media (max-width: 768px) {
+  .featured { grid-template-columns: minmax(0, 1fr); }
+  .featured-image { min-height: 320px; }
+  .featured-info { padding: 48px 24px; border-left: none; border-top: 1px solid var(--border); }
+}
+
+/* PHILOSOPHY */
+.philosophy {
+  padding: 140px 60px;
+  text-align: center;
+  background: var(--black);
+  position: relative; overflow: hidden;
+}
+.philosophy-quote {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(36px, 7vw, 80px);
+  color: transparent;
+  -webkit-text-stroke: 1px var(--white-very-faint);
+  letter-spacing: -2px;
+  line-height: 1;
+  max-width: 900px;
+      width: 100%; margin: 0 auto 32px;
+}
+.philosophy-sub {
+  font-size: 9px; letter-spacing: 6px;
+  color: var(--red);
+}
+
+@media (max-width: 768px) {
+  .philosophy { padding: 80px 24px; }
+  .philosophy-quote { -webkit-text-stroke: 1px var(--white-faint); }
+}
+
+/* DROP CTA */
+.drop {
+  padding: 140px 60px;
+  text-align: center;
+  border-top: 1px solid var(--border);
+}
+.drop-badge {
+  display: inline-block;
+  padding: 6px 16px;
+  border: 1px solid var(--red);
+  font-size: 8px; letter-spacing: 4px;
+  color: var(--red); margin-bottom: 32px;
+}
+.drop-date {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(60px, 10vw, 120px);
+  letter-spacing: -3px; line-height: 0.9;
+  margin-bottom: 48px;
+}
+.btn-red {
+  display: inline-block;
+  padding: 18px 64px;
+  background: var(--red);
+  font-size: 10px; letter-spacing: 8px;
+  color: var(--black); text-decoration: none;
+  font-weight: 700;
+  transition: opacity 0.3s;
+  cursor: none;
+}
+.btn-red:hover { opacity: 0.85; }
+
+/* FOOTER */
+footer {
+  padding: 48px 40px;
+  display: flex; justify-content: space-between; align-items: center;
+  border-top: 1px solid var(--border);
+}
+.footer-logo {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 16px; letter-spacing: 6px;
+  color: var(--muted); text-decoration: none;
+}
+.footer-links { display: flex; gap: 24px; list-style: none; }
+.footer-links a {
+  font-size: 8px; letter-spacing: 3px;
+  color: var(--white-faint); text-decoration: none;
+  transition: color 0.3s;
+}
+.footer-links a:hover { color: var(--white); }
+.footer-copy { font-size: 8px; color: var(--white-very-faint); }
+
+@media (max-width: 768px) {
+  .drop { padding: 80px 24px; }
+  footer {
+    flex-direction: column; gap: 24px;
+    text-align: center; padding: 40px 24px;
+  }
+  .footer-links { flex-wrap: wrap; justify-content: center; }
+}
+
+/* SCROLL REVEAL */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+  will-change: opacity, transform;
+    }
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <a class="nav-logo" href="#">VOID TOKYO</a>
+  <ul class="nav-links">
+    <li><a href="#collection">COLLECTION</a></li>
+    <li><a href="#lookbook">LOOKBOOK</a></li>
+    <li><a href="#about">ABOUT</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg-text" aria-hidden="true">VOID</div>
+  <div class="hero-content">
+    <div class="hero-line-top"></div>
+    <span class="hero-title-outline">VOID</span>
+    <span class="hero-title-solid">TOKYO</span>
+    <div class="hero-line-bottom"></div>
+    <p class="hero-tagline">WEAR NOTHING. MEAN EVERYTHING.</p>
+  </div>
+  <div class="hero-scroll">SCROLL</div>
+</section>
+
+<div class="marquee-section" aria-hidden="true">
+  <div class="marquee-track">
+    <span>VOID TOKYO</span><span>·</span>
+    <span>SS 2026</span><span>·</span>
+    <span>NEW DROP</span><span>·</span>
+    <span>LIMITED EDITION</span><span>·</span>
+    <span>STREETWEAR TOKYO</span><span>·</span>
+    <span>VOID TOKYO</span><span>·</span>
+    <span>SS 2026</span><span>·</span>
+    <span>NEW DROP</span><span>·</span>
+    <span>LIMITED EDITION</span><span>·</span>
+    <span>STREETWEAR TOKYO</span><span>·</span>
+  </div>
+</div>
+
+<section class="featured" id="collection">
+  <div class="featured-image reveal">
+    <div class="featured-image-placeholder">
+      <span>PRODUCT IMAGE</span>
+      <span>340 × 440</span>
+    </div>
+  </div>
+  <div class="featured-info reveal">
+    <p class="featured-label">SS 2026 — FEATURED ITEM</p>
+    <h2 class="featured-name">VOID<br>OVERSIZED<br>HOODIE</h2>
+    <p class="featured-desc">
+      ヘビーウェイトコットン100%。オーバーサイズシルエットと
+      ミニマルなVOIDロゴ刺繍。着るたびに問いを纏う。
+    </p>
+    <p class="featured-price">¥42,000</p>
+    <a href="#" class="btn-outline">SHOP NOW</a>
+  </div>
+</section>
+
+<section class="philosophy" id="about">
+  <h2 class="philosophy-quote reveal">
+    VOID IS NOT EMPTY.<br>VOID IS EVERYTHING.
+  </h2>
+  <p class="philosophy-sub reveal">— VOID TOKYO MANIFESTO</p>
+</section>
+
+<section class="drop">
+  <div class="drop-badge reveal">COMING SOON</div>
+  <h2 class="drop-date reveal">MAY 10<br>2026</h2>
+  <a href="#" class="btn-red reveal">NOTIFY ME</a>
+</section>
+
+<footer>
+  <a class="footer-logo" href="#">VOID TOKYO</a>
+  <ul class="footer-links">
+    <li><a href="#">COLLECTION</a></li>
+    <li><a href="#">LOOKBOOK</a></li>
+    <li><a href="#">STOCKISTS</a></li>
+    <li><a href="#">CONTACT</a></li>
+  </ul>
+  <p class="footer-copy">© 2026 VOID TOKYO. ALL RIGHTS RESERVED.</p>
+</footer>
+
+<script>
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+if (cursor && ring) {
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+    ring.style.left = e.clientX + 'px';
+    ring.style.top = e.clientY + 'px';
+  });
+}
+</script>
+
+<script>
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Works — Senkode</title>
+  <meta name="description" content="Senkodeの制作実績一覧。SEOライティング・Web制作・業務効率化コンサルティングの事例をご覧ください。">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital@1&family=Noto+Sans+JP:wght@100;200;300;700&display=swap" rel="stylesheet">
+  <style>
+    [class*="grid"] > *, [class*="inner"] > *, [class*="wrap"] > * { min-width: 0; }
+
+    img, video, iframe { max-width: 100%; height: auto; }
+
+    html { overflow-x: hidden; }
+
+    /* ===== DESIGN TOKENS ===== */
+    :root {
+      --gold:       #C9A84C;
+      --gold-light: #E8C97A;
+      --gold-dim:   #6B5420;
+      --black:      #080808;
+      --off-black:  #0F0F0F;
+      --card:       #111111;
+      --white:      #F4F1EC;
+      --muted:      rgba(244,241,236,0.35);
+      --border:     rgba(201,168,76,0.1);
+      --gold-hover:    rgba(201,168,76,0.1);
+      --gold-alpha-40: rgba(201,168,76,0.4);
+      --gold-alpha-30: rgba(201,168,76,0.3);
+      --gold-alpha-50: rgba(201,168,76,0.5);
+      --white-dim:     rgba(244,241,236,0.4);
+      --white-faint:   rgba(244,241,236,0.2);
+      --gold-glow-soft: rgba(201,168,76,0.08);
+      --gold-grid:      rgba(201,168,76,0.03);
+      --nav-bg:         rgba(15,15,15,0.85);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    p, li, h1, h2, h3, h4, span, div, td, dt, dd, label {
+      word-break: keep-all;
+      overflow-wrap: break-word;
+      line-break: strict;
+    }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: none;
+      word-break: keep-all;
+      overflow-wrap: break-word;
+      line-break: strict;
+    }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dim); }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--gold-grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--gold-grid) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
+      will-change: opacity, transform;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ===== CURSOR ===== */
+    .cursor-dot {
+      position: fixed; width: 8px; height: 8px;
+      background: var(--gold); border-radius: 50%;
+      transform: translate(-50%,-50%); pointer-events: none;
+      z-index: 9999; mix-blend-mode: difference; transition: transform 0.1s;
+    }
+    .cursor-ring {
+      position: fixed; width: 32px; height: 32px;
+      border: 1px solid var(--gold-alpha-50); border-radius: 50%;
+      transform: translate(-50%,-50%); pointer-events: none;
+      z-index: 9998; transition: width 0.3s, height 0.3s;
+    }
+    .cursor-ring.expanded { width: 48px; height: 48px; }
+
+    /* ===== NOISE ===== */
+    .noise {
+      position: fixed; inset: 0; pointer-events: none; z-index: 500; opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat: repeat; background-size: 200px 200px;
+    }
+
+    /* ===== NAVIGATION ===== */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 60px;
+      background: var(--nav-bg); backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-wordmark { font-family: 'Bebas Neue', cursive; font-size: 22px; letter-spacing: 0.25em; color: var(--white); }
+    .nav-links { display: flex; align-items: center; gap: 32px; }
+    .nav-link { font-size: 11px; letter-spacing: 0.2em; color: var(--muted); text-decoration: none; transition: color 0.3s; display: flex; flex-direction: column; align-items: center; line-height: 1.2; }
+    .nav-link:hover, .nav-link.active { color: var(--white); }
+    .nav-cta {
+      font-size: 10px; letter-spacing: 0.2em; color: var(--gold);
+      text-decoration: none; border: 1px solid var(--gold-alpha-40);
+      padding: 8px 16px; transition: background 0.3s;
+    }
+    .nav-cta:hover { background: var(--gold-hover); }
+
+    /* ===== PAGE HERO ===== */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .page-hero {
+      padding: 120px 60px 80px;
+      position: relative;
+      z-index: 1;
+      border-bottom: 1px solid var(--border);
+    }
+    .page-hero-inner {
+      max-width: 1100px;
+      width: 100%;
+      margin: 0 auto;
+      animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.1s both;
+    }
+    .page-label {
+      font-size: 10px;
+      letter-spacing: 0.35em;
+      color: var(--gold);
+      margin-bottom: 16px;
+      font-weight: 100;
+    }
+    .page-title {
+      font-family: 'Bebas Neue', cursive;
+      font-size: clamp(56px, 8vw, 96px);
+      letter-spacing: 0.08em;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 20px;
+    }
+    .page-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 16px;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    /* ===== FILTER ===== */
+    .filter-bar {
+      padding: 40px 60px;
+      position: relative;
+      z-index: 1;
+      border-bottom: 1px solid var(--border);
+    }
+    .filter-inner {
+      max-width: 1100px;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 8px 20px;
+      background: none;
+      cursor: pointer;
+      transition: color 0.3s, border-color 0.3s, background 0.3s;
+      font-family: 'Noto Sans JP', sans-serif;
+    }
+    .filter-btn:hover { color: var(--white); border-color: var(--gold-alpha-40); }
+    .filter-btn.active { color: var(--gold); border-color: var(--gold); background: var(--gold-glow-soft); }
+
+    /* ===== WORKS GRID ===== */
+    .works-section {
+      padding: 80px 60px 140px;
+      position: relative;
+      z-index: 1;
+    }
+    .works-inner {
+      max-width: 1100px;
+      width: 100%;
+      margin: 0 auto;
+    }
+    .works-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 2px;
+    }
+
+    .work-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      transition-delay: var(--delay, 0s);
+      position: relative;
+      cursor: pointer;
+    }
+    .work-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 2px;
+      background: var(--gold);
+      transition: left 0.5s ease;
+      z-index: 2;
+    }
+    .work-card:hover::before { left: 100%; }
+
+    .work-thumb {
+      height: 180px;
+      position: relative;
+      overflow: hidden;
+    }
+    .work-thumb--writing-01 {
+      background: linear-gradient(135deg, #1a0e00 0%, var(--gold-dim) 60%, #3d2a00 100%);
+    }
+    .work-thumb--writing-02 {
+      background: linear-gradient(135deg, var(--black) 0%, #2a1f00 60%, var(--gold-dim) 100%);
+    }
+    .work-thumb--web {
+      background: linear-gradient(135deg, #050505 0%, #1a1a1a 50%, var(--gold-dim) 100%);
+    }
+    .work-thumb--auto {
+      background: linear-gradient(135deg, #080808 0%, #0d1a0d 50%, #1a3a1a 100%);
+    }
+    .work-thumb--report {
+      background: linear-gradient(135deg, #080808 0%, #0d0d1a 50%, #1a1a3a 100%);
+    }
+    .work-thumb--video {
+      background: linear-gradient(135deg, #080808 0%, #1a1000 40%, var(--gold-dim) 100%);
+    }
+    .work-thumb--lp-gym {
+      background: linear-gradient(135deg, var(--black) 0%, #0a1a0a 50%, #1a3320 100%);
+    }
+    .work-thumb--lp-fukugyou {
+      background: linear-gradient(135deg, var(--black) 0%, #120d1a 50%, #2a1a3a 100%);
+    }
+    .work-thumb--void-tokyo {
+      background: #080808;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 4px;
+    }
+    .work-thumb--void-tokyo .void-label-outline {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 28px; letter-spacing: -1px;
+      color: transparent;
+      -webkit-text-stroke: 1px #f0f0f0;
+      line-height: 0.9;
+    }
+    .work-thumb--void-tokyo .void-label-solid {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 28px; letter-spacing: -1px;
+      color: #f0f0f0; line-height: 0.9;
+    }
+    .work-thumb--void-tokyo .void-bar {
+      width: 36px; height: 2px;
+      background: #ff0000; margin-top: 4px;
+    }
+    .work-thumb--x-auto {
+      background: linear-gradient(135deg, var(--black) 0%, #001515 50%, #003535 100%);
+    }
+    .work-thumb--lp-clinic {
+      background: linear-gradient(160deg, #ffffff 0%, #fde8e8 50%, #f5c8c8 100%);
+      display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 6px;
+    }
+    .work-thumb--lp-clinic .clinic-logo {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-style: italic; font-size: 20px; font-weight: 300;
+      color: #c9a0a0; letter-spacing: 3px;
+    }
+    .work-thumb--lp-clinic .clinic-bar {
+      width: 28px; height: 1px; background: #c9a0a0;
+    }
+    .work-thumb--lp-clinic .clinic-sub {
+      font-size: 8px; letter-spacing: 4px; color: #c9a0a0; font-family: 'Noto Sans JP', sans-serif;
+    }
+    .work-thumb--lp-saas {
+      background: #050D05;
+      display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 4px;
+    }
+    .work-thumb--lp-saas .saas-logo {
+      font-family: 'Courier New', monospace;
+      font-size: 14px; font-weight: 700; letter-spacing: 2px;
+      color: #00FF88;
+      text-shadow: 0 0 12px rgba(0,255,136,0.5);
+    }
+    .work-thumb--lp-saas .saas-cmd {
+      font-family: 'Courier New', monospace;
+      font-size: 9px; color: rgba(0,255,136,0.5); letter-spacing: 1px;
+    }
+
+    /* Card 13: Café Matin */
+    .work-thumb--cafe-matin {
+      background: linear-gradient(135deg, #F5EDE0 0%, #C4956A 60%, #3D2B1F 100%);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 8px;
+    }
+    .cafe-matin-logo {
+      font-family: 'Playfair Display', serif; font-style: italic;
+      font-size: 22px; color: #FDFAF6; letter-spacing: 2px;
+    }
+    .cafe-matin-sub {
+      font-size: 9px; letter-spacing: 4px; text-transform: uppercase;
+      color: rgba(253,250,246,0.6);
+    }
+    .cafe-matin-dots {
+      display: flex; gap: 6px; margin-top: 4px;
+    }
+    .cafe-matin-dots span {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #E2C4A0;
+    }
+
+    /* ===== WORKS DIVIDER ===== */
+    .works-divider {
+      grid-column: 1 / -1;
+      padding: 48px 0 32px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .works-divider-label {
+      font-size: 10px;
+      letter-spacing: 0.35em;
+      color: var(--gold);
+      white-space: nowrap;
+      font-weight: 100;
+    }
+    .works-divider-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .works-divider-sub {
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .work-thumb--video .play-icon {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      width: 52px; height: 52px;
+      border: 2px solid var(--gold);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0.8;
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    .work-card:hover .play-icon { opacity: 1; transform: translate(-50%,-50%) scale(1.1); }
+    .work-thumb-label {
+      position: absolute;
+      bottom: 16px; left: 20px;
+      font-family: 'Bebas Neue', cursive;
+      font-size: 36px;
+      letter-spacing: 0.1em;
+      color: rgba(201,168,76,0.15);
+      line-height: 1;
+      user-select: none;
+    }
+    .work-thumb-icon {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      opacity: 0.6;
+    }
+
+    .work-body { padding: 24px 28px 28px; }
+    .work-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .work-tag {
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      border: 1px solid var(--gold-alpha-30);
+      padding: 3px 10px;
+    }
+    .work-date {
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+    }
+    .work-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 10px;
+      letter-spacing: 0.03em;
+      line-height: 1.6;
+    }
+    .work-desc {
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 16px;
+    }
+    .work-link {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      text-decoration: none;
+      opacity: 0;
+      transition: opacity 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .work-card:hover .work-link { opacity: 1; }
+
+    /* ===== CTA ===== */
+    .cta {
+      padding: 140px 60px;
+      background: var(--off-black);
+      position: relative;
+      z-index: 1;
+      text-align: center;
+    }
+    .cta-content { max-width: 600px;
+      width: 100%; margin: 0 auto; }
+    .section-label {
+      font-size: 10px; letter-spacing: 0.35em;
+      color: var(--gold); margin-bottom: 12px; font-weight: 100;
+    }
+    .cta-title {
+      font-family: 'Bebas Neue', cursive;
+      font-size: clamp(32px, 5vw, 56px);
+      letter-spacing: 0.1em;
+      color: var(--white);
+      margin-bottom: 16px;
+    }
+    .cta-sub {
+      font-size: 12px; color: var(--muted);
+      line-height: 1.9; margin-bottom: 40px;
+    }
+    .btn-primary {
+      display: inline-block; padding: 14px 32px;
+      border: 1px solid var(--gold); color: var(--gold);
+      text-decoration: none; font-size: 11px;
+      letter-spacing: 0.2em; transition: background 0.3s;
+    }
+    .btn-primary:hover { background: var(--gold-hover); }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      padding: 24px 60px;
+      background: var(--black);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+    .footer-copy { font-size: 10px; letter-spacing: 0.25em; color: var(--muted); }
+    .footer-tag  { font-size: 9px;  letter-spacing: 0.15em; color: var(--white-faint); }
+    .footer-sns { display:flex; gap:20px; align-items:center; }
+    .footer-sns a { display:flex; align-items:center; justify-content:center; width:32px; height:32px; color:var(--muted); transition:color 0.3s; }
+    .footer-sns a:hover { color:var(--gold); }
+
+    /* ===== TABLET ===== */
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .nav { padding: 20px 40px; }
+      .page-hero { padding: 100px 40px 60px; }
+      .works-section { padding: 80px 40px; }
+      .works-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+      .filter-bar { padding: 0 40px; }
+      .footer { padding: 24px 40px; }
+    }
+
+    /* ===== MOBILE ===== */
+    @media (max-width: 768px) {
+      body { cursor: auto; }
+      .cursor-dot, .cursor-ring { display: none; }
+      .nav { padding: 16px 24px; }
+      .nav-links { gap: 16px; }
+      .nav-link { display: none; }
+      .page-hero { padding: 80px 24px 60px; }
+      .filter-bar { padding: 24px; }
+      .works-section { padding: 40px 24px 80px; }
+      .works-grid { grid-template-columns: minmax(0, 1fr); }
+      .cta { padding: 80px 24px; }
+      .footer { padding: 20px 24px; flex-direction: column; gap: 8px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+  <div class="noise"></div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <a href="index.html" class="nav-logo">
+      <svg width="44" height="44" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="logoGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#6B5420"/>
+            <stop offset="50%" stop-color="#E8C97A"/>
+            <stop offset="100%" stop-color="#C9A84C"/>
+          </linearGradient>
+          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <path id="logoCircle" d="M30,5 A25,25,0,1,1,29.999,5" fill="none"/>
+        </defs>
+        <circle cx="30" cy="30" r="28" fill="none" stroke="#C9A84C" stroke-width="0.5" opacity="0.4"/>
+        <circle cx="30" cy="30" r="20" fill="none" stroke="#C9A84C" stroke-width="0.3" opacity="0.2"/>
+        <g transform="translate(-6,-4.4) scale(0.36)">
+          <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="url(#logoGrad)" style="filter: url(#glow)"/>
+        </g>
+        <text font-family="'Bebas Neue','Noto Sans JP',sans-serif" font-size="5" fill="#C9A84C" opacity="0.78">
+          <textPath href="#logoCircle" startOffset="0%" letter-spacing="2.5">Senkode · 閃光 · Senkode · 閃光 ·</textPath>
+        </text>
+      </svg>
+      <span class="nav-wordmark">Senkode</span>
+    </a>
+    <div class="nav-links">
+      <a href="services.html" class="nav-link">SERVICES</a>
+      <a href="works.html" class="nav-link active">WORKS</a>
+      <a href="articles/index.html" class="nav-link">ARTICLES</a>
+      <a href="about.html" class="nav-link">ABOUT</a>
+      <a href="contact.html" class="nav-cta">無料相談 CONTACT</a>
+    </div>
+  </nav>
+
+  <!-- Page Hero -->
+  <section class="page-hero">
+    <div class="page-hero-inner">
+      <p class="page-label">PORTFOLIO — 制作実績一覧</p>
+      <h1 class="page-title">Works</h1>
+      <p class="page-sub">実績 — LP・Webサイト・SEO記事・自動化ツール・提案書 全 39 件以上</p>
+    </div>
+  </section>
+
+  <!-- Filter -->
+  <div class="filter-bar">
+    <div class="filter-inner">
+      <button class="filter-btn active" data-filter="all">ALL すべて</button>
+      <button class="filter-btn" data-filter="writing">SEO WRITING 記事</button>
+      <button class="filter-btn" data-filter="web">WEB Web制作</button>
+      <button class="filter-btn" data-filter="automation">AUTOMATION 自動化</button>
+      <button class="filter-btn" data-filter="consulting">CONSULTING 提案書</button>
+      <button class="filter-btn" data-filter="video">VIDEO 動画</button>
+    </div>
+  </div>
+
+  <!-- Works Grid -->
+  <section class="works-section">
+    <div class="works-inner">
+      <div class="works-grid">
+
+        <!-- Card 01: 物流AI記事 -->
+        <div class="work-card reveal" style="--delay:0s" data-category="writing">
+          <div class="work-thumb work-thumb--writing-01">
+            <span class="work-thumb-label">01</span>
+            <svg class="work-thumb-icon" width="48" height="48" viewBox="0 0 200 200" fill="none">
+              <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="#C9A84C" opacity="0.5"/>
+            </svg>
+          </div>
+          <div class="work-body">
+            <div class="work-meta">
+              <span class="work-tag">SEO Writing</span>
+              <span class="work-date">2026.04</span>
+            </div>
+            <h3 class="work-title">物流業界のAI活用で業務効率化｜現場管理職が実践した3つの改善策</h3>
+            <p class="work-desc">大手運送会社での実務経験をもとに執筆。ルート最適化・需要予測・音声入力による事務作業削減を現場目線で解説。約2,200字。</p>
+            <span class="work-link">READ →</span>
+          </div>
+        </div>
+
+        <!-- Card 02: KPI管理シート -->
+        <div class="work-card reveal" style="--delay:0.08s" data-category="writing">
+          <div class="work-thumb work-thumb--writing-02">
+            <span class="work-thumb-label">02</span>
+            <svg class="work-thumb-icon" width="48" height="48" viewBox="0 0 200 200" fill="none">
+              <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="#C9A84C" opacity="0.5"/>
+            </svg>
+          </div>
+          <div class="work-body">
+            <div class="work-meta">
+              <span class="work-tag">SEO Writing</span>
+              <span class="work-date">2026.04</span>
+            </div>
+            <h3 class="work-title">Excel不要！Google スプレッドシートで作るKPI管理シート｜中小企業の業務改善に</h3>
+            <p class="work-desc">管理職として日常的に行ってきたKPI管理の経験から執筆。無料ツールを使った実践的な設計手順を2,400字で解説。</p>
+            <span class="work-link">READ →</span>
+          </div>
+        </div>
+
+        <!-- Card 03: Senkode.jp Webサイト -->
+        <div class="work-card reveal" style="--delay:0.16s" data-category="web">
+          <div class="work-thumb work-thumb--web">
+            <span class="work-thumb-label">03</span>
+            <svg class="work-thumb-icon" width="48" height="48" viewBox="0 0 200 200" fill="none">
+              <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="#C9A84C" opacity="0.5"/>
+            </svg>
+          </div>
+          <div class="work-body">
+            <div class="work-meta">
+              <span class="work-tag">Web Production</span>
+              <span class="work-date">2026.04</span>
+            </div>
+            <h3 class="work-title">Senkode.jp — コンサルティングファーム コーポレートサイト</h3>
+            <p class="work-desc">ブランドコンセプト「閃光」をゼロから設計・実装。ゴールド×ブラックのラグジュアリーデザイン。カスタムカーソル・スクロールアニメーション実装。</p>
+            <a href="index.html" class="work-link">VIEW SITE →</a>
+          </div>
+        </div>
+
+        <!-- Card 04: APEX GYM LP -->
+        <div class="work-card reveal" style="--delay:0.24s" data-category="web" onclick="window.open('portfolio/lp-gym/index.html','_blank')">
+          <div class="work-thumb work-thumb--lp-gym">
+            <span class="work-thumb-label">04</span>
+            <svg class="work-thumb-icon" width="48" height="48" viewBox="0 0 200 200" fill="none">
+              <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="#C9A84C" opacity="0.5"/>
+            </svg>
+          </div>
+          <div class="work-body">
+            <div class="work-meta">
+              <span class="work-tag">LP Design</span>
+              <span class="work-date">2026.04</span>
+            </div>
+            <h3 class="work-title">APEX GYM — パーソナルジム向け ラグジュアリーLP</h3>
+            <p class="work-desc">高単価パーソナルジム向けのコンバージョン特化LP。高級感と信頼感を両立したデザインで、体験申し込みへの動線を最適化。</p>
+            <span class="work-link">VIEW LP →</span>
+          </div>
+        </div>
+
+        <!-- Card 05: 副業LP -->
+        <div class="work-card reveal" style="--delay:0.32s" data-category="web" onclick="window.open('portfolio/lp-fukugyou/index.html','_blank')">
+          <div class="work-thumb work-thumb--lp-fukugyou">
+            <span class="work-thumb-label">05</span>
+            <svg class="work-thumb-icon" width="48" height="48" viewBox="0 0 200 200" fill="none">
+              <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="#C9A84C" opacity="0.5"/>
+            </svg>
+          </div>
+          <div class="work-body">
+            <div class="work-meta">
+              <span class="work-tag">LP Design</span>
+              <span class="work-date">2026.04</span>
+            </div>
+            <h3 class="work-title">副業スクール向け サービス紹介LP</h3>
+            <p class="work-desc">副業・スキルアップを訴求するサービスLP。ターゲットの不安と期待に応えるコピーとCTA設計で、問い合わせ率向上を重視。</p>
+            <span class="work-link">VIEW LP →</span>
+          </div>
+        </div>
+
+        <!-- Card 06: HeyGen AI Avatar Video -->
+        <div class="work-card reveal" style="--delay:0.4s" data-category="video">
+          <div class="work-thumb work-thumb--video">
+            <span class="work-thumb-label">06</span>
+            <div class="play-icon">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                <path d="M6 4L14 9L6 14V4Z" fill="#C9A84C"/>
+              </svg>
+            </div>
+          </div>
+          <div class="work-body">
+            <div class="work-meta">
+              <span class="work-tag">Video Direction</span>
+              <span class="work-date">2026.04</span>
+            </div>
+            <h3 class="work-title">Senkode — AI動画ディレクション紹介動画</h3>
+            <p class="work-desc">HeyGen AIアバターを活用したサービス紹介動画。脚本・構成・AI指示まですべてSenkodeが担当。撮影ゼロで60秒のプレミアム映像を制作。</p>
+            <span class="work-link">WATCH →</span>
+          </div>
+        </div>
+
+        <!-- Automation Section Divider -->
+        <div class="works-divider reveal" style="--delay:0.48s">
+          <span class="works-divider-label">AUTOMATION TOOLS</span>
+          <div class="works-divider-line"></div>
+          <span class="works-divider-sub">自社開発 — 実運用中</span>
+        </div>
+
+        <!-- Card 07: X投稿自動化システム -->
+        <div class="work-card reveal" style="--delay:0.56s" data-category="automation">
+          <div class="work-thumb work-thumb--x-auto">
+            <span class="work-thumb-label">07</span>
+            <svg class="work-thumb-icon" width="48" height="48" viewBox="0 0 200 200" fill="none">
+              <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="#C9A84C" opacity="0.5"/>
+            </svg>
+          </div>
+          <div class="work-body">
+            <div class="work-meta">
+              <span class="work-tag">Automation</span>
+              <span class="work-date">2026.05</span>
+            </div>
+            <h3 class="work-title">X（Twitter）投稿文 自動生成システム — GAS × Claude API × Notion</h3>
+            <p class="work-desc">フォーム入力・SS入力・毎朝配信の3ルートを実装。スマホからテーマを入力するだけで5分以内に投稿文を自動生成し、Notionへ同期。完全稼働中。</p>
+            <span class="work-link">DETAIL →</span>
+          </div>
+        </div>
+
+        <!-- Card 08: 日次レポート自動生成 -->
+        <div class="work-card reveal" style="--delay:0.64s" data-category="automation">
+          <div class="work-thumb work-thumb--report">
+            <span class="work-thumb-label">08</span>
+            <svg class="work-thumb-icon" width="48" height="48" viewBox="0 0 200 200" fill="none">
+              <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="#C9A84C" opacity="0.5"/>
+            </svg>
+          </div>
+          <div class="work-body">
+            <div class="work-meta">
+              <span class="work-tag">Automation</span>
+              <span class="work-date">2026.05</span>
+            </div>
+            <h3 class="work-title">GAS × Claude API — 日次／週次／月次 レポート自動生成システム</h3>
+            <p class="work-desc">活動ログを入力するだけでClaude APIがサマリー・翌日タスク・気づきを自動生成。日次・週次・月次の3段階でレポート化。完全無人運用。</p>
+            <span class="work-link">DETAIL →</span>
+          </div>
+        </div>
+
+        <!-- Card 09: 記事執筆自動化 -->
+        <div class="work-card reveal" style="--delay:0.72s" data-category="automation">
+          <div class="work-thumb work-thumb--auto">
+            <span class="work-thumb-label">09</span>
+            <svg class="work-thumb-icon" width="48" height="48" viewBox="0 0 200 200" fill="none">
+              <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="#C9A84C" opacity="0.5"/>
+            </svg>
+          </div>
+          <div class="work-body">
+            <div class="work-meta">
+              <span class="work-tag">Automation</span>
+              <span class="work-date">2026.04</span>
+            </div>
+            <h3 class="work-title">AI記事執筆自動化システムの設計・構築</h3>
+            <p class="work-desc">Claude APIを活用した記事生成パイプラインを社内向けに構築。キーワード投入から2,000字記事の出力まで全工程を自動化。</p>
+            <span class="work-link">DETAIL →</span>
+          </div>
+        </div>
+
+        <!-- Card 10: VOID TOKYO LP -->
+        <div class="work-card reveal" style="--delay:0.8s" data-category="web" onclick="window.open('portfolio/lp-streetwear/index.html','_blank')">
+          <div class="work-thumb work-thumb--void-tokyo">
+            <span class="void-label-outline">VOID</span>
+            <span class="void-label-solid">TOKYO</span>
+            <div class="void-bar"></div>
+          </div>
+          <div class="work-body">
+            <div class="work-meta">
+              <span class="work-tag">LP / Fashion</span>
+              <span class="work-date">2026.05</span>
+            </div>
+            <h3 class="work-title">VOID TOKYO — ストリートウェアブランドLP</h3>
+            <p class="work-desc">黒×白×レッド。Supreme型センタータイポグラフィ・CSSマーキーアニメーション・アウトラインテキストを用いたファッションブランドLP。Senkodeのゴールド系とは全く異なるデザイン言語を実証。</p>
+            <span class="work-link">VIEW LP →</span>
+          </div>
+        </div>
+
+        <!-- Card 11: 美容クリニック LP -->
+        <div class="work-card reveal" style="--delay:0.88s" data-category="web" onclick="window.open('portfolio/lp-clinic/index.html','_blank')">
+          <div class="work-thumb work-thumb--lp-clinic">
+            <span class="clinic-logo">Clinique</span>
+            <div class="clinic-bar"></div>
+            <span class="clinic-sub">AESTHETIC CLINIC</span>
+          </div>
+          <div class="work-body">
+            <div class="work-meta">
+              <span class="work-tag">LP / Medical</span>
+              <span class="work-date">2026.05</span>
+            </div>
+            <h3 class="work-title">美容クリニック LP</h3>
+            <p class="work-desc">ピュアホワイト×ローズゴールド。Cormorant Garamond italicと繊細な余白で「高級感」を演出。既存の暗背景LPと真逆の女性向け医療美容デザイン。WHITE / ROSE GOLD / MEDICAL</p>
+            <span class="work-link">VIEW LP →</span>
+          </div>
+        </div>
+
+        <!-- Card 12: SaaS / AI プロダクト LP -->
+        <div class="work-card reveal" style="--delay:0.96s" data-category="web" onclick="window.open('portfolio/lp-saas/index.html','_blank')">
+          <div class="work-thumb work-thumb--lp-saas">
+            <span class="saas-logo">AUTOMATE.SH</span>
+            <span class="saas-cmd">$ npm run automate --free</span>
+          </div>
+          <div class="work-body">
+            <div class="work-meta">
+              <span class="work-tag">LP / SaaS</span>
+              <span class="work-date">2026.05</span>
+            </div>
+            <h3 class="work-title">SaaS / AI プロダクト LP</h3>
+            <p class="work-desc">ターミナルグリーン×深緑黒。CRTスキャンライン・タイプライターアニメーション・縦横スクロール切替・スティッキー分割レイアウト。B2B/エンジニア向けSaaS LPの実証。NEON / TERMINAL / SAAS</p>
+            <span class="work-link">VIEW LP →</span>
+          </div>
+        </div>
+
+        <!-- Card 13: CAFÉ MATIN ホームページ -->
+        <div class="work-card reveal" style="--delay:1.04s" data-category="web" onclick="window.open('portfolio/cafe-matin/index.html','_blank')">
+          <div class="work-thumb work-thumb--cafe-matin">
+            <span class="cafe-matin-logo">CAFÉ MATIN</span>
+            <span class="cafe-matin-sub">Shimokitazawa Café</span>
+            <div class="cafe-matin-dots">
+              <span></span><span></span><span></span>
+            </div>
+          </div>
+          <div class="work-body">
+            <div class="work-meta">
+              <span class="work-tag">Website / Café</span>
+              <span class="work-date">2026.05</span>
+            </div>
+            <h3 class="work-title">カフェ・ビストロ ホームページ</h3>
+            <p class="work-desc">5ページ構成のコーポレートサイト。ナチュラル・ウォームカラー（クリーム×テラコッタ×ブラウン）、Playfair Display italicで上品なカフェの世界観を表現。単ページLPとは異なる多ページ設計。</p>
+            <span class="work-link">VIEW SITE →</span>
+          </div>
+        </div>
+
+        <!-- Card 14: 税理士事務所 LP -->
+        <div class="work-card reveal" style="--delay:1.12s" data-category="web" onclick="window.open('portfolio/lp-tax/index.html','_blank')">
+          <div class="work-thumb" style="background:linear-gradient(135deg,#0D1B2A 0%,#1A2E44 50%,#2563EB 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;">
+            <div style="font-size:11px;letter-spacing:3px;color:rgba(147,197,253,0.8);">AI × TAX</div>
+            <div style="font-size:20px;font-weight:700;color:#fff;font-family:serif;">田中税理士事務所</div>
+            <div style="font-size:10px;color:rgba(255,255,255,0.4);letter-spacing:2px;">AI記帳 × 確定申告</div>
+          </div>
+          <div class="work-body">
+            <div class="work-meta">
+              <span class="work-tag">LP / 士業</span>
+              <span class="work-date">2026.05</span>
+            </div>
+            <h3 class="work-title">AI活用税理士事務所 LP（シミュレーション）</h3>
+            <p class="work-desc">「帳簿はAIが読む、不安は税理士が聞く」をコンセプトに。Navy×Accent Blueで信頼感を設計。課題共感→AI処理フロー→明瞭料金→FAQ→問い合わせフォームの一気通貫LP。</p>
+            <span class="work-link">VIEW LP →</span>
+          </div>
+        </div>
+
+        <!-- Card 15: 採用HR AI自動化 提案書 -->
+        <div class="work-card reveal" style="--delay:1.2s" data-category="consulting" onclick="window.open('portfolio/proposal-hr/index.html','_blank')">
+          <div class="work-thumb" style="background:linear-gradient(135deg,#0A0A14 0%,#1A1A2E 50%,#16213E 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden;">
+            <span class="work-thumb-label">15</span>
+            <div style="font-size:10px;letter-spacing:3px;color:rgba(74,222,128,0.8);">AI × HR</div>
+            <div style="font-size:16px;font-weight:700;color:#F4F1EC;letter-spacing:1px;">PROPOSAL DOC</div>
+            <div style="font-size:9px;color:rgba(244,241,236,0.35);letter-spacing:2px;">採用業務 完全自動化</div>
+            <div style="margin-top:6px;display:flex;gap:6px;">
+              <span style="background:rgba(74,222,128,0.15);border:1px solid rgba(74,222,128,0.3);color:rgba(74,222,128,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">AI</span>
+              <span style="background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.3);color:rgba(201,168,76,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">HUMAN</span>
+            </div>
+          </div>
+          <div class="work-body">
+            <div class="work-meta">
+              <span class="work-tag">Consulting / HR</span>
+              <span class="work-date">2026.05</span>
+            </div>
+            <h3 class="work-title">採用業務AI自動化 提案書（シミュレーション）</h3>
+            <p class="work-desc">月200件応募をさばく人事2名がパンクした企業向け提案。AI・人間・ハイブリッドの役割分担を設計し、スクリーニング75%削減・24h連絡対応を実現するフローと費用感を7スライドで提示。</p>
+            <span class="work-link">VIEW PROPOSAL →</span>
+          </div>
+        </div>
+
+        <!-- Card 20: 飲食店 メニュー改善×SNS戦略 -->
+        <div class="work-card reveal" style="--delay:1.6s" data-category="consulting" onclick="window.open('portfolio/proposal-restaurant/index.html','_blank')">
+          <div class="work-thumb" style="background:linear-gradient(135deg,#100A06 0%,#1E110A 50%,#2A1508 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden;">
+            <span class="work-thumb-label">20</span>
+            <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13px;letter-spacing:3px;color:rgba(217,119,6,0.8);">Bistro Trois</div>
+            <div style="font-size:14px;font-weight:700;color:#FAF5EB;letter-spacing:1px;">MENU × SNS</div>
+            <div style="font-size:9px;color:rgba(250,245,235,0.3);letter-spacing:2px;">飲食店 戦略提案書</div>
+            <div style="margin-top:6px;width:32px;height:1px;background:rgba(217,119,6,0.4);"></div>
+          </div>
+          <div class="work-body">
+            <div class="work-meta">
+              <span class="work-tag">Consulting / F&B</span>
+              <span class="work-date">2026.05</span>
+            </div>
+            <h3 class="work-title">飲食店 メニュー改善 × SNS戦略提案書（シミュレーション）</h3>
+            <p class="work-desc">「全部おいしいは、何でもいいと同じだ」。中目黒ビストロへの戦略提案。28品→12品への絞り込み設計・メニュー名コピーライティング改善（7時間煮込んだ豚バラ）・Instagram5種投稿設計・コンテンツカレンダー・KPIを8スライドで提示。</p>
+            <span class="work-link">VIEW PROPOSAL →</span>
+          </div>
+        </div>
+
+        <!-- Card 19: 採用ページ（物流×DX）-->
+        <div class="work-card reveal" style="--delay:1.52s" data-category="web" onclick="window.open('portfolio/lp-recruit/index.html','_blank')">
+          <div class="work-thumb" style="background:linear-gradient(135deg,#080808 0%,#1A0A00 50%,#2D1200 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden;">
+            <span class="work-thumb-label">19</span>
+            <div style="font-size:10px;letter-spacing:3px;color:rgba(249,115,22,0.8);">RECRUIT</div>
+            <div style="font-size:15px;font-weight:900;color:#F5F0EB;letter-spacing:1px;">ミドリロジ</div>
+            <div style="font-size:9px;color:rgba(245,240,235,0.35);letter-spacing:2px;">物流×DX採用ページ</div>
+            <div style="margin-top:6px;display:flex;gap:6px;">
+              <span style="background:rgba(249,115,22,0.12);border:1px solid rgba(249,115,22,0.3);color:rgba(251,146,60,0.9);font-size:7px;letter-spacing:1px;padding:2px 7px;">残業8h</span>
+              <span style="background:rgba(249,115,22,0.12);border:1px solid rgba(249,115,22,0.3);color:rgba(251,146,60,0.9);font-size:7px;letter-spacing:1px;padding:2px 7px;">副業OK</span>
+            </div>
+          </div>
+          <div class="work-body">
+            <div class="work-meta">
+              <span class="work-tag">Recruit / Copywriting</span>
+              <span class="work-date">2026.05</span>
+            </div>
+            <h3 class="work-title">物流×DX企業 採用サイト（シミュレーション）</h3>
+            <p class="work-desc">「物流を、もっとあたらしくしていく人が、いる。」AI導入で残業42h→8hを達成した架空企業のコピーライティング+採用LP。黒×オレンジ、ミッション・理由3つ・1日の流れ・社員の声・求人票・選考フローを完全実装。物流現場の一次情報が生きたコピー。</p>
+            <span class="work-link">VIEW SITE →</span>
+          </div>
+        </div>
+
+        <!-- Card 18: 不動産SNS自動投稿 要件定義書 -->
+        <div class="work-card reveal" style="--delay:1.44s" data-category="consulting" onclick="window.open('portfolio/proposal-sns-auto/index.html','_blank')">
+          <div class="work-thumb" style="background:linear-gradient(135deg,#060D18 0%,#0A1525 50%,#0D2040 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden;">
+            <span class="work-thumb-label">18</span>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:rgba(34,197,94,0.8);">&gt; GAS × CLAUDE API</div>
+            <div style="font-size:14px;font-weight:700;color:#F4F1EC;letter-spacing:1px;">REQUIREMENTS<br style="line-height:0.5"> DOC</div>
+            <div style="font-size:8px;color:rgba(244,241,236,0.3);letter-spacing:2px;font-family:monospace;">SNS AUTO SYSTEM</div>
+            <div style="margin-top:6px;display:flex;gap:5px;">
+              <span style="background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.3);color:rgba(134,239,172,0.9);font-size:7px;letter-spacing:1px;padding:2px 7px;font-family:monospace;">GAS</span>
+              <span style="background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.3);color:rgba(147,197,253,0.9);font-size:7px;letter-spacing:1px;padding:2px 7px;font-family:monospace;">CLAUDE</span>
+              <span style="background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.3);color:rgba(252,211,77,0.9);font-size:7px;letter-spacing:1px;padding:2px 7px;font-family:monospace;">LINE</span>
+            </div>
+          </div>
+          <div class="work-body">
+            <div class="work-meta">
+              <span class="work-tag">Consulting / Dev</span>
+              <span class="work-date">2026.05</span>
+            </div>
+            <h3 class="work-title">不動産会社 SNS自動投稿システム 要件定義書（シミュレーション）</h3>
+            <p class="work-desc">週3件の手作業投稿を1日3件の自動投稿へ。GAS×Claude API×Google Sheetsによる設計図。機能要件・システムフロー・データ設計・プロンプト設計・費用ROI試算を8スライドで提示。自社稼働中のアーキテクチャをベースにした実証済み設計。</p>
+            <span class="work-link">VIEW SPEC →</span>
+          </div>
+        </div>
+
+        <!-- Card 17: 整骨院 LP -->
+        <div class="work-card reveal" style="--delay:1.36s" data-category="web" onclick="window.open('portfolio/lp-seikotsu/index.html','_blank')">
+          <div class="work-thumb" style="background:linear-gradient(135deg,#F0F9FF 0%,#BAE6FD 50%,#0891B2 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;">
+            <div style="width:44px;height:44px;background:#0891B2;border-radius:10px;display:flex;align-items:center;justify-content:center;">
+              <div style="position:relative;width:18px;height:18px;">
+                <div style="position:absolute;width:18px;height:4px;top:7px;left:0;background:white;border-radius:1px;"></div>
+                <div style="position:absolute;width:4px;height:18px;top:0;left:7px;background:white;border-radius:1px;"></div>
+              </div>
+            </div>
+            <div style="font-size:14px;font-weight:700;color:#0F172A;font-family:serif;letter-spacing:1px;">芝浦整骨院</div>
+            <div style="font-size:9px;color:rgba(15,23,42,0.45);letter-spacing:2px;">SEIKOTSU-IN LP</div>
+          </div>
+          <div class="work-body">
+            <div class="work-meta">
+              <span class="work-tag">LP / Medical</span>
+              <span class="work-date">2026.05</span>
+            </div>
+            <h3 class="work-title">整骨院 集客LP（シミュレーション）</h3>
+            <p class="work-desc">「その痛み、我慢しなくていい。」をキャッチに、ライトカラー（白×ティール）設計。症状カード・施術フロー・料金・院長メッセージ・口コミ・FAQ・LINECTAを一気通貫で構成。暗背景LPと真逆の表現力を実証。</p>
+            <span class="work-link">VIEW LP →</span>
+          </div>
+        </div>
+
+        <!-- Card 16: EC×SEO コンテンツ戦略提案書 -->
+        <div class="work-card reveal" style="--delay:1.28s" data-category="consulting" onclick="window.open('portfolio/proposal-ec-seo/index.html','_blank')">
+          <div class="work-thumb" style="background:linear-gradient(135deg,#08080E 0%,#12062A 50%,#1E0A42 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden;">
+            <span class="work-thumb-label">16</span>
+            <div style="font-size:10px;letter-spacing:3px;color:rgba(167,139,250,0.8);">SEO × CONTENT</div>
+            <div style="font-size:16px;font-weight:700;color:#F4F1EC;letter-spacing:1px;">STRATEGY DOC</div>
+            <div style="font-size:9px;color:rgba(244,241,236,0.35);letter-spacing:2px;">EC 月商300万円設計図</div>
+            <div style="margin-top:6px;display:flex;gap:6px;">
+              <span style="background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.3);color:rgba(167,139,250,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">24 ARTICLES</span>
+              <span style="background:rgba(74,222,128,0.15);border:1px solid rgba(74,222,128,0.3);color:rgba(74,222,128,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">3 MONTHS</span>
+            </div>
+          </div>
+          <div class="work-body">
+            <div class="work-meta">
+              <span class="work-tag">Consulting / SEO</span>
+              <span class="work-date">2026.05</span>
+            </div>
+            <h3 class="work-title">EC×SEO コンテンツ戦略提案書（シミュレーション）</h3>
+            <p class="work-desc">広告費¥25万/月に依存する木工雑貨ECへの戦略提案。購買ファネル別キーワードマップ・3ヶ月コンテンツカレンダー・AIパイプライン設計・KPI設計を8スライドで提示。オーガニック流入で月商300万円を目指す設計図。</p>
+            <span class="work-link">VIEW STRATEGY →</span>
+          </div>
+        </div>
+
+        <!-- Card 22: H-L002 製造業DX研修 BtoB LP -->
+        <div class="work-card reveal" style="--delay:1.76s" data-category="web" onclick="window.open('portfolio/lp-dx-training/index.html','_blank')">
+          <div class="work-thumb" style="background:linear-gradient(135deg,#060A12 0%,#0A0F1C 50%,#0E1A30 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden;">
+            <span class="work-thumb-label">22</span>
+            <div style="font-size:10px;letter-spacing:3px;color:rgba(96,165,250,0.8);">B2B LP / MANUFACTURING</div>
+            <div style="font-size:14px;font-weight:700;color:#E2E8F0;letter-spacing:1px;">DX ACADEMY</div>
+            <div style="font-size:9px;color:rgba(226,232,240,0.35);letter-spacing:2px;">製造業専門 DX研修</div>
+            <div style="margin-top:6px;display:flex;gap:6px;">
+              <span style="background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.3);color:rgba(147,197,253,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">定着率87%</span>
+              <span style="background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.3);color:rgba(74,222,128,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">3フェーズ</span>
+            </div>
+          </div>
+          <div class="work-body">
+            <div class="work-meta">
+              <span class="work-tag">LP / BtoB・製造業DX</span>
+              <span class="work-date">2026.05</span>
+            </div>
+            <h3 class="work-title">製造業DX研修サービス LP（BtoB想定）</h3>
+            <p class="work-desc">「DX研修の9割が定着しない」という逆張りキャッチで製造業担当者の共感を掴むBtoB LP。業務フロー再設計→現場研修→伴走定着の3フェーズ構成。導入事例・成熟度スコア・FAQ・補助金訴求まで完備した受注設計。</p>
+            <span class="work-link">VIEW LP →</span>
+          </div>
+        </div>
+
+        <!-- Card 27: H-W005 建設業採用記事 -->
+        <div class="work-card reveal" style="--delay:2.16s" data-category="writing" onclick="window.open('articles/006-construction-recruit.html','_blank')">
+          <div class="work-thumb" style="background:linear-gradient(135deg,#080A06 0%,#101408 50%,#181C0C 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden;">
+            <span class="work-thumb-label">27</span>
+            <div style="font-size:10px;letter-spacing:3px;color:rgba(163,230,53,0.8);">WRITING / 採用メディア</div>
+            <div style="font-size:14px;font-weight:700;color:#F5F0E8;letter-spacing:1px;">CONSTRUCTION HR</div>
+            <div style="font-size:9px;color:rgba(245,240,232,0.35);letter-spacing:2px;">建設業採用危機の本音</div>
+            <div style="margin-top:6px;display:flex;gap:6px;">
+              <span style="background:rgba(163,230,53,0.12);border:1px solid rgba(163,230,53,0.3);color:rgba(190,242,100,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">求人倍率6.4倍</span>
+            </div>
+          </div>
+          <div class="work-body">
+            <div class="work-meta"><span class="work-tag">Writing / 建設業採用</span><span class="work-date">2026.05</span></div>
+            <h3 class="work-title">建設業採用コンテンツ「若手が来ない本当の理由」（業界メディア想定）</h3>
+            <p class="work-desc">建設業界向け採用メディア編集部からの依頼を想定。離職理由テーブル×SNS正直発信×入社前ロードマップ×DX宣言採用の4軸で構成。現役管理職の一次情報が説得力を担保。経営者・人事担当者が読む3,800字。</p>
+            <span class="work-link">READ ARTICLE →</span>
+          </div>
+        </div>
+
+        <!-- Card 28: H-L004 学習塾LP -->
+        <div class="work-card reveal" style="--delay:2.24s" data-category="web" onclick="window.open('portfolio/lp-juku/index.html','_blank')">
+          <div class="work-thumb" style="background:linear-gradient(135deg,#070912 0%,#0A0D1A 50%,#0F1228 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden;">
+            <span class="work-thumb-label">28</span>
+            <div style="font-size:10px;letter-spacing:3px;color:rgba(129,140,248,0.8);">LP / EDUCATION</div>
+            <div style="font-size:14px;font-weight:700;color:#EEF0F8;letter-spacing:1px;">JUKU LP</div>
+            <div style="font-size:9px;color:rgba(238,240,248,0.35);letter-spacing:2px;">才能のせいじゃない</div>
+            <div style="margin-top:6px;display:flex;gap:6px;">
+              <span style="background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.3);color:rgba(165,180,252,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">満足度96%</span>
+              <span style="background:rgba(52,211,153,0.12);border:1px solid rgba(52,211,153,0.3);color:rgba(110,231,183,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">逆張り</span>
+            </div>
+          </div>
+          <div class="work-body">
+            <div class="work-meta"><span class="work-tag">LP / 学習塾・保護者向け</span><span class="work-date">2026.05</span></div>
+            <h3 class="work-title">学習塾LP「うちの子が勉強嫌いなのは才能のせいじゃない」</h3>
+            <p class="work-desc">地域密着型学習塾を想定。「成績より先につまずきを解決」という逆張りメッセージで保護者の共感を獲得。つまずき診断・1問正解サイクル・親子コミュニケーション設計の3メソッド。「成績保証はしません」という正直CTAが差別化。</p>
+            <span class="work-link">VIEW LP →</span>
+          </div>
+        </div>
+
+        <!-- Card 29: H-E004 QuoteFlow見積書自動生成 -->
+        <div class="work-card reveal" style="--delay:2.32s" data-category="automation" onclick="window.open('portfolio/tool-estimate-gen/index.html','_blank')">
+          <div class="work-thumb" style="background:linear-gradient(135deg,#0A0704 0%,#141008 50%,#1C1610 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden;">
+            <span class="work-thumb-label">29</span>
+            <div style="font-size:10px;letter-spacing:3px;color:rgba(251,146,60,0.8);">AUTOMATION TOOL</div>
+            <div style="font-size:14px;font-weight:700;color:#F5F0E8;letter-spacing:1px;">QUOTEFLOW</div>
+            <div style="font-size:9px;color:rgba(245,240,232,0.35);letter-spacing:2px;">GAS × Claude API</div>
+            <div style="margin-top:6px;display:flex;gap:6px;">
+              <span style="background:rgba(249,115,22,0.15);border:1px solid rgba(249,115,22,0.3);color:rgba(253,186,116,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">1時間→15分</span>
+              <span style="background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.3);color:rgba(74,222,128,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">月¥400</span>
+            </div>
+          </div>
+          <div class="work-body">
+            <div class="work-meta"><span class="work-tag">Automation / 見積書×全業種</span><span class="work-date">2026.05</span></div>
+            <h3 class="work-title">見積書自動生成ツール QuoteFlow（GAS+Claude API）</h3>
+            <p class="work-desc">営業担当者・フリーランス・工務店向けの業務効率化ツール。打ち合わせメモをフォーム入力するだけで見積書をスプレッドシートに自動出力。実GASコード・見積書モックアップ・建設/Web/コンサルの業種別活用例を完備。</p>
+            <span class="work-link">VIEW TOOL →</span>
+          </div>
+        </div>
+
+        <!-- Card 30: H-A004 ECチャットボット要件定義書 -->
+        <div class="work-card reveal" style="--delay:2.4s" data-category="consulting" onclick="window.open('portfolio/app-ec-chatbot/index.html','_blank')">
+          <div class="work-thumb" style="background:linear-gradient(135deg,#040A08 0%,#070F0B 50%,#0B1610 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden;">
+            <span class="work-thumb-label">30</span>
+            <div style="font-size:10px;letter-spacing:3px;color:rgba(52,211,153,0.8);">APP REQUIREMENTS</div>
+            <div style="font-size:14px;font-weight:700;color:#ECFDF5;letter-spacing:1px;">EC AI CHAT</div>
+            <div style="font-size:9px;color:rgba(236,253,245,0.35);letter-spacing:2px;">カスタマーサポートAI</div>
+            <div style="margin-top:6px;display:flex;gap:6px;">
+              <span style="background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.3);color:rgba(52,211,153,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">月30万削減</span>
+              <span style="background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.3);color:rgba(147,197,253,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">Shopify連携</span>
+            </div>
+          </div>
+          <div class="work-body">
+            <div class="work-meta"><span class="work-tag">App / EC×AIチャット</span><span class="work-date">2026.05</span></div>
+            <h3 class="work-title">ECカスタマーサポートAIチャットボット 要件定義書</h3>
+            <p class="work-desc">アパレル系EC（年商3億）向けのアプリ要件定義。問い合わせ65%をAIが自動対応しCS工数月220時間削減。チャットUIモックアップ・Shopify API連携設計・プロンプト設計・Phase別開発計画（合計320万円）を発注できる精度で設計。</p>
+            <span class="work-link">VIEW SPEC →</span>
+          </div>
+        </div>
+
+        <!-- Card 31: H-W006 物流2024年問題1年後レポート -->
+        <div class="work-card reveal" style="--delay:2.6s" data-category="writing" onclick="window.open('articles/007-logistics-2024-followup.html','_blank')">
+          <div class="work-thumb" style="background:linear-gradient(135deg,#06080F 0%,#080C18 50%,#0B1022 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden;">
+            <span class="work-thumb-label">31</span>
+            <div style="font-size:10px;letter-spacing:3px;color:rgba(96,165,250,0.8);">REPORT / 物流専門誌</div>
+            <div style="font-size:14px;font-weight:700;color:#EFF6FF;letter-spacing:1px;">LOGISTICS 2024</div>
+            <div style="font-size:9px;color:rgba(239,246,255,0.35);letter-spacing:2px;">1年後の現場リポート</div>
+            <div style="margin-top:6px;display:flex;gap:6px;">
+              <span style="background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.3);color:rgba(147,197,253,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">残業上限施行1年</span>
+              <span style="background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.3);color:rgba(52,211,153,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">現役管理職一次情報</span>
+            </div>
+          </div>
+          <div class="work-body">
+            <div class="work-meta"><span class="work-tag">Writing / 物流専門誌</span><span class="work-date">2026.05</span></div>
+            <h3 class="work-title">「物流2024年問題」から1年——変わったこと、変わらなかったこと</h3>
+            <p class="work-desc">残業上限規制施行から1年後の現場ファクトチェック記事。深夜残業→早朝出勤の置き換え実態・荷主との力関係変化・デジタル化の二極化を現役管理職目線で検証。「物流が止まる」は何が正しくて何が誇張だったかを数値で答える。</p>
+            <span class="work-link">READ ARTICLE →</span>
+          </div>
+        </div>
+
+        <!-- Card 32: H-L005 保険代理店LP -->
+        <div class="work-card reveal" style="--delay:2.7s" data-category="lp" onclick="window.open('portfolio/lp-insurance/index.html','_blank')">
+          <div class="work-thumb" style="background:linear-gradient(135deg,#05080F 0%,#080C18 50%,#0C1122 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden;">
+            <span class="work-thumb-label">32</span>
+            <div style="font-size:10px;letter-spacing:3px;color:rgba(59,130,246,0.8);">LP / 保険代理店</div>
+            <div style="font-size:14px;font-weight:700;color:#EFF6FF;letter-spacing:1px;">INSURANCE LP</div>
+            <div style="font-size:9px;color:rgba(239,246,255,0.35);letter-spacing:2px;">完全中立の保険相談</div>
+            <div style="margin-top:6px;display:flex;gap:6px;">
+              <span style="background:rgba(37,99,235,0.12);border:1px solid rgba(37,99,235,0.3);color:rgba(147,197,253,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">平均32%削減</span>
+              <span style="background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.3);color:rgba(52,211,153,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">逆張り型LP</span>
+            </div>
+          </div>
+          <div class="work-body">
+            <div class="work-meta"><span class="work-tag">LP / 保険代理店</span><span class="work-date">2026.05</span></div>
+            <h3 class="work-title">中立保険相談室LP「あなたが払っている保険料の32%は不要かもしれない」</h3>
+            <p class="work-desc">独立FP（特定保険会社と代理店契約なし）向けの逆張り型LP。「まず削る」というポジショニングで過剰保険に疲れた40〜50代に刺さる設計。不安解消セクション・シミュレーション診断フロー・セールス電話なし訴求でリード獲得最適化。</p>
+            <span class="work-link">VIEW LP →</span>
+          </div>
+        </div>
+
+        <!-- Card 33: H-E005 PostPilot SNS自動化ツール -->
+        <div class="work-card reveal" style="--delay:2.8s" data-category="automation" onclick="window.open('portfolio/tool-post-pilot/index.html','_blank')">
+          <div class="work-thumb" style="background:linear-gradient(135deg,#040810 0%,#060C18 50%,#0A1020 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden;">
+            <span class="work-thumb-label">33</span>
+            <div style="font-size:10px;letter-spacing:3px;color:rgba(6,182,212,0.8);">TOOL / SNS AUTOMATION</div>
+            <div style="font-size:14px;font-weight:700;color:#ECFEFF;letter-spacing:1px;">POST PILOT</div>
+            <div style="font-size:9px;color:rgba(236,254,255,0.35);letter-spacing:2px;">SNS投稿自動生成</div>
+            <div style="margin-top:6px;display:flex;gap:6px;">
+              <span style="background:rgba(6,182,212,0.12);border:1px solid rgba(6,182,212,0.3);color:rgba(103,232,249,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">GAS×Claude API</span>
+              <span style="background:rgba(139,92,246,0.12);border:1px solid rgba(139,92,246,0.3);color:rgba(196,181,253,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">月5時間→30分</span>
+            </div>
+          </div>
+          <div class="work-body">
+            <div class="work-meta"><span class="work-tag">Tool / SNS運用自動化</span><span class="work-date">2026.05</span></div>
+            <h3 class="work-title">PostPilot — SNS投稿自動生成ツール（GAS×Claude API）</h3>
+            <p class="work-desc">中小企業のSNS運用担当者向けツール。商品情報を入力するだけでX・Instagram・LinkedIn向けの投稿文案をClaudeが自動生成。GASでスプレッドシート管理、月5時間のコンテンツ作成を30分に短縮。実装コード付きで即納品可能。</p>
+            <span class="work-link">VIEW TOOL →</span>
+          </div>
+        </div>
+
+        <!-- Card 34: H-A005 飲食店食材発注AIアシスタント -->
+        <div class="work-card reveal" style="--delay:2.9s" data-category="consulting" onclick="window.open('portfolio/app-food-order/index.html','_blank')">
+          <div class="work-thumb" style="background:linear-gradient(135deg,#0C0604 0%,#120A06 50%,#1A0E08 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:relative;overflow:hidden;">
+            <span class="work-thumb-label">34</span>
+            <div style="font-size:10px;letter-spacing:3px;color:rgba(248,113,113,0.8);">APP REQUIREMENTS</div>
+            <div style="font-size:14px;font-weight:700;color:#FEF2F2;letter-spacing:1px;">FOOD ORDER AI</div>
+            <div style="font-size:9px;color:rgba(254,242,242,0.35);letter-spacing:2px;">食材発注AIアシスタント</div>
+            <div style="margin-top:6px;display:flex;gap:6px;">
+              <span style="background:rgba(220,38,38,0.12);border:1px solid rgba(220,38,38,0.3);color:rgba(252,165,165,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">廃棄30%削減</span>
+              <span style="background:rgba(234,88,12,0.12);border:1px solid rgba(234,88,12,0.3);color:rgba(253,186,116,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">飲食3店舗規模</span>
+            </div>
+          </div>
+          <div class="work-body">
+            <div class="work-meta"><span class="work-tag">App / 飲食×AI発注</span><span class="work-date">2026.05</span></div>
+            <h3 class="work-title">飲食店食材発注AIアシスタント 要件定義書</h3>
+            <p class="work-desc">飲食チェーン3店舗向けのAI発注支援システム要件定義。過去売上×天気×曜日データからClaudeが最適発注量を提案、食材廃棄30%削減・発注業務60%省力化を目標設計。LINE Bot連携・POS連携・アレルギー管理の3モジュール構成で発注書レベルの精度。</p>
+            <span class="work-link">VIEW SPEC →</span>
+          </div>
+        </div>
+
+        <!-- Card 35: H-W007 介護施設職員定着コンテンツ -->
+        <div class="work-card reveal" style="--delay:3.0s" data-category="writing" onclick="window.open('articles/008-care-staff-retention.html','_blank')">
+          <div class="work-thumb" style="background:linear-gradient(135deg,#040C06 0%,#071009 50%,#0A160C 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden;">
+            <span class="work-thumb-label">35</span>
+            <div style="font-size:10px;letter-spacing:3px;color:rgba(34,197,94,0.8);">ARTICLE / HR・介護</div>
+            <div style="font-size:14px;font-weight:700;color:#F0FDF4;letter-spacing:1px;">CARE HR</div>
+            <div style="font-size:9px;color:rgba(240,253,244,0.35);letter-spacing:2px;">離職率22%→9%の現場</div>
+            <div style="margin-top:6px;display:flex;gap:6px;">
+              <span style="background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.3);color:rgba(134,239,172,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">定着率改善</span>
+              <span style="background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.3);color:rgba(52,211,153,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">給料上げずに実現</span>
+            </div>
+          </div>
+          <div class="work-body">
+            <div class="work-meta"><span class="work-tag">Writing / 介護×HR</span><span class="work-date">2026.05</span></div>
+            <h3 class="work-title">介護職員の離職率を3年で22%→9%に下げた施設がやっていた3つのこと</h3>
+            <p class="work-desc">介護専門誌からの依頼を想定したBtoBメディア記事シミュレーション。業界平均15〜17%の離職率に悩む施設向けに「不満の見える化」「成長の可視化」「管理職の関わり方」の3施策を現場管理職の一次情報で解説。Before/Afterテーブル・callout6個の密度設計。</p>
+            <span class="work-link">READ ARTICLE →</span>
+          </div>
+        </div>
+
+        <!-- Card 36: H-L006 歯科医院新患獲得LP -->
+        <div class="work-card reveal" style="--delay:3.1s" data-category="lp" onclick="window.open('portfolio/lp-dental/index.html','_blank')">
+          <div class="work-thumb" style="background:linear-gradient(135deg,#0A0407 0%,#110508 50%,#180809 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden;">
+            <span class="work-thumb-label">36</span>
+            <div style="font-size:10px;letter-spacing:3px;color:rgba(244,63,94,0.8);">LP / 歯科医院</div>
+            <div style="font-size:14px;font-weight:700;color:#FFF1F2;letter-spacing:1px;">DENTAL LP</div>
+            <div style="font-size:9px;color:rgba(255,241,242,0.35);letter-spacing:2px;">歯医者嫌いのための歯科</div>
+            <div style="margin-top:6px;display:flex;gap:6px;">
+              <span style="background:rgba(244,63,94,0.12);border:1px solid rgba(244,63,94,0.3);color:rgba(251,113,133,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">逆張り型LP</span>
+              <span style="background:rgba(236,72,153,0.12);border:1px solid rgba(236,72,153,0.3);color:rgba(249,168,212,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">歯科恐怖症ターゲット</span>
+            </div>
+          </div>
+          <div class="work-body">
+            <div class="work-meta"><span class="work-tag">LP / 歯科医院</span><span class="work-date">2026.05</span></div>
+            <h3 class="work-title">「歯医者が怖い人のための歯科医院」新患獲得LP</h3>
+            <p class="work-desc">地域歯科医院向け逆張り型LP。「今日は治療しなくてもいい」「途中でやめてOK」というキャッチで歯科恐怖症層の来院障壁を解体。従来歯科との5軸VS比較・3つの安心保証・FAQアコーディオンで不安層の信頼獲得を設計。初診予約CTA4箇所。</p>
+            <span class="work-link">VIEW LP →</span>
+          </div>
+        </div>
+
+        <!-- Card 37: H-E006 ExpenseBot 経費精算自動化 -->
+        <div class="work-card reveal" style="--delay:3.2s" data-category="automation" onclick="window.open('portfolio/tool-expense-auto/index.html','_blank')">
+          <div class="work-thumb" style="background:linear-gradient(135deg,#060804 0%,#080B05 50%,#0A0F06 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden;">
+            <span class="work-thumb-label">37</span>
+            <div style="font-size:10px;letter-spacing:3px;color:rgba(132,204,22,0.8);">TOOL / 経費精算</div>
+            <div style="font-size:14px;font-weight:700;color:#F7FEE7;letter-spacing:1px;">EXPENSE BOT</div>
+            <div style="font-size:9px;color:rgba(247,254,231,0.35);letter-spacing:2px;">GAS×Claude Vision API</div>
+            <div style="margin-top:6px;display:flex;gap:6px;">
+              <span style="background:rgba(132,204,22,0.12);border:1px solid rgba(132,204,22,0.3);color:rgba(190,242,100,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">月15h→2h</span>
+              <span style="background:rgba(163,230,53,0.12);border:1px solid rgba(163,230,53,0.3);color:rgba(190,242,100,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">月¥300運用</span>
+            </div>
+          </div>
+          <div class="work-body">
+            <div class="work-meta"><span class="work-tag">Tool / 経費精算自動化</span><span class="work-date">2026.05</span></div>
+            <h3 class="work-title">ExpenseBot — レシート撮影→自動記録（GAS×Claude Vision API）</h3>
+            <p class="work-desc">スマホでレシートを撮影するだけで経費精算が完了するGASツール。Claude Vision APIがレシートを読み取り・自動分類・Googleスプレッドシートに記録。月15時間→2時間・入力ミスゼロ・月¥300の運用コスト。実装コードスニペット付きで即納品可能。</p>
+            <span class="work-link">VIEW TOOL →</span>
+          </div>
+        </div>
+
+        <!-- Card 38: H-A006 TenantAI 不動産管理AIチャットボット -->
+        <div class="work-card reveal" style="--delay:3.3s" data-category="consulting" onclick="window.open('portfolio/app-property-ai/index.html','_blank')">
+          <div class="work-thumb" style="background:linear-gradient(135deg,#040810 0%,#060C18 50%,#080F1E 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden;">
+            <span class="work-thumb-label">38</span>
+            <div style="font-size:10px;letter-spacing:3px;color:rgba(14,165,233,0.8);">APP REQUIREMENTS</div>
+            <div style="font-size:14px;font-weight:700;color:#F0F9FF;letter-spacing:1px;">TENANT AI</div>
+            <div style="font-size:9px;color:rgba(240,249,255,0.35);letter-spacing:2px;">賃貸入居者対応AI</div>
+            <div style="margin-top:6px;display:flex;gap:6px;">
+              <span style="background:rgba(14,165,233,0.12);border:1px solid rgba(14,165,233,0.3);color:rgba(125,211,252,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">問い合わせ70%自動化</span>
+              <span style="background:rgba(56,189,248,0.12);border:1px solid rgba(56,189,248,0.3);color:rgba(125,211,252,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">月120h削減</span>
+            </div>
+          </div>
+          <div class="work-body">
+            <div class="work-meta"><span class="work-tag">App / 不動産管理×AI</span><span class="work-date">2026.05</span></div>
+            <h3 class="work-title">TenantAI — 賃貸入居者対応AIチャットボット 要件定義書</h3>
+            <p class="work-desc">賃貸管理会社（物件200〜500戸）向けシステム要件定義。LINE Bot×RAG×Claude APIで問い合わせ70%を自動対応、CS工数月120時間削減。深夜漏水・退去手続き・オーナー報告の3課題を解決。フェーズ別開発計画（合計300万円）を発注書レベルで設計。</p>
+            <span class="work-link">VIEW SPEC →</span>
+          </div>
+        </div>
+
+        <!-- Card 23: H-W004 AI失敗白書2026 -->
+        <div class="work-card reveal" style="--delay:1.84s" data-category="writing" onclick="window.open('articles/005-ai-failure-report.html','_blank')">
+          <div class="work-thumb" style="background:linear-gradient(135deg,#080610 0%,#100A1C 50%,#180E2A 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden;">
+            <span class="work-thumb-label">23</span>
+            <div style="font-size:10px;letter-spacing:3px;color:rgba(167,139,250,0.8);">REPORT / BtoB MEDIA</div>
+            <div style="font-size:14px;font-weight:700;color:#F1F0F7;letter-spacing:1px;">AI FAILURE 2026</div>
+            <div style="font-size:9px;color:rgba(241,240,247,0.35);letter-spacing:2px;">中小企業300社の失敗データ</div>
+            <div style="margin-top:6px;display:flex;gap:6px;">
+              <span style="background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);color:rgba(252,165,165,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">63%が1年以内に停止</span>
+            </div>
+          </div>
+          <div class="work-body">
+            <div class="work-meta">
+              <span class="work-tag">Writing / BtoBメディア</span>
+              <span class="work-date">2026.05</span>
+            </div>
+            <h3 class="work-title">AI導入失敗白書2026（経営者向けBtoBメディア記事）</h3>
+            <p class="work-desc">BtoBメディア編集部からの依頼を想定したシミュレーション。中小企業300社のデータを根拠に「失敗パターン3つ」と「定着させた企業の共通点3つ」を経営者目線で解説。現役管理職の一次情報×ROI測定テーブルで説得力を担保。</p>
+            <span class="work-link">READ ARTICLE →</span>
+          </div>
+        </div>
+
+        <!-- Card 24: H-L003 不動産売却査定LP -->
+        <div class="work-card reveal" style="--delay:1.92s" data-category="web" onclick="window.open('portfolio/lp-realestate-sell/index.html','_blank')">
+          <div class="work-thumb" style="background:linear-gradient(135deg,#0C0906 0%,#151009 50%,#1C1510 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden;">
+            <span class="work-thumb-label">24</span>
+            <div style="font-size:10px;letter-spacing:3px;color:rgba(212,168,83,0.8);">LP / REAL ESTATE</div>
+            <div style="font-size:14px;font-weight:700;color:#F0EDE8;letter-spacing:1px;">SELL CONSULTING</div>
+            <div style="font-size:9px;color:rgba(240,237,232,0.35);letter-spacing:2px;">不動産売却専門</div>
+            <div style="margin-top:6px;display:flex;gap:6px;">
+              <span style="background:rgba(212,168,83,0.15);border:1px solid rgba(212,168,83,0.3);color:rgba(232,201,122,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">成約率94%</span>
+              <span style="background:rgba(82,168,130,0.12);border:1px solid rgba(82,168,130,0.3);color:rgba(134,198,166,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">逆張り構成</span>
+            </div>
+          </div>
+          <div class="work-body">
+            <div class="work-meta">
+              <span class="work-tag">LP / 不動産・BtoC</span>
+              <span class="work-date">2026.05</span>
+            </div>
+            <h3 class="work-title">不動産売却査定LP「査定額より大切なこと」（感情訴求型）</h3>
+            <p class="work-desc">地域密着型不動産仲介会社を想定したシミュレーション。「査定額が一番高い会社に頼んではいけない」という逆張りキャッチで信頼を先に獲得。3つの確認事項（教育コンテンツ）→実績→タイムライン→FAQ→CTA の受注設計。</p>
+            <span class="work-link">VIEW LP →</span>
+          </div>
+        </div>
+
+        <!-- Card 25: H-E003 採用スクリーニング自動化ツール -->
+        <div class="work-card reveal" style="--delay:2.0s" data-category="automation" onclick="window.open('portfolio/tool-hr-screening/index.html','_blank')">
+          <div class="work-thumb" style="background:linear-gradient(135deg,#070510 0%,#0C0A18 50%,#120E22 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden;">
+            <span class="work-thumb-label">25</span>
+            <div style="font-size:10px;letter-spacing:3px;color:rgba(139,92,246,0.8);">AUTOMATION TOOL</div>
+            <div style="font-size:14px;font-weight:700;color:#F1F0F7;letter-spacing:1px;">HIREFILTER</div>
+            <div style="font-size:9px;color:rgba(241,240,247,0.35);letter-spacing:2px;">GAS × Claude API</div>
+            <div style="margin-top:6px;display:flex;gap:6px;">
+              <span style="background:rgba(139,92,246,0.15);border:1px solid rgba(139,92,246,0.3);color:rgba(167,139,250,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">200分→12分</span>
+              <span style="background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.3);color:rgba(52,211,153,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">月¥200</span>
+            </div>
+          </div>
+          <div class="work-body">
+            <div class="work-meta">
+              <span class="work-tag">Automation / HR × AI</span>
+              <span class="work-date">2026.05</span>
+            </div>
+            <h3 class="work-title">採用スクリーニング自動化ツール HireFilter（GAS+Claude API）</h3>
+            <p class="work-desc">中小企業HR担当者への業務効率化提案を想定したシミュレーション。40件の応募書類を200分→12分に短縮するGAS実装。実際のコードスニペット・フロー図・スプレッドシート出力イメージ・導入5ステップ・月額¥200の費用感まで開示。</p>
+            <span class="work-link">VIEW TOOL →</span>
+          </div>
+        </div>
+
+        <!-- Card 39: LP Generator — AI LP生成ツール -->
+        <div class="work-card reveal" style="--delay:3.12s" data-category="automation" onclick="window.open('https://senkode-lp-generator.vercel.app','_blank')">
+          <div class="work-thumb" style="background:linear-gradient(135deg,#080604 0%,#0F0C05 50%,#18140A 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden;">
+            <span class="work-thumb-label">39</span>
+            <div style="font-size:10px;letter-spacing:3px;color:rgba(201,168,76,0.8);">AUTOMATION / AI TOOL</div>
+            <div style="font-size:14px;font-weight:700;color:#F4F1EC;letter-spacing:1px;">LP GENERATOR</div>
+            <div style="font-size:9px;color:rgba(244,241,236,0.35);letter-spacing:2px;">Next.js × Claude API</div>
+            <div style="margin-top:6px;display:flex;gap:6px;">
+              <span style="background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.3);color:rgba(232,201,122,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">6ステップ→LP即生成</span>
+              <span style="background:rgba(74,222,128,0.12);border:1px solid rgba(74,222,128,0.3);color:rgba(74,222,128,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">BYOK</span>
+            </div>
+          </div>
+          <div class="work-body">
+            <div class="work-meta">
+              <span class="work-tag">AI Tool / LP自動生成</span>
+              <span class="work-date">2026.05</span>
+            </div>
+            <h3 class="work-title">LP Generator — 6ステップのヒアリングからLP HTMLをAI生成</h3>
+            <p class="work-desc">業種・ターゲット・強み・トーンを入力するだけで、即デプロイ可能なLP HTML/CSSをClaude APIがストリーミング生成。Senkodeが受託するLP制作の全工程をAIで実演するポートフォリオ兼デモツール。BYOK方式でサーバーにAPIキーを持たない設計。</p>
+            <span class="work-link">TRY TOOL →</span>
+          </div>
+        </div>
+
+        <!-- Card 26: H-A003 AI問診要約システム要件定義書 -->
+        <div class="work-card reveal" style="--delay:2.08s" data-category="consulting" onclick="window.open('portfolio/app-clinic-interview/index.html','_blank')">
+          <div class="work-thumb" style="background:linear-gradient(135deg,#060C12 0%,#0A1018 50%,#0E1820 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden;">
+            <span class="work-thumb-label">26</span>
+            <div style="font-size:10px;letter-spacing:3px;color:rgba(20,184,166,0.8);">APP REQUIREMENTS</div>
+            <div style="font-size:14px;font-weight:700;color:#E8F4F4;letter-spacing:1px;">AI CLINIC</div>
+            <div style="font-size:9px;color:rgba(232,244,244,0.35);letter-spacing:2px;">医療×AI問診要約</div>
+            <div style="margin-top:6px;display:flex;gap:6px;">
+              <span style="background:rgba(20,184,166,0.12);border:1px solid rgba(20,184,166,0.3);color:rgba(45,212,191,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">83%削減</span>
+              <span style="background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.3);color:rgba(147,197,253,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">要件定義書</span>
+            </div>
+          </div>
+          <div class="work-body">
+            <div class="work-meta">
+              <span class="work-tag">App / 医療×AI</span>
+              <span class="work-date">2026.05</span>
+            </div>
+            <h3 class="work-title">AI問診要約システム 要件定義書（内科クリニック向け）</h3>
+            <p class="work-desc">内科クリニック院長からのアプリ制作依頼を想定したシミュレーション。患者問診→Claude API要約→医師ダッシュボードの3層構成。機能要件・非機能要件・画面仕様・プロンプト設計・フェーズ別見積まで「発注できる」精度で設計。</p>
+            <span class="work-link">VIEW SPEC →</span>
+          </div>
+        </div>
+
+        <!-- Card 21: H-W001 物流AI導入ホワイトペーパー -->
+        <div class="work-card reveal" style="--delay:1.68s" data-category="writing" onclick="window.open('articles/004-logistics-ai-roi.html','_blank')">
+          <div class="work-thumb" style="background:linear-gradient(135deg,#050A14 0%,#0A1628 50%,#0F2040 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden;">
+            <span class="work-thumb-label">21</span>
+            <div style="font-size:10px;letter-spacing:3px;color:rgba(100,160,255,0.8);">WHITE PAPER</div>
+            <div style="font-size:15px;font-weight:700;color:#F4F1EC;letter-spacing:1px;">LOGISTICS × AI</div>
+            <div style="font-size:9px;color:rgba(244,241,236,0.35);letter-spacing:2px;">現場管理職の一次情報</div>
+            <div style="margin-top:6px;display:flex;gap:6px;">
+              <span style="background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.3);color:rgba(147,197,253,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">-23H/月</span>
+              <span style="background:rgba(74,222,128,0.15);border:1px solid rgba(74,222,128,0.3);color:rgba(74,222,128,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">ROI実数値</span>
+            </div>
+          </div>
+          <div class="work-body">
+            <div class="work-meta">
+              <span class="work-tag">Writing / 物流×DX</span>
+              <span class="work-date">2026.05</span>
+            </div>
+            <h3 class="work-title">物流現場AI導入ホワイトペーパー（BtoB営業ツール想定）</h3>
+            <p class="work-desc">物流SaaS企業の営業部長からの依頼を想定したシミュレーション。現役管理職の一次情報×失敗3パターン×ROI実数値（月23時間削減）を組み込んだBtoB向けホワイトペーパー。「この会社わかってる」と刺さる構成を設計。</p>
+            <span class="work-link">READ PAPER →</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="cta-content reveal">
+      <p class="section-label">GET STARTED — まず無料相談から</p>
+      <h2 class="cta-title">まずは無料相談から。</h2>
+      <p class="cta-sub">課題をお聞きし、最適な施策をご提案します。24時間以内にご返信します。</p>
+      <a href="contact.html" class="btn-primary">無料相談を申し込む →</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <span class="footer-copy">Senkode © 2026</span>
+    <div class="footer-sns">
+      <a href="https://note.com/sena01300" target="_blank" rel="noopener" aria-label="note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+          <path d="M5 4h14a2 2 0 0 1 2 2v13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a2 2 0 0 1 2-2z"/>
+          <line x1="8" y1="9" x2="16" y2="9"/><line x1="8" y1="13" x2="13" y2="13"/>
+        </svg>
+      </a>
+      <a href="https://x.com/senkode1006" target="_blank" rel="noopener" aria-label="X">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.402 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.256 5.63 5.908-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+        </svg>
+      </a>
+    </div>
+    <span class="footer-tag">閃光 — Flash of Light</span>
+  </footer>
+
+  <script>
+    // Custom cursor
+    const cursorDot  = document.querySelector('.cursor-dot');
+    const cursorRing = document.querySelector('.cursor-ring');
+    let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0, cursorRafId = null;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX; mouseY = e.clientY;
+      cursorDot.style.left = mouseX + 'px';
+      cursorDot.style.top  = mouseY + 'px';
+      if (cursorRafId === null) {
+        ringX = mouseX; ringY = mouseY;
+        cursorRafId = requestAnimationFrame(animateCursor);
+      }
+    });
+
+    function animateCursor() {
+      const dx = mouseX - ringX, dy = mouseY - ringY;
+      if (Math.abs(dx) > 0.05 || Math.abs(dy) > 0.05) {
+        ringX += dx * 0.15; ringY += dy * 0.15;
+        cursorRing.style.left = ringX + 'px';
+        cursorRing.style.top  = ringY + 'px';
+      }
+      cursorRafId = requestAnimationFrame(animateCursor);
+    }
+
+    document.querySelectorAll('.work-card, .btn-primary, .nav-cta, .filter-btn').forEach(el => {
+      el.addEventListener('mouseenter', () => cursorRing.classList.add('expanded'));
+      el.addEventListener('mouseleave', () => cursorRing.classList.remove('expanded'));
+    });
+
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const delay = entry.target.style.getPropertyValue('--delay') || '0s';
+          setTimeout(() => entry.target.classList.add('visible'), parseFloat(delay) * 1000);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Filter
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const workCards  = document.querySelectorAll('.work-card');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+        workCards.forEach(card => {
+          card.style.display = (filter === 'all' || card.dataset.category === filter) ? '' : 'none';
+        });
+        document.querySelectorAll('.works-divider').forEach(div => {
+          div.style.display = (filter === 'all' || filter === 'automation') ? '' : 'none';
+        });
+      });
+    });
+  </script>
+</body>
+</html>

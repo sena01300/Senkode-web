@@ -1,0 +1,1726 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Senkode — AI制作ディレクション</title>
+  <meta name="description" content="AIで制作を加速させる。中小企業・スタートアップのDX化を伴走するAI制作ディレクションファーム。Web・コンテンツ・動画制作をAIで高速化。">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital@1&family=Noto+Sans+JP:wght@100;200;300;700&display=swap" rel="stylesheet">
+  <style>
+    [class*="grid"] > *, [class*="inner"] > *, [class*="wrap"] > * { min-width: 0; }
+
+    img, video, iframe { max-width: 100%; height: auto; }
+
+    html { overflow-x: hidden; }
+
+    /* ===== DESIGN TOKENS ===== */
+    :root {
+      --gold:       #C9A84C;
+      --gold-light: #E8C97A;  /* used as literal in SVG logo stop-color (CSS vars unsupported in SVG attributes) */
+      --gold-dim:   #6B5420;
+      --black:      #080808;
+      --off-black:  #0F0F0F;
+      --card:       #111111;
+      --white:      #F4F1EC;
+      --muted:      rgba(244,241,236,0.35);
+      --border:     rgba(201,168,76,0.1);
+      --gold-hover:    rgba(201,168,76,0.1);
+      --gold-alpha-40: rgba(201,168,76,0.4);
+      --gold-alpha-30: rgba(201,168,76,0.3);
+      --gold-alpha-50: rgba(201,168,76,0.5);
+      --white-dim:     rgba(244,241,236,0.4);
+      --white-faint:   rgba(244,241,236,0.2);
+      --gold-glow-soft: rgba(201,168,76,0.08);
+      --gold-grid:      rgba(201,168,76,0.03);
+      --nav-bg:         rgba(15,15,15,0.85);
+
+      --cta-glow: rgba(201,168,76,0.06);
+    }
+
+    /* ===== RESET ===== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: none;
+      word-break: keep-all;
+      overflow-wrap: break-word;
+      line-break: strict;
+    }
+
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dim); }
+
+    /* ===== GRID BACKGROUND ===== */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--gold-grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--gold-grid) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ===== SCROLL REVEAL (base) ===== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
+      will-change: opacity, transform;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== SHARED SECTION HEADER ===== */
+    .section-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+    .section-label {
+      font-size: 10px;
+      letter-spacing: 0.35em;
+      color: var(--gold);
+      margin-bottom: 12px;
+      font-weight: 100;
+    }
+    .section-title {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 700;
+      font-size: 28px;
+      letter-spacing: 0.1em;
+      color: var(--white);
+    }
+
+    /* ===== SHARED BUTTONS ===== */
+    .btn-primary {
+      display: inline-block;
+      padding: 14px 32px;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      transition: background 0.3s;
+    }
+    .btn-primary:hover { background: var(--gold-hover); }
+
+    .btn-secondary {
+      display: inline-block;
+      padding: 14px 32px;
+      border: 1px solid var(--white-faint);
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      transition: border-color 0.3s, color 0.3s;
+    }
+    .btn-secondary:hover {
+      border-color: var(--white-dim);
+      color: var(--white);
+    }
+
+    /* ===== CURSOR ===== */
+    .cursor-dot {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      background: var(--gold);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 9999;
+      mix-blend-mode: difference;
+      transition: transform 0.1s;
+    }
+    .cursor-ring {
+      position: fixed;
+      width: 32px;
+      height: 32px;
+      border: 1px solid var(--gold-alpha-50);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 9998;
+      transition: width 0.3s, height 0.3s;
+    }
+    .cursor-ring.expanded { width: 48px; height: 48px; }
+
+    /* ===== NOISE ===== */
+    .noise {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 500;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 200px 200px;
+    }
+
+    /* ===== NAVIGATION ===== */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 60px;
+      background: var(--nav-bg);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .nav-wordmark {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 22px;
+      letter-spacing: 0.25em;
+      color: var(--white);
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+    .nav-link {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .nav-link:hover { color: var(--white); }
+    .nav-cta {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      text-decoration: none;
+      border: 1px solid var(--gold-alpha-40);
+      padding: 8px 16px;
+      transition: background 0.3s;
+    }
+    .nav-cta:hover { background: var(--gold-hover); }
+
+    /* ===== ANIMATED ICON ===== */
+    @keyframes outerGlow {
+      0%, 100% { filter: drop-shadow(0 0 10px rgba(201,168,76,0.4)); }
+      50%       { filter: drop-shadow(0 0 38px rgba(201,168,76,0.95)); }
+    }
+    .anim-mark { animation: outerGlow 3.6s ease-in-out infinite; }
+
+    /* ===== HERO ===== */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse {
+      0%, 100% { transform: translate(-50%,-50%) scale(1);   opacity: 1; }
+      50%       { transform: translate(-50%,-50%) scale(1.1); opacity: 0.7; }
+    }
+    @keyframes flash {
+      0%   { top: -20%; opacity: 0; }
+      10%  { opacity: 1; }
+      90%  { opacity: 1; }
+      100% { top: 120%; opacity: 0; }
+    }
+
+    .fade-up {
+      animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.2s both;
+    }
+
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 140px 60px;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+    .hero-glow {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, var(--gold-glow-soft) 0%, transparent 70%);
+      animation: pulse 4s ease-in-out infinite;
+      pointer-events: none;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+    }
+    .hero-label {
+      font-size: 11px;
+      letter-spacing: 0.35em;
+      color: var(--gold);
+      margin-bottom: 24px;
+      font-weight: 100;
+    }
+    .hero-title {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 700;
+      font-size: clamp(28px, 4vw, 52px);
+      line-height: 1.3;
+      letter-spacing: 0.05em;
+      color: var(--white);
+      margin-bottom: 16px;
+    }
+    .hero-highlight { color: var(--gold); }
+    .hero-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 16px;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      margin-bottom: 40px;
+    }
+    .hero-btns {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+    }
+
+    /* ===== BRAND MARKS ===== */
+    .hero-bg-word {
+      position: absolute;
+      font-family: 'Bebas Neue', cursive;
+      font-size: clamp(120px, 20vw, 280px);
+      letter-spacing: 0.15em;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(201,168,76,0.05);
+      pointer-events: none;
+      user-select: none;
+      z-index: 0;
+      white-space: nowrap;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .hero-badge-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 36px;
+    }
+    .hero-brand-name {
+      font-family: 'Bebas Neue', cursive;
+      font-size: clamp(44px, 7vw, 88px);
+      letter-spacing: 0.3em;
+      background: linear-gradient(135deg, var(--gold-dim), var(--gold-light), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+      line-height: 1;
+    }
+    @keyframes badgeSpin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+    .hero-badge-ring {
+      transform-origin: 100px 100px;
+      animation: badgeSpin 20s linear infinite;
+    }
+    .stats-mark {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      margin-bottom: 40px;
+    }
+    .stats-mark-line {
+      width: 1px;
+      height: 36px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      opacity: 0.3;
+      margin-top: 4px;
+    }
+    .cta-mark {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 28px;
+    }
+
+    /* ===== FLASH LINE ===== */
+    .flash-line {
+      position: fixed;
+      left: 28%;
+      width: 1px;
+      height: 120px;
+      background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+      pointer-events: none;
+      z-index: 501;
+      animation: flash 8s linear infinite;
+      top: -20%;
+    }
+
+    /* ===== STATS ===== */
+    .stats {
+      background: var(--off-black);
+      padding: 80px 60px;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      z-index: 1;
+    }
+    .stats-grid {
+      display: flex;
+      justify-content: space-around;
+      max-width: 900px;
+      width: 100%;
+      margin: 0 auto;
+    }
+    .stat-item { text-align: center; }
+    .stat-number {
+      font-family: 'Bebas Neue', cursive;
+      font-size: clamp(36px, 5vw, 56px);
+      color: var(--gold);
+      letter-spacing: 0.05em;
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+
+    /* ===== SERVICES ===== */
+    .services {
+      padding: 140px 60px;
+      background: var(--black);
+      position: relative;
+      z-index: 1;
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 2px;
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto;
+    }
+    .service-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 48px 36px;
+      position: relative;
+      overflow: hidden;
+      transition-delay: var(--delay, 0s);
+    }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 2px;
+      background: var(--gold);
+      transition: left 0.5s ease;
+    }
+    .service-card:hover::before { left: 100%; }
+    .service-num {
+      display: block;
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+    .service-name {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 28px;
+      letter-spacing: 0.1em;
+      color: var(--white);
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+    .service-desc {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.9;
+    }
+
+    /* ===== WORKS ===== */
+    .works {
+      padding: 140px 60px;
+      background: var(--off-black);
+      position: relative;
+      z-index: 1;
+    }
+    .works-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 2px;
+      max-width: 1100px;
+      width: 100%;
+      margin: 0 auto;
+    }
+    .work-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      transition-delay: var(--delay, 0s);
+    }
+    .work-thumb { height: 200px; }
+    .work-thumb--article {
+      background: linear-gradient(135deg, var(--gold-dim) 0%, var(--black) 100%);
+    }
+    .work-thumb--lp {
+      background: linear-gradient(135deg, var(--card) 0%, var(--gold-dim) 100%);
+    }
+    .work-body { padding: 24px 28px; }
+    .work-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 10px;
+      letter-spacing: 0.05em;
+    }
+    .work-tag {
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      border: 1px solid var(--gold-alpha-30);
+      padding: 3px 10px;
+    }
+    .work-desc {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 200;
+      line-height: 1.7;
+      margin: 6px 0 8px;
+    }
+
+    /* ===== PROCESS ===== */
+    .process {
+      padding: 140px 60px;
+      background: var(--black);
+      position: relative;
+      z-index: 1;
+    }
+    .process-steps {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      max-width: 900px;
+      width: 100%;
+      margin: 0 auto;
+      gap: 16px;
+    }
+    .process-step { text-align: center; flex: 1; }
+    .step-num {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 40px;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+    .step-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 8px;
+      letter-spacing: 0.05em;
+    }
+    .step-desc {
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+    .process-arrow {
+      font-size: 20px;
+      color: var(--gold-alpha-40);
+      flex-shrink: 0;
+      padding-bottom: 20px;
+    }
+
+    /* ===== CTA ===== */
+    .cta {
+      padding: 140px 60px;
+      background: var(--black);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+    .cta::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+    .cta-glow {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, var(--cta-glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta-content {
+      position: relative;
+      z-index: 1;
+    }
+    .cta-title {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: clamp(24px, 3vw, 36px);
+      font-weight: 700;
+      color: var(--white);
+      margin: 16px 0 12px;
+      letter-spacing: 0.05em;
+    }
+    .cta-sub {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 32px;
+      line-height: 1.9;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      background: var(--off-black);
+      border-top: 1px solid var(--border);
+      padding: 28px 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+    .footer-copy {
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      color: var(--muted);
+    }
+    .footer-sns {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+    .footer-sns a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      color: var(--muted);
+      transition: color 0.3s;
+    }
+    .footer-sns a:hover {
+      color: var(--gold);
+    }
+    .footer-sns svg {
+      width: 18px;
+      height: 18px;
+    }
+    .footer-tag {
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      color: var(--white-faint);
+    }
+
+    /* ===== VISION ===== */
+    .vision {
+      padding: 120px 60px;
+      background: var(--off-black);
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .vision-year {
+      font-family: 'Bebas Neue', cursive;
+      font-size: clamp(48px, 7vw, 96px);
+      line-height: 1;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(201,168,76,0.2);
+      letter-spacing: 0.05em;
+      margin-bottom: 32px;
+    }
+    .vision-title {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 700;
+      font-size: clamp(22px, 3.5vw, 44px);
+      letter-spacing: 0.08em;
+      color: var(--white);
+      margin-bottom: 24px;
+      line-height: 1.4;
+    }
+    .vision-title span { color: var(--gold); }
+    .vision-body {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 2.1;
+      max-width: 620px;
+      width: 100%;
+      margin: 0 auto 32px;
+    }
+    .vision-tag {
+      display: inline-block;
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      color: var(--gold);
+      border: 1px solid var(--gold-alpha-30);
+      padding: 8px 20px;
+    }
+
+    /* ===== PROBLEM ===== */
+    .problem {
+      padding: 140px 60px;
+      background: var(--black);
+      position: relative;
+      z-index: 1;
+    }
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 2px;
+      max-width: 1100px;
+      width: 100%;
+      margin: 0 auto;
+    }
+    .problem-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 40px 32px;
+      position: relative;
+    }
+    .problem-card::after {
+      content: '?';
+      position: absolute;
+      top: 20px; right: 24px;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 48px;
+      color: var(--gold);
+      opacity: 0.12;
+      line-height: 1;
+    }
+    .problem-num {
+      display: block;
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+    .problem-text {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.7;
+      letter-spacing: 0.04em;
+    }
+
+    /* ===== ANSWER ===== */
+    .answer {
+      padding: 140px 60px;
+      background: var(--off-black);
+      position: relative;
+      z-index: 1;
+    }
+    .answer-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 40px;
+      max-width: 1000px;
+      width: 100%;
+      margin: 0 auto;
+    }
+    .answer-item { text-align: center; }
+    .answer-icon {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 52px;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 16px;
+      letter-spacing: 0.05em;
+    }
+    .answer-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 10px;
+      letter-spacing: 0.08em;
+    }
+    .answer-desc {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.9;
+    }
+
+    /* ===== COMMITMENT ===== */
+    .commitment {
+      padding: 100px 60px;
+      background: var(--black);
+      position: relative;
+      z-index: 1;
+    }
+    .commitment-inner {
+      max-width: 800px;
+      width: 100%;
+      margin: 0 auto;
+      border: 1px solid rgba(201,168,76,0.25);
+      padding: 56px 64px;
+      text-align: center;
+      position: relative;
+    }
+    .commitment-inner::before,
+    .commitment-inner::after {
+      content: '';
+      position: absolute;
+      width: 20px; height: 20px;
+      border-color: var(--gold);
+      border-style: solid;
+      opacity: 0.6;
+    }
+    .commitment-inner::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+    .commitment-inner::after  { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+    .commitment-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(18px, 2.5vw, 26px);
+      color: var(--white);
+      line-height: 1.9;
+      letter-spacing: 0.04em;
+      margin-bottom: 24px;
+    }
+    .commitment-quote span { color: var(--gold); }
+    .commitment-sub {
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      color: var(--muted);
+    }
+
+    /* ===== DIVISIONS ===== */
+    .divisions { padding: 140px 60px; }
+    .divisions-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 2px;
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto 48px;
+    }
+    .division-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 40px 32px;
+      position: relative;
+      overflow: hidden;
+      transition-delay: var(--delay, 0s);
+      cursor: default;
+    }
+    .division-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 2px;
+      background: var(--gold);
+      transition: left 0.5s ease;
+    }
+    .division-card:hover::before { left: 100%; }
+    .division-code {
+      display: block;
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+    .division-name {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      font-size: 17px;
+      color: var(--white);
+      margin-bottom: 12px;
+      letter-spacing: 0.05em;
+    }
+    .division-suite {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+    }
+    .divisions-footer {
+      text-align: center;
+    }
+
+    /* ===== WORD BREAK — Japanese text ===== */
+    p, li, h1, h2, h3, h4, span, div, td, dt, dd, label {
+      word-break: keep-all;
+      overflow-wrap: break-word;
+      line-break: strict;
+    }
+    .commitment-quote .cq-line { display: block; }
+
+    /* ===== NAV — bilingual labels ===== */
+    .nav-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 1.2;
+    }
+    .nav-link-ja {
+      font-size: 7px;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 100;
+      opacity: 0.65;
+      margin-top: 1px;
+    }
+
+    /* ===== STAT LABEL — bilingual ===== */
+    .stat-label-ja {
+      display: block;
+      font-size: 9px;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 100;
+      margin-top: 2px;
+      opacity: 0.7;
+    }
+
+    /* ===== WORKS — updated section ===== */
+    /* works-grid: 3 columns on homepage */
+    .works-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+      max-width: 1200px !important;
+    }
+    /* card as <a> tag */
+    a.work-card {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+    }
+    /* always show link text on homepage featured cards */
+    a.work-card .work-link {
+      opacity: 1;
+      color: var(--gold);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    /* work thumb needs position for inner elements */
+    .work-thumb {
+      position: relative;
+      overflow: hidden;
+    }
+    .work-thumb-label {
+      position: absolute;
+      bottom: 16px; left: 20px;
+      font-family: 'Bebas Neue', cursive;
+      font-size: 36px;
+      letter-spacing: 0.1em;
+      color: rgba(201,168,76,0.15);
+      line-height: 1;
+      user-select: none;
+    }
+    .work-thumb-icon {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      opacity: 0.5;
+    }
+    .work-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    /* Works count + CTA */
+    .works-count-note {
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      margin-top: 12px;
+    }
+    .works-count-num {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 22px;
+      color: var(--gold);
+    }
+    .works-footer-cta {
+      text-align: center;
+      margin-top: 56px;
+    }
+    .works-footer-note {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      margin-bottom: 24px;
+    }
+    .works-footer-note strong {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 18px;
+      color: var(--gold);
+      font-weight: normal;
+    }
+
+    /* ===== TABLET (769px〜1024px) ===== */
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .nav { padding: 20px 40px; }
+      .hero { padding: 100px 40px; }
+      .services { padding: 100px 40px; }
+      .services-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+      .works { padding: 100px 40px; }
+      .works-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+      .problem { padding: 100px 40px; }
+      .problem-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .answer { padding: 100px 40px; }
+      .answer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .divisions { padding: 100px 40px; }
+      .divisions-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .vision { padding: 100px 40px; }
+      .stats { padding: 80px 40px; }
+      .process { padding: 100px 40px; }
+      .commitment { padding: 80px 40px; }
+      .cta { padding: 100px 40px; }
+      .footer { padding: 28px 40px; }
+    }
+
+    /* ===== MOBILE (768px以下) ===== */
+    @media (max-width: 768px) {
+      /* Cursor — hide on touch devices */
+      body { cursor: auto; }
+      .cursor-dot, .cursor-ring { display: none; }
+
+      /* Decorative elements — suppress continuous GPU animation */
+      .flash-line { display: none; }
+
+      /* Navigation */
+      .nav { padding: 16px 24px; }
+      .nav-links { gap: 16px; }
+      .nav-link { display: none; }
+
+      /* Hero */
+      .hero { padding: 80px 24px; min-height: auto; }
+      .hero-btns { flex-direction: column; align-items: center; gap: 12px; }
+      .btn-primary, .btn-secondary { width: 100%; max-width: 280px; text-align: center; }
+
+      /* Stats */
+      .stats { padding: 60px 24px; }
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 24px 20px;
+      }
+
+      /* Services */
+      .services { padding: 80px 24px; }
+      .services-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2px; }
+      .service-card { padding: 28px 16px; }
+      .service-name { font-size: 18px; letter-spacing: 0.06em; }
+      .service-desc { font-size: 11px; line-height: 1.8; }
+
+      /* Divisions */
+      .divisions { padding: 80px 24px; }
+      .divisions-grid { grid-template-columns: minmax(0, 1fr); }
+
+      /* Works */
+      .works { padding: 80px 24px; }
+      .works-grid { grid-template-columns: minmax(0, 1fr) !important; gap: 16px; }
+      .works-count-note { font-size: 11px; letter-spacing: 0.03em; }
+
+      /* Process */
+      .process { padding: 80px 24px; }
+      .process-steps { flex-direction: column; gap: 28px; }
+      .process-arrow { transform: rotate(90deg); padding: 4px 0; }
+
+      /* Brand marks */
+      .hero-bg-word { display: none; }
+      .hero-badge-wrap svg { width: 160px; height: 160px; }
+      .cta-mark svg { width: 60px; height: 60px; }
+
+      /* CTA */
+      .cta { padding: 80px 24px; }
+
+      /* New sections */
+      .vision { padding: 80px 24px; }
+      .vision-body { text-align: left; }
+      .problem { padding: 80px 24px; }
+      .problem-grid { grid-template-columns: minmax(0, 1fr); }
+      .answer { padding: 80px 24px; }
+      .answer-grid { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+      .commitment { padding: 60px 24px; }
+      .commitment-inner { padding: 36px 28px; }
+
+      /* PC-only line breaks: hide on mobile */
+      br.pc-br { display: none; }
+
+      /* Footer */
+      .footer { padding: 20px 24px; flex-direction: column; gap: 8px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Cursor -->
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+
+  <!-- Noise overlay -->
+  <div class="noise"></div>
+
+  <!-- Flash line -->
+  <div class="flash-line"></div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <a href="#" class="nav-logo">
+      <svg class="nav-logo-icon" width="44" height="44" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <!-- stop-color uses literals: SVG attributes can't reference CSS vars.
+               Values match --gold-dim / --gold-light / --gold in :root. -->
+          <linearGradient id="logoGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#6B5420"/>
+            <stop offset="50%" stop-color="#E8C97A"/>
+            <stop offset="100%" stop-color="#C9A84C"/>
+          </linearGradient>
+          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <!-- Clockwise circle path (r=25) for text — gap appears at top -->
+          <path id="logoCircle" d="M30,5 A25,25,0,1,1,29.999,5" fill="none"/>
+        </defs>
+        <!-- Outer border ring -->
+        <circle cx="30" cy="30" r="28" fill="none" stroke="#C9A84C" stroke-width="0.5" opacity="0.4"/>
+        <!-- Inner decorative ring -->
+        <circle cx="30" cy="30" r="20" fill="none" stroke="#C9A84C" stroke-width="0.3" opacity="0.2"/>
+        <!-- Lightning bolt S — canonical brand path (200×200) scaled to fit 60×60 viewBox -->
+        <g transform="translate(-6,-4.4) scale(0.36)">
+          <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="url(#logoGrad)" style="filter: url(#glow)"/>
+        </g>
+        <!-- Company name + taglines ring the badge clockwise from top -->
+        <text font-family="'Bebas Neue','Noto Sans JP',sans-serif" font-size="5" fill="#C9A84C" opacity="0.78">
+          <textPath href="#logoCircle" startOffset="0%" letter-spacing="2.5">Senkode · 閃光 · Senkode · 閃光 ·</textPath>
+        </text>
+      </svg>
+      <span class="nav-wordmark">Senkode</span>
+    </a>
+    <div class="nav-links">
+      <a href="services.html" class="nav-link">SERVICES<span class="nav-link-ja">サービス</span></a>
+      <a href="works.html" class="nav-link">WORKS<span class="nav-link-ja">制作実績</span></a>
+      <a href="articles/index.html" class="nav-link">ARTICLES<span class="nav-link-ja">記事</span></a>
+      <a href="about.html" class="nav-link">ABOUT<span class="nav-link-ja">概要</span></a>
+      <a href="contact.html" class="nav-cta">無料相談 CONTACT</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <div class="hero-bg-word">SENKODE</div>
+    <div class="hero-content fade-up">
+      <!-- Full animated blade icon from icon-brand-final.html Section A -->
+      <div class="hero-badge-wrap">
+        <svg class="anim-mark" width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="wBg" cx="38%" cy="32%" r="65%"><stop offset="0%" stop-color="#1c1200"/><stop offset="100%" stop-color="#040404"/></radialGradient>
+            <linearGradient id="wBlade" x1="60" y1="35" x2="145" y2="158" gradientUnits="userSpaceOnUse">
+              <stop offset="0%"   stop-color="#FFF8C0"/><stop offset="18%" stop-color="#EDD06A"/>
+              <stop offset="42%"  stop-color="#C9A84C"/><stop offset="68%" stop-color="#7A5010"/>
+              <stop offset="88%"  stop-color="#3a2000"/><stop offset="100%" stop-color="#150c00"/>
+            </linearGradient>
+            <linearGradient id="wRing" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#6B5420"/><stop offset="45%" stop-color="#E8C97A"/><stop offset="100%" stop-color="#C9A84C"/>
+            </linearGradient>
+            <radialGradient id="wSheen" cx="30%" cy="28%" r="55%">
+              <stop offset="0%" stop-color="#FFFFF8" stop-opacity="0.22"/><stop offset="100%" stop-color="#FFFFF8" stop-opacity="0"/>
+            </radialGradient>
+            <clipPath id="wClip"><path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z"/></clipPath>
+            <path id="wCtp" d="M100,100 m-84,0 a84,84 0 1,1 168,0 a84,84 0 1,1 -168,0"/>
+            <filter id="wRidge" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.2"/></filter>
+            <filter id="wEdge"  x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.2"/></filter>
+            <filter id="wShadow" x="-20%" y="-20%" width="150%" height="150%"><feDropShadow dx="3" dy="4" stdDeviation="3.5" flood-color="#0a0500" flood-opacity="0.9"/></filter>
+            <filter id="wSweep"  x="-200%" y="-200%" width="500%" height="500%"><feGaussianBlur stdDeviation="4"/></filter>
+            <filter id="wTip"    x="-200%" y="-200%" width="500%" height="500%"><feGaussianBlur stdDeviation="5"/></filter>
+          </defs>
+          <circle cx="100" cy="100" r="92" fill="url(#wBg)"/>
+          <circle cx="100" cy="100" r="60" fill="none" stroke="rgba(201,168,76,0.07)" stroke-width="40">
+            <animate attributeName="opacity" values="0.5;1;0.5" dur="4s" repeatCount="indefinite"/>
+          </circle>
+          <g stroke="#C9A84C" opacity="0.18" stroke-width="0.8">
+            <line x1="100" y1="10" x2="100" y2="19" transform="rotate(0   100 100)"/>
+            <line x1="100" y1="10" x2="100" y2="19" transform="rotate(30  100 100)"/>
+            <line x1="100" y1="10" x2="100" y2="19" transform="rotate(60  100 100)"/>
+            <line x1="100" y1="10" x2="100" y2="19" transform="rotate(90  100 100)"/>
+            <line x1="100" y1="10" x2="100" y2="19" transform="rotate(120 100 100)"/>
+            <line x1="100" y1="10" x2="100" y2="19" transform="rotate(150 100 100)"/>
+            <line x1="100" y1="10" x2="100" y2="19" transform="rotate(180 100 100)"/>
+            <line x1="100" y1="10" x2="100" y2="19" transform="rotate(210 100 100)"/>
+            <line x1="100" y1="10" x2="100" y2="19" transform="rotate(240 100 100)"/>
+            <line x1="100" y1="10" x2="100" y2="19" transform="rotate(270 100 100)"/>
+            <line x1="100" y1="10" x2="100" y2="19" transform="rotate(300 100 100)"/>
+            <line x1="100" y1="10" x2="100" y2="19" transform="rotate(330 100 100)"/>
+          </g>
+          <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="#1a0c00" filter="url(#wShadow)" opacity="0.85"/>
+          <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="none" stroke="#0a0500" stroke-width="2.5" opacity="0.8"/>
+          <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="url(#wBlade)"/>
+          <rect x="60" y="35" width="80" height="125" fill="url(#wSheen)" clip-path="url(#wClip)"/>
+          <line x1="106" y1="91"  x2="121" y2="40"  stroke="#000" stroke-width="1.8" opacity="0.35"/>
+          <line x1="69"  y1="100" x2="94"  y2="100" stroke="#000" stroke-width="1.5" opacity="0.3"/>
+          <line x1="79"  y1="151" x2="131" y2="91"  stroke="#000" stroke-width="1.2" opacity="0.25"/>
+          <line x1="121" y1="40"  x2="69"  y2="100" stroke="#FFF4A0" stroke-width="3"   opacity="0.22" filter="url(#wEdge)"/>
+          <line x1="94"  y1="100" x2="79"  y2="151" stroke="#FFF4A0" stroke-width="3"   opacity="0.18" filter="url(#wEdge)"/>
+          <line x1="131" y1="91"  x2="106" y2="91"  stroke="#FFF4A0" stroke-width="2.5" opacity="0.16" filter="url(#wEdge)"/>
+          <line x1="116" y1="45"  x2="77"  y2="94"  stroke="#FFFCE0" stroke-width="2"   opacity="0.32" filter="url(#wRidge)"/>
+          <line x1="88"  y1="103" x2="98"  y2="147" stroke="#FFFCE0" stroke-width="2"   opacity="0.28" filter="url(#wRidge)"/>
+          <line x1="121" y1="40"  x2="69"  y2="100" stroke="#FFF8C0" stroke-width="0.8" opacity="0.75"/>
+          <line x1="94"  y1="100" x2="79"  y2="151" stroke="#FFF8C0" stroke-width="0.8" opacity="0.65"/>
+          <line x1="131" y1="91"  x2="106" y2="91"  stroke="#FFF8C0" stroke-width="0.7" opacity="0.55"/>
+          <!-- SWEEP LIGHT -->
+          <g>
+            <circle r="9" fill="rgba(255,248,192,0.35)" filter="url(#wSweep)">
+              <animateMotion dur="2.8s" repeatCount="indefinite" calcMode="spline"
+                keyTimes="0;0.45;0.55;1" keySplines="0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1"
+                path="M 121,40 L 69,100 L 94,100 L 79,151"/>
+              <animate attributeName="opacity" values="0;0.7;0.7;0" keyTimes="0;0.05;0.95;1" dur="2.8s" repeatCount="indefinite"/>
+            </circle>
+            <circle r="3.5" fill="#FFFFFF">
+              <animateMotion dur="2.8s" repeatCount="indefinite" calcMode="spline"
+                keyTimes="0;0.45;0.55;1" keySplines="0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1"
+                path="M 121,40 L 69,100 L 94,100 L 79,151"/>
+              <animate attributeName="opacity" values="0;0.95;0.95;0" keyTimes="0;0.05;0.92;1" dur="2.8s" repeatCount="indefinite"/>
+            </circle>
+          </g>
+          <!-- TIP FLASH -->
+          <circle cx="121" cy="40" r="8" fill="#FFFFF0" filter="url(#wTip)">
+            <animate attributeName="opacity" values="0.3;0.3;0.85;0.1;0.7;0.3" keyTimes="0;0.6;0.72;0.75;0.78;1" dur="5s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="121" cy="40" r="3.5" fill="#FFFFF0" filter="url(#wEdge)" opacity="0.85"/>
+          <circle cx="121" cy="40" r="1.5" fill="#FFFFFF">
+            <animate attributeName="opacity" values="0.9;0.9;1;0.2;1;0.9" keyTimes="0;0.6;0.72;0.75;0.78;1" dur="5s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="79"  cy="151" r="2.5" fill="#E8C97A" opacity="0.7" filter="url(#wEdge)"/>
+          <circle cx="79"  cy="151" r="1"   fill="#FFF8C0" opacity="0.8"/>
+          <circle cx="69"  cy="100" r="2"   fill="#FFE898" opacity="0.6"/>
+          <circle cx="131" cy="91"  r="2"   fill="#D4A830" opacity="0.5"/>
+          <circle cx="94"  cy="100" r="5"   fill="#000000" opacity="0.18"/>
+          <circle cx="106" cy="91"  r="4"   fill="#000000" opacity="0.15"/>
+          <!-- RING SHIMMER -->
+          <circle cx="100" cy="8" r="4" fill="#FFFCE0" opacity="0.85" filter="url(#wEdge)">
+            <animateTransform attributeName="transform" type="rotate" from="0 100 100" to="360 100 100" dur="8s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="100" cy="192" r="2.5" fill="#C9A84C" opacity="0.5">
+            <animateTransform attributeName="transform" type="rotate" from="0 100 100" to="-360 100 100" dur="12s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="100" cy="100" r="92" fill="none" stroke="url(#wRing)" stroke-width="2.5"/>
+          <circle cx="100" cy="100" r="83" fill="none" stroke="url(#wRing)" stroke-width="0.8" opacity="0.4"/>
+          <circle cx="100" cy="9"   r="3" fill="#C9A84C" opacity="0.7"/>
+          <circle cx="100" cy="191" r="3" fill="#C9A84C" opacity="0.7"/>
+          <circle cx="9"   cy="100" r="3" fill="#C9A84C" opacity="0.7"/>
+          <circle cx="191" cy="100" r="3" fill="#C9A84C" opacity="0.7"/>
+          <text font-family="'Bebas Neue','Noto Sans JP',sans-serif" font-size="7.5" fill="#C9A84C" opacity="0.75" letter-spacing="2.8">
+            <textPath href="#wCtp" startOffset="0%">Senkode · Senko-Digital-Engine · Senko-Data-Engine · 閃光 · Senkode · Senko-Digital-Engine · Senko-Data-Engine · 閃光 ·</textPath>
+          </text>
+        </svg>
+      </div>
+      <!-- Brand name -->
+      <p class="hero-brand-name">SENKODE</p>
+      <p class="hero-label">AI DIRECTION / WEB / WRITING / AUTOMATION</p>
+      <p class="hero-sub">AI Direction. Speed of Light.</p>
+      <p style="font-size:12px;color:var(--muted);letter-spacing:0.12em;margin-bottom:36px;font-family:'Noto Sans JP',sans-serif;font-weight:100;">AIで制作を加速する。Web・記事・動画・自動化ツール一気通貫。</p>
+      <div class="hero-btns">
+        <a href="contact.html" class="btn-primary">無料相談はこちら →</a>
+        <a href="works.html" class="btn-secondary">制作実績を見る（38件+）</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Vision -->
+  <section class="vision">
+    <div class="reveal">
+      <svg width="36" height="36" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:24px;opacity:0.7">
+        <defs><linearGradient id="vIconGrad" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#6B5420"/><stop offset="50%" stop-color="#E8C97A"/><stop offset="100%" stop-color="#C9A84C"/></linearGradient></defs>
+        <circle cx="100" cy="100" r="92" fill="none" stroke="#C9A84C" stroke-width="1.5" opacity="0.3"/>
+        <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="url(#vIconGrad)"/>
+      </svg>
+      <div class="vision-year">2030</div>
+      <h2 class="vision-title"><span>AIネイティブな会社</span>だけが、勝つ。</h2>
+      <p class="vision-body">
+        AIを使いこなす会社だけが、次の10年を手にする。
+        Senkodeは、その変化の最前線であなたに伴走し続けます。
+      </p>
+      <span class="vision-tag">Senkode AI Direction</span>
+    </div>
+  </section>
+
+  <!-- Problem -->
+  <section class="problem">
+    <div class="section-header reveal">
+      <p class="section-label">PAIN POINTS</p>
+      <h2 class="section-title">こんな課題、抱えていませんか？</h2>
+    </div>
+    <div class="problem-grid">
+      <div class="problem-card reveal">
+        <svg width="28" height="28" viewBox="0 0 28 28" style="margin-bottom:16px"><circle cx="14" cy="14" r="13" fill="none" stroke="#C9A84C" stroke-width="1" opacity="0.4"/><line x1="14" y1="8" x2="14" y2="16" stroke="#C9A84C" stroke-width="1.5" stroke-linecap="round"/><circle cx="14" cy="20" r="1.5" fill="#C9A84C"/></svg>
+        <span class="problem-num">01</span>
+        <p class="problem-text">制作コストが高く、スピードも遅い</p>
+      </div>
+      <div class="problem-card reveal" style="--delay:0.1s">
+        <svg width="28" height="28" viewBox="0 0 28 28" style="margin-bottom:16px"><circle cx="14" cy="14" r="13" fill="none" stroke="#C9A84C" stroke-width="1" opacity="0.4"/><text x="14" y="19" text-anchor="middle" font-family="Cormorant Garamond,serif" font-style="italic" font-size="16" fill="#C9A84C">?</text></svg>
+        <span class="problem-num">02</span>
+        <p class="problem-text">AIを使いたいが何から始めればいいか分からない</p>
+      </div>
+      <div class="problem-card reveal" style="--delay:0.2s">
+        <svg width="28" height="28" viewBox="0 0 28 28" style="margin-bottom:16px"><circle cx="14" cy="14" r="13" fill="none" stroke="#C9A84C" stroke-width="1" opacity="0.4"/><line x1="8" y1="10" x2="20" y2="10" stroke="#C9A84C" stroke-width="1.5" stroke-linecap="round"/><line x1="8" y1="14" x2="20" y2="14" stroke="#C9A84C" stroke-width="1.5" stroke-linecap="round"/><line x1="8" y1="18" x2="16" y2="18" stroke="#C9A84C" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <span class="problem-num">03</span>
+        <p class="problem-text">品質にムラがあり、外注管理に手間がかかる</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Answer -->
+  <section class="answer">
+    <div class="section-header reveal">
+      <p class="section-label">OUR APPROACH</p>
+      <h2 class="section-title">Senkodeのアプローチ</h2>
+    </div>
+    <div class="answer-grid">
+      <div class="answer-item reveal">
+        <div class="answer-icon">SPEED</div>
+        <h3 class="answer-label">スピード</h3>
+        <p class="answer-desc">AIで従来比3〜5倍のスピード。日付で納品します。</p>
+      </div>
+      <div class="answer-item reveal" style="--delay:0.1s">
+        <div class="answer-icon">QUALITY</div>
+        <h3 class="answer-label">品質</h3>
+        <p class="answer-desc">AIの出力を人間が磨く二段構え。量産してもクオリティは落とさない。</p>
+      </div>
+      <div class="answer-item reveal" style="--delay:0.2s">
+        <div class="answer-icon">COST</div>
+        <h3 class="answer-label">コスト</h3>
+        <p class="answer-desc">AIが工数を圧縮するため、プレミアムな成果物をリーズナブルな価格で提供します。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="stats">
+    <div class="stats-mark reveal">
+      <svg width="60" height="60" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="sBadgeGrad" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#6B5420"/>
+            <stop offset="50%" stop-color="#E8C97A"/>
+            <stop offset="100%" stop-color="#C9A84C"/>
+          </linearGradient>
+        </defs>
+        <circle cx="100" cy="100" r="96" fill="none" stroke="#C9A84C" stroke-width="1" opacity="0.3"/>
+        <circle cx="100" cy="100" r="72" fill="none" stroke="#C9A84C" stroke-width="0.5" opacity="0.15"/>
+        <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="url(#sBadgeGrad)" opacity="0.9"/>
+      </svg>
+      <div class="stats-mark-line"></div>
+    </div>
+    <div class="stats-grid reveal">
+      <div class="stat-item">
+        <div class="stat-number" data-target="38" data-suffix="+">0</div>
+        <div class="stat-label">PROJECTS<span class="stat-label-ja">累計制作件数</span></div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" data-target="340" data-suffix="%">0</div>
+        <div class="stat-label">TRAFFIC GROWTH<span class="stat-label-ja">流入増加実績</span></div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" data-target="96" data-suffix="">0</div>
+        <div class="stat-label">PAGESPEED<span class="stat-label-ja">表示速度スコア</span></div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" data-target="5" data-suffix="年+">0</div>
+        <div class="stat-label">EXPERIENCE<span class="stat-label-ja">現場管理職歴</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class="services" id="services">
+    <div class="section-header reveal">
+      <p class="section-label">WHAT WE DO — サービス紹介</p>
+      <h2 class="section-title">サービス</h2>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <span class="service-num">01</span>
+        <h3 class="service-name">AI DIRECTION</h3>
+        <p class="service-desc">Web・コンテンツ・動画——あらゆる制作をAIでディレクション。速度と品質を同時に引き上げます。</p>
+      </div>
+      <div class="service-card reveal" style="--delay:0.1s">
+        <span class="service-num">02</span>
+        <h3 class="service-name">SEO WRITING</h3>
+        <p class="service-desc">現場10年の一次情報 × AIの高速生成。上位表示から収益化まで一貫設計します。</p>
+      </div>
+      <div class="service-card reveal" style="--delay:0.2s">
+        <span class="service-num">03</span>
+        <h3 class="service-name">WEB CODING</h3>
+        <p class="service-desc">PageSpeed 96+の高速表示とブランドデザインを両立。コーディングから運用まで一気通貫です。</p>
+      </div>
+      <div class="service-card reveal" style="--delay:0.3s">
+        <span class="service-num">04</span>
+        <h3 class="service-name">VIDEO DIRECTION</h3>
+        <p class="service-desc">Runway・HeyGenによるAI動画ディレクション。撮影ゼロで、SNS・広告・説明動画を高速納品。</p>
+      </div>
+      <div class="service-card reveal" style="--delay:0.4s">
+        <span class="service-num">05</span>
+        <h3 class="service-name">AI AUTOMATION</h3>
+        <p class="service-desc">Claude API × GAS × Notionで業務を完全自動化。SNS投稿生成・日次レポート・データ集計を毎日自動実行。</p>
+      </div>
+      <div class="service-card reveal" style="--delay:0.5s">
+        <span class="service-num">06</span>
+        <h3 class="service-name">APP DEVELOPMENT</h3>
+        <p class="service-desc">AI搭載Webアプリを高品質で開発。採用ツール・問診システム・不動産査定など、業務を変えるプロダクトを設計から納品まで。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Commitment -->
+  <section class="commitment">
+    <div class="commitment-inner reveal">
+      <svg width="32" height="24" viewBox="0 0 32 24" style="margin-bottom:20px;opacity:0.5"><path d="M0 24V14C0 6.268 5.373 1.313 16.12 0l1.88 3C12.747 4.373 10 7.44 10 12v1h6v11H0zm18 0V14C18 6.268 23.373 1.313 34.12 0L36 3c-5.253 1.373-8 4.44-8 9v1h6v11H18z" fill="#C9A84C"/></svg>
+      <p class="commitment-quote">
+        <span class="cq-line">「昨日の正解が、明日の敗因になる。</span>
+        <span class="cq-line">だから私たちは、<span>止まらない。</span></span>
+        <span class="cq-line">あなたが勝ち続けるための、<span>永続的な伴走</span>。」</span>
+      </p>
+      <p class="commitment-sub">Senkodeの約束 — OUR COMMITMENT</p>
+    </div>
+  </section>
+
+  <!-- Works -->
+  <section class="works" id="works">
+    <div class="section-header reveal">
+      <p class="section-label">PORTFOLIO — 制作実績</p>
+      <h2 class="section-title">制作実績</h2>
+      <p class="works-count-note">LP・Web・記事・自動化ツール・提案書 全 <span class="works-count-num">38</span> 件以上を公開中</p>
+    </div>
+    <div class="works-grid">
+
+      <!-- Featured 1: CAFÉ MATIN HP -->
+      <a class="work-card reveal" href="portfolio/cafe-matin/index.html" target="_blank">
+        <div class="work-thumb" style="background:linear-gradient(135deg,#F5EDE0 0%,#C4956A 60%,#3D2B1F 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;height:200px;">
+          <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:22px;color:#FDFAF6;letter-spacing:2px;">Café Matin</div>
+          <div style="font-size:8px;letter-spacing:4px;color:rgba(253,250,246,0.6);text-transform:uppercase;">Shimokitazawa Café</div>
+          <div style="display:flex;gap:6px;margin-top:4px;"><span style="width:6px;height:6px;border-radius:50%;background:#E2C4A0;display:block;"></span><span style="width:6px;height:6px;border-radius:50%;background:#E2C4A0;display:block;"></span><span style="width:6px;height:6px;border-radius:50%;background:#E2C4A0;display:block;"></span></div>
+        </div>
+        <div class="work-body">
+          <div class="work-meta"><span class="work-tag">Website / カフェ</span></div>
+          <h3 class="work-title">カフェ・ビストロ 5ページ構成ホームページ</h3>
+          <p class="work-desc">ナチュラルウォームカラーと優雅なセリフ体で上品な世界観を表現。トップ・メニュー・コンセプト・ギャラリー・アクセスの多ページ設計。</p>
+          <span class="work-link">VIEW SITE →</span>
+        </div>
+      </a>
+
+      <!-- Featured 2: APEX GYM LP -->
+      <a class="work-card reveal" href="portfolio/lp-gym/index.html" target="_blank" style="--delay:0.08s">
+        <div class="work-thumb" style="background:linear-gradient(135deg,var(--black) 0%,#0a1a0a 50%,#1a3320 100%);height:200px;">
+          <span class="work-thumb-label">GYM</span>
+          <svg class="work-thumb-icon" width="48" height="48" viewBox="0 0 200 200" fill="none"><path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="#C9A84C"/></svg>
+        </div>
+        <div class="work-body">
+          <div class="work-meta"><span class="work-tag">LP Design / ジム</span></div>
+          <h3 class="work-title">APEX GYM — パーソナルジム向けラグジュアリーLP</h3>
+          <p class="work-desc">高単価パーソナルジム向けコンバージョン特化LP。高級感と信頼感を両立し、体験申し込みへの動線を設計。</p>
+          <span class="work-link">VIEW LP →</span>
+        </div>
+      </a>
+
+      <!-- Featured 3: VOID TOKYO LP -->
+      <a class="work-card reveal" href="portfolio/lp-streetwear/index.html" target="_blank" style="--delay:0.16s">
+        <div class="work-thumb" style="background:#080808;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;height:200px;">
+          <div style="font-family:'Bebas Neue',cursive;font-size:28px;letter-spacing:-1px;color:transparent;-webkit-text-stroke:1px #f0f0f0;line-height:0.9;">VOID</div>
+          <div style="font-family:'Bebas Neue',cursive;font-size:28px;letter-spacing:-1px;color:#f0f0f0;line-height:0.9;">TOKYO</div>
+          <div style="width:36px;height:2px;background:#ff0000;margin-top:4px;"></div>
+        </div>
+        <div class="work-body">
+          <div class="work-meta"><span class="work-tag">LP / ファッション</span></div>
+          <h3 class="work-title">VOID TOKYO — ストリートウェアブランドLP</h3>
+          <p class="work-desc">黒×白×レッド。マーキーアニメーション・アウトラインテキストを駆使したファッションブランドLP。ゴールド系とは真逆のデザイン言語で多様なスタイル対応力を実証。</p>
+          <span class="work-link">VIEW LP →</span>
+        </div>
+      </a>
+
+      <!-- Featured 4: X投稿自動化システム -->
+      <a class="work-card reveal" href="works.html" style="--delay:0.24s">
+        <div class="work-thumb" style="background:linear-gradient(135deg,var(--black) 0%,#001515 50%,#003535 100%);height:200px;">
+          <span class="work-thumb-label">AUTO</span>
+          <svg class="work-thumb-icon" width="48" height="48" viewBox="0 0 200 200" fill="none"><path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="#C9A84C"/></svg>
+        </div>
+        <div class="work-body">
+          <div class="work-meta"><span class="work-tag">Automation / 自動化</span></div>
+          <h3 class="work-title">X投稿文 自動生成システム — GAS × Claude API × Notion</h3>
+          <p class="work-desc">フォーム・SS入力・毎朝配信の3ルートを実装。スマホからテーマ入力するだけで5分以内に投稿文を自動生成。完全稼働中。</p>
+          <span class="work-link">DETAIL →</span>
+        </div>
+      </a>
+
+      <!-- Featured 5: 採用AI自動化 提案書 -->
+      <a class="work-card reveal" href="portfolio/proposal-hr/index.html" target="_blank" style="--delay:0.32s">
+        <div class="work-thumb" style="background:linear-gradient(135deg,#0A0A14 0%,#1A1A2E 50%,#16213E 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;height:200px;">
+          <div style="font-size:10px;letter-spacing:3px;color:rgba(74,222,128,0.8);">AI × HR</div>
+          <div style="font-size:16px;font-weight:700;color:#F4F1EC;letter-spacing:1px;">PROPOSAL DOC</div>
+          <div style="font-size:9px;color:rgba(244,241,236,0.35);letter-spacing:2px;">採用業務 完全自動化</div>
+        </div>
+        <div class="work-body">
+          <div class="work-meta"><span class="work-tag">Consulting / 採用HR</span></div>
+          <h3 class="work-title">採用業務AI自動化 提案書</h3>
+          <p class="work-desc">月200件応募をさばく人事2名がパンクした企業向け提案。スクリーニング75%削減・24時間連絡対応を実現するフローを7スライドで提示。</p>
+          <span class="work-link">VIEW PROPOSAL →</span>
+        </div>
+      </a>
+
+      <!-- Featured 6: 物流×AI ROI記事 -->
+      <a class="work-card reveal" href="articles/004-logistics-ai-roi.html" target="_blank" style="--delay:0.4s">
+        <div class="work-thumb" style="background:linear-gradient(135deg,#1a0e00 0%,var(--gold-dim) 60%,#3d2a00 100%);height:200px;">
+          <span class="work-thumb-label">SEO</span>
+          <svg class="work-thumb-icon" width="48" height="48" viewBox="0 0 200 200" fill="none"><path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="#C9A84C"/></svg>
+        </div>
+        <div class="work-body">
+          <div class="work-meta"><span class="work-tag">SEO Writing / 物流</span></div>
+          <h3 class="work-title">物流業×AI導入のROI計算式｜現場管理職が試算した実績値</h3>
+          <p class="work-desc">現場管理職10年の一次情報でAI導入効果を数値化。投資対効果を具体的な試算で解説したSEO特化・業界メディア向け記事。</p>
+          <span class="work-link">READ →</span>
+        </div>
+      </a>
+
+    </div>
+    <div class="works-footer-cta reveal">
+      <p class="works-footer-note">LP・Webサイト・SEO記事・自動化ツール・提案書など全 <strong>38</strong> 件以上を公開中</p>
+      <a href="works.html" class="btn-primary">制作実績を全て見る →</a>
+    </div>
+  </section>
+
+  <!-- Divisions -->
+  <section class="divisions" id="divisions">
+    <div class="section-header reveal">
+      <p class="section-label">DIVISIONS — 業界特化事業部</p>
+      <h2 class="section-title">9つの業界特化事業部</h2>
+    </div>
+    <div class="divisions-grid">
+      <div class="division-card reveal">
+        <span class="division-code">DIVISION 01</span>
+        <p class="division-name">医療・クリニック</p>
+        <span class="division-suite">CMO管轄</span>
+      </div>
+      <div class="division-card reveal" style="--delay:0.05s">
+        <span class="division-code">DIVISION 02</span>
+        <p class="division-name">不動産・建設</p>
+        <span class="division-suite">CPO管轄</span>
+      </div>
+      <div class="division-card reveal" style="--delay:0.1s">
+        <span class="division-code">DIVISION 03</span>
+        <p class="division-name">EC・D2C</p>
+        <span class="division-suite">CMO管轄</span>
+      </div>
+      <div class="division-card reveal" style="--delay:0.15s">
+        <span class="division-code">DIVISION 04</span>
+        <p class="division-name">士業・コンサル</p>
+        <span class="division-suite">CSO管轄</span>
+      </div>
+      <div class="division-card reveal" style="--delay:0.2s">
+        <span class="division-code">DIVISION 05</span>
+        <p class="division-name">人材・採用</p>
+        <span class="division-suite">CSO管轄</span>
+      </div>
+      <div class="division-card reveal" style="--delay:0.25s">
+        <span class="division-code">DIVISION 06</span>
+        <p class="division-name">飲食・ホテル・観光</p>
+        <span class="division-suite">CMO管轄</span>
+      </div>
+      <div class="division-card reveal" style="--delay:0.3s">
+        <span class="division-code">DIVISION 07</span>
+        <p class="division-name">IT・SaaS</p>
+        <span class="division-suite">CTO管轄</span>
+      </div>
+      <div class="division-card reveal" style="--delay:0.35s">
+        <span class="division-code">DIVISION 08</span>
+        <p class="division-name">ウェルネス・美容</p>
+        <span class="division-suite">CPO管轄</span>
+      </div>
+      <div class="division-card reveal" style="--delay:0.4s">
+        <span class="division-code">DIVISION 09</span>
+        <p class="division-name">Webデザイン（専門）</p>
+        <span class="division-suite">CPO管轄</span>
+      </div>
+    </div>
+    <div class="divisions-footer reveal">
+      <a href="organization.html" class="btn-secondary">VIEW ALL DIVISIONS →</a>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta" id="cta">
+    <div class="cta-glow"></div>
+    <div class="cta-content reveal">
+      <div class="cta-mark">
+        <svg width="80" height="80" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="cBadgeGrad" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#6B5420"/>
+              <stop offset="50%" stop-color="#E8C97A"/>
+              <stop offset="100%" stop-color="#C9A84C"/>
+            </linearGradient>
+            <filter id="cBadgeGlow" x="-30%" y="-30%" width="160%" height="160%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+            <path id="cBadgeCtp" d="M100,7 A93,93,0,1,1,99.999,7" fill="none"/>
+          </defs>
+          <circle cx="100" cy="100" r="96" fill="none" stroke="#C9A84C" stroke-width="0.8" opacity="0.35"/>
+          <circle cx="100" cy="100" r="72" fill="none" stroke="#C9A84C" stroke-width="0.4" opacity="0.15"/>
+          <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="url(#cBadgeGrad)" filter="url(#cBadgeGlow)"/>
+          <text font-family="'Bebas Neue','Noto Sans JP',sans-serif" font-size="7.5" fill="#C9A84C" opacity="0.65" letter-spacing="2.5">
+            <textPath href="#cBadgeCtp" startOffset="0%">Senkode · Senko-Digital-Engine · Senko-Data-Engine · 閃光 · Senkode · Senko-Digital-Engine · Senko-Data-Engine · 閃光 ·</textPath>
+          </text>
+        </svg>
+      </div>
+      <p class="section-label">GET STARTED</p>
+      <h2 class="cta-title">AI時代の第一歩を、今日踏み出す。</h2>
+      <p class="cta-sub">まずは無料相談から。24時間以内にご返信します。</p>
+      <a href="contact.html" class="btn-primary">無料相談を申し込む →</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <span class="footer-copy">Senkode © 2026</span>
+    <div class="footer-sns">
+      <!-- note -->
+      <a href="https://note.com/sena01300" target="_blank" rel="noopener" aria-label="note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 4h14a2 2 0 0 1 2 2v13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a2 2 0 0 1 2-2z"/>
+          <line x1="8" y1="9" x2="16" y2="9"/>
+          <line x1="8" y1="13" x2="13" y2="13"/>
+        </svg>
+      </a>
+      <!-- X (Twitter) -->
+      <a href="https://x.com/senkode1006" target="_blank" rel="noopener" aria-label="X">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.402 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.256 5.63 5.908-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+        </svg>
+      </a>
+    </div>
+    <span class="footer-tag">閃光 — Flash of Light</span>
+  </footer>
+
+  <script>
+    // Custom cursor
+    const cursorDot  = document.querySelector('.cursor-dot');
+    const cursorRing = document.querySelector('.cursor-ring');
+    let mouseX = 0, mouseY = 0;
+    let ringX  = 0, ringY  = 0;
+    let cursorRafId = null;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      cursorDot.style.left = mouseX + 'px';
+      cursorDot.style.top  = mouseY + 'px';
+      if (cursorRafId === null) {
+        // Snap ring to cursor on first move so it doesn't lerp from (0,0)
+        ringX = mouseX;
+        ringY = mouseY;
+        cursorRafId = requestAnimationFrame(animateCursor);
+      }
+    });
+
+    function animateCursor() {
+      const dx = mouseX - ringX;
+      const dy = mouseY - ringY;
+      // lerp: move 15% of remaining distance each frame
+      if (Math.abs(dx) > 0.05 || Math.abs(dy) > 0.05) {
+        ringX += dx * 0.15;
+        ringY += dy * 0.15;
+        cursorRing.style.left = ringX + 'px';
+        cursorRing.style.top  = ringY + 'px';
+      }
+      cursorRafId = requestAnimationFrame(animateCursor);
+    }
+
+    // Expand ring on card/button hover
+    const hoverTargets = document.querySelectorAll('.service-card, .work-card, .btn-primary, .btn-secondary, .nav-cta');
+    hoverTargets.forEach(el => {
+      el.addEventListener('mouseenter', () => cursorRing.classList.add('expanded'));
+      el.addEventListener('mouseleave', () => cursorRing.classList.remove('expanded'));
+    });
+
+    // CountUp animation
+    function countUp(el) {
+      const target = parseInt(el.dataset.target);
+      const suffix = el.dataset.suffix || '';
+      const duration = 1500;
+      const steps = duration / 16;
+      const increment = target / steps;
+      let current = 0;
+      const timer = setInterval(() => {
+        current = Math.min(current + increment, target);
+        el.textContent = Math.floor(current) + suffix;
+        if (current >= target) clearInterval(timer);
+      }, 16);
+    }
+
+    // IntersectionObserver for CountUp
+    const statNumbers = document.querySelectorAll('.stat-number');
+    const statObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          countUp(entry.target);
+          statObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+    statNumbers.forEach(el => statObserver.observe(el));
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => revealObserver.observe(el));
+  </script>
+</body>
+</html>

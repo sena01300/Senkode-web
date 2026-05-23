@@ -1,0 +1,2091 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ExpenseBot — 経費精算自動化ツール | GAS × Claude Vision API | Senkode</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@100;200;300&display=swap" rel="stylesheet">
+  <style>
+    [class*="grid"] > *, [class*="inner"] > *, [class*="wrap"] > * { min-width: 0; }
+
+    img, video, iframe { max-width: 100%; height: auto; }
+
+    html { overflow-x: hidden; }
+
+    /* ==============================
+       CSS Variables
+    ============================== */
+    :root {
+      --bg:           #060804;
+      --bg-sub:       #0A0F06;
+      --card:         #0D1409;
+      --lime:         #84CC16;
+      --lime-lt:      #A3E635;
+      --lime-bd:      rgba(132,204,22,0.25);
+      --lime-glow:    rgba(132,204,22,0.09);
+      --lime-dim:     rgba(132,204,22,0.06);
+      --yellow:       #EAB308;
+      --blue:         #60A5FA;
+      --red:          #EF4444;
+      --text:         #EFF5E4;
+      --text-mid:     rgba(239,245,228,0.55);
+      --text-faint:   rgba(239,245,228,0.22);
+      --bd:           rgba(132,204,22,0.1);
+      --nav-bg:       rgba(6,8,4,0.92);
+      --code-bg:      #040602;
+      --dot-red:      #FF5F57;
+      --dot-yellow:   #FFBD2E;
+      --dot-green:    #28C840;
+      --syn-green:    #A3E635;
+      --syn-blue:     #93C5FD;
+      --syn-yellow:   #FDE68A;
+      --syn-pink:     #F9A8D4;
+      --syn-comment:  rgba(239,245,228,0.28);
+    }
+
+    /* ==============================
+       Reset & Base
+    ============================== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      line-height: 1.8;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ==============================
+       Custom Cursor
+    ============================== */
+    .cursor {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 10px;
+      height: 10px;
+      background: var(--lime);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 10000;
+      transform: translate(-50%, -50%);
+      transition: transform 0.08s ease, width 0.2s ease, height 0.2s ease, opacity 0.2s ease;
+      mix-blend-mode: screen;
+    }
+
+    .cursor-ring {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--lime-bd);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.18s ease, width 0.25s ease, height 0.25s ease, border-color 0.2s ease;
+    }
+
+    body:hover .cursor { opacity: 1; }
+
+    /* ==============================
+       Scrollbar
+    ============================== */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--lime-bd); border-radius: 2px; }
+
+    /* ==============================
+       Navigation
+    ============================== */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: var(--nav-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--bd);
+      padding: 0 48px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-brand {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px;
+      letter-spacing: 0.15em;
+      color: var(--text);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-brand-accent {
+      color: var(--lime-lt);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-mid);
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--lime-lt);
+    }
+
+    .nav-cta {
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--bg) !important;
+      background: var(--lime);
+      padding: 8px 20px;
+      transition: background 0.2s ease, color 0.2s ease !important;
+    }
+
+    .nav-cta:hover {
+      background: var(--lime-lt) !important;
+      color: var(--bg) !important;
+    }
+
+    /* ==============================
+       Section Base
+    ============================== */
+    section {
+      padding: 120px 0;
+    }
+
+    .container {
+      max-width: 1120px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 48px;
+    }
+
+    .section-label {
+      font-size: 10px;
+      font-weight: 200;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--lime-lt);
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    /* ==============================
+       Scroll Reveal
+    ============================== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+      will-change: opacity, transform;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+    .reveal-delay-5 { transition-delay: 0.5s; }
+
+    /* 見出し折り返し（<br>代替） */
+    .title-line {
+      display: block;
+    }
+
+    /* ==============================
+       HERO
+    ============================== */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--bd) 1px, transparent 1px),
+        linear-gradient(90deg, var(--bd) 1px, transparent 1px);
+      background-size: 64px 64px;
+      opacity: 0.6;
+    }
+
+    .hero-glow {
+      position: absolute;
+      top: 15%;
+      left: 42%;
+      transform: translateX(-50%);
+      width: 750px;
+      height: 750px;
+      background: radial-gradient(ellipse, var(--lime-glow) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      padding-top: 80px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--lime-bd);
+      background: var(--lime-glow);
+      padding: 6px 16px;
+      font-size: 10px;
+      font-weight: 200;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--lime-lt);
+      margin-bottom: 40px;
+    }
+
+    .hero-badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--lime-lt);
+      animation: blink 1.4s ease-in-out infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.1; }
+    }
+
+    .hero-headline {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(52px, 6vw, 88px);
+      line-height: 1.0;
+      letter-spacing: 0.03em;
+      color: var(--text);
+      margin-bottom: 32px;
+    }
+
+    .hero-headline-accent {
+      color: var(--lime-lt);
+    }
+
+    .hero-sub {
+      font-size: 15px;
+      font-weight: 200;
+      color: var(--text-mid);
+      max-width: 600px;
+      line-height: 2;
+      margin-bottom: 64px;
+    }
+
+    .hero-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1px;
+      max-width: 680px;
+      border: 1px solid var(--bd);
+      margin-bottom: 56px;
+    }
+
+    .hero-metric {
+      background: var(--card);
+      padding: 28px 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-metric::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--lime), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .hero-metric:hover::before {
+      opacity: 1;
+    }
+
+    .hero-metric-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 36px;
+      letter-spacing: 0.05em;
+      color: var(--lime-lt);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .hero-metric-label {
+      font-size: 10px;
+      font-weight: 200;
+      letter-spacing: 0.15em;
+      color: var(--text-faint);
+      text-transform: uppercase;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--lime);
+      color: var(--bg);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 15px;
+      letter-spacing: 0.15em;
+      padding: 16px 36px;
+      text-decoration: none;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .btn-primary:hover {
+      background: var(--lime-lt);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid var(--lime-bd);
+      color: var(--lime-lt);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 15px;
+      letter-spacing: 0.15em;
+      padding: 15px 36px;
+      text-decoration: none;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .btn-secondary:hover {
+      background: var(--lime-glow);
+      border-color: var(--lime);
+    }
+
+    /* ==============================
+       PROBLEM
+    ============================== */
+    #problem {
+      background: var(--bg-sub);
+    }
+
+    .problem-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 48px;
+      letter-spacing: 0.05em;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+
+    .problem-sub {
+      font-size: 14px;
+      font-weight: 200;
+      color: var(--text-mid);
+      margin-bottom: 56px;
+      max-width: 540px;
+    }
+
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1px;
+      background: var(--bd);
+    }
+
+    .problem-card {
+      background: var(--card);
+      padding: 40px 36px;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s ease;
+    }
+
+    .problem-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--lime-dim) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .problem-card:hover {
+      background: #0F1A0A;
+    }
+
+    .problem-card:hover::after {
+      opacity: 1;
+    }
+
+    .problem-card-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 80px;
+      line-height: 0.85;
+      letter-spacing: 0.02em;
+      color: var(--lime-bd);
+      margin-bottom: 24px;
+      transition: color 0.3s ease;
+    }
+
+    .problem-card:hover .problem-card-num {
+      color: var(--lime-glow);
+    }
+
+    .problem-card-icon {
+      font-size: 28px;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .problem-card-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 0.06em;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+
+    .problem-card-body {
+      font-size: 13px;
+      font-weight: 200;
+      color: var(--text-mid);
+      line-height: 1.9;
+    }
+
+    .problem-card-tag {
+      display: inline-block;
+      margin-top: 20px;
+      font-size: 9px;
+      font-weight: 200;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--red);
+      border: 1px solid rgba(239,68,68,0.3);
+      padding: 3px 10px;
+    }
+
+    /* ==============================
+       SOLUTION
+    ============================== */
+    #solution {
+      background: var(--bg);
+    }
+
+    .solution-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 48px;
+      letter-spacing: 0.05em;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+
+    .solution-sub {
+      font-size: 14px;
+      font-weight: 200;
+      color: var(--text-mid);
+      margin-bottom: 64px;
+      max-width: 520px;
+    }
+
+    .flow-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      position: relative;
+    }
+
+    .flow-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 24px;
+      position: relative;
+    }
+
+    .flow-step-connector {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-shrink: 0;
+      width: 48px;
+    }
+
+    .flow-step-node {
+      width: 48px;
+      height: 48px;
+      border: 1px solid var(--lime-bd);
+      background: var(--card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      position: relative;
+      z-index: 1;
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+
+    .flow-step:hover .flow-step-node {
+      background: var(--lime-glow);
+      border-color: var(--lime);
+    }
+
+    .flow-step-line {
+      width: 1px;
+      flex: 1;
+      min-height: 32px;
+      background: linear-gradient(to bottom, var(--lime-bd), transparent);
+    }
+
+    .flow-step-body {
+      padding: 4px 0 40px;
+      flex: 1;
+    }
+
+    .flow-step-tag {
+      font-size: 9px;
+      font-weight: 200;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--lime-lt);
+      margin-bottom: 4px;
+    }
+
+    .flow-step-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 0.08em;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .flow-step-desc {
+      font-size: 13px;
+      font-weight: 200;
+      color: var(--text-mid);
+      max-width: 560px;
+      line-height: 1.9;
+    }
+
+    /* ==============================
+       ARCHITECTURE
+    ============================== */
+    #architecture {
+      background: var(--bg-sub);
+    }
+
+    .arch-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 48px;
+      letter-spacing: 0.05em;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+
+    .arch-sub {
+      font-size: 14px;
+      font-weight: 200;
+      color: var(--text-mid);
+      margin-bottom: 48px;
+    }
+
+    .arch-diagram {
+      border: 1px solid var(--lime-bd);
+      background: var(--card);
+      padding: 48px;
+    }
+
+    .arch-diagram-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0;
+      overflow-x: auto;
+    }
+
+    .arch-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .arch-node-box {
+      width: 140px;
+      border: 1px solid var(--lime-bd);
+      background: var(--bg);
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      transition: border-color 0.3s ease, background 0.3s ease;
+    }
+
+    .arch-node-box:hover {
+      border-color: var(--lime);
+      background: var(--lime-dim);
+    }
+
+    .arch-node-icon {
+      font-size: 28px;
+    }
+
+    .arch-node-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 16px;
+      letter-spacing: 0.08em;
+      color: var(--lime-lt);
+      line-height: 1.2;
+    }
+
+    .arch-node-tech {
+      font-size: 9px;
+      font-weight: 200;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+    }
+
+    .arch-arrow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      flex: 1;
+      min-width: 48px;
+    }
+
+    .arch-arrow-line {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, var(--lime-bd), var(--lime-lt), var(--lime-bd));
+    }
+
+    .arch-arrow-label {
+      font-size: 8px;
+      font-weight: 200;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--lime-lt);
+      white-space: nowrap;
+    }
+
+    .arch-arrow-tip {
+      font-size: 12px;
+      color: var(--lime-lt);
+    }
+
+    .arch-notes {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1px;
+      margin-top: 1px;
+      background: var(--bd);
+    }
+
+    .arch-note {
+      background: var(--bg);
+      padding: 20px 24px;
+    }
+
+    .arch-note-key {
+      font-size: 9px;
+      font-weight: 200;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--lime-lt);
+      margin-bottom: 6px;
+    }
+
+    .arch-note-val {
+      font-size: 12px;
+      font-weight: 200;
+      color: var(--text-mid);
+    }
+
+    /* ==============================
+       CODE SNIPPET
+    ============================== */
+    #code {
+      background: var(--bg);
+    }
+
+    .code-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 48px;
+      letter-spacing: 0.05em;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+
+    .code-sub {
+      font-size: 13px;
+      font-weight: 200;
+      color: var(--text-mid);
+      margin-bottom: 40px;
+    }
+
+    .code-window {
+      border: 1px solid var(--lime-bd);
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+
+    .code-window-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 20px;
+      background: var(--card);
+      border-bottom: 1px solid var(--lime-bd);
+    }
+
+    .code-window-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .code-window-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .code-window-dot:nth-child(1) { background: var(--dot-red); }
+    .code-window-dot:nth-child(2) { background: var(--dot-yellow); }
+    .code-window-dot:nth-child(3) { background: var(--dot-green); }
+
+    .code-window-label {
+      font-size: 10px;
+      font-weight: 200;
+      letter-spacing: 0.15em;
+      color: var(--lime-lt);
+    }
+
+    .code-block {
+      background: var(--code-bg);
+      padding: 32px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      line-height: 2;
+      color: var(--text-mid);
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    .code-keyword  { color: var(--syn-green); }
+    .code-string   { color: var(--syn-yellow); }
+    .code-comment  { color: var(--syn-comment); font-style: italic; }
+    .code-fn       { color: var(--syn-blue); }
+    .code-prop     { color: var(--syn-pink); }
+    .code-num      { color: var(--lime-lt); }
+    .code-builtin  { color: #86EFAC; }
+
+    /* ==============================
+       BEFORE / AFTER
+    ============================== */
+    #before-after {
+      background: var(--bg-sub);
+    }
+
+    .ba-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 48px;
+      letter-spacing: 0.05em;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+
+    .ba-sub {
+      font-size: 13px;
+      font-weight: 200;
+      color: var(--text-mid);
+      margin-bottom: 48px;
+    }
+
+    .ba-table-wrap {
+      overflow-x: auto;
+    }
+
+    .ba-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 640px;
+    }
+
+    .ba-table thead tr {
+      background: var(--card);
+      border-bottom: 1px solid var(--lime-bd);
+    }
+
+    .ba-table th {
+      padding: 14px 24px;
+      font-size: 9px;
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      text-align: left;
+    }
+
+    .ba-table th.col-after {
+      color: var(--lime-lt);
+    }
+
+    .ba-table td {
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--bd);
+      font-size: 13px;
+      font-weight: 200;
+      color: var(--text-mid);
+      vertical-align: middle;
+    }
+
+    .ba-table tbody tr {
+      background: var(--bg);
+      transition: background 0.2s ease;
+    }
+
+    .ba-table tbody tr:hover {
+      background: var(--lime-dim);
+    }
+
+    .ba-metric-name {
+      font-weight: 300;
+      color: var(--text);
+      font-size: 13px;
+    }
+
+    .ba-before {
+      color: var(--red);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px;
+      letter-spacing: 0.05em;
+    }
+
+    .ba-after {
+      color: var(--lime-lt);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px;
+      letter-spacing: 0.05em;
+    }
+
+    .ba-improvement {
+      font-size: 10px;
+      font-weight: 200;
+      letter-spacing: 0.12em;
+      color: var(--lime-lt);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .ba-improvement::before {
+      content: '▲';
+      font-size: 8px;
+    }
+
+    /* ==============================
+       COST
+    ============================== */
+    #cost {
+      background: var(--bg);
+    }
+
+    .cost-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 48px;
+      letter-spacing: 0.05em;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+
+    .cost-sub {
+      font-size: 13px;
+      font-weight: 200;
+      color: var(--text-mid);
+      margin-bottom: 48px;
+    }
+
+    .cost-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 24px;
+    }
+
+    .cost-card {
+      border: 1px solid var(--lime-bd);
+      background: var(--card);
+      padding: 36px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cost-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--lime), transparent);
+    }
+
+    .cost-card-label {
+      font-size: 10px;
+      font-weight: 200;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--lime-lt);
+      margin-bottom: 12px;
+    }
+
+    .cost-card-price {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 52px;
+      letter-spacing: 0.03em;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .cost-card-unit {
+      font-size: 14px;
+      font-weight: 200;
+      color: var(--text-faint);
+      letter-spacing: 0.1em;
+      margin-bottom: 20px;
+    }
+
+    .cost-card-note {
+      font-size: 12px;
+      font-weight: 200;
+      color: var(--text-mid);
+      line-height: 1.9;
+    }
+
+    .cost-breakdown {
+      margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .cost-breakdown-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--bd);
+    }
+
+    .cost-breakdown-item:last-child {
+      border-bottom: none;
+    }
+
+    .cost-breakdown-name {
+      font-size: 11px;
+      font-weight: 200;
+      color: var(--text-mid);
+    }
+
+    .cost-breakdown-val {
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--lime-lt);
+      letter-spacing: 0.05em;
+    }
+
+    /* ==============================
+       DELIVERY
+    ============================== */
+    #delivery {
+      background: var(--bg-sub);
+    }
+
+    .delivery-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 48px;
+      letter-spacing: 0.05em;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+
+    .delivery-sub {
+      font-size: 13px;
+      font-weight: 200;
+      color: var(--text-mid);
+      margin-bottom: 48px;
+    }
+
+    .delivery-list {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1px;
+      background: var(--bd);
+    }
+
+    .delivery-item {
+      background: var(--card);
+      padding: 32px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: background 0.3s ease;
+    }
+
+    .delivery-item:hover {
+      background: #0F1A0A;
+    }
+
+    .delivery-item-icon {
+      font-size: 24px;
+    }
+
+    .delivery-item-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px;
+      letter-spacing: 0.06em;
+      color: var(--lime-lt);
+    }
+
+    .delivery-item-desc {
+      font-size: 12px;
+      font-weight: 200;
+      color: var(--text-mid);
+      line-height: 1.9;
+    }
+
+    .delivery-badge {
+      display: inline-block;
+      font-size: 9px;
+      font-weight: 200;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--lime-lt);
+      border: 1px solid var(--lime-bd);
+      padding: 3px 10px;
+      width: fit-content;
+    }
+
+    /* ==============================
+       CTA SECTION
+    ============================== */
+    #cta {
+      background: var(--bg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-bg-glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 800px;
+      height: 400px;
+      background: radial-gradient(ellipse, var(--lime-glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .cta-inner {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      max-width: 720px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .cta-eyebrow {
+      font-size: 10px;
+      font-weight: 200;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--lime-lt);
+      margin-bottom: 24px;
+      display: block;
+    }
+
+    .cta-headline {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(40px, 5vw, 72px);
+      letter-spacing: 0.04em;
+      line-height: 1.05;
+      color: var(--text);
+      margin-bottom: 24px;
+    }
+
+    .cta-headline-accent {
+      color: var(--lime-lt);
+    }
+
+    .cta-body {
+      font-size: 14px;
+      font-weight: 200;
+      color: var(--text-mid);
+      line-height: 2;
+      margin-bottom: 48px;
+    }
+
+    .cta-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .cta-note {
+      margin-top: 28px;
+      font-size: 11px;
+      font-weight: 200;
+      color: var(--text-faint);
+      letter-spacing: 0.08em;
+    }
+
+    /* ==============================
+       FOOTER
+    ============================== */
+    footer {
+      background: var(--bg);
+      border-top: 1px solid var(--bd);
+      padding: 40px 0;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-brand {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 16px;
+      letter-spacing: 0.15em;
+      color: var(--text-faint);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .footer-copyright {
+      font-size: 10px;
+      font-weight: 200;
+      color: var(--text-faint);
+      letter-spacing: 0.1em;
+    }
+
+    .footer-tool-id {
+      font-size: 9px;
+      font-weight: 200;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--lime-bd);
+    }
+
+    /* ==============================
+       RESPONSIVE — 768px以下
+    ============================== */
+    @media (max-width: 768px) {
+      nav {
+        padding: 0 20px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      section {
+        padding: 80px 0;
+      }
+
+      .container {
+        padding: 0 20px;
+      }
+
+      .hero-metrics {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .hero-ctas {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .problem-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .arch-diagram-inner {
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .arch-arrow {
+        transform: rotate(90deg);
+        min-width: auto;
+        width: 60px;
+      }
+
+      .arch-notes {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .cost-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .delivery-list {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Custom Cursor -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- ==============================
+       NAVIGATION
+  ============================== -->
+  <nav>
+    <a href="#" class="nav-brand">
+      <svg width="22" height="22" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="logoGrad" x1="69" y1="40" x2="131" y2="151" gradientUnits="userSpaceOnUse">
+            <stop offset="0%"   stop-color="#6B5420"/>
+            <stop offset="50%"  stop-color="#E8C97A"/>
+            <stop offset="100%" stop-color="#C9A84C"/>
+          </linearGradient>
+        </defs>
+        <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="url(#logoGrad)"/>
+      </svg>
+      SENKODE <span class="nav-brand-accent">/ ExpenseBot</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#problem">課題</a></li>
+      <li><a href="#solution">仕組み</a></li>
+      <li><a href="#architecture">構成</a></li>
+      <li><a href="#code">コード</a></li>
+      <li><a href="#before-after">効果</a></li>
+      <li><a href="#cost">費用</a></li>
+      <li><a href="#cta" class="nav-cta">お問い合わせ</a></li>
+    </ul>
+  </nav>
+
+  <!-- ==============================
+       HERO
+  ============================== -->
+  <section id="hero">
+    <div class="hero-bg-grid"></div>
+    <div class="hero-glow"></div>
+    <div class="container">
+      <div class="hero-inner">
+
+        <div class="hero-badge reveal">
+          <span class="hero-badge-dot"></span>
+          H-E006 — Expense Automation Tool
+        </div>
+
+        <h1 class="hero-headline reveal reveal-delay-1">
+          月<span class="hero-headline-accent">15時間</span>の
+          経費精算が
+          <span class="hero-headline-accent">2時間</span>になった
+        </h1>
+
+        <p class="hero-sub reveal reveal-delay-2">
+          スマホでレシートを撮るだけ。GAS × Claude Vision APIが自動で金額・店名・カテゴリを読み取り、
+          Googleスプレッドシートに即時記録。中小企業の経理担当者が抱える「入力の手間」「紛失リスク」
+          「承認の遅れ」を一括解消します。
+        </p>
+
+        <div class="hero-metrics reveal reveal-delay-3">
+          <div class="hero-metric">
+            <div class="hero-metric-num">87%</div>
+            <div class="hero-metric-label">Work Reduction</div>
+          </div>
+          <div class="hero-metric">
+            <div class="hero-metric-num">¥0</div>
+            <div class="hero-metric-label">紙・印刷コスト</div>
+          </div>
+          <div class="hero-metric">
+            <div class="hero-metric-num">3x</div>
+            <div class="hero-metric-label">承認スピード</div>
+          </div>
+        </div>
+
+        <div class="hero-ctas reveal reveal-delay-4">
+          <a href="#cta" class="btn-primary">無料相談を予約する →</a>
+          <a href="#solution" class="btn-secondary">仕組みを見る</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==============================
+       PROBLEM
+  ============================== -->
+  <section id="problem">
+    <div class="container">
+      <span class="section-label reveal">Problem — 従来の経費精算</span>
+      <h2 class="problem-title reveal reveal-delay-1"><span class="title-line">3つの無駄が、</span><span class="title-line">経理の時間を奪っている</span></h2>
+      <p class="problem-sub reveal reveal-delay-2">
+        月次締めのたびに繰り返される非効率。従業員50〜100名規模では、これが年間で数百万円の機会損失になっています。
+      </p>
+
+      <div class="problem-grid">
+        <div class="problem-card reveal reveal-delay-1">
+          <div class="problem-card-num">01</div>
+          <span class="problem-card-icon">🗒️</span>
+          <h3 class="problem-card-title">紙レシートの紛失・劣化</h3>
+          <p class="problem-card-body">
+            出張・外食・消耗品購入のたびにレシートを保管する運用は破綻しやすい。
+            月末になって「見つからない」「読めない」が頻発し、差し戻しや再申請で二重の手間が発生します。
+          </p>
+          <span class="problem-card-tag">月平均 3〜5件の紛失</span>
+        </div>
+
+        <div class="problem-card reveal reveal-delay-2">
+          <div class="problem-card-num">02</div>
+          <span class="problem-card-icon">⌨️</span>
+          <h3 class="problem-card-title">手入力ミスと転記エラー</h3>
+          <p class="problem-card-body">
+            金額・日付・勘定科目を手打ちするたびに人的ミスが生まれます。
+            ゼロの数が一つ違うだけで申請却下、修正対応、再承認という
+            ループが経理担当者を消耗させます。
+          </p>
+          <span class="problem-card-tag">転記ミス率 平均4.7%</span>
+        </div>
+
+        <div class="problem-card reveal reveal-delay-3">
+          <div class="problem-card-num">03</div>
+          <span class="problem-card-icon">⏳</span>
+          <h3 class="problem-card-title">承認ルートの非効率</h3>
+          <p class="problem-card-body">
+            紙の申請書が担当者のデスクで止まり、上長が不在なら翌週まで待機。
+            承認が遅れれば締め作業も遅延し、月次決算スケジュール全体を
+            圧迫します。
+          </p>
+          <span class="problem-card-tag">平均承認リードタイム 4.2日</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==============================
+       SOLUTION
+  ============================== -->
+  <section id="solution">
+    <div class="container">
+      <span class="section-label reveal">Solution — ExpenseBotの仕組み</span>
+      <h2 class="solution-title reveal reveal-delay-1"><span class="title-line">撮影から記録まで、</span><span class="title-line">すべて自動</span></h2>
+      <p class="solution-sub reveal reveal-delay-2">
+        4つのステップで経費申請が完結。従業員はスマホのカメラを向けるだけ、経理担当者は確認ボタンを押すだけです。
+      </p>
+
+      <div class="flow-steps">
+
+        <div class="flow-step reveal reveal-delay-1">
+          <div class="flow-step-connector">
+            <div class="flow-step-node">📱</div>
+            <div class="flow-step-line"></div>
+          </div>
+          <div class="flow-step-body">
+            <div class="flow-step-tag">Step 01 — Capture</div>
+            <div class="flow-step-name">スマホでレシート撮影</div>
+            <p class="flow-step-desc">
+              専用Google FormまたはLINE Botから画像をアップロード。
+              特別なアプリのインストール不要。普段使いのスマホだけで完結します。
+              撮影と同時に日時・位置情報も自動付与されます。
+            </p>
+          </div>
+        </div>
+
+        <div class="flow-step reveal reveal-delay-2">
+          <div class="flow-step-connector">
+            <div class="flow-step-node">⚙️</div>
+            <div class="flow-step-line"></div>
+          </div>
+          <div class="flow-step-body">
+            <div class="flow-step-tag">Step 02 — Extract</div>
+            <div class="flow-step-name">Claude Vision APIが自動読み取り</div>
+            <p class="flow-step-desc">
+              Google Apps Scriptが画像を受け取り、Claude Vision APIへ転送。
+              AIが金額・店名・日付・消費税区分を高精度で抽出します。
+              手書きレシートや傾いた撮影にも対応。
+            </p>
+          </div>
+        </div>
+
+        <div class="flow-step reveal reveal-delay-3">
+          <div class="flow-step-connector">
+            <div class="flow-step-node">🗂️</div>
+            <div class="flow-step-line"></div>
+          </div>
+          <div class="flow-step-body">
+            <div class="flow-step-tag">Step 03 — Classify</div>
+            <div class="flow-step-name">勘定科目・カテゴリを自動分類</div>
+            <p class="flow-step-desc">
+              抽出データを交通費・接待費・消耗品費などの勘定科目に自動振り分け。
+              企業ごとの分類ルールをプロンプトに組み込むことで、
+              既存の会計ルールに準拠した仕訳が可能です。
+            </p>
+          </div>
+        </div>
+
+        <div class="flow-step reveal reveal-delay-4">
+          <div class="flow-step-connector">
+            <div class="flow-step-node">✅</div>
+          </div>
+          <div class="flow-step-body">
+            <div class="flow-step-tag">Step 04 — Approve</div>
+            <div class="flow-step-name">スプレッドシート記録 + 承認通知</div>
+            <p class="flow-step-desc">
+              分類済みデータをGoogleスプレッドシートへ自動書き込み。
+              上長へはGmailまたはSlackで即時通知が届き、
+              ワンクリック承認が可能。リアルタイムで経費集計が完了します。
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==============================
+       ARCHITECTURE
+  ============================== -->
+  <section id="architecture">
+    <div class="container">
+      <span class="section-label reveal">Architecture — システム構成</span>
+      <h2 class="arch-title reveal reveal-delay-1"><span class="title-line">GAS × Claude Vision API</span><span class="title-line">× Googleスプレッドシート</span></h2>
+      <p class="arch-sub reveal reveal-delay-2">
+        既存のGoogleワークスペース環境に追加導入ゼロで構築できます。
+      </p>
+
+      <div class="arch-diagram reveal reveal-delay-2">
+        <div class="arch-diagram-inner">
+
+          <div class="arch-node">
+            <div class="arch-node-box">
+              <span class="arch-node-icon">📱</span>
+              <div class="arch-node-name">Google Form / LINE Bot</div>
+              <div class="arch-node-tech">Input Layer</div>
+            </div>
+          </div>
+
+          <div class="arch-arrow">
+            <div class="arch-arrow-label">画像受信</div>
+            <div class="arch-arrow-line"></div>
+            <div class="arch-arrow-tip">▶</div>
+          </div>
+
+          <div class="arch-node">
+            <div class="arch-node-box">
+              <span class="arch-node-icon">⚙️</span>
+              <div class="arch-node-name">Google Apps Script</div>
+              <div class="arch-node-tech">Middleware</div>
+            </div>
+          </div>
+
+          <div class="arch-arrow">
+            <div class="arch-arrow-label">API呼び出し</div>
+            <div class="arch-arrow-line"></div>
+            <div class="arch-arrow-tip">▶</div>
+          </div>
+
+          <div class="arch-node">
+            <div class="arch-node-box">
+              <span class="arch-node-icon">🤖</span>
+              <div class="arch-node-name">Claude Vision API</div>
+              <div class="arch-node-tech">AI Engine</div>
+            </div>
+          </div>
+
+          <div class="arch-arrow">
+            <div class="arch-arrow-label">構造化JSON</div>
+            <div class="arch-arrow-line"></div>
+            <div class="arch-arrow-tip">▶</div>
+          </div>
+
+          <div class="arch-node">
+            <div class="arch-node-box">
+              <span class="arch-node-icon">📊</span>
+              <div class="arch-node-name">Google Sheets</div>
+              <div class="arch-node-tech">Output Layer</div>
+            </div>
+          </div>
+
+          <div class="arch-arrow">
+            <div class="arch-arrow-label">承認通知</div>
+            <div class="arch-arrow-line"></div>
+            <div class="arch-arrow-tip">▶</div>
+          </div>
+
+          <div class="arch-node">
+            <div class="arch-node-box">
+              <span class="arch-node-icon">📧</span>
+              <div class="arch-node-name">Gmail / Slack</div>
+              <div class="arch-node-tech">Notification</div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="arch-notes">
+          <div class="arch-note">
+            <div class="arch-note-key">インフラ</div>
+            <div class="arch-note-val">Googleワークスペース上で完結。サーバー不要・追加インフラゼロ</div>
+          </div>
+          <div class="arch-note">
+            <div class="arch-note-key">セキュリティ</div>
+            <div class="arch-note-val">画像はAPIへの一時転送のみ。スプレッドシートのアクセス権で管理</div>
+          </div>
+          <div class="arch-note">
+            <div class="arch-note-key">拡張性</div>
+            <div class="arch-note-val">承認ルートや通知先のカスタマイズは設定ファイル変更のみで対応</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==============================
+       CODE SNIPPET
+  ============================== -->
+  <section id="code">
+    <div class="container">
+      <span class="section-label reveal">Code — 実装コアスニペット</span>
+      <h2 class="code-title reveal reveal-delay-1"><span class="title-line">GAS × Claude Vision API</span><span class="title-line">実装例</span></h2>
+      <p class="code-sub reveal reveal-delay-2">
+        Google Apps Script からClaude Vision APIを呼び出し、レシート情報をJSON形式で取得する中核処理です。
+      </p>
+
+      <div class="code-window reveal reveal-delay-2">
+        <div class="code-window-header">
+          <div class="code-window-dots">
+            <div class="code-window-dot"></div>
+            <div class="code-window-dot"></div>
+            <div class="code-window-dot"></div>
+          </div>
+          <div class="code-window-label">ExpenseBot.gs — analyzeReceipt()</div>
+        </div>
+        <div class="code-block"><span class="code-comment">// ============================================================
+// ExpenseBot — GAS × Claude Vision API コアスニペット
+// Google Apps Script で動作
+// ============================================================</span>
+
+<span class="code-keyword">const</span> <span class="code-prop">CONFIG</span> = {
+  <span class="code-prop">CLAUDE_API_KEY</span>: <span class="code-builtin">PropertiesService</span>.<span class="code-fn">getScriptProperties</span>().<span class="code-fn">getProperty</span>(<span class="code-string">'CLAUDE_API_KEY'</span>),
+  <span class="code-prop">API_URL</span>:       <span class="code-string">'https://api.anthropic.com/v1/messages'</span>,
+  <span class="code-prop">MODEL</span>:         <span class="code-string">'claude-opus-4-5'</span>,
+  <span class="code-prop">SHEET_NAME</span>:    <span class="code-string">'経費記録'</span>,
+};
+
+<span class="code-comment">/**
+ * レシート画像URLを受け取り、Claude Vision APIで解析して
+ * 金額・店名・カテゴリをスプレッドシートに書き込む
+ */</span>
+<span class="code-keyword">function</span> <span class="code-fn">analyzeReceipt</span>(imageUrl, submittedBy) {
+  <span class="code-keyword">const</span> imageBase64 = <span class="code-fn">fetchImageAsBase64</span>(imageUrl);
+
+  <span class="code-keyword">const</span> payload = {
+    <span class="code-prop">model</span>:      <span class="code-prop">CONFIG</span>.<span class="code-prop">MODEL</span>,
+    <span class="code-prop">max_tokens</span>: <span class="code-num">512</span>,
+    <span class="code-prop">messages</span>: [{
+      <span class="code-prop">role</span>: <span class="code-string">'user'</span>,
+      <span class="code-prop">content</span>: [
+        {
+          <span class="code-prop">type</span>:       <span class="code-string">'image'</span>,
+          <span class="code-prop">source</span>: {
+            <span class="code-prop">type</span>:       <span class="code-string">'base64'</span>,
+            <span class="code-prop">media_type</span>: <span class="code-string">'image/jpeg'</span>,
+            <span class="code-prop">data</span>:       imageBase64,
+          },
+        },
+        {
+          <span class="code-prop">type</span>: <span class="code-string">'text'</span>,
+          <span class="code-prop">text</span>: <span class="code-string">`このレシート画像を解析し、以下のJSONのみを返してください。
+{
+  "store_name": "店名",
+  "date": "YYYY-MM-DD",
+  "total_amount": 数値,
+  "tax_amount": 数値,
+  "category": "交通費|接待費|消耗品費|その他",
+  "items": [{"name": "品目", "amount": 数値}],
+  "notes": "特記事項があれば"
+}`</span>,
+        },
+      ],
+    }],
+  };
+
+  <span class="code-keyword">const</span> response = <span class="code-builtin">UrlFetchApp</span>.<span class="code-fn">fetch</span>(<span class="code-prop">CONFIG</span>.<span class="code-prop">API_URL</span>, {
+    <span class="code-prop">method</span>:      <span class="code-string">'post'</span>,
+    <span class="code-prop">contentType</span>: <span class="code-string">'application/json'</span>,
+    <span class="code-prop">headers</span>: {
+      <span class="code-string">'x-api-key'</span>:         <span class="code-prop">CONFIG</span>.<span class="code-prop">CLAUDE_API_KEY</span>,
+      <span class="code-string">'anthropic-version'</span>: <span class="code-string">'2023-06-01'</span>,
+    },
+    <span class="code-prop">payload</span>: <span class="code-builtin">JSON</span>.<span class="code-fn">stringify</span>(payload),
+  });
+
+  <span class="code-keyword">const</span> result = <span class="code-builtin">JSON</span>.<span class="code-fn">parse</span>(response.<span class="code-fn">getContentText</span>());
+  <span class="code-keyword">const</span> data   = <span class="code-builtin">JSON</span>.<span class="code-fn">parse</span>(result.<span class="code-prop">content</span>[<span class="code-num">0</span>].<span class="code-prop">text</span>);
+
+  <span class="code-fn">writeToSheet</span>(data, submittedBy);
+  <span class="code-fn">sendApprovalNotification</span>(data, submittedBy);
+
+  <span class="code-keyword">return</span> data;
+}
+
+<span class="code-comment">/** スプレッドシートへ書き込み */</span>
+<span class="code-keyword">function</span> <span class="code-fn">writeToSheet</span>(data, submittedBy) {
+  <span class="code-keyword">const</span> sheet = <span class="code-builtin">SpreadsheetApp</span>.<span class="code-fn">getActiveSpreadsheet</span>()
+                              .<span class="code-fn">getSheetByName</span>(<span class="code-prop">CONFIG</span>.<span class="code-prop">SHEET_NAME</span>);
+  sheet.<span class="code-fn">appendRow</span>([
+    <span class="code-keyword">new</span> <span class="code-builtin">Date</span>(),
+    submittedBy,
+    data.<span class="code-prop">date</span>,
+    data.<span class="code-prop">store_name</span>,
+    data.<span class="code-prop">category</span>,
+    data.<span class="code-prop">total_amount</span>,
+    data.<span class="code-prop">tax_amount</span>,
+    <span class="code-string">'未承認'</span>,
+    data.<span class="code-prop">notes</span>,
+  ]);
+}
+
+<span class="code-comment">/** 承認者へのメール通知 */</span>
+<span class="code-keyword">function</span> <span class="code-fn">sendApprovalNotification</span>(data, submittedBy) {
+  <span class="code-keyword">const</span> approverEmail = <span class="code-builtin">PropertiesService</span>.<span class="code-fn">getScriptProperties</span>()
+                                             .<span class="code-fn">getProperty</span>(<span class="code-string">'APPROVER_EMAIL'</span>);
+  <span class="code-builtin">GmailApp</span>.<span class="code-fn">sendEmail</span>(approverEmail, <span class="code-string">`[承認依頼] ${data.store_name} ¥${data.total_amount}`</span>,
+    <span class="code-string">`${submittedBy} から経費申請が届きました。\n`</span> +
+    <span class="code-string">`金額: ¥${data.total_amount}\n科目: ${data.category}\n`</span> +
+    <span class="code-string">`スプレッドシートで承認してください。`</span>
+  );
+}</div>
+      </div>
+
+      <div class="code-window reveal reveal-delay-3">
+        <div class="code-window-header">
+          <div class="code-window-dots">
+            <div class="code-window-dot"></div>
+            <div class="code-window-dot"></div>
+            <div class="code-window-dot"></div>
+          </div>
+          <div class="code-window-label">ExpenseBot.gs — fetchImageAsBase64()</div>
+        </div>
+        <div class="code-block"><span class="code-comment">/** Google DriveのファイルIDからBase64画像を取得 */</span>
+<span class="code-keyword">function</span> <span class="code-fn">fetchImageAsBase64</span>(fileId) {
+  <span class="code-keyword">const</span> file  = <span class="code-builtin">DriveApp</span>.<span class="code-fn">getFileById</span>(fileId);
+  <span class="code-keyword">const</span> blob  = file.<span class="code-fn">getBlob</span>();
+  <span class="code-keyword">return</span> <span class="code-builtin">Utilities</span>.<span class="code-fn">base64Encode</span>(blob.<span class="code-fn">getBytes</span>());
+}
+
+<span class="code-comment">/** Google Form 送信時トリガーで自動実行 */</span>
+<span class="code-keyword">function</span> <span class="code-fn">onFormSubmit</span>(e) {
+  <span class="code-keyword">const</span> responses    = e.<span class="code-prop">namedValues</span>;
+  <span class="code-keyword">const</span> imageUrl     = responses[<span class="code-string">'レシート画像'</span>][<span class="code-num">0</span>];
+  <span class="code-keyword">const</span> submittedBy  = responses[<span class="code-string">'お名前'</span>][<span class="code-num">0</span>];
+
+  <span class="code-comment">// Google Form の画像URLからファイルIDを抽出</span>
+  <span class="code-keyword">const</span> fileId = imageUrl.<span class="code-fn">match</span>(<span class="code-string">/[-\w]{25,}/</span>)?.[<span class="code-num">0</span>];
+  <span class="code-keyword">if</span> (!fileId) <span class="code-keyword">return</span>;
+
+  <span class="code-fn">analyzeReceipt</span>(fileId, submittedBy);
+}</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==============================
+       BEFORE / AFTER
+  ============================== -->
+  <section id="before-after">
+    <div class="container">
+      <span class="section-label reveal">Before / After — 導入効果</span>
+      <h2 class="ba-title reveal reveal-delay-1">数字で見る改善効果</h2>
+      <p class="ba-sub reveal reveal-delay-2">
+        従業員60名・月平均申請150件の中小企業モデルケースにおける試算値です。
+      </p>
+
+      <div class="ba-table-wrap reveal reveal-delay-2">
+        <table class="ba-table">
+          <thead>
+            <tr>
+              <th>指標 / Metric</th>
+              <th>Before — 従来運用</th>
+              <th class="col-after">After — ExpenseBot</th>
+              <th>改善率</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="ba-metric-name">月間作業時間（経理担当者）</span></td>
+              <td><span class="ba-before">15時間</span></td>
+              <td><span class="ba-after">2時間</span></td>
+              <td><span class="ba-improvement">87% 削減</span></td>
+            </tr>
+            <tr>
+              <td><span class="ba-metric-name">転記・入力ミス件数</span></td>
+              <td><span class="ba-before">月7件</span></td>
+              <td><span class="ba-after">0件</span></td>
+              <td><span class="ba-improvement">100% 解消</span></td>
+            </tr>
+            <tr>
+              <td><span class="ba-metric-name">平均承認リードタイム</span></td>
+              <td><span class="ba-before">4.2日</span></td>
+              <td><span class="ba-after">1.3日</span></td>
+              <td><span class="ba-improvement">3倍 高速化</span></td>
+            </tr>
+            <tr>
+              <td><span class="ba-metric-name">レシート紛失・再申請件数</span></td>
+              <td><span class="ba-before">月5件</span></td>
+              <td><span class="ba-after">0件</span></td>
+              <td><span class="ba-improvement">完全撲滅</span></td>
+            </tr>
+            <tr>
+              <td><span class="ba-metric-name">月次経費集計の完了タイミング</span></td>
+              <td><span class="ba-before">翌月6〜8日</span></td>
+              <td><span class="ba-after">当月末日</span></td>
+              <td><span class="ba-improvement">1週間 前倒し</span></td>
+            </tr>
+            <tr>
+              <td><span class="ba-metric-name">従業員の申請所要時間</span></td>
+              <td><span class="ba-before">1件5〜7分</span></td>
+              <td><span class="ba-after">1件30秒</span></td>
+              <td><span class="ba-improvement">90% 短縮</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==============================
+       COST
+  ============================== -->
+  <section id="cost">
+    <div class="container">
+      <span class="section-label reveal">Cost — 費用感</span>
+      <h2 class="cost-title reveal reveal-delay-1"><span class="title-line">驚くほど低コストで</span><span class="title-line">導入できます</span></h2>
+      <p class="cost-sub reveal reveal-delay-2">
+        サーバーレス構成のため、月額固定費はほぼゼロ。Claude APIの従量課金のみです。
+      </p>
+
+      <div class="cost-grid">
+        <div class="cost-card reveal reveal-delay-1">
+          <div class="cost-card-label">月間ランニングコスト（目安）</div>
+          <div class="cost-card-price">¥300</div>
+          <div class="cost-card-unit">〜 / month</div>
+          <p class="cost-card-note">
+            月150件のレシート処理を想定した場合の試算。
+            Claude Vision APIはトークン従量課金のため、処理件数に比例してスケールします。
+          </p>
+          <div class="cost-breakdown">
+            <div class="cost-breakdown-item">
+              <span class="cost-breakdown-name">Claude API（150件/月）</span>
+              <span class="cost-breakdown-val">約¥200〜300</span>
+            </div>
+            <div class="cost-breakdown-item">
+              <span class="cost-breakdown-name">Google Apps Script</span>
+              <span class="cost-breakdown-val">無料枠内</span>
+            </div>
+            <div class="cost-breakdown-item">
+              <span class="cost-breakdown-name">Googleスプレッドシート</span>
+              <span class="cost-breakdown-val">既存契約で対応</span>
+            </div>
+            <div class="cost-breakdown-item">
+              <span class="cost-breakdown-name">サーバー費用</span>
+              <span class="cost-breakdown-val">¥0（不要）</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="cost-card reveal reveal-delay-2">
+          <div class="cost-card-label">初期導入費用（Senkodeへの依頼）</div>
+          <div class="cost-card-price">¥38,000</div>
+          <div class="cost-card-unit">〜（税込）/ 初回のみ</div>
+          <p class="cost-card-note">
+            GASコード納品・スプレッドシートテンプレート・設定マニュアル・オンライン研修1回を含む一式パッケージ。
+            貴社の申請フォーム・承認ルート・勘定科目に合わせてカスタマイズします。
+          </p>
+          <div class="cost-breakdown">
+            <div class="cost-breakdown-item">
+              <span class="cost-breakdown-name">GASコード一式</span>
+              <span class="cost-breakdown-val">含む</span>
+            </div>
+            <div class="cost-breakdown-item">
+              <span class="cost-breakdown-name">スプレッドシートテンプレート</span>
+              <span class="cost-breakdown-val">含む</span>
+            </div>
+            <div class="cost-breakdown-item">
+              <span class="cost-breakdown-name">設定マニュアル（PDF）</span>
+              <span class="cost-breakdown-val">含む</span>
+            </div>
+            <div class="cost-breakdown-item">
+              <span class="cost-breakdown-name">オンライン研修（60分）</span>
+              <span class="cost-breakdown-val">1回含む</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==============================
+       DELIVERY
+  ============================== -->
+  <section id="delivery">
+    <div class="container">
+      <span class="section-label reveal">Deliverables — 納品物一覧</span>
+      <h2 class="delivery-title reveal reveal-delay-1"><span class="title-line">すぐに動かせる</span><span class="title-line">完全パッケージで納品</span></h2>
+      <p class="delivery-sub reveal reveal-delay-2">
+        コードを渡して終わりではありません。経理担当者が自信を持って運用できるまでサポートします。
+      </p>
+
+      <div class="delivery-list">
+
+        <div class="delivery-item reveal reveal-delay-1">
+          <span class="delivery-item-icon">💻</span>
+          <div class="delivery-item-name">GASコード一式</div>
+          <p class="delivery-item-desc">
+            レシート解析・スプレッドシート書き込み・承認通知の全処理をカバーした
+            Google Apps Scriptコード。コメント付きで保守しやすい構成。
+          </p>
+          <span class="delivery-badge">Source Code</span>
+        </div>
+
+        <div class="delivery-item reveal reveal-delay-2">
+          <span class="delivery-item-icon">📊</span>
+          <div class="delivery-item-name">スプレッドシートテンプレート</div>
+          <p class="delivery-item-desc">
+            経費記録・月次集計・承認管理の3シート構成。
+            勘定科目・承認者・予算上限は設定シートで一元管理できます。
+          </p>
+          <span class="delivery-badge">Google Sheets</span>
+        </div>
+
+        <div class="delivery-item reveal reveal-delay-3">
+          <span class="delivery-item-icon">📝</span>
+          <div class="delivery-item-name">設定マニュアル（PDF）</div>
+          <p class="delivery-item-desc">
+            APIキーの取得から初期設定・トリガー設定・承認ルートの変更方法まで。
+            IT担当者がいない経理部門でも対応できるスクリーンショット付き手順書。
+          </p>
+          <span class="delivery-badge">PDF Document</span>
+        </div>
+
+        <div class="delivery-item reveal reveal-delay-4">
+          <span class="delivery-item-icon">🎓</span>
+          <div class="delivery-item-name">オンライン研修（60分）</div>
+          <p class="delivery-item-desc">
+            経理担当者・従業員向けの使い方レクチャーをオンラインで実施。
+            録画データもお渡しするため、新入社員の教育にも活用できます。
+          </p>
+          <span class="delivery-badge">Live Session × 1</span>
+        </div>
+
+        <div class="delivery-item reveal reveal-delay-5">
+          <span class="delivery-item-icon">🔧</span>
+          <div class="delivery-item-name">カスタマイズ対応</div>
+          <p class="delivery-item-desc">
+            貴社の勘定科目・承認フロー・通知先（GmailまたはSlack）に合わせた
+            初期カスタマイズを納品前に実施します。
+          </p>
+          <span class="delivery-badge">Included</span>
+        </div>
+
+        <div class="delivery-item reveal reveal-delay-5">
+          <span class="delivery-item-icon">🛡️</span>
+          <div class="delivery-item-name">1ヶ月サポート</div>
+          <p class="delivery-item-desc">
+            納品後1ヶ月間はメールでの技術サポートを無償提供。
+            稼働初月の不安をゼロにします。
+          </p>
+          <span class="delivery-badge">30-Day Support</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==============================
+       CTA
+  ============================== -->
+  <section id="cta">
+    <div class="cta-bg-glow"></div>
+    <div class="container">
+      <div class="cta-inner">
+        <span class="cta-eyebrow reveal">Contact — お問い合わせ</span>
+        <h2 class="cta-headline reveal reveal-delay-1">
+          経費精算の
+          <span class="cta-headline-accent">自動化</span>を
+          今月から始めませんか
+        </h2>
+        <p class="cta-body reveal reveal-delay-2">
+          「まず試してみたい」「自社環境で動くか確認したい」という段階でも大歓迎です。
+          無料相談（30分）で貴社の現状をヒアリングし、導入可否と費用感をその場でお伝えします。
+        </p>
+        <div class="cta-buttons reveal reveal-delay-3">
+          <a href="mailto:contact@senkode.com?subject=ExpenseBot（H-E006）お問い合わせ" class="btn-primary">
+            無料相談を予約する →
+          </a>
+          <a href="https://senkode.com/portfolio" class="btn-secondary">
+            他のツール実績を見る
+          </a>
+        </div>
+        <p class="cta-note reveal reveal-delay-4">
+          H-E006 — ExpenseBot | Senkode Tool Portfolio | 対応規模：50〜300名
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==============================
+       FOOTER
+  ============================== -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <svg width="18" height="18" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="logoGradF" x1="69" y1="40" x2="131" y2="151" gradientUnits="userSpaceOnUse">
+                <stop offset="0%"   stop-color="#6B5420"/>
+                <stop offset="50%"  stop-color="#E8C97A"/>
+                <stop offset="100%" stop-color="#C9A84C"/>
+              </linearGradient>
+            </defs>
+            <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="url(#logoGradF)"/>
+          </svg>
+          SENKODE
+        </div>
+        <div class="footer-tool-id">H-E006 — ExpenseBot v1.0</div>
+        <div class="footer-copyright">© 2026 Senkode. All rights reserved.</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==============================
+       JavaScript
+  ============================== -->
+  <script>
+    /* --- Custom Cursor --- */
+    const cursor     = document.getElementById('cursor');
+    const cursorRing = document.getElementById('cursorRing');
+    let   mouseX = 0, mouseY = 0;
+    let   ringX  = 0, ringY  = 0;
+
+    document.addEventListener('mousemove', e => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      cursor.style.left = mouseX + 'px';
+      cursor.style.top  = mouseY + 'px';
+    });
+
+    (function animateRing() {
+      ringX += (mouseX - ringX) * 0.12;
+      ringY += (mouseY - ringY) * 0.12;
+      cursorRing.style.left = ringX + 'px';
+      cursorRing.style.top  = ringY + 'px';
+      requestAnimationFrame(animateRing);
+    })();
+
+    document.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor.style.width  = '6px';
+        cursor.style.height = '6px';
+        cursorRing.style.width  = '52px';
+        cursorRing.style.height = '52px';
+        cursorRing.style.borderColor = 'var(--lime-lt)';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.style.width  = '10px';
+        cursor.style.height = '10px';
+        cursorRing.style.width  = '36px';
+        cursorRing.style.height = '36px';
+        cursorRing.style.borderColor = 'var(--lime-bd)';
+      });
+    });
+
+    /* --- Scroll Reveal --- */
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

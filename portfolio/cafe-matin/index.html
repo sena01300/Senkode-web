@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CAFÉ MATIN — 下北沢の朝カフェ</title>
+  <meta name="description" content="東京・下北沢の路地裏にある朝専門カフェ。自家製パンとスペシャルティコーヒー。8:00〜15:00営業。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,300;1,400&family=Noto+Sans+JP:wght@300;400&family=Playfair+Display:ital,wght@1,400;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    [class*="grid"] > *, [class*="inner"] > *, [class*="wrap"] > * { min-width: 0; }
+
+    img, video, iframe { max-width: 100%; height: auto; }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html { overflow-x: hidden; }
+
+    /* --- Hero --- */
+    .hero {
+      position: relative;
+      height: 100vh; min-height: 600px;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background-image: url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1600&q=80');
+      background-size: cover; background-position: center;
+    }
+    .hero-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, var(--brown-45) 0%, var(--brown-60) 100%);
+    }
+    .hero-content {
+      position: relative; z-index: 1;
+      text-align: center; color: var(--white);
+      padding: 0 24px;
+    }
+    .hero-label {
+      font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
+      color: var(--terra-light); margin-bottom: 24px;
+    }
+    .hero-title {
+      font-family: 'Playfair Display', serif; font-style: italic;
+      font-size: clamp(40px, 6vw, 72px); line-height: 1.15;
+      margin-bottom: 12px;
+    }
+    .hero-sub {
+      font-family: 'Cormorant Garamond', serif; font-style: italic;
+      font-size: clamp(16px, 2vw, 20px);
+      color: var(--terra-light); margin-bottom: 48px;
+    }
+    .hero-cta {
+      display: inline-block;
+      border: 1px solid var(--terra);
+      color: var(--white); padding: 14px 40px;
+      font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+      transition: background 0.3s, color 0.3s;
+    }
+    .hero-cta:hover { background: var(--terra); }
+    .scroll-indicator {
+      position: absolute; bottom: 40px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      color: var(--white-60); font-size: 10px; letter-spacing: 2px;
+    }
+    .scroll-line {
+      width: 1px; height: 48px;
+      background: linear-gradient(to bottom, var(--terra), transparent);
+      animation: scrollDown 1.8s ease-in-out infinite;
+    }
+    @keyframes scrollDown {
+      0% { opacity: 0; transform: scaleY(0); transform-origin: top; }
+      50% { opacity: 1; transform: scaleY(1); }
+      100% { opacity: 0; transform: scaleY(0); transform-origin: bottom; }
+    }
+
+    /* --- About snippet --- */
+    .about-grid {
+      display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 80px; align-items: center;
+    }
+    .about-img {
+      aspect-ratio: 4/3;
+      background-image: url('https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800&q=80');
+      background-size: cover; background-position: center;
+    }
+    .about-label {
+      font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
+      color: var(--terra); margin-bottom: 20px;
+    }
+    .about-title {
+      font-family: 'Playfair Display', serif; font-style: italic;
+      font-size: clamp(28px, 3vw, 40px); line-height: 1.3;
+      margin-bottom: 20px;
+    }
+    .about-text {
+      color: var(--brown-mid); line-height: 1.9; font-size: 14px;
+      margin-bottom: 32px;
+    }
+    .text-link {
+      font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--terra); border-bottom: 1px solid var(--terra);
+      padding-bottom: 2px; transition: opacity 0.3s;
+    }
+    .text-link:hover { opacity: 0.7; }
+
+    /* --- Featured Menu --- */
+    .featured-menu { background: var(--bg-soft); }
+    .section-header { text-align: center; margin-bottom: 64px; }
+    .section-label {
+      font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
+      color: var(--terra); margin-bottom: 16px;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif; font-style: italic;
+      font-size: clamp(28px, 3vw, 40px);
+    }
+    .menu-grid {
+      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px;
+    }
+    .menu-card {
+      background: var(--bg); overflow: hidden;
+      transition: transform 0.3s;
+    }
+    .menu-card:hover { transform: translateY(-6px); }
+    .menu-card-img {
+      aspect-ratio: 4/3;
+      background-size: cover; background-position: center;
+    }
+    .menu-card-body {
+      overflow-x: hidden; padding: 20px; }
+    .menu-card-name {
+      font-family: 'Playfair Display', serif; font-style: italic;
+      font-size: 18px; margin-bottom: 6px;
+    }
+    .menu-card-desc { font-size: 12px; color: var(--brown-mid); margin-bottom: 12px; line-height: 1.7; }
+    .menu-card-price { font-size: 13px; color: var(--terra); letter-spacing: 1px; }
+
+    /* --- Gallery Preview --- */
+    .gallery-grid-preview {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-rows: repeat(2, 220px);
+      gap: 8px;
+      margin-bottom: 40px;
+    }
+    .gallery-preview-item {
+      background-size: cover; background-position: center;
+      overflow: hidden; cursor: pointer;
+      transition: opacity 0.3s;
+    }
+    .gallery-preview-item:hover { opacity: 0.85; }
+    .gallery-cta { text-align: center; }
+
+    /* --- Responsive --- */
+    @media (max-width: 768px) {
+      .about-grid { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+      .menu-grid { grid-template-columns: minmax(0, 1fr); }
+      .gallery-grid-preview { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(3, 160px); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div class="cursor-dot" id="cursor"></div>
+
+<!-- Nav -->
+<nav>
+  <a href="index.html" class="nav-logo">CAFÉ <span>MATIN</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html" aria-current="page">TOP</a></li>
+    <li><a href="menu.html">MENU</a></li>
+    <li><a href="concept.html">CONCEPT</a></li>
+    <li><a href="gallery.html">GALLERY</a></li>
+    <li><a href="access.html">ACCESS</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <p class="hero-label">Shimokitazawa, Tokyo</p>
+    <h1 class="hero-title">朝のひとときを、<br>ここで。</h1>
+    <p class="hero-sub">Specialty Coffee &amp; Homemade Bread</p>
+    <a href="menu.html" class="hero-cta">MENU を見る</a>
+  </div>
+  <div class="scroll-indicator">
+    <div class="scroll-line"></div>
+    <span>SCROLL</span>
+  </div>
+</section>
+
+<!-- About snippet -->
+<section class="section-pad">
+  <div class="about-grid reveal">
+    <div class="about-img"></div>
+    <div class="about-copy">
+      <p class="about-label">Our Story</p>
+      <h2 class="about-title">路地裏の小さなカフェから、<br>大切な朝を。</h2>
+      <p class="about-text">下北沢の喧騒から一本入った路地。扉を開けると、自家製パンの香りとスペシャルティコーヒーの湯気が迎えてくれます。毎朝8時から、丁寧に焼き上げるパンと、産地にこだわった一杯。</p>
+      <a href="concept.html" class="text-link">CONCEPT を読む →</a>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Menu -->
+<section class="section-pad featured-menu">
+  <div class="section-header reveal">
+    <p class="section-label">Featured</p>
+    <h2 class="section-title">看板メニュー</h2>
+  </div>
+  <div class="menu-grid">
+    <div class="menu-card reveal">
+      <div class="menu-card-img" style="background-image:url('https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=600&q=80')"></div>
+      <div class="menu-card-body">
+        <h3 class="menu-card-name">Morning Latte</h3>
+        <p class="menu-card-desc">エチオピア産シングルオリジンのラテ。朝の一杯にふさわしい、柔らかな酸味と甘み。</p>
+        <span class="menu-card-price">¥ 680</span>
+      </div>
+    </div>
+    <div class="menu-card reveal" style="transition-delay:0.1s">
+      <div class="menu-card-img" style="background-image:url('https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&q=80')"></div>
+      <div class="menu-card-body">
+        <h3 class="menu-card-name">Pain au Levain</h3>
+        <p class="menu-card-desc">自家製天然酵母のカントリーブレッド。毎朝5時から仕込む、外はパリッ、中はもっちり。</p>
+        <span class="menu-card-price">¥ 420</span>
+      </div>
+    </div>
+    <div class="menu-card reveal" style="transition-delay:0.2s">
+      <div class="menu-card-img" style="background-image:url('https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=600&q=80')"></div>
+      <div class="menu-card-body">
+        <h3 class="menu-card-name">Morning Plate</h3>
+        <p class="menu-card-desc">自家製パン2種・目玉焼き・季節のサラダのモーニングセット。コーヒー付き。</p>
+        <span class="menu-card-price">¥ 980</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Gallery Preview -->
+<section class="section-pad">
+  <div class="section-header reveal">
+    <p class="section-label">Gallery</p>
+    <h2 class="section-title">店内の風景</h2>
+  </div>
+  <div class="gallery-grid-preview reveal">
+    <div class="gallery-preview-item" style="background-image:url('https://images.unsplash.com/photo-1445116572660-236099ec97a0?w=600&q=80')"></div>
+    <div class="gallery-preview-item" style="background-image:url('https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&q=80')"></div>
+    <div class="gallery-preview-item" style="background-image:url('https://images.unsplash.com/photo-1504630083234-14187a9df0f5?w=600&q=80')"></div>
+    <div class="gallery-preview-item" style="background-image:url('https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=600&q=80')"></div>
+    <div class="gallery-preview-item" style="background-image:url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=80')"></div>
+    <div class="gallery-preview-item" style="background-image:url('https://images.unsplash.com/photo-1541167760496-1628856ab772?w=600&q=80')"></div>
+  </div>
+  <div class="gallery-cta reveal">
+    <a href="gallery.html" class="text-link">GALLERY をすべて見る →</a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <span class="footer-logo">CAFÉ MATIN</span>
+  <ul class="footer-links">
+    <li><a href="menu.html">MENU</a></li>
+    <li><a href="concept.html">CONCEPT</a></li>
+    <li><a href="gallery.html">GALLERY</a></li>
+    <li><a href="access.html">ACCESS</a></li>
+  </ul>
+  <span>© 2026 CAFÉ MATIN</span>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+
+  // Scroll reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

@@ -1,0 +1,1584 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HireFilter — 採用書類スクリーニング自動化ツール | Senkode</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@100;200;300&display=swap" rel="stylesheet">
+  <style>
+    [class*="grid"] > *, [class*="inner"] > *, [class*="wrap"] > * { min-width: 0; }
+
+    img, video, iframe { max-width: 100%; height: auto; }
+
+    html { overflow-x: hidden; }
+
+    /* ==============================
+       CSS Variables
+    ============================== */
+    :root {
+      --bg:          #070510;
+      --bg-sub:      #0C0A18;
+      --card:        #100E1E;
+      --purple:      #8B5CF6;
+      --purple-lt:   #A78BFA;
+      --purple-bd:   rgba(139,92,246,0.25);
+      --purple-glow: rgba(139,92,246,0.1);
+      --pink:        #EC4899;
+      --green:       #10B981;
+      --green-bd:    rgba(16,185,129,0.25);
+      --text:        #F1F0F7;
+      --text-mid:    rgba(241,240,247,0.55);
+      --text-faint:  rgba(241,240,247,0.22);
+      --bd:          rgba(139,92,246,0.12);
+      --nav-bg:      rgba(7,5,16,0.9);
+      --code-bg:     #0D0B1A;
+      --dot-red:     #FF5F57;
+      --dot-yellow:  #FFBD2E;
+      --dot-green:   #28C840;
+      --syn-blue:    #60A5FA;
+      --syn-pink:    #F9A8D4;
+      --syn-orange:  #FB923C;
+      --amber:       #FBBF24;
+      --amber-bd:    rgba(251,191,36,0.1);
+      --amber-bdl:   rgba(251,191,36,0.25);
+      --red:         #EF4444;
+    }
+
+    /* ==============================
+       Reset & Base
+    ============================== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      line-height: 1.8;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ==============================
+       Custom Cursor
+    ============================== */
+    .cursor {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 10px;
+      height: 10px;
+      background: var(--purple);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 10000;
+      transform: translate(-50%, -50%);
+      transition: transform 0.08s ease, width 0.2s ease, height 0.2s ease, opacity 0.2s ease;
+      mix-blend-mode: screen;
+    }
+
+    .cursor-ring {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--purple-bd);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.18s ease, width 0.25s ease, height 0.25s ease, border-color 0.2s ease;
+    }
+
+    body:hover .cursor { opacity: 1; }
+
+    a:hover ~ .cursor,
+    button:hover ~ .cursor {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* ==============================
+       Scrollbar
+    ============================== */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--purple-bd); border-radius: 2px; }
+
+    /* ==============================
+       Navigation
+    ============================== */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: var(--nav-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--bd);
+      padding: 0 48px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-brand {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px;
+      letter-spacing: 0.15em;
+      color: var(--text);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-brand-accent {
+      color: var(--purple-lt);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-mid);
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--purple-lt);
+    }
+
+    /* ==============================
+       Section Base
+    ============================== */
+    section {
+      padding: 120px 0;
+    }
+
+    .container {
+      max-width: 1120px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 48px;
+    }
+
+    .section-label {
+      font-size: 10px;
+      font-weight: 200;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--purple-lt);
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    /* ==============================
+       Scroll Reveal
+    ============================== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+      will-change: opacity, transform;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+    .reveal-delay-5 { transition-delay: 0.5s; }
+
+    /* ==============================
+       HERO
+    ============================== */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--bd) 1px, transparent 1px),
+        linear-gradient(90deg, var(--bd) 1px, transparent 1px);
+      background-size: 64px 64px;
+      opacity: 0.5;
+    }
+
+    .hero-glow {
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(ellipse, var(--purple-glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      padding-top: 80px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--purple-bd);
+      background: var(--purple-glow);
+      padding: 6px 16px;
+      font-size: 10px;
+      font-weight: 200;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--purple-lt);
+      margin-bottom: 40px;
+    }
+
+    .hero-badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--purple-lt);
+      animation: blink 1.4s ease-in-out infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.1; }
+    }
+
+    .hero-headline {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(52px, 6vw, 88px);
+      line-height: 1.0;
+      letter-spacing: 0.03em;
+      color: var(--text);
+      margin-bottom: 32px;
+    }
+
+    .hero-headline-accent {
+      color: var(--purple-lt);
+    }
+
+    .hero-sub {
+      font-size: 15px;
+      font-weight: 200;
+      color: var(--text-mid);
+      max-width: 560px;
+      line-height: 2;
+      margin-bottom: 64px;
+    }
+
+    .hero-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1px;
+      max-width: 640px;
+      border: 1px solid var(--bd);
+    }
+
+    .hero-metric {
+      background: var(--card);
+      padding: 28px 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-metric::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--purple), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .hero-metric:hover::before {
+      opacity: 1;
+    }
+
+    .hero-metric-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 36px;
+      letter-spacing: 0.05em;
+      color: var(--purple-lt);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .hero-metric-label {
+      font-size: 10px;
+      font-weight: 200;
+      letter-spacing: 0.15em;
+      color: var(--text-faint);
+      text-transform: uppercase;
+    }
+
+    /* ==============================
+       FLOW
+    ============================== */
+    #flow {
+      background: var(--bg-sub);
+    }
+
+    .flow-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 48px;
+      letter-spacing: 0.05em;
+      margin-bottom: 64px;
+      color: var(--text);
+    }
+
+    .flow-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      position: relative;
+    }
+
+    .flow-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 24px;
+      position: relative;
+    }
+
+    .flow-step-connector {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-shrink: 0;
+      width: 48px;
+    }
+
+    .flow-step-node {
+      width: 48px;
+      height: 48px;
+      border: 1px solid var(--purple-bd);
+      background: var(--card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      position: relative;
+      z-index: 1;
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+
+    .flow-step:hover .flow-step-node {
+      background: var(--purple-glow);
+      border-color: var(--purple);
+    }
+
+    .flow-step-line {
+      width: 1px;
+      flex: 1;
+      min-height: 32px;
+      background: linear-gradient(to bottom, var(--purple-bd), transparent);
+    }
+
+    .flow-step-body {
+      padding: 8px 0 40px;
+      flex: 1;
+    }
+
+    .flow-step-tag {
+      font-size: 9px;
+      font-weight: 200;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--purple-lt);
+      margin-bottom: 4px;
+    }
+
+    .flow-step-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 0.08em;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .flow-step-desc {
+      font-size: 13px;
+      font-weight: 200;
+      color: var(--text-mid);
+      max-width: 480px;
+      line-height: 1.9;
+    }
+
+    .flow-arrow {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      color: var(--purple-lt);
+      letter-spacing: 0.12em;
+      margin-top: 8px;
+    }
+
+    /* ==============================
+       CODE
+    ============================== */
+    #code {
+      background: var(--bg);
+    }
+
+    .code-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 48px;
+      letter-spacing: 0.05em;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+
+    .code-sub {
+      font-size: 13px;
+      font-weight: 200;
+      color: var(--text-mid);
+      margin-bottom: 40px;
+    }
+
+    .code-block {
+      background: var(--code-bg);
+      border: 1px solid var(--purple-bd);
+      border-left: 3px solid var(--purple);
+      padding: 32px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      line-height: 2;
+      color: var(--text-mid);
+      overflow-x: auto;
+      white-space: pre;
+      position: relative;
+    }
+
+    .code-block-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 32px;
+      background: var(--card);
+      border: 1px solid var(--purple-bd);
+      border-bottom: none;
+      border-left: 3px solid var(--purple);
+      font-size: 10px;
+      font-weight: 200;
+      letter-spacing: 0.15em;
+      color: var(--purple-lt);
+    }
+
+    .code-block-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .code-block-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .code-block-dot:nth-child(1) { background: var(--dot-red); }
+    .code-block-dot:nth-child(2) { background: var(--dot-yellow); }
+    .code-block-dot:nth-child(3) { background: var(--dot-green); }
+
+    .code-keyword { color: var(--purple-lt); }
+    .code-string  { color: var(--green); }
+    .code-comment { color: var(--text-faint); font-style: italic; }
+    .code-fn      { color: var(--syn-blue); }
+    .code-prop    { color: var(--syn-pink); }
+    .code-num     { color: var(--syn-orange); }
+
+    /* ==============================
+       SHEET OUTPUT
+    ============================== */
+    #sheet {
+      background: var(--bg-sub);
+    }
+
+    .sheet-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 48px;
+      letter-spacing: 0.05em;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+
+    .sheet-sub {
+      font-size: 13px;
+      font-weight: 200;
+      color: var(--text-mid);
+      margin-bottom: 40px;
+    }
+
+    .sheet-wrapper {
+      overflow-x: auto;
+      border: 1px solid var(--bd);
+    }
+
+    .sheet-header-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 20px;
+      background: var(--card);
+      border-bottom: 1px solid var(--bd);
+    }
+
+    .sheet-header-icon {
+      font-size: 14px;
+    }
+
+    .sheet-header-title {
+      font-size: 11px;
+      font-weight: 300;
+      color: var(--text-mid);
+      letter-spacing: 0.1em;
+    }
+
+    .sheet-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      min-width: 900px;
+    }
+
+    .sheet-table thead tr {
+      background: var(--card);
+      border-bottom: 1px solid var(--bd);
+    }
+
+    .sheet-table th {
+      padding: 12px 16px;
+      font-size: 9px;
+      font-weight: 300;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    .sheet-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--bd);
+      color: var(--text-mid);
+      font-weight: 200;
+      vertical-align: middle;
+    }
+
+    .sheet-table tbody tr {
+      background: var(--bg);
+      transition: background 0.2s ease;
+    }
+
+    .sheet-table tbody tr:hover {
+      background: var(--purple-glow);
+    }
+
+    .score-cell {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      letter-spacing: 0.05em;
+    }
+
+    .score-high { color: var(--green); }
+    .score-mid  { color: var(--amber); }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      font-size: 9px;
+      font-weight: 300;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border-radius: 2px;
+    }
+
+    .badge-pass {
+      background: var(--green-bd);
+      color: var(--green);
+      border: 1px solid var(--green-bd);
+    }
+
+    .badge-hold {
+      background: var(--amber-bd);
+      color: var(--amber);
+      border: 1px solid var(--amber-bdl);
+    }
+
+    .proc-time {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 14px;
+      color: var(--purple-lt);
+      letter-spacing: 0.05em;
+    }
+
+    /* ==============================
+       BEFORE / AFTER
+    ============================== */
+    #compare {
+      background: var(--bg);
+    }
+
+    .compare-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 48px;
+      letter-spacing: 0.05em;
+      margin-bottom: 48px;
+      color: var(--text);
+    }
+
+    .compare-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 2px;
+    }
+
+    .compare-card {
+      padding: 48px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .compare-before {
+      background: var(--card);
+      border: 1px solid var(--bd);
+    }
+
+    .compare-after {
+      background: var(--card);
+      border: 1px solid var(--purple-bd);
+    }
+
+    .compare-after::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--purple), var(--pink));
+    }
+
+    .compare-label {
+      font-size: 10px;
+      font-weight: 200;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    .compare-before .compare-label { color: var(--text-faint); }
+    .compare-after  .compare-label { color: var(--purple-lt); }
+
+    .compare-heading {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 0.05em;
+      margin-bottom: 32px;
+    }
+
+    .compare-before .compare-heading { color: var(--text-mid); }
+    .compare-after  .compare-heading { color: var(--text); }
+
+    .compare-items {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .compare-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 13px;
+      font-weight: 200;
+      color: var(--text-mid);
+    }
+
+    .compare-item-icon {
+      font-size: 14px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .compare-before .compare-item-icon { color: var(--red); }
+    .compare-after  .compare-item-icon { color: var(--green); }
+
+    .compare-item-value {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 0.05em;
+      display: block;
+      line-height: 1.2;
+      margin-bottom: 2px;
+    }
+
+    .compare-before .compare-item-value { color: var(--text-mid); }
+    .compare-after  .compare-item-value { color: var(--purple-lt); }
+
+    .compare-item-desc {
+      font-size: 12px;
+      color: var(--text-faint);
+    }
+
+    /* ==============================
+       STEPS
+    ============================== */
+    #steps {
+      background: var(--bg-sub);
+    }
+
+    .steps-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 48px;
+      letter-spacing: 0.05em;
+      margin-bottom: 64px;
+      color: var(--text);
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 2px;
+    }
+
+    .step-card {
+      background: var(--card);
+      border: 1px solid var(--bd);
+      padding: 32px 24px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s ease, background 0.3s ease;
+    }
+
+    .step-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--purple);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+
+    .step-card:hover {
+      border-color: var(--purple-bd);
+      background: var(--bg-sub);
+    }
+
+    .step-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .step-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 48px;
+      letter-spacing: 0.05em;
+      color: var(--purple-bd);
+      line-height: 1;
+      margin-bottom: 16px;
+      transition: color 0.3s ease;
+    }
+
+    .step-card:hover .step-num {
+      color: var(--purple);
+    }
+
+    .step-name {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--text);
+      margin-bottom: 10px;
+      line-height: 1.6;
+    }
+
+    .step-desc {
+      font-size: 11px;
+      font-weight: 200;
+      color: var(--text-faint);
+      line-height: 1.8;
+    }
+
+    /* ==============================
+       PRICING
+    ============================== */
+    #pricing {
+      background: var(--bg);
+    }
+
+    .pricing-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 48px;
+      letter-spacing: 0.05em;
+      margin-bottom: 48px;
+      color: var(--text);
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 2px;
+      margin-bottom: 48px;
+    }
+
+    .pricing-card {
+      background: var(--card);
+      border: 1px solid var(--bd);
+      padding: 48px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pricing-card-main {
+      border-color: var(--purple-bd);
+    }
+
+    .pricing-card-main::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--purple), var(--pink));
+    }
+
+    .pricing-card-label {
+      font-size: 9px;
+      font-weight: 200;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--purple-lt);
+      margin-bottom: 20px;
+    }
+
+    .pricing-amount {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 52px;
+      letter-spacing: 0.03em;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .pricing-amount-unit {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 16px;
+      font-weight: 200;
+      color: var(--text-mid);
+      margin-bottom: 24px;
+    }
+
+    .pricing-desc {
+      font-size: 12px;
+      font-weight: 200;
+      color: var(--text-mid);
+      line-height: 2;
+      margin-bottom: 32px;
+    }
+
+    .pricing-items {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .pricing-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      font-weight: 200;
+      color: var(--text-mid);
+    }
+
+    .pricing-item::before {
+      content: '';
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--purple-lt);
+      flex-shrink: 0;
+    }
+
+    .deliverables-section {
+      border: 1px solid var(--bd);
+      padding: 40px 48px;
+      background: var(--card);
+    }
+
+    .deliverables-label {
+      font-size: 10px;
+      font-weight: 200;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 24px;
+    }
+
+    .deliverables-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    .deliverable-item {
+      padding: 20px;
+      border: 1px solid var(--bd);
+      background: var(--bg);
+      transition: border-color 0.3s ease;
+    }
+
+    .deliverable-item:hover {
+      border-color: var(--purple-bd);
+    }
+
+    .deliverable-icon {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .deliverable-name {
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* ==============================
+       FOOTER
+    ============================== */
+    footer {
+      padding: 48px;
+      border-top: 1px solid var(--bd);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-brand {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 16px;
+      letter-spacing: 0.15em;
+      color: var(--text-faint);
+    }
+
+    .footer-copy {
+      font-size: 11px;
+      font-weight: 200;
+      color: var(--text-faint);
+      letter-spacing: 0.1em;
+    }
+
+    /* ==============================
+       Responsive
+    ============================== */
+    @media (max-width: 768px) {
+      nav {
+        padding: 0 24px;
+      }
+
+      .nav-links { display: none; }
+
+      .container { padding: 0 24px; }
+
+      section { padding: 80px 0; }
+
+      .hero-headline { font-size: 48px; }
+
+      .hero-metrics {
+        grid-template-columns: minmax(0, 1fr);
+        max-width: 100%;
+      }
+
+      .compare-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .steps-grid {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      }
+
+      .steps-grid .step-card:last-child {
+        grid-column: span 2;
+      }
+
+      .pricing-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .deliverables-grid {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      }
+
+      footer {
+        flex-direction: column;
+        gap: 16px;
+        padding: 32px 24px;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .steps-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .steps-grid .step-card:last-child {
+        grid-column: span 1;
+      }
+
+      .deliverables-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Cursor -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursor-ring"></div>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="#" class="nav-brand">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10 2L15 6V10L10 14L5 10V6L10 2Z" stroke="var(--purple-lt)" stroke-width="1" fill="none"/>
+        <path d="M10 6L13 8.5V11.5L10 14L7 11.5V8.5L10 6Z" fill="var(--purple-lt)" opacity="0.3"/>
+      </svg>
+      Senkode <span class="nav-brand-accent">/ HireFilter</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#flow">仕組み</a></li>
+      <li><a href="#code">コード</a></li>
+      <li><a href="#compare">効果比較</a></li>
+      <li><a href="#steps">導入手順</a></li>
+      <li><a href="#pricing">料金</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-bg-grid"></div>
+    <div class="hero-glow"></div>
+    <div class="container hero-inner">
+
+      <div class="hero-badge reveal">
+        <span class="hero-badge-dot"></span>
+        Automation Tool / GAS &times; Claude API
+      </div>
+
+      <h1 class="hero-headline reveal reveal-delay-1">
+        応募書類<span class="hero-headline-accent">40件</span>を<br>
+        <span class="hero-headline-accent">12分</span>でスクリーニング
+      </h1>
+
+      <p class="hero-sub reveal reveal-delay-2">
+        採用担当者が3〜5時間かけていた書類選考を、AIが評価基準に沿って自動採点。スプレッドシートにスコア・サマリー・推奨判定を出力する。
+      </p>
+
+      <div class="hero-metrics reveal reveal-delay-3">
+        <div class="hero-metric">
+          <div class="hero-metric-num">96%</div>
+          <div class="hero-metric-label">処理時間削減率</div>
+        </div>
+        <div class="hero-metric">
+          <div class="hero-metric-num">¥200</div>
+          <div class="hero-metric-label">月間API コスト</div>
+        </div>
+        <div class="hero-metric">
+          <div class="hero-metric-num">±5pt</div>
+          <div class="hero-metric-label">評価ブレ 従来比</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FLOW -->
+  <section id="flow">
+    <div class="container">
+      <span class="section-label reveal">Architecture / How It Works</span>
+      <h2 class="flow-title reveal reveal-delay-1">処理フロー</h2>
+
+      <div class="flow-steps">
+
+        <div class="flow-step reveal reveal-delay-1">
+          <div class="flow-step-connector">
+            <div class="flow-step-node">📋</div>
+            <div class="flow-step-line"></div>
+          </div>
+          <div class="flow-step-body">
+            <div class="flow-step-tag">Step 01 / Input</div>
+            <div class="flow-step-name">Google Forms — 応募者入力</div>
+            <p class="flow-step-desc">氏名・職務経歴・志望動機・スキル資格を構造化フォームで収集。入力項目はカスタマイズ可能。フォーム送信と同時に処理が自動起動する。</p>
+          </div>
+        </div>
+
+        <div class="flow-step reveal reveal-delay-2">
+          <div class="flow-step-connector">
+            <div class="flow-step-node">⚙️</div>
+            <div class="flow-step-line"></div>
+          </div>
+          <div class="flow-step-body">
+            <div class="flow-step-tag">Step 02 / Trigger</div>
+            <div class="flow-step-name">GAS — フォーム送信トリガー起動</div>
+            <p class="flow-step-desc">Google Apps Script がフォーム送信イベントを検知。回答データを取得してテキスト整形を実行。採用基準プロンプトと応募者情報を組み合わせる。</p>
+          </div>
+        </div>
+
+        <div class="flow-step reveal reveal-delay-3">
+          <div class="flow-step-connector">
+            <div class="flow-step-node">🤖</div>
+            <div class="flow-step-line"></div>
+          </div>
+          <div class="flow-step-body">
+            <div class="flow-step-tag">Step 03 / AI Evaluation</div>
+            <div class="flow-step-name">Claude API — 自動採点・評価</div>
+            <p class="flow-step-desc">claude-haiku-4-5 が採用基準に照らして応募者を評価。総合スコア・強み・懸念点・推奨判定をJSON形式で返す。1件あたり平均18秒で処理完了。</p>
+          </div>
+        </div>
+
+        <div class="flow-step reveal reveal-delay-4">
+          <div class="flow-step-connector">
+            <div class="flow-step-node">📊</div>
+            <div class="flow-step-line"></div>
+          </div>
+          <div class="flow-step-body">
+            <div class="flow-step-tag">Step 04 / Output</div>
+            <div class="flow-step-name">Googleスプレッドシート — 結果書き込み</div>
+            <p class="flow-step-desc">スコア・推奨判定・強み・懸念点・総評をシートに自動記録。採用担当者はシートを開くだけで全応募者を一覧比較できる状態になっている。</p>
+          </div>
+        </div>
+
+        <div class="flow-step reveal reveal-delay-5">
+          <div class="flow-step-connector">
+            <div class="flow-step-node">✅</div>
+          </div>
+          <div class="flow-step-body">
+            <div class="flow-step-tag">Step 05 / Human Decision</div>
+            <div class="flow-step-name">採用担当者 — 最終判断</div>
+            <p class="flow-step-desc">AIの評価はあくまで一次スクリーニング支援。最終的な採否判断は採用担当者が行う。AIが定型作業を肩代わりし、人間はより重要な面接・意思決定に集中できる。</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CODE SNIPPET -->
+  <section id="code">
+    <div class="container">
+      <span class="section-label reveal">GAS Source Code</span>
+      <h2 class="code-title reveal reveal-delay-1">実装コード</h2>
+      <p class="code-sub reveal reveal-delay-2">Google Apps Script — claude-haiku-4-5 呼び出し実装</p>
+
+      <div class="reveal reveal-delay-3">
+        <div class="code-block-header">
+          <span>HireFilter.gs</span>
+          <div class="code-block-dots">
+            <div class="code-block-dot"></div>
+            <div class="code-block-dot"></div>
+            <div class="code-block-dot"></div>
+          </div>
+        </div>
+        <div class="code-block"><span class="code-comment">// HireFilter — フォーム送信トリガー関数</span>
+<span class="code-keyword">function</span> <span class="code-fn">onFormSubmit</span>(e) {
+  <span class="code-keyword">const</span> formData = e.namedValues;
+  <span class="code-keyword">const</span> applicant = {
+    <span class="code-prop">name</span>:       formData[<span class="code-string">'氏名'</span>][<span class="code-num">0</span>],
+    <span class="code-prop">experience</span>: formData[<span class="code-string">'職務経歴'</span>][<span class="code-num">0</span>],
+    <span class="code-prop">motivation</span>: formData[<span class="code-string">'志望動機'</span>][<span class="code-num">0</span>],
+    <span class="code-prop">skills</span>:     formData[<span class="code-string">'スキル・資格'</span>][<span class="code-num">0</span>]
+  };
+
+  <span class="code-keyword">const</span> score = <span class="code-fn">evaluateApplicant</span>(applicant);
+  <span class="code-fn">writeToSheet</span>(applicant, score);
+}
+
+<span class="code-keyword">function</span> <span class="code-fn">evaluateApplicant</span>(applicant) {
+  <span class="code-keyword">const</span> prompt = <span class="code-fn">buildPrompt</span>(applicant);
+
+  <span class="code-keyword">const</span> response = UrlFetchApp.<span class="code-fn">fetch</span>(<span class="code-string">'https://api.anthropic.com/v1/messages'</span>, {
+    <span class="code-prop">method</span>:   <span class="code-string">'post'</span>,
+    <span class="code-prop">headers</span>: {
+      <span class="code-string">'x-api-key'</span>:          PropertiesService.<span class="code-fn">getScriptProperties</span>().<span class="code-fn">getProperty</span>(<span class="code-string">'CLAUDE_API_KEY'</span>),
+      <span class="code-string">'anthropic-version'</span>: <span class="code-string">'2023-06-01'</span>,
+      <span class="code-string">'content-type'</span>:       <span class="code-string">'application/json'</span>
+    },
+    <span class="code-prop">payload</span>: JSON.<span class="code-fn">stringify</span>({
+      <span class="code-prop">model</span>:      <span class="code-string">'claude-haiku-4-5-20251001'</span>,
+      <span class="code-prop">max_tokens</span>: <span class="code-num">800</span>,
+      <span class="code-prop">messages</span>:   [{ <span class="code-prop">role</span>: <span class="code-string">'user'</span>, <span class="code-prop">content</span>: prompt }]
+    })
+  });
+
+  <span class="code-keyword">return</span> JSON.<span class="code-fn">parse</span>(JSON.<span class="code-fn">parse</span>(response.<span class="code-fn">getContentText</span>()).content[<span class="code-num">0</span>].text);
+}
+
+<span class="code-keyword">function</span> <span class="code-fn">buildPrompt</span>(applicant) {
+  <span class="code-keyword">return</span> <span class="code-string">`以下の応募者情報を採用基準に照らして評価してください。
+
+応募者情報:
+- 氏名: ${applicant.name}
+- 職務経歴: ${applicant.experience}
+- 志望動機: ${applicant.motivation}
+- スキル・資格: ${applicant.skills}
+
+採用基準: [ここに採用基準を入力]
+
+以下のJSON形式で返してください:
+{
+  "total_score": 0〜100,
+  "strengths": ["強み1", "強み2"],
+  "concerns": ["懸念点1"],
+  "recommendation": "PASS / HOLD / REJECT",
+  "summary": "100字以内の総評"
+}`</span>;
+}</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SHEET OUTPUT -->
+  <section id="sheet">
+    <div class="container">
+      <span class="section-label reveal">Output Preview</span>
+      <h2 class="sheet-title reveal reveal-delay-1">スプレッドシート出力イメージ</h2>
+      <p class="sheet-sub reveal reveal-delay-2">フォーム送信ごとに自動追記。採用担当者はシートを開くだけで全応募者を一覧確認できる。</p>
+
+      <div class="sheet-wrapper reveal reveal-delay-3">
+        <div class="sheet-header-bar">
+          <span class="sheet-header-icon">📊</span>
+          <span class="sheet-header-title">HireFilter — 採用スクリーニング結果 2026年5月</span>
+        </div>
+        <table class="sheet-table">
+          <thead>
+            <tr>
+              <th>応募者名</th>
+              <th>スコア</th>
+              <th>推奨判定</th>
+              <th>強み</th>
+              <th>懸念点</th>
+              <th>総評</th>
+              <th>処理時間</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>鈴木 一郎</td>
+              <td><span class="score-cell score-high">82</span></td>
+              <td><span class="badge badge-pass">PASS</span></td>
+              <td>営業経験5年・マネジメント経験あり</td>
+              <td>IT系経験が浅い</td>
+              <td>即戦力として期待大。現場への適応は早いと判断。</td>
+              <td><span class="proc-time">18s</span></td>
+            </tr>
+            <tr>
+              <td>田中 花子</td>
+              <td><span class="score-cell score-mid">58</span></td>
+              <td><span class="badge badge-hold">HOLD</span></td>
+              <td>コミュニケーション力・主体性</td>
+              <td>業界経験なし・スキル要件未充足</td>
+              <td>ポテンシャルはあるが現時点でスキルが不足。追加面談を推奨。</td>
+              <td><span class="proc-time">21s</span></td>
+            </tr>
+            <tr>
+              <td>佐藤 次郎</td>
+              <td><span class="score-cell score-high">91</span></td>
+              <td><span class="badge badge-pass">PASS</span></td>
+              <td>業界歴10年・マネジメント実績・資格保有</td>
+              <td>希望年収が上限ギリギリ</td>
+              <td>全評価項目でトップクラス。最優先で面接設定を推奨。</td>
+              <td><span class="proc-time">16s</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- BEFORE / AFTER -->
+  <section id="compare">
+    <div class="container">
+      <span class="section-label reveal">Efficiency Comparison</span>
+      <h2 class="compare-title reveal reveal-delay-1">Before / After</h2>
+
+      <div class="compare-grid">
+
+        <div class="compare-card compare-before reveal reveal-delay-2">
+          <div class="compare-label">Before — 手動スクリーニング</div>
+          <div class="compare-heading">3〜5時間の消耗作業</div>
+          <ul class="compare-items">
+            <li class="compare-item">
+              <span class="compare-item-icon">✗</span>
+              <div>
+                <span class="compare-item-value">200分</span>
+                <span class="compare-item-desc">40件 × 5分 = 3時間以上。担当者の集中力が限界に達する</span>
+              </div>
+            </li>
+            <li class="compare-item">
+              <span class="compare-item-icon">✗</span>
+              <div>
+                <span class="compare-item-value">主観ブレ</span>
+                <span class="compare-item-desc">担当者の体調・気分・疲労度で評価基準が変わる。公平性に欠ける</span>
+              </div>
+            </li>
+            <li class="compare-item">
+              <span class="compare-item-icon">✗</span>
+              <div>
+                <span class="compare-item-value">週次処理</span>
+                <span class="compare-item-desc">まとめて処理するため応募から結果まで最大1週間のタイムラグが発生</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="compare-card compare-after reveal reveal-delay-3">
+          <div class="compare-label">After — HireFilter 自動化</div>
+          <div class="compare-heading">12分で全件処理完了</div>
+          <ul class="compare-items">
+            <li class="compare-item">
+              <span class="compare-item-icon">✓</span>
+              <div>
+                <span class="compare-item-value">12分</span>
+                <span class="compare-item-desc">40件 × 18秒 = 12分。担当者は結果確認だけに集中できる</span>
+              </div>
+            </li>
+            <li class="compare-item">
+              <span class="compare-item-icon">✓</span>
+              <div>
+                <span class="compare-item-value">評価基準統一</span>
+                <span class="compare-item-desc">プロンプトに設定した採用基準で全員を同じ視点で評価。公平性が担保される</span>
+              </div>
+            </li>
+            <li class="compare-item">
+              <span class="compare-item-icon">✓</span>
+              <div>
+                <span class="compare-item-value">リアルタイム</span>
+                <span class="compare-item-desc">フォーム送信の瞬間にシートへ自動記録。応募直後から結果が確認できる</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- STEPS -->
+  <section id="steps">
+    <div class="container">
+      <span class="section-label reveal">Implementation / 5 Steps</span>
+      <h2 class="steps-title reveal reveal-delay-1">導入手順</h2>
+
+      <div class="steps-grid">
+
+        <div class="step-card reveal reveal-delay-1">
+          <div class="step-num">01</div>
+          <div class="step-name">Google Formsに必要項目を追加</div>
+          <p class="step-desc">テンプレートを提供。氏名・職務経歴・志望動機・スキルの4項目が基本構成。貴社の採用要件に合わせてカスタマイズ可能。</p>
+        </div>
+
+        <div class="step-card reveal reveal-delay-2">
+          <div class="step-num">02</div>
+          <div class="step-name">Googleスプレッドシートと連携</div>
+          <p class="step-desc">Formsの回答先シートを設定するだけ。GASはそのシートに自動でスコア列を追記する。特別な設定は不要。</p>
+        </div>
+
+        <div class="step-card reveal reveal-delay-3">
+          <div class="step-num">03</div>
+          <div class="step-name">GASスクリプトをコピー&貼り付け</div>
+          <p class="step-desc">スクリプトエディタを開いてコードを貼り付け。作業時間は5分以内。マニュアルに全手順をスクリーンショット付きで記載。</p>
+        </div>
+
+        <div class="step-card reveal reveal-delay-4">
+          <div class="step-num">04</div>
+          <div class="step-name">Claude APIキーを設定</div>
+          <p class="step-desc">スクリプトプロパティにAPIキーを登録。コード内にキーを直書きしないセキュアな実装。Anthropicコンソールで即日発行可能。</p>
+        </div>
+
+        <div class="step-card reveal reveal-delay-5">
+          <div class="step-num">05</div>
+          <div class="step-name">採用基準を記入してテスト送信</div>
+          <p class="step-desc">プロンプトの採用基準欄に貴社の選考軸を記入。テスト送信で動作確認。採用基準作成のサポートも提供する。</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing">
+    <div class="container">
+      <span class="section-label reveal">Pricing / Deliverables</span>
+      <h2 class="pricing-title reveal reveal-delay-1">料金・納品物</h2>
+
+      <div class="pricing-grid reveal reveal-delay-2">
+
+        <div class="pricing-card pricing-card-main">
+          <div class="pricing-card-label">導入支援（初期費用）</div>
+          <div class="pricing-amount">¥150,000</div>
+          <div class="pricing-amount-unit">税別 / 一括</div>
+          <p class="pricing-desc">GAS設定・テスト・運用マニュアル・採用基準作成支援をすべて含む。追加費用なし。</p>
+          <ul class="pricing-items">
+            <li class="pricing-item">GASスクリプト フルセットアップ</li>
+            <li class="pricing-item">Google Forms テンプレート</li>
+            <li class="pricing-item">スプレッドシート出力設定</li>
+            <li class="pricing-item">テスト10件 動作確認</li>
+            <li class="pricing-item">採用基準プロンプト作成支援</li>
+            <li class="pricing-item">運用マニュアル（PDF）</li>
+          </ul>
+        </div>
+
+        <div class="pricing-card">
+          <div class="pricing-card-label">月額ランニングコスト</div>
+          <div class="pricing-amount">¥0</div>
+          <div class="pricing-amount-unit">月額固定費なし</div>
+          <p class="pricing-desc">月額サブスクリプションは一切なし。かかるのは Claude APIの従量課金のみ。</p>
+          <ul class="pricing-items">
+            <li class="pricing-item">月40件処理の場合：約¥200</li>
+            <li class="pricing-item">月200件処理の場合：約¥1,000</li>
+            <li class="pricing-item">Google Workspace 費用は別途</li>
+            <li class="pricing-item">APIキーは貴社名義で取得</li>
+            <li class="pricing-item">コスト管理ダッシュボードを共有</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="deliverables-section reveal reveal-delay-3">
+        <div class="deliverables-label">納品物一覧 / Deliverables</div>
+        <div class="deliverables-grid">
+          <div class="deliverable-item">
+            <div class="deliverable-icon">📜</div>
+            <div class="deliverable-name">GASスクリプト一式</div>
+          </div>
+          <div class="deliverable-item">
+            <div class="deliverable-icon">📋</div>
+            <div class="deliverable-name">Google Forms テンプレート</div>
+          </div>
+          <div class="deliverable-item">
+            <div class="deliverable-icon">📘</div>
+            <div class="deliverable-name">設定マニュアル（PDF）</div>
+          </div>
+          <div class="deliverable-item">
+            <div class="deliverable-icon">🎯</div>
+            <div class="deliverable-name">採用基準プロンプト作成支援</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-brand">Senkode</span>
+    <span class="footer-copy">HireFilter — GAS × Claude API Automation Tool &copy; 2026</span>
+  </footer>
+
+  <!-- JS: Cursor + Scroll Reveal -->
+  <script>
+    // Custom Cursor
+    const cursor     = document.getElementById('cursor');
+    const cursorRing = document.getElementById('cursor-ring');
+    let mouseX = 0, mouseY = 0;
+    let ringX  = 0, ringY  = 0;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      cursor.style.left = mouseX + 'px';
+      cursor.style.top  = mouseY + 'px';
+    });
+
+    function animateRing() {
+      ringX += (mouseX - ringX) * 0.12;
+      ringY += (mouseY - ringY) * 0.12;
+      cursorRing.style.left = ringX + 'px';
+      cursorRing.style.top  = ringY + 'px';
+      requestAnimationFrame(animateRing);
+    }
+    animateRing();
+
+    document.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor.style.width  = '16px';
+        cursor.style.height = '16px';
+        cursorRing.style.width  = '52px';
+        cursorRing.style.height = '52px';
+        cursorRing.style.borderColor = 'var(--purple)';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.style.width  = '10px';
+        cursor.style.height = '10px';
+        cursorRing.style.width  = '36px';
+        cursorRing.style.height = '36px';
+        cursorRing.style.borderColor = 'var(--purple-bd)';
+      });
+    });
+
+    // Scroll Reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+
+    reveals.forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>

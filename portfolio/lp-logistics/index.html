@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LOGIX DX — 運送現場を知るコンサルタントによる業務効率化支援</title>
+  <meta name="description" content="管理職10年以上の現場経験を持つコンサルタントが、中小運送会社のDX化を伴走支援。残業38%削減・ペーパーレス化・KPI可視化を3ステップで実現します。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@1,400;1,600&family=Noto+Sans+JP:wght@100;200;300;400;700&display=swap" rel="stylesheet">
+  <style>
+    [class*="grid"] > *, [class*="inner"] > *, [class*="wrap"] > * { min-width: 0; }
+
+    img, video, iframe { max-width: 100%; height: auto; }
+
+    html { overflow-x: hidden; }
+
+    /* ===== TOKENS ===== */
+    :root {
+      --gold:       #2196F3;
+      --gold-light: #64B5F6;
+      --gold-dim:   #0D47A1;
+      --black:      #080808;
+      --off-black:  #0D0D10;
+      --card:       #0E0E14;
+      --white:      #EEF4FF;
+      --muted:      rgba(238,244,255,0.4);
+      --muted-sm:   rgba(238,244,255,0.25);
+      --border:     rgba(33,150,243,0.14);
+      --gold-glow:  rgba(33,150,243,0.06);
+      --gold-grid:  rgba(33,150,243,0.025);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      line-height: 1;
+    }
+
+    /* Grid background */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(var(--gold-grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--gold-grid) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
+
+    /* ===== ANIMATION ===== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
+      will-change: opacity, transform;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ===== UTIL ===== */
+    .gold { color: var(--gold); }
+    .tag {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: 10px; letter-spacing: 4px; color: var(--gold);
+      font-weight: 300; text-transform: uppercase; margin-bottom: 24px;
+    }
+    .tag::before { content: ''; width: 24px; height: 1px; background: var(--gold); }
+
+    /* ===== HEADER ===== */
+    header {
+      position: fixed; top: 0; width: 100%; z-index: 200;
+      background: rgba(8,8,8,0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 60px;
+      height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px; letter-spacing: 5px;
+      display: flex; align-items: center; gap: 2px;
+    }
+    .logo-accent { color: var(--gold); }
+
+    nav { display: flex; align-items: center; gap: 32px; }
+    nav a {
+      color: var(--muted); text-decoration: none;
+      font-size: 11px; letter-spacing: 2px; font-weight: 300;
+      transition: color 0.3s;
+    }
+    nav a:hover { color: var(--white); }
+
+    .nav-cta {
+      background: var(--gold); color: var(--black) !important;
+      font-size: 11px !important; font-weight: 700 !important;
+      letter-spacing: 2px; padding: 10px 24px;
+      transition: background 0.3s !important;
+    }
+    .nav-cta:hover { background: var(--gold-light) !important; color: var(--black) !important; }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 480px;
+      gap: 0;
+      align-items: center;
+      padding: 80px 60px 80px;
+      position: relative; z-index: 1;
+      overflow: hidden;
+    }
+
+    /* Decorative diagonal */
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: 0; right: 420px; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--gold-dim), transparent);
+      opacity: 0.4;
+    }
+
+    .hero-left { padding-right: 80px; }
+
+    .hero-eyebrow {
+      font-size: 10px; letter-spacing: 5px; color: var(--gold);
+      text-transform: uppercase; margin-bottom: 36px;
+      display: flex; align-items: center; gap: 16px;
+      opacity: 0; transform: translateX(-20px);
+      animation: fadeSlideIn 0.8s 0.2s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    .hero-eyebrow::before {
+      content: ''; width: 40px; height: 1px; background: var(--gold);
+    }
+
+    @keyframes fadeSlideIn {
+      to { opacity: 1; transform: none; }
+    }
+
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(60px, 6.5vw, 92px);
+      line-height: 0.95;
+      letter-spacing: 2px;
+      margin-bottom: 40px;
+      opacity: 0; transform: translateY(20px);
+      animation: fadeSlideIn 0.9s 0.35s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+
+    h1 .line-accent {
+      display: block;
+      background: linear-gradient(90deg, var(--gold-dim) 0%, var(--gold-light) 50%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: 16px; line-height: 2; color: var(--muted);
+      max-width: 500px; margin-bottom: 52px;
+      opacity: 0; transform: translateY(20px);
+      animation: fadeSlideIn 1s 0.5s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+
+    .hero-actions {
+      display: flex; align-items: center; gap: 28px; flex-wrap: wrap;
+      opacity: 0; transform: translateY(20px);
+      animation: fadeSlideIn 1s 0.65s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+
+    .btn-primary {
+      background: var(--gold); color: var(--black);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 12px; font-weight: 700; letter-spacing: 3px;
+      padding: 18px 44px; border: none; cursor: pointer;
+      transition: all 0.3s; text-decoration: none; display: inline-block;
+      position: relative; overflow: hidden;
+    }
+    .btn-primary::after {
+      content: ''; position: absolute; inset: 0;
+      background: var(--gold-light);
+      transform: translateX(-100%); transition: transform 0.3s;
+    }
+    .btn-primary:hover::after { transform: translateX(0); }
+    .btn-primary span { position: relative; z-index: 1; }
+
+    .btn-outline {
+      color: var(--muted); font-size: 12px; letter-spacing: 2px;
+      text-decoration: none; display: flex; align-items: center; gap: 8px;
+      transition: color 0.3s;
+    }
+    .btn-outline::after { content: '→'; transition: transform 0.3s; }
+    .btn-outline:hover { color: var(--white); }
+    .btn-outline:hover::after { transform: translateX(4px); }
+
+    /* Hero right panel */
+    .hero-right {
+      position: relative;
+      opacity: 0; transform: translateX(30px);
+      animation: fadeSlideIn 1s 0.5s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+
+    .hero-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 48px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold-dim), var(--gold-light), var(--gold-dim));
+    }
+
+    .hero-card-label {
+      font-size: 10px; letter-spacing: 4px; color: var(--gold);
+      text-transform: uppercase; margin-bottom: 32px;
+    }
+
+    .hero-stat-row {
+      display: flex; flex-direction: column; gap: 28px;
+    }
+
+    .hero-stat {
+      display: grid; grid-template-columns: 100px minmax(0, 1fr); gap: 20px;
+      align-items: center; padding-bottom: 28px;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-stat:last-child { border-bottom: none; padding-bottom: 0; }
+
+    .hero-stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 52px; line-height: 1;
+      background: linear-gradient(180deg, var(--gold-light), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-stat-info strong {
+      display: block; font-size: 14px; font-weight: 400;
+      letter-spacing: 0.5px; margin-bottom: 6px;
+    }
+    .hero-stat-info span {
+      font-size: 12px; color: var(--muted); line-height: 1.6;
+    }
+
+    .hero-bg-text {
+      position: absolute; right: -20px; bottom: -40px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 160px; line-height: 1; color: var(--gold);
+      opacity: 0.03; letter-spacing: -5px; pointer-events: none;
+      user-select: none;
+    }
+
+    /* ===== TRUST BAR ===== */
+    .trust-bar {
+      padding: 28px 60px;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--off-black);
+      position: relative; z-index: 1;
+      display: flex; align-items: center; gap: 48px;
+      flex-wrap: wrap;
+    }
+
+    .trust-label {
+      font-size: 10px; letter-spacing: 3px; color: var(--muted-sm);
+      text-transform: uppercase; white-space: nowrap;
+    }
+
+    .trust-items {
+      display: flex; align-items: center; gap: 40px; flex-wrap: wrap;
+    }
+
+    .trust-item {
+      font-size: 12px; letter-spacing: 1px; color: var(--muted);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .trust-item::before { content: '◆'; color: var(--gold-dim); font-size: 8px; }
+
+    /* ===== PROBLEM ===== */
+    .section {
+      padding: 140px 60px;
+      position: relative; z-index: 1;
+    }
+
+    .section-header { margin-bottom: 80px; }
+
+    h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(40px, 4.5vw, 60px);
+      letter-spacing: 3px; line-height: 1.05;
+      margin-bottom: 20px;
+    }
+
+    .section-lead {
+      font-size: 15px; color: var(--muted); line-height: 2;
+      max-width: 520px;
+    }
+
+    .problem-bg { background: var(--off-black); }
+
+    .problem-grid {
+      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 2px;
+    }
+
+    .prob-card {
+      background: var(--card);
+      padding: 52px 40px;
+      position: relative; overflow: hidden;
+      cursor: default;
+    }
+
+    .prob-card::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 0;
+      background: linear-gradient(180deg, rgba(33,150,243,0.08) 0%, transparent 100%);
+      transition: height 0.5s cubic-bezier(0.16,1,0.3,1);
+    }
+    .prob-card:hover::before { height: 100%; }
+
+    .prob-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 80px; line-height: 1;
+      color: var(--gold); opacity: 0.12;
+      margin-bottom: 24px;
+      transition: opacity 0.4s;
+    }
+    .prob-card:hover .prob-num { opacity: 0.25; }
+
+    .prob-icon {
+      font-size: 28px; margin-bottom: 20px;
+      display: block; opacity: 0.6;
+    }
+
+    .prob-title {
+      font-size: 18px; font-weight: 400; letter-spacing: 0.5px;
+      margin-bottom: 16px; line-height: 1.6;
+    }
+
+    .prob-body {
+      font-size: 13px; color: var(--muted); line-height: 2;
+    }
+
+    .prob-tag {
+      display: inline-block; margin-top: 20px;
+      font-size: 10px; letter-spacing: 2px; color: var(--gold);
+      border: 1px solid rgba(33,150,243,0.3); padding: 3px 10px;
+    }
+
+    /* ===== SOLUTION / TIMELINE ===== */
+    .timeline {
+      max-width: 880px;
+      position: relative;
+    }
+
+    .timeline::before {
+      content: ''; position: absolute;
+      left: 39px; top: 20px; bottom: 20px;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--gold-dim) 20%, var(--gold-dim) 80%, transparent);
+    }
+
+    .tl-item {
+      display: grid;
+      grid-template-columns: 80px minmax(0, 1fr);
+      gap: 40px;
+      align-items: start;
+      padding: 0 0 60px;
+      position: relative;
+    }
+    .tl-item:last-child { padding-bottom: 0; }
+
+    .tl-dot {
+      width: 80px; height: 80px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      position: relative; z-index: 1;
+      transition: border-color 0.3s, background 0.3s;
+      flex-shrink: 0;
+    }
+    .tl-item:hover .tl-dot {
+      border-color: var(--gold);
+      background: rgba(33,150,243,0.06);
+    }
+
+    .tl-dot-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px; color: var(--gold); line-height: 1;
+    }
+
+    .tl-content {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 40px 48px;
+      transition: border-color 0.3s;
+    }
+    .tl-item:hover .tl-content { border-color: rgba(33,150,243,0.3); }
+
+    .tl-period {
+      font-size: 10px; letter-spacing: 4px; color: var(--gold);
+      text-transform: uppercase; margin-bottom: 16px;
+    }
+
+    .tl-title {
+      font-size: 22px; font-weight: 400; letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+
+    .tl-body {
+      font-size: 14px; color: var(--muted); line-height: 2;
+      margin-bottom: 24px;
+    }
+
+    .tl-tags {
+      display: flex; gap: 8px; flex-wrap: wrap;
+    }
+
+    .tl-tag {
+      font-size: 11px; letter-spacing: 1px; color: var(--gold);
+      border: 1px solid rgba(33,150,243,0.25); padding: 4px 12px;
+    }
+
+    .tl-outcome {
+      margin-top: 24px; padding-top: 24px;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; gap: 12px;
+    }
+
+    .tl-outcome-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 32px; color: var(--gold-light); line-height: 1;
+    }
+
+    .tl-outcome-text {
+      font-size: 12px; color: var(--muted); line-height: 1.6;
+    }
+
+    /* ===== STATS COUNTER ===== */
+    .counter-section {
+      background: var(--off-black);
+      padding: 100px 60px;
+      position: relative; z-index: 1;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .counter-grid {
+      display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0;
+    }
+
+    .counter-item {
+      padding: 40px 48px;
+      border-right: 1px solid var(--border);
+      text-align: center;
+    }
+    .counter-item:last-child { border-right: none; }
+
+    .counter-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 72px; line-height: 1;
+      background: linear-gradient(180deg, var(--gold-light), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 12px; display: block;
+    }
+
+    .counter-suffix {
+      font-size: 32px;
+    }
+
+    .counter-label {
+      font-size: 12px; color: var(--muted);
+      letter-spacing: 1px; line-height: 1.8;
+    }
+
+    /* ===== TESTIMONIALS ===== */
+    .testimonials-grid {
+      display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 2px;
+    }
+
+    .testi-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 48px;
+      display: flex; flex-direction: column;
+      gap: 28px;
+      transition: border-color 0.3s;
+    }
+    .testi-card:hover { border-color: rgba(33,150,243,0.3); }
+
+    .testi-stars {
+      display: flex; gap: 4px;
+    }
+    .star { color: var(--gold); font-size: 14px; }
+
+    .testi-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 18px; line-height: 1.8; color: var(--white);
+      flex: 1;
+    }
+
+    .testi-meta {
+      display: flex; align-items: center; gap: 16px;
+      padding-top: 24px; border-top: 1px solid var(--border);
+    }
+
+    .testi-avatar {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold-dim), var(--card));
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px; color: var(--gold);
+      flex-shrink: 0;
+    }
+
+    .testi-info strong {
+      display: block; font-size: 13px; font-weight: 400;
+      margin-bottom: 4px;
+    }
+    .testi-info span {
+      font-size: 11px; color: var(--muted); letter-spacing: 1px;
+    }
+
+    .testi-result {
+      font-size: 12px; margin-left: auto;
+      text-align: right;
+    }
+    .testi-result strong {
+      display: block;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px; color: var(--gold); line-height: 1;
+    }
+    .testi-result span { font-size: 11px; color: var(--muted); }
+
+    /* ===== CTA SECTION ===== */
+    .cta-section {
+      padding: 160px 60px;
+      position: relative; z-index: 1;
+      overflow: hidden;
+    }
+
+    .cta-section::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 800px 600px at 50% 50%, rgba(33,150,243,0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .cta-inner {
+      max-width: 680px;
+      width: 100%; margin: 0 auto; text-align: center;
+    }
+
+    .cta-inner h2 { margin-bottom: 24px; }
+
+    .cta-inner p {
+      font-size: 15px; color: var(--muted); line-height: 2;
+      margin-bottom: 56px;
+    }
+
+    .contact-form {
+      display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px;
+    }
+
+    .form-field {
+      position: relative;
+    }
+    .form-field.full { grid-column: 1 / -1; }
+
+    .form-field label {
+      display: block; font-size: 10px; letter-spacing: 3px;
+      color: var(--gold); text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .form-field input,
+    .form-field select,
+    .form-field textarea {
+      width: 100%;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--white);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 14px; font-weight: 300;
+      padding: 16px 20px;
+      outline: none;
+      transition: border-color 0.3s;
+      appearance: none;
+    }
+    .form-field input::placeholder,
+    .form-field textarea::placeholder { color: rgba(244,241,236,0.2); }
+    .form-field input:focus,
+    .form-field select:focus,
+    .form-field textarea:focus { border-color: rgba(33,150,243,0.6); }
+    .form-field textarea { height: 120px; resize: none; }
+    .form-field select option { background: var(--card); color: var(--white); }
+
+    .submit-row {
+      grid-column: 1 / -1;
+      display: flex; flex-direction: column; align-items: center; gap: 16px;
+      margin-top: 8px;
+    }
+
+    .submit-note {
+      font-size: 11px; color: var(--muted-sm); letter-spacing: 1px;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      padding: 40px 60px;
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      position: relative; z-index: 1;
+    }
+
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px; letter-spacing: 4px; color: var(--muted-sm);
+    }
+
+    footer p { font-size: 11px; color: var(--muted-sm); letter-spacing: 1px; }
+
+    .portfolio-badge {
+      font-size: 10px; letter-spacing: 3px; color: var(--gold-dim);
+      text-transform: uppercase;
+      border: 1px solid rgba(13,71,161,0.4); padding: 5px 14px;
+    }
+
+    /* ===== MOBILE STICKY CTA ===== */
+    .mobile-cta {
+      display: none;
+      position: fixed; bottom: 0; left: 0; right: 0;
+      z-index: 300;
+      background: rgba(8,8,8,0.95);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid var(--border);
+      padding: 16px 24px;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1024px) {
+      .hero { grid-template-columns: minmax(0, 1fr); }
+      .hero::after { display: none; }
+      .hero-left { padding-right: 0; }
+      .hero-right { display: none; }
+      .counter-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .counter-item:nth-child(2) { border-right: none; }
+      .counter-item:nth-child(3), .counter-item:nth-child(4) {
+        border-top: 1px solid var(--border);
+      }
+    }
+
+    @media (max-width: 768px) {
+      header { padding: 0 24px; }
+      nav a:not(.nav-cta) { display: none; }
+
+      .hero { padding: 100px 24px 80px; }
+      h1 { font-size: 56px; }
+      .hero-sub { font-size: 14px; }
+
+      .trust-bar { padding: 20px 24px; gap: 16px; }
+
+      .section { padding: 80px 24px; }
+      .counter-section { padding: 60px 24px; }
+
+      .problem-grid { grid-template-columns: minmax(0, 1fr); }
+      .prob-card { padding: 36px 24px; }
+
+      .timeline::before { display: none; }
+      .tl-item { grid-template-columns: minmax(0, 1fr); gap: 0; }
+      .tl-dot { width: 48px; height: 48px; margin-bottom: 16px; }
+      .tl-content { padding: 28px 24px; }
+
+      .testimonials-grid { grid-template-columns: minmax(0, 1fr); }
+      .testi-card { padding: 32px 24px; }
+      .testi-result { display: none; }
+
+      .cta-section { padding: 80px 24px; }
+      .contact-form { grid-template-columns: minmax(0, 1fr); }
+
+      footer { flex-direction: column; gap: 16px; text-align: center; padding: 32px 24px; }
+
+      .mobile-cta { display: block; }
+      .cta-section { padding-bottom: 120px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo"><span class="logo-accent">LOGIX</span>&nbsp;DX</div>
+    <nav>
+      <a href="#problem">課題</a>
+      <a href="#solution">解決策</a>
+      <a href="#results">実績</a>
+      <a href="#contact" class="nav-cta">無料相談</a>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-eyebrow">Logistics × Digital Transformation</div>
+      <h1>
+        現場が変わる。<br>
+        <span class="line-accent">利益が変わる。</span>
+      </h1>
+      <p class="hero-sub">
+        運送現場を10年以上経験した管理職コンサルタントが、<br>
+        中小運送会社のDX化を現場目線で伴走支援します。<br>
+        残業削減・ペーパーレス化・KPI可視化を確実に実現。
+      </p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-primary"><span>無料相談を予約する</span></a>
+        <a href="#results" class="btn-outline">導入実績を見る</a>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="hero-card">
+        <div class="hero-card-label">Lead Results</div>
+        <div class="hero-stat-row">
+          <div class="hero-stat">
+            <div class="hero-stat-num">38<small style="font-size:0.45em">%</small></div>
+            <div class="hero-stat-info">
+              <strong>残業時間削減</strong>
+              <span>導入後6ヶ月の<br>平均削減率</span>
+            </div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-num">¥28<small style="font-size:0.45em">万</small></div>
+            <div class="hero-stat-info">
+              <strong>月間コスト削減</strong>
+              <span>燃料費・事務工数の<br>合計削減額（平均）</span>
+            </div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-num">94<small style="font-size:0.45em">%</small></div>
+            <div class="hero-stat-info">
+              <strong>継続支援率</strong>
+              <span>1年後も契約継続している<br>クライアント比率</span>
+            </div>
+          </div>
+        </div>
+        <div class="hero-bg-text">DX</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST BAR -->
+  <div class="trust-bar">
+    <span class="trust-label">Support Record</span>
+    <div class="trust-items">
+      <span class="trust-item">累計支援 120社以上</span>
+      <span class="trust-item">中小運送会社 専門</span>
+      <span class="trust-item">現場管理職 10年以上の実務経験</span>
+      <span class="trust-item">導入後 平均6ヶ月で成果</span>
+    </div>
+  </div>
+
+  <!-- PROBLEM -->
+  <section class="section problem-bg" id="problem">
+    <div class="section-header reveal">
+      <div class="tag">Problem</div>
+      <h2>現場でよく聞く<span class="gold">3つの壁</span></h2>
+      <p class="section-lead">「DXしたいが何から始めれば…」「ツールを入れたが現場に定着しない」。<br>理由のほとんどは、現場を知らない提案からきています。</p>
+    </div>
+    <div class="problem-grid">
+      <div class="prob-card reveal">
+        <div class="prob-num">01</div>
+        <span class="prob-icon">🔄</span>
+        <h3 class="prob-title">ルート・配車が<br>ベテラン頼みになっている</h3>
+        <p class="prob-body">10年選手のドライバーの経験と勘に依存した配車。担当交代のたびに非効率が生まれ、燃料費と残業が積み上がっています。</p>
+        <span class="prob-tag">属人化リスク</span>
+      </div>
+      <div class="prob-card reveal" style="transition-delay:0.12s">
+        <div class="prob-num">02</div>
+        <span class="prob-icon">📋</span>
+        <h3 class="prob-title">日報・点呼・運行管理が<br>すべて紙のまま</h3>
+        <p class="prob-body">紙書類の集計・確認に毎日1〜2時間。事務スタッフの工数のうち約30%が「転記作業」に使われています。</p>
+        <span class="prob-tag">ペーパーロス</span>
+      </div>
+      <div class="prob-card reveal" style="transition-delay:0.24s">
+        <div class="prob-num">03</div>
+        <span class="prob-icon">📊</span>
+        <h3 class="prob-title">KPIが「なんとなく」で<br>改善の優先順位が見えない</h3>
+        <p class="prob-body">売上と台数は追えても、稼働率・配送効率・ドライバーあたり利益率が把握できていない。「どこを直せばいいか」がわからない状態が続く。</p>
+        <span class="prob-tag">数値の不透明</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOLUTION -->
+  <section class="section" id="solution">
+    <div class="section-header reveal">
+      <div class="tag">Solution</div>
+      <h2>3フェーズで<span class="gold">確実に変える</span></h2>
+      <p class="section-lead">大規模システム導入は不要です。現状の見える化から始め、<br>現場が自走できる仕組みを段階的に作ります。</p>
+    </div>
+    <div class="timeline">
+      <div class="tl-item reveal">
+        <div class="tl-dot"><span class="tl-dot-num">01</span></div>
+        <div class="tl-content">
+          <div class="tl-period">Phase 1 — Week 1〜2</div>
+          <h3 class="tl-title">現場診断 &amp; 課題の数値化</h3>
+          <p class="tl-body">現場ヒアリング・データ収集・業務フロー分析を2週間で実施。「感覚」ではなく「数字」で課題の優先順位を確定します。改善可能な余地を金額・時間に換算してご報告。</p>
+          <div class="tl-tags">
+            <span class="tl-tag">現場ヒアリング</span>
+            <span class="tl-tag">業務フロー分析</span>
+            <span class="tl-tag">コスト試算</span>
+          </div>
+          <div class="tl-outcome">
+            <span class="tl-outcome-num">2週間</span>
+            <span class="tl-outcome-text">で課題マップと<br>改善ロードマップを納品</span>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item reveal" style="transition-delay:0.12s">
+        <div class="tl-dot"><span class="tl-dot-num">02</span></div>
+        <div class="tl-content">
+          <div class="tl-period">Phase 2 — Month 1〜3</div>
+          <h3 class="tl-title">ツール選定 &amp; 業務フロー再設計</h3>
+          <p class="tl-body">既存ツールを最大限活用し、最小コストで最大効果を実現。勤怠・配車・日報管理のデジタル化と並行して、現場スタッフへの定着研修も担当します。</p>
+          <div class="tl-tags">
+            <span class="tl-tag">ペーパーレス化</span>
+            <span class="tl-tag">配車最適化</span>
+            <span class="tl-tag">スタッフ研修</span>
+          </div>
+          <div class="tl-outcome">
+            <span class="tl-outcome-num">3ヶ月</span>
+            <span class="tl-outcome-text">で現場定着まで<br>完全サポート</span>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item reveal" style="transition-delay:0.24s">
+        <div class="tl-dot"><span class="tl-dot-num">03</span></div>
+        <div class="tl-content">
+          <div class="tl-period">Phase 3 — Month 4〜</div>
+          <h3 class="tl-title">月次モニタリング &amp; 継続改善</h3>
+          <p class="tl-body">毎月KPIレポートと定例ミーティングで成果を確認。数字が動かなければ施策を見直します。「導入して終わり」ではなく、成果が出るまで伴走します。</p>
+          <div class="tl-tags">
+            <span class="tl-tag">月次KPIレポート</span>
+            <span class="tl-tag">定例MTG</span>
+            <span class="tl-tag">継続改善支援</span>
+          </div>
+          <div class="tl-outcome">
+            <span class="tl-outcome-num">成果</span>
+            <span class="tl-outcome-text">が出るまで<br>契約継続サポート</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COUNTER STATS -->
+  <div class="counter-section reveal">
+    <div class="counter-grid">
+      <div class="counter-item">
+        <span class="counter-num" data-target="120" data-suffix="+">0</span>
+        <div class="counter-label">累計支援実績<br>（社）</div>
+      </div>
+      <div class="counter-item">
+        <span class="counter-num" data-target="38" data-suffix="%">0</span>
+        <div class="counter-label">平均残業時間<br>削減率</div>
+      </div>
+      <div class="counter-item">
+        <span class="counter-num" data-target="94" data-suffix="%">0</span>
+        <div class="counter-label">継続支援率<br>（1年後）</div>
+      </div>
+      <div class="counter-item">
+        <span class="counter-num" data-target="28" data-suffix="万円">0</span>
+        <div class="counter-label">月間コスト削減<br>（平均）</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TESTIMONIALS -->
+  <section class="section" id="results">
+    <div class="section-header reveal">
+      <div class="tag">Testimonials</div>
+      <h2>導入企業の<span class="gold">リアルな声</span></h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testi-card reveal">
+        <div class="testi-stars">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+        </div>
+        <p class="testi-quote">「現場の反発を心配していましたが、ステップを踏んだ導入のおかげで想定より早く定着しました。管理職経験がある方ならではの視点で、現場の気持ちを汲んだ提案が助かりました。」</p>
+        <div class="testi-meta">
+          <div class="testi-avatar">S</div>
+          <div class="testi-info">
+            <strong>S.T. 代表取締役</strong>
+            <span>中小運送会社 A社 / 従業員32名</span>
+          </div>
+          <div class="testi-result">
+            <strong>ー42%</strong>
+            <span>事務工数削減</span>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card reveal" style="transition-delay:0.12s">
+        <div class="testi-stars">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+        </div>
+        <p class="testi-quote">「KPIを数字で見て初めて、どこに改善の余地があるか気づけました。これまでは感覚で判断していたことが、今は根拠を持って意思決定できています。」</p>
+        <div class="testi-meta">
+          <div class="testi-avatar">K</div>
+          <div class="testi-info">
+            <strong>K.M. 取締役</strong>
+            <span>地域配送会社 B社 / 従業員18名</span>
+          </div>
+          <div class="testi-result">
+            <strong>ー28万</strong>
+            <span>月間コスト削減</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section" id="contact">
+    <div class="cta-inner">
+      <div class="reveal">
+        <div class="tag">Contact</div>
+        <h2>まず<span class="gold">30分の無料相談</span>から</h2>
+        <p>課題の整理だけでも大歓迎です。<br>「何から始めればいいかわからない」という段階から、<br>あなたのペースで一緒に整理していきましょう。</p>
+      </div>
+      <div class="contact-form reveal" style="transition-delay:0.15s">
+        <div class="form-field">
+          <label>会社名</label>
+          <input type="text" placeholder="株式会社〇〇運輸">
+        </div>
+        <div class="form-field">
+          <label>お名前</label>
+          <input type="text" placeholder="山田 太郎">
+        </div>
+        <div class="form-field">
+          <label>メールアドレス</label>
+          <input type="email" placeholder="info@example.com">
+        </div>
+        <div class="form-field">
+          <label>従業員数</label>
+          <select>
+            <option value="" disabled selected>選択してください</option>
+            <option>10名未満</option>
+            <option>10〜30名</option>
+            <option>30〜100名</option>
+            <option>100名以上</option>
+          </select>
+        </div>
+        <div class="form-field full">
+          <label>現在の課題（任意）</label>
+          <textarea placeholder="気になっていること、困っていることを自由にご記入ください"></textarea>
+        </div>
+        <div class="submit-row">
+          <a href="#" class="btn-primary" style="width:100%;text-align:center"><span>無料相談を申し込む（完全無料）</span></a>
+          <p class="submit-note">返信は48時間以内 ・ 強引な営業は一切行いません</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">LOGIX DX</div>
+    <p>© 2026 LOGIX DX Consulting. All rights reserved.</p>
+    <span class="portfolio-badge">Portfolio — Senkode</span>
+  </footer>
+
+  <!-- MOBILE STICKY CTA -->
+  <div class="mobile-cta">
+    <a href="#contact" class="btn-primary" style="width:100%;text-align:center;display:block"><span>無料相談を予約する</span></a>
+  </div>
+
+  <script>
+    // Scroll reveal
+    const revealObserver = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // Counter animation
+    function animateCounter(el) {
+      const target = parseInt(el.dataset.target);
+      const suffix = el.dataset.suffix || '';
+      const duration = 1800;
+      const start = performance.now();
+      const easeOut = t => 1 - Math.pow(1 - t, 3);
+
+      function update(now) {
+        const progress = Math.min((now - start) / duration, 1);
+        const value = Math.floor(easeOut(progress) * target);
+        el.textContent = value + suffix;
+        if (progress < 1) requestAnimationFrame(update);
+        else el.textContent = target + suffix;
+      }
+      requestAnimationFrame(update);
+    }
+
+    const counterObserver = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.querySelectorAll('.counter-num').forEach(animateCounter);
+          counterObserver.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.counter-section').forEach(el => counterObserver.observe(el));
+
+    // Hide mobile CTA when in contact section
+    const contactEl = document.getElementById('contact');
+    const mobileCta = document.querySelector('.mobile-cta');
+    if (mobileCta && contactEl) {
+      const hideObserver = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          mobileCta.style.opacity = e.isIntersecting ? '0' : '1';
+          mobileCta.style.pointerEvents = e.isIntersecting ? 'none' : 'auto';
+        });
+      }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+      hideObserver.observe(contactEl);
+    }
+  </script>
+</body>
+</html>

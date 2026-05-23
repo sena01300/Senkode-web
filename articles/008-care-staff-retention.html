@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>介護職員の離職率を3年で22%→9%に下げた施設が、密かにやっていた3つのこと — Senkode Articles</title>
+  <meta name="description" content="給料を上げずに定着率を改善した現場の実話。業界平均15〜17%の離職率に悩む介護施設HR担当・施設長へ贈る、現場発の定着改善メソッド。">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital@1&family=Noto+Sans+JP:wght@100;200;300;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold:          #C9A84C;
+      --gold-light:    #E8C97A;
+      --gold-dim:      #6B5420;
+      --black:         #080808;
+      --off-black:     #0F0F0F;
+      --card:          #111111;
+      --white:         #F4F1EC;
+      --muted:         rgba(244,241,236,0.35);
+      --border:        rgba(201,168,76,0.1);
+      --gold-hover:    rgba(201,168,76,0.1);
+      --gold-alpha-40: rgba(201,168,76,0.4);
+      --gold-alpha-30: rgba(201,168,76,0.3);
+      --gold-alpha-50: rgba(201,168,76,0.5);
+      --white-dim:     rgba(244,241,236,0.4);
+      --white-faint:   rgba(244,241,236,0.2);
+      --gold-grid:     rgba(201,168,76,0.03);
+      --nav-bg:        rgba(15,15,15,0.85);
+
+      /* Article theme — sage green */
+      --sage:          #22C55E;
+      --sage-dark:     #16A34A;
+      --sage-alpha-20: rgba(34,197,94,0.12);
+      --sage-alpha-40: rgba(34,197,94,0.28);
+      --sage-border:   rgba(34,197,94,0.18);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dim); }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(var(--gold-grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--gold-grid) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none; z-index: 0;
+    }
+
+    /* CURSOR */
+    .cursor-dot {
+      position: fixed; width: 8px; height: 8px; background: var(--gold);
+      border-radius: 50%; transform: translate(-50%,-50%);
+      pointer-events: none; z-index: 9999; mix-blend-mode: difference;
+    }
+    .cursor-ring {
+      position: fixed; width: 32px; height: 32px;
+      border: 1px solid var(--gold-alpha-50); border-radius: 50%;
+      transform: translate(-50%,-50%); pointer-events: none;
+      z-index: 9998; transition: width 0.3s, height 0.3s;
+    }
+    .cursor-ring.expanded { width: 48px; height: 48px; }
+
+    .noise {
+      position: fixed; inset: 0; pointer-events: none; z-index: 500; opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat: repeat; background-size: 200px 200px;
+    }
+
+    /* NAV */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 60px;
+      background: var(--nav-bg); backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-wordmark { font-family: 'Bebas Neue', cursive; font-size: 22px; letter-spacing: 0.25em; color: var(--white); }
+    .nav-links { display: flex; align-items: center; gap: 32px; }
+    .nav-link { font-size: 11px; letter-spacing: 0.2em; color: var(--muted); text-decoration: none; transition: color 0.3s; }
+    .nav-link:hover, .nav-link.active { color: var(--white); }
+    .nav-cta {
+      font-size: 10px; letter-spacing: 0.2em; color: var(--gold);
+      text-decoration: none; border: 1px solid var(--gold-alpha-40);
+      padding: 8px 16px; transition: background 0.3s;
+    }
+    .nav-cta:hover { background: var(--gold-hover); }
+
+    /* ARTICLE HERO */
+    .article-hero {
+      padding: 100px 60px 60px;
+      position: relative; z-index: 1;
+      border-bottom: 1px solid var(--border);
+      max-width: 860px; margin: 0 auto;
+      animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.1s both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .article-meta {
+      display: flex; align-items: center; gap: 16px; margin-bottom: 24px;
+    }
+    .article-tag {
+      font-size: 9px; letter-spacing: 0.15em; color: var(--sage);
+      border: 1px solid var(--sage-border); padding: 3px 10px;
+    }
+    .article-date { font-size: 10px; color: var(--muted); letter-spacing: 0.15em; }
+    .article-read-time { font-size: 10px; color: var(--muted); letter-spacing: 0.1em; }
+
+    .article-title {
+      font-size: clamp(22px, 3.8vw, 38px);
+      font-weight: 700; color: var(--white);
+      line-height: 1.55; margin-bottom: 16px;
+    }
+    .article-subtitle {
+      font-size: 13px; color: var(--sage); letter-spacing: 0.05em;
+      margin-bottom: 20px; font-weight: 300;
+    }
+    .article-lead {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-size: 16px;
+      color: var(--muted); line-height: 1.9; letter-spacing: 0.03em;
+    }
+
+    /* ARTICLE BODY */
+    .article-body {
+      max-width: 860px; margin: 0 auto;
+      padding: 60px 60px 120px;
+      position: relative; z-index: 1;
+    }
+
+    .article-body h2 {
+      font-size: 20px; font-weight: 700; color: var(--white);
+      margin: 56px 0 20px;
+      padding-left: 16px;
+      border-left: 2px solid var(--sage);
+    }
+    .article-body h3 {
+      font-size: 15px; font-weight: 700; color: var(--white);
+      margin: 36px 0 12px;
+    }
+    .article-body p {
+      font-size: 14px; color: var(--muted); line-height: 2.1;
+      margin-bottom: 20px;
+    }
+    .article-body strong { color: var(--white); font-weight: 700; }
+    .article-body ul, .article-body ol {
+      margin: 16px 0 24px 20px;
+    }
+    .article-body li {
+      font-size: 14px; color: var(--muted); line-height: 2; margin-bottom: 6px;
+    }
+
+    /* TABLE */
+    .article-table {
+      width: 100%; border-collapse: collapse;
+      margin: 28px 0; font-size: 12px;
+    }
+    .article-table th {
+      font-size: 9px; letter-spacing: 0.2em; color: var(--sage);
+      border-bottom: 1px solid var(--sage-alpha-40);
+      padding: 10px 16px; text-align: left; font-weight: 300;
+    }
+    .article-table td {
+      padding: 12px 16px; color: var(--muted);
+      border-bottom: 1px solid var(--border); line-height: 1.7;
+    }
+    .article-table tr:hover td { color: var(--white); }
+    .article-table .tag-before {
+      display: inline-block; font-size: 9px; letter-spacing: 0.12em;
+      color: var(--muted); border: 1px solid var(--border); padding: 2px 7px;
+      margin-bottom: 4px;
+    }
+    .article-table .tag-after {
+      display: inline-block; font-size: 9px; letter-spacing: 0.12em;
+      color: var(--sage); border: 1px solid var(--sage-border); padding: 2px 7px;
+      margin-bottom: 4px;
+    }
+
+    /* CALLOUT — standard (gold) */
+    .callout {
+      border: 1px solid var(--gold-alpha-40);
+      background: var(--gold-hover);
+      padding: 24px 28px; margin: 32px 0;
+    }
+    .callout-label {
+      font-size: 9px; letter-spacing: 0.2em; color: var(--gold);
+      margin-bottom: 10px; display: block;
+    }
+    .callout p { font-size: 13px; color: var(--white); margin-bottom: 0; }
+
+    /* CALLOUT — sage green variant */
+    .callout-sage {
+      border: 1px solid var(--sage-alpha-40);
+      background: var(--sage-alpha-20);
+      padding: 24px 28px; margin: 32px 0;
+    }
+    .callout-sage .callout-label {
+      color: var(--sage);
+    }
+    .callout-sage p { font-size: 13px; color: var(--white); margin-bottom: 0; }
+
+    /* DIVIDER */
+    .article-divider {
+      border: none; border-top: 1px solid var(--border);
+      margin: 48px 0;
+    }
+
+    /* BACK LINK */
+    .back-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 10px; letter-spacing: 0.2em; color: var(--muted);
+      text-decoration: none; margin-bottom: 40px;
+      transition: color 0.3s;
+    }
+    .back-link:hover { color: var(--gold); }
+
+    /* NEXT ARTICLE */
+    .next-article {
+      border-top: 1px solid var(--border);
+      padding: 40px 0 0; margin-top: 80px;
+    }
+    .next-label { font-size: 9px; letter-spacing: 0.25em; color: var(--gold); margin-bottom: 12px; display: block; }
+    .next-title { font-size: 15px; font-weight: 700; color: var(--muted); line-height: 1.6; transition: color 0.3s; }
+    .next-article:hover .next-title { color: var(--white); }
+
+    /* FOOTER */
+    .footer {
+      padding: 24px 60px; background: var(--black);
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      position: relative; z-index: 1;
+    }
+    .footer-copy { font-size: 10px; letter-spacing: 0.25em; color: var(--muted); }
+    .footer-tag  { font-size: 9px;  letter-spacing: 0.15em; color: var(--white-faint); }
+
+    /* CTA BLOCK */
+    .cta-block {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-left: 2px solid var(--gold);
+      padding: 28px 32px; margin: 40px 0 0;
+    }
+    .cta-block p {
+      font-size: 13px; color: var(--muted); margin-bottom: 16px;
+    }
+    .cta-block a {
+      display: inline-block;
+      font-size: 10px; letter-spacing: 0.2em; color: var(--gold);
+      text-decoration: none; border: 1px solid var(--gold-alpha-40);
+      padding: 10px 20px; transition: background 0.3s;
+    }
+    .cta-block a:hover { background: var(--gold-hover); }
+
+    /* NUMBER BADGE */
+    .step-badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--sage-alpha-20); border: 1px solid var(--sage-border);
+      color: var(--sage); font-size: 11px; font-weight: 700;
+      margin-right: 8px; vertical-align: middle; flex-shrink: 0;
+    }
+
+    @media (max-width: 768px) {
+      body { cursor: auto; }
+      .cursor-dot, .cursor-ring { display: none; }
+      .nav { padding: 16px 24px; }
+      .nav-link { display: none; }
+      .article-hero { padding: 80px 24px 48px; }
+      .article-body { padding: 40px 24px 80px; }
+      .footer { padding: 20px 24px; flex-direction: column; gap: 8px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+  <div class="noise"></div>
+
+  <nav class="nav">
+    <a href="/index.html" class="nav-logo">
+      <svg width="44" height="44" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="logoGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#6B5420"/>
+            <stop offset="50%" stop-color="#E8C97A"/>
+            <stop offset="100%" stop-color="#C9A84C"/>
+          </linearGradient>
+          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <path id="logoCircle" d="M30,5 A25,25,0,1,1,29.999,5" fill="none"/>
+        </defs>
+        <circle cx="30" cy="30" r="28" fill="none" stroke="#C9A84C" stroke-width="0.5" opacity="0.4"/>
+        <circle cx="30" cy="30" r="20" fill="none" stroke="#C9A84C" stroke-width="0.3" opacity="0.2"/>
+        <g transform="translate(-6,-4.4) scale(0.36)">
+          <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="url(#logoGrad)" style="filter: url(#glow)"/>
+        </g>
+        <text font-family="'Bebas Neue','Noto Sans JP',sans-serif" font-size="5" fill="#C9A84C" opacity="0.78">
+          <textPath href="#logoCircle" startOffset="0%" letter-spacing="2.5">Senkode · 閃光 · Senkode · 閃光 ·</textPath>
+        </text>
+      </svg>
+      <span class="nav-wordmark">Senkode</span>
+    </a>
+    <div class="nav-links">
+      <a href="/services.html" class="nav-link">SERVICES</a>
+      <a href="/works.html" class="nav-link">WORKS</a>
+      <a href="/articles/index.html" class="nav-link active">ARTICLES</a>
+      <a href="/about.html" class="nav-link">ABOUT</a>
+      <a href="/contact.html" class="nav-cta">CONTACT</a>
+    </div>
+  </nav>
+
+  <!-- Article Hero -->
+  <div class="article-hero">
+    <a href="/articles/index.html" class="back-link">← ARTICLES</a>
+    <div class="article-meta">
+      <span class="article-tag">介護×HR</span>
+      <span class="article-date">2026.05.10</span>
+      <span class="article-read-time">読了 約12分</span>
+    </div>
+    <h1 class="article-title">介護職員の離職率を3年で22%→9%に下げた施設が、密かにやっていた3つのこと</h1>
+    <p class="article-subtitle">給料を上げずに定着率を改善した現場の実話</p>
+    <p class="article-lead">介護業界の平均離職率は15〜17%。構造的な人手不足が続くなかで「採用」に頭を悩ませる施設は多い。しかし本当の問題は、採用の後ろ側にある。3年間で離職率を半分以下にした施設長の話を聞いて、見えてきたことを書く。</p>
+  </div>
+
+  <!-- Article Body -->
+  <article class="article-body">
+
+    <p>介護職員の離職。この問題を「給料を上げれば解決する」と思っている経営者・HR担当者は少なくない。確かに処遇改善加算（国が介護職の給与水準を上げるために設けた補助制度）の拡充は重要だ。しかし現場の実態を見てきた人間として言えるのは、<strong>離職の引き金のほとんどは「お金」ではない</strong>ということだ。</p>
+
+    <p>公益財団法人介護労働安定センターの調査によると、介護職員が離職した理由の上位は「職場の人間関係」「法人の理念・経営方針への不満」「仕事の内容・やりがい」が並ぶ。「給与・処遇への不満」はそれらの後に来る。つまり、<strong>職員は「感情的な理由」で辞めていることが多い。</strong></p>
+
+    <p>では、どうすれば感情的な離職を防げるのか。今回紹介するのは、3年間で離職率を22%から9%まで下げた、ある介護施設グループの取り組みだ。特別な予算をかけず、制度を根本から変えたわけでもない。施設長と主任が「関わり方」を変えただけで、数字が動いた。</p>
+
+    <div class="callout">
+      <span class="callout-label">介護業界の離職率データ（2023年度）</span>
+      <p>業界全体の離職率は15.4%（介護労働安定センター調べ）。特養・老健などの入居型施設では20%を超える事業所も珍しくない。採用コストは1名あたり平均40〜80万円と言われ、離職が続くほど経営を圧迫する構造になっている。</p>
+    </div>
+
+    <h2>多くの施設が間違えている「定着対策」の落とし穴</h2>
+
+    <p>離職率が高い施設の多くが、まず「採用を増やす」方向に動く。求人媒体への出稿を増やし、紹介会社を使い、採用イベントに参加する。確かに短期的には人員が補填される。しかし根本の問題を解決しないまま採用を繰り返すのは、穴の開いたバケツに水を注ぎ続けるようなものだ。</p>
+
+    <p>次によく行われるのが「制度の整備」だ。有給取得率の向上、育児・介護との両立支援、研修制度の充実——これらは必要なことだが、<strong>「制度があること」と「職員が職場に居続けたいと思うこと」は別の話</strong>だ。制度を整えた直後に離職が続く施設を、私は何度も見てきた。</p>
+
+    <p>では何が足りないのか。答えは単純だ。<strong>「自分はここで必要とされている」という感覚が、職員に届いていない。</strong></p>
+
+    <p>制度は「環境」を整える。しかし人が職場に留まる理由の多くは「関係性」にある。自分の意見を聞いてくれる上司がいるか。成長を認めてもらえているか。困ったときに相談できる仲間がいるか——これらが揃っていない職場からは、どれだけ処遇を改善しても人は離れていく。</p>
+
+    <div class="callout-sage">
+      <span class="callout-label">落とし穴の構造</span>
+      <p>「採用コスト増大 → 採用強化 → 定着しない → また採用」のループに入っている施設は多い。抜け出すには、採用の前段階——在職中の職員が「なぜ辞めるのか」を直視することが先決になる。</p>
+    </div>
+
+    <h2>離職率を下げた施設がやっていたこと①——「不満の見える化」</h2>
+
+    <p>最初の一手は、地味に見えて最も効果的なものだった。<strong>月1回、全職員に対して「匿名の不満アンケート」を実施する</strong>という取り組みだ。</p>
+
+    <p>内容はシンプルだ。「今月、仕事で困ったことを1つ書いてください」「改善してほしいことがあれば書いてください」の2問だけ。紙で配り、施設長が直接回収し、翌週の朝礼で「こういう声がありました。こう対応します」と読み上げる。</p>
+
+    <p>最初の数か月は「業務の無駄が多い」「申し送りに時間がかかりすぎる」といった表面的な内容が多かった。しかし半年が経つと、「Aさんとの関係が辛い」「休憩が取れない日が続いている」「サービス残業が当たり前になっている」といった、深層にある不満が出始めた。</p>
+
+    <p>施設長がここで取った行動が重要だ。<strong>「読み上げる」だけでなく、「その週のうちに何らかの対応をする」というルールを自分に課した。</strong>100点の解決策でなくていい。「来週、業務フローを見直すための打ち合わせをします」という一言でもいい。「あなたの声を聞いた」という事実が、職員の信頼を積み上げていった。</p>
+
+    <table class="article-table">
+      <thead>
+        <tr>
+          <th>定着対策</th>
+          <th>Before（導入前）</th>
+          <th>After（1年後）</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>職員の不満把握手段</td>
+          <td>
+            <span class="tag-before">BEFORE</span><br>
+            退職時の面談のみ（手遅れ）
+          </td>
+          <td>
+            <span class="tag-after">AFTER</span><br>
+            月次匿名アンケート＋週次朝礼フィードバック
+          </td>
+        </tr>
+        <tr>
+          <td>不満への対応速度</td>
+          <td>
+            <span class="tag-before">BEFORE</span><br>
+            半年〜1年以上かかるか、放置
+          </td>
+          <td>
+            <span class="tag-after">AFTER</span><br>
+            1週間以内に何らかのアクションを報告
+          </td>
+        </tr>
+        <tr>
+          <td>職員の「聞いてもらえている」感</td>
+          <td>
+            <span class="tag-before">BEFORE</span><br>
+            満足度調査なし・体感で「低い」
+          </td>
+          <td>
+            <span class="tag-after">AFTER</span><br>
+            半年後の調査で「職場への満足度」が18pt改善
+          </td>
+        </tr>
+        <tr>
+          <td>1年以内の離職者数（施設全体）</td>
+          <td>
+            <span class="tag-before">BEFORE</span><br>
+            年間8〜10名（職員40名規模）
+          </td>
+          <td>
+            <span class="tag-after">AFTER</span><br>
+            年間3〜4名まで減少
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>この取り組みに予算は不要だ。必要なのは施設長の「聞く覚悟」だけだ。不満を聞いた後に動かなければ、むしろ「言っても無駄」という絶望感が加速する。だからこそ「聞いたら動く」というセットで機能する。</p>
+
+    <div class="callout">
+      <span class="callout-label">施設長の声</span>
+      <p>「最初は怖かったです。自分への批判が出てきたらどうしようと思って。でも実際に読んでみると、ほとんどは業務の問題でした。むしろ職員が何に困っているかがわかって、ようやく仕事が始まった気がしました。知らなかったことが問題だったんです。」</p>
+    </div>
+
+    <h2>離職率を下げた施設がやっていたこと②——「成長の可視化」</h2>
+
+    <p>介護職員が「やりがいを感じにくい」理由の一つに、<strong>「自分が成長しているかどうかが見えない」</strong>という問題がある。ケアの質は数値化しにくく、毎日同じような業務の繰り返しに感じやすい。1年勤めても「自分はどれだけ成長したのか」が実感しにくい職種だ。</p>
+
+    <p>この施設が導入したのは「スキルカード」という仕組みだ。シンプルな1枚のシートに、介護技術・コミュニケーション・リーダーシップ・記録の質などの項目を並べ、3か月ごとに施設長と主任が評価し、本人にフィードバックする。</p>
+
+    <p>重要なのは「評価」そのものではなく、<strong>「3か月前の自分と比べてここが変わった」という変化の言語化</strong>だ。数字ではなくコメントで届ける。「Bさんは今月、新人に対してすごく丁寧に教えていた。3か月前はそれができていなかった。確実に成長している」——こういった言葉を、施設長が直接伝える。</p>
+
+    <p>この取り組みを始めてから、中堅層（勤続3〜7年）の離職が顕著に減った。中堅は採用コストが最もかかる層であり、かつ「成長の踊り場」に差し掛かる時期でもある。「ここにいても成長できない」という感覚が離職を引き起こしやすい。スキルカードはその感覚に直接対処した。</p>
+
+    <div class="callout-sage">
+      <span class="callout-label">成長可視化のポイント</span>
+      <p>「評価」と「成長の言語化」は別物。評価は上下関係を生みやすいが、「3か月前との比較」は成長の証拠になる。職員に必要なのは点数ではなく「あなたは変わった」という事実の言葉だ。</p>
+    </div>
+
+    <p>スキルカードの副次効果として、「キャリアの見通し」が生まれた。「このスキルが上がれば主任になれる」「チームリーダーとしての役割を任せたい」という会話が自然に発生するようになった。キャリアの出口が見えない職場ほど、人は早く辞める。出口を示す——それだけで、在職期間は変わる。</p>
+
+    <h2>離職率を下げた施設がやっていたこと③——「管理職の関わり方の変化」</h2>
+
+    <p>3つ目は、最も地味で、最も効果が大きかった変化だ。施設長と主任が、<strong>「報告を受ける人」から「現場に降りていく人」に変わった</strong>ことだ。</p>
+
+    <p>多くの施設では、管理職は事務室にいる。シフト管理・書類処理・会議——確かにやることは多い。しかし職員から見ると、「施設長は何もわかっていない」「自分たちの苦労を見ていない」という感覚が積み重なっていく。</p>
+
+    <p>この施設の施設長が始めたのは、「週に2〜3回、30分だけ現場に入る」というルールだ。介護補助として、実際にケアの一端を担う。利用者さんと話す。そのついでに、職員に一言二言かける。「最近どう？」でも「あの件、その後どうなった？」でもいい。</p>
+
+    <p>管理職が現場に「顔を出す」だけで、職員の心理状態は変わる。<strong>「自分たちが見られている」ではなく「自分たちと一緒にいる」という感覚が生まれる。</strong>これは研修でも制度でも作れない、関係性の質の問題だ。</p>
+
+    <p>さらにこの施設では、主任が「辞めそうな職員の予兆リスト」を感覚ではなく言語化するようにした。「最近挨拶が減った」「シフト変更の希望が増えた」「昼休みに一人でいることが多くなった」——こうした変化が見えたら、その週のうちに1対1の面談を設ける。退職の申し出が来てからでは遅い。</p>
+
+    <div class="callout">
+      <span class="callout-label">主任のリアルな言葉</span>
+      <p>「辞める人って、言う前に必ずサインを出しているんです。気づいてもらえなかった、話を聞いてもらえなかった——そう言って辞めていく人を何人も見てきた。だから今は、変化に気づいたらすぐ声をかける。それだけで引き留められたケースが何件もあります。」</p>
+    </div>
+
+    <p>管理職の「関わり方の変化」は、本人の意識と時間の使い方を変えることを要求する。すぐに数字に出ないからこそ、継続が難しい。しかしこの施設では、取り組みを始めて9か月目から離職件数が明確に減り始めた。</p>
+
+    <h2>今日から始められる最初の一手</h2>
+
+    <p>ここまで3つの取り組みを紹介してきた。「規模が大きい施設でないとできない」「うちは人手不足でそこまで手が回らない」——そう思った方もいるかもしれない。しかし、どれも特別な予算も、外部コンサルも、新しいシステムも必要としない。</p>
+
+    <p>今日から始められることを、優先順位順に整理する。</p>
+
+    <ol>
+      <li>今週の朝礼で「一言アンケート」を配布する（紙1枚・2問・匿名）</li>
+      <li>最近「変化」が見える職員に、今週中に1対1の時間を15分だけ設ける</li>
+      <li>来月から月1回、施設長が現場に30分入るスケジュールを今日カレンダーに入れる</li>
+    </ol>
+
+    <p>この3つだけでいい。完璧な制度を設計しようとしないことが重要だ。最初から大きな変革を目指すと、継続できない。「小さく、速く、続ける」——これが定着対策の本質だ。</p>
+
+    <p>介護職員の定着率は、施設の「儲かり方」に直結する。1名の離職コストを採用費・引き継ぎコスト・業務品質低下まで含めると、軽く100万円を超える計算になる。離職率を13ポイント下げた施設が得たのは、職員の安心だけではない。経営上の損失が年間数百万円単位で消えた、という事実でもある。</p>
+
+    <div class="callout-sage">
+      <span class="callout-label">定着率改善の費用対効果</span>
+      <p>職員40名・年間離職率22%の施設では年間8〜9名が離職する計算になる。採用コスト1名60万円として年間約540万円のコスト。これを9%まで下げると離職3〜4名・コスト約180〜240万円。年間300万円以上の削減効果になる計算だ。「定着対策は費用がかかる」ではなく「定着対策をしないことが最大のコストだ」という視点が重要になる。</p>
+    </div>
+
+    <hr class="article-divider">
+
+    <h2>まとめ——「人が辞めない施設」は、特別なことをしていない</h2>
+
+    <p>今回紹介した3つの取り組みは、振り返ってみると極めてシンプルだ。</p>
+
+    <ol>
+      <li>不満を聞いて、すぐ動く</li>
+      <li>成長を見える形で届ける</li>
+      <li>管理職が現場に降りていく</li>
+    </ol>
+
+    <p>これらに共通するのは、<strong>「職員が見えている」という感覚を作ること</strong>だ。人は「自分が見えていない場所」から去っていく。処遇改善は必要だが、それだけでは足りない。</p>
+
+    <p>離職率22%から9%へ。数字の変化の裏には、毎週の朝礼で声を読み上げた施設長と、変化に気づいて声をかけ続けた主任の、地道な積み重ねがある。派手さはない。しかし、再現性がある。</p>
+
+    <p>今この記事を読んでいるHR担当者・施設長の方に伝えたいのは、「仕組みより先に関係がある」ということだ。どんなに優れた制度も、職員との信頼関係がなければ機能しない。逆に言えば、信頼関係さえ築けば、制度が不完全でも人は残る。</p>
+
+    <!-- Author Callout -->
+    <div class="callout">
+      <span class="callout-label">著者プロフィール</span>
+      <p>大手運送会社の現役管理職として10年以上、チームの採用・定着・育成に携わる。ShiftAIスクールにてAI×ライティングを習得後、物流・DX・HR系コンテンツを専門とするライターとして活動。現場の一次情報にこだわったBtoBコンテンツ制作を得意とする。本記事はクライアントシミュレーションとして作成。</p>
+    </div>
+
+    <!-- Senkode CTA -->
+    <div class="cta-block">
+      <p>介護・医療・福祉業界のHR担当者・施設長の方へ。Senkodeでは、現場の一次情報に基づいた採用コンテンツ・定着支援コンテンツの制作から、デジタル化・採用プロセス改善の戦略立案まで、一気通貫でサポートしています。「採用より前に、定着を」——まずはご相談ください。</p>
+      <a href="/contact.html">CONTACT — まずは相談する</a>
+    </div>
+
+    <!-- Next Article -->
+    <div class="next-article">
+      <span class="next-label">NEXT ARTICLE</span>
+      <p class="next-title">介護施設のシフト崩壊を防ぐ——管理職が知っておくべきAIシフト管理の現実（近日公開）</p>
+    </div>
+
+  </article>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <span class="footer-copy">Senkode © 2026</span>
+    <span class="footer-tag">閃光 — Flash of Light</span>
+  </footer>
+
+  <script>
+    const cursorDot  = document.querySelector('.cursor-dot');
+    const cursorRing = document.querySelector('.cursor-ring');
+    let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX; mouseY = e.clientY;
+      cursorDot.style.left = mouseX + 'px';
+      cursorDot.style.top  = mouseY + 'px';
+    });
+
+    (function animateCursor() {
+      const dx = mouseX - ringX, dy = mouseY - ringY;
+      ringX += dx * 0.15; ringY += dy * 0.15;
+      cursorRing.style.left = ringX + 'px';
+      cursorRing.style.top  = ringY + 'px';
+      requestAnimationFrame(animateCursor);
+    })();
+
+    document.querySelectorAll('a, .nav-cta').forEach(el => {
+      el.addEventListener('mouseenter', () => cursorRing.classList.add('expanded'));
+      el.addEventListener('mouseleave', () => cursorRing.classList.remove('expanded'));
+    });
+  </script>
+</body>
+</html>
