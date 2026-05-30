@@ -347,6 +347,90 @@
     }
     .thankyou-text { font-size: 14px; color: var(--muted); line-height: 1.8; }
 
+    /* ===== TABS ===== */
+    .form-tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 12px 20px;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--muted);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+      margin-bottom: -1px;
+    }
+    .tab-btn:hover { color: var(--white); }
+    .tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+
+    /* ===== LINE CARD ===== */
+    .line-card {
+      border: 1px solid var(--border);
+      padding: 20px;
+      background: rgba(201,168,76,0.02);
+      margin-top: 32px;
+    }
+    .line-card-note {
+      font-size: 12px;
+      color: var(--muted);
+      margin: 8px 0 16px;
+      line-height: 1.6;
+    }
+    .btn-line {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 24px;
+      background: #06C755;
+      color: #fff;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      text-decoration: none;
+      transition: opacity 0.2s;
+      width: 100%;
+      justify-content: center;
+    }
+    .btn-line:hover { opacity: 0.85; }
+
+    /* ===== HEARING FORM ===== */
+    .form-section-header {
+      margin: 32px 0 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .form-section-label {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 16px;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+    }
+    .form-section-desc {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 4px;
+      letter-spacing: 0.1em;
+    }
+    .form-hint {
+      font-size: 11px;
+      color: rgba(244,241,236,0.25);
+      margin-top: 4px;
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+
     /* ===== FOOTER ===== */
     .footer {
       display: flex;
@@ -460,10 +544,30 @@
         <p class="contact-promise-text">"一瞬で市場を照らす、閃光のコンサルティング"</p>
         <p class="contact-promise-sub">— Senkode, Flash of Light</p>
       </div>
+
+      <!-- LINE (★ LINE公式アカウント作成後、hrefのURLを差し替えてください) -->
+      <div class="line-card">
+        <p class="contact-info-label">LINE</p>
+        <p class="line-card-note">LINEでお気軽にご相談いただけます。フォームより手軽にご連絡ください。</p>
+        <a href="#" class="btn-line" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16" aria-hidden="true">
+            <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63H19.365c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.629 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
+          </svg>
+          LINEで気軽に相談する
+        </a>
+      </div>
     </div>
 
     <!-- Right: Form -->
     <div class="reveal">
+      <!-- Tab navigation -->
+      <div class="form-tabs">
+        <button class="tab-btn active" data-tab="inquiry">お問い合わせ</button>
+        <button class="tab-btn" data-tab="hearing">制作ヒアリング</button>
+      </div>
+
+      <!-- Tab 1: Simple inquiry -->
+      <div class="tab-pane active" id="tab-inquiry">
       <form class="contact-form" id="contactForm"
             action="https://formspree.io/f/meevvdrl"
             method="POST">
@@ -527,6 +631,162 @@
           <span style="display:block">24時間以内にご返信いたします。</span>
         </p>
       </div>
+      </div><!-- /tab-inquiry -->
+
+      <!-- Tab 2: Hearing Sheet -->
+      <div class="tab-pane" id="tab-hearing">
+        <form class="contact-form" id="hearingForm"
+              action="https://formspree.io/f/meevvdrl"
+              method="POST">
+          <input type="hidden" name="_subject" value="【制作ヒアリング】Webサイト制作 ご依頼">
+
+          <div class="form-group">
+            <label class="form-label" for="h-company">会社名<span>*</span></label>
+            <input class="form-input" type="text" id="h-company" name="company" placeholder="株式会社〇〇" required>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="h-person">ご担当者名<span>*</span></label>
+              <input class="form-input" type="text" id="h-person" name="person" placeholder="山田 太郎" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="h-email">メールアドレス<span>*</span></label>
+              <input class="form-input" type="email" id="h-email" name="email" placeholder="taro@example.com" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="h-industry">業種<span>*</span></label>
+            <select class="form-select" id="h-industry" name="industry" required>
+              <option value="" disabled selected>選択してください</option>
+              <option>汎用</option>
+              <option>飲食・ホスピタリティ</option>
+              <option>クリニック・医療・美容</option>
+              <option>コーポレート・IT・SaaS</option>
+              <option>サロン・美容・ウェルネス</option>
+              <option>EC・物販・D2C</option>
+              <option>不動産・建設・リフォーム</option>
+              <option>士業・法律・税務</option>
+              <option>採用・HR</option>
+            </select>
+          </div>
+
+          <!-- SEC 1 -->
+          <div class="form-section-header">
+            <p class="form-section-label">SEC 1 — 事業理解</p>
+            <p class="form-section-desc">貴社の現状・課題・期待を整理します</p>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="h-q1">Q1. 事業概要と、このサイトに期待する「3つの役割」<span>*</span></label>
+            <p class="form-hint">例）①新規顧客獲得 ②採用応募の増加 ③ブランディング向上。優先順位をつけて3つに絞ってください。</p>
+            <textarea class="form-textarea" id="h-q1" name="q1_roles" required></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="h-q2">Q2. 現状の数字と、達成したい目標数字</label>
+            <p class="form-hint">例）現在の問い合わせ数: 月3件 → 目標: 月15件</p>
+            <textarea class="form-textarea" id="h-q2" name="q2_numbers"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="h-q3">Q3. 競合3社のURLと、貴社が「勝っている点・負けている点」</label>
+            <p class="form-hint">競合A・B・CそれぞれのURLと、貴社から見た自己評価をお書きください。</p>
+            <textarea class="form-textarea" id="h-q3" name="q3_competitors"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="h-q4">Q4. このサイトを作るに至った「きっかけの出来事」<span>*</span></label>
+            <p class="form-hint">感情が動いた具体的なエピソードをそのままお書きください。</p>
+            <textarea class="form-textarea" id="h-q4" name="q4_trigger" required></textarea>
+          </div>
+
+          <!-- SEC 2 -->
+          <div class="form-section-header">
+            <p class="form-section-label">SEC 2 — ターゲット &amp; 訴求設計</p>
+            <p class="form-section-desc">誰に何を伝えるサイトかを明確化します</p>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="h-q5">Q5. メインターゲット顧客「1人」の具体的な人物像<span>*</span></label>
+            <p class="form-hint">年齢・性別・職業・年収・悩み・情報収集の手段など。1人に絞るのがポイントです。</p>
+            <textarea class="form-textarea" id="h-q5" name="q5_persona" required></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="h-q6">Q6. 既存顧客から最もよく言われる「3つの褒め言葉」</label>
+            <p class="form-hint">お客様の口から実際に出た言葉をそのままお書きください。</p>
+            <textarea class="form-textarea" id="h-q6" name="q6_praises"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="h-q7">Q7. 失注した・離脱した顧客の理由（分かる範囲で）</label>
+            <p class="form-hint">「価格で他社に流れた」「対応が遅いと言われた」など。</p>
+            <textarea class="form-textarea" id="h-q7" name="q7_churn"></textarea>
+          </div>
+
+          <!-- SEC 3 -->
+          <div class="form-section-header">
+            <p class="form-section-label">SEC 3 — デザイン方向性</p>
+            <p class="form-section-desc">デザインの方針と素材を確認します</p>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="h-q8">Q8. 参考にしたいサイト3つと、その理由</label>
+            <p class="form-hint">好きな雰囲気のサイト3つのURLと、何が良いと感じたかを1行コメントでお書きください。</p>
+            <textarea class="form-textarea" id="h-q8" name="q8_references"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="h-q9">Q9. 絶対に避けたいデザイン方向性（NGリスト）</label>
+            <p class="form-hint">「ゴチャゴチャしている」「カラフルすぎる」など、苦手なテイストを率直に。</p>
+            <textarea class="form-textarea" id="h-q9" name="q9_design_ng"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="h-q10">Q10. ブランドカラー・ロゴ・既存素材の有無</label>
+            <p class="form-hint">ロゴデータ・ブランドガイドライン・既存写真素材・撮影が必要かどうかをお書きください。</p>
+            <textarea class="form-textarea" id="h-q10" name="q10_assets"></textarea>
+          </div>
+
+          <!-- SEC 4 -->
+          <div class="form-section-header">
+            <p class="form-section-label">SEC 4 — 機能 &amp; 運用</p>
+            <p class="form-section-desc">サイトに必要な機能と運用体制を整理します</p>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="h-q11">Q11. 必要な機能のチェックリスト</label>
+            <p class="form-hint">例）お問い合わせフォーム、予約システム、ブログ、施工事例ギャラリー、スタッフ紹介など</p>
+            <textarea class="form-textarea" id="h-q11" name="q11_features"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="h-q12">Q12. 公開後の更新頻度と、更新ご担当者</label>
+            <p class="form-hint">月の更新回数の想定 / ご担当者のITリテラシーレベル（WordPressに触ったことがあるか など）。</p>
+            <textarea class="form-textarea" id="h-q12" name="q12_operations"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="h-q13">Q13. SEO対策の優先度と、狙いたい検索キーワード3つ</label>
+            <p class="form-hint">例）「池袋 整体」「初心者 プログラミングスクール」など。SEO優先度（高/中/低）も教えてください。</p>
+            <textarea class="form-textarea" id="h-q13" name="q13_seo"></textarea>
+          </div>
+
+          <!-- SEC 5 -->
+          <div class="form-section-header">
+            <p class="form-section-label">SEC 5 — プロジェクト条件</p>
+            <p class="form-section-desc">予算・納期・運用方針を確認します</p>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="h-q14">Q14. 予算感・希望納期・決裁プロセス<span>*</span></label>
+            <p class="form-hint">想定予算 / 希望納期 / 最終決裁者は誰か（社長 / 役員 / ご担当者）。</p>
+            <textarea class="form-textarea" id="h-q14" name="q14_budget" required></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="h-q15">Q15. 公開後の運用・保守のご希望</label>
+            <p class="form-hint">月額保守・月次レポート・SEO記事執筆・自動化システム構築など、ご希望をお書きください。</p>
+            <textarea class="form-textarea" id="h-q15" name="q15_maintenance"></textarea>
+          </div>
+
+          <button type="submit" class="btn-submit">ヒアリングシートを送信する →</button>
+        </form>
+        <div class="thankyou" id="thankyou-hearing">
+          <div class="thankyou-icon">⚡</div>
+          <p class="thankyou-title">RECEIVED</p>
+          <p class="thankyou-text">
+            <span style="display:block">ヒアリングシートを受け取りました。</span>
+            <span style="display:block">内容を確認のうえ、48時間以内にご連絡します。</span>
+          </p>
+        </div>
+      </div><!-- /tab-hearing -->
+
     </div>
   </div>
 
@@ -598,16 +858,25 @@
     }, { threshold: 0.1 });
     reveals.forEach(el => revealObserver.observe(el));
 
-    // Formspree AJAX submit
+    // Tab switching
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = btn.dataset.tab;
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('tab-' + target).classList.add('active');
+      });
+    });
+
+    // Simple inquiry form AJAX
     const form = document.getElementById('contactForm');
     const thankyou = document.getElementById('thankyou');
-
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const data = new FormData(form);
       const res = await fetch(form.action, {
         method: 'POST',
-        body: data,
+        body: new FormData(form),
         headers: { 'Accept': 'application/json' }
       });
       if (res.ok) {
@@ -615,6 +884,28 @@
         thankyou.classList.add('visible');
       } else {
         alert('送信に失敗しました。時間をおいて再度お試しください。');
+      }
+    });
+
+    // Hearing form AJAX
+    const hearingForm = document.getElementById('hearingForm');
+    const thankyouHearing = document.getElementById('thankyou-hearing');
+    hearingForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = hearingForm.querySelector('button[type="submit"]');
+      btn.textContent = '送信中...';
+      btn.disabled = true;
+      const res = await fetch(hearingForm.action, {
+        method: 'POST',
+        body: new FormData(hearingForm),
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        hearingForm.style.display = 'none';
+        thankyouHearing.classList.add('visible');
+      } else {
+        btn.textContent = 'エラー。再度お試しください。';
+        btn.disabled = false;
       }
     });
   </script>

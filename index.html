@@ -610,6 +610,28 @@
       margin-bottom: 32px;
       line-height: 1.9;
     }
+    .cta-btns {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-line-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 40px;
+      background: #06C755;
+      color: #fff;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    .btn-line-cta:hover { opacity: 0.85; }
 
     /* ===== FOOTER ===== */
     .footer {
@@ -1616,7 +1638,16 @@
       <p class="section-label">GET STARTED</p>
       <h2 class="cta-title">AI時代の第一歩を、今日踏み出す。</h2>
       <p class="cta-sub">まずは無料相談から。24時間以内にご返信します。</p>
-      <a href="contact.html" class="btn-primary">無料相談を申し込む →</a>
+      <div class="cta-btns">
+        <!-- ★ LINE公式アカウント作成後、hrefのURLを差し替えてください -->
+        <a href="#" class="btn-line-cta" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16" aria-hidden="true">
+            <path d="M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
+          </svg>
+          LINEで気軽に話す
+        </a>
+        <a href="contact.html" class="btn-primary">フォームで相談する →</a>
+      </div>
     </div>
   </section>
 
