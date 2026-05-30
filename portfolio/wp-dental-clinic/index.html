@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>さくら歯科クリニック | 地域密着・痛みに配慮した歯科医院</title>
+  <meta name="description" content="さくら歯科クリニックは、渋谷区恵比寿の歯科医院です。虫歯治療・歯周病・ホワイトニング・小児歯科まで幅広く対応。痛みに配慮した丁寧な治療をご提供します。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Serif+JP:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary:    #2B7A6B;   /* ティール（清潔感）*/
+      --primary-lt: #3D9E8C;
+      --primary-bg: #EDF7F5;
+      --accent:     #E8A87C;   /* ウォームオレンジ（親しみやすさ）*/
+      --white:      #FFFFFF;
+      --off-white:  #F8FFFE;
+      --light:      #F0F9F7;
+      --text:       #2C3E35;
+      --muted:      #6B8075;
+      --border:     #D4EBE6;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      color: var(--text);
+      background: var(--white);
+      line-height: 1.8;
+      font-weight: 300;
+    }
+    img { max-width: 100%; height: auto; display: block; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ===== NAV ===== */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(255,255,255,0.97);
+      border-bottom: 1px solid var(--border);
+      padding: 0 40px;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 68px;
+      box-shadow: 0 2px 12px rgba(43,122,107,0.06);
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .nav-logo-icon {
+      width: 36px; height: 36px;
+      background: var(--primary);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .nav-logo-icon svg { width: 20px; height: 20px; }
+    .nav-logo-text { font-family: 'Noto Serif JP', serif; font-size: 15px; font-weight: 600; letter-spacing: 0.05em; color: var(--primary); }
+    .nav-logo-sub { font-size: 9px; color: var(--muted); letter-spacing: 0.1em; }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { font-size: 13px; letter-spacing: 0.05em; color: var(--text); transition: color 0.2s; }
+    .nav-links a:hover { color: var(--primary); }
+    .nav-cta {
+      background: var(--primary); color: #fff;
+      padding: 10px 20px; border-radius: 4px;
+      font-size: 13px; letter-spacing: 0.05em;
+      transition: background 0.2s;
+    }
+    .nav-cta:hover { background: var(--primary-lt); }
+
+    /* ===== HERO ===== */
+    .hero {
+      margin-top: 68px;
+      min-height: 560px;
+      background: linear-gradient(160deg, var(--light) 0%, var(--primary-bg) 100%);
+      display: grid; grid-template-columns: 1fr 1fr;
+      align-items: center; gap: 0;
+      overflow: hidden;
+    }
+    .hero-content { padding: 72px 60px 72px 72px; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(43,122,107,0.1); color: var(--primary);
+      border: 1px solid rgba(43,122,107,0.2);
+      padding: 4px 12px; border-radius: 20px;
+      font-size: 11px; letter-spacing: 0.1em; font-weight: 500;
+      margin-bottom: 20px;
+    }
+    .hero-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--primary); }
+    .hero-title {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 38px; font-weight: 600;
+      line-height: 1.5; letter-spacing: 0.05em;
+      color: var(--text); margin-bottom: 16px;
+    }
+    .hero-title span { color: var(--primary); }
+    .hero-subtitle { font-size: 15px; color: var(--muted); line-height: 1.9; margin-bottom: 32px; }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--primary); color: #fff;
+      padding: 14px 28px; border-radius: 4px;
+      font-size: 14px; font-weight: 500; letter-spacing: 0.05em;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn-primary:hover { background: var(--primary-lt); transform: translateY(-1px); }
+    .btn-outline {
+      background: transparent; color: var(--primary);
+      border: 1.5px solid var(--primary);
+      padding: 14px 28px; border-radius: 4px;
+      font-size: 14px; font-weight: 500; letter-spacing: 0.05em;
+      transition: all 0.2s;
+    }
+    .btn-outline:hover { background: var(--primary); color: #fff; }
+    .hero-image {
+      background: linear-gradient(135deg, #3D9E8C 0%, #2B7A6B 100%);
+      height: 100%; min-height: 560px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 20px; position: relative; overflow: hidden;
+    }
+    .hero-image::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-cross {
+      width: 120px; height: 120px;
+      position: relative;
+    }
+    .hero-cross::before, .hero-cross::after {
+      content: '';
+      position: absolute;
+      background: rgba(255,255,255,0.2);
+      border-radius: 4px;
+    }
+    .hero-cross::before { width: 30px; height: 100%; left: 50%; transform: translateX(-50%); top: 0; }
+    .hero-cross::after { height: 30px; width: 100%; top: 50%; transform: translateY(-50%); left: 0; }
+    .hero-stats {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+      padding: 24px; z-index: 1;
+    }
+    .hero-stat {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 8px;
+      padding: 16px; text-align: center;
+    }
+    .hero-stat-num { font-size: 28px; font-weight: 700; color: #fff; line-height: 1; margin-bottom: 4px; }
+    .hero-stat-label { font-size: 10px; color: rgba(255,255,255,0.7); letter-spacing: 0.1em; }
+
+    /* ===== MARQUEE ===== */
+    .marquee-strip {
+      background: var(--primary); color: #fff;
+      padding: 12px 0; overflow: hidden;
+    }
+    .marquee-inner {
+      display: flex; gap: 40px;
+      animation: marquee 25s linear infinite;
+      white-space: nowrap;
+    }
+    .marquee-item { font-size: 12px; letter-spacing: 0.15em; opacity: 0.9; flex-shrink: 0; }
+    .marquee-dot { color: rgba(255,255,255,0.4); }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* ===== SECTION COMMON ===== */
+    .section { padding: 88px 0; }
+    .section-bg { background: var(--light); }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 40px; }
+    .section-header { text-align: center; margin-bottom: 52px; }
+    .section-en { font-size: 11px; letter-spacing: 0.25em; color: var(--primary); text-transform: uppercase; margin-bottom: 10px; }
+    .section-title {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 30px; font-weight: 600;
+      line-height: 1.5; color: var(--text);
+    }
+    .section-lead { font-size: 14px; color: var(--muted); margin-top: 12px; line-height: 1.9; }
+    .divider {
+      width: 40px; height: 2px;
+      background: var(--primary);
+      margin: 16px auto 0;
+    }
+
+    /* ===== FEATURES ===== */
+    .features-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+    }
+    .feature-card {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 10px; padding: 32px 24px;
+      text-align: center;
+      transition: box-shadow 0.3s, transform 0.3s;
+    }
+    .feature-card:hover { box-shadow: 0 8px 30px rgba(43,122,107,0.1); transform: translateY(-3px); }
+    .feature-icon {
+      width: 56px; height: 56px;
+      background: var(--primary-bg);
+      border-radius: 50%;
+      margin: 0 auto 16px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .feature-icon svg { width: 28px; height: 28px; stroke: var(--primary); stroke-width: 1.5; fill: none; }
+    .feature-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+    .feature-desc { font-size: 13px; color: var(--muted); line-height: 1.9; }
+
+    /* ===== SERVICES ===== */
+    .services-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+    }
+    .service-card {
+      background: var(--white); border-radius: 10px; overflow: hidden;
+      border: 1px solid var(--border);
+      transition: box-shadow 0.3s;
+    }
+    .service-card:hover { box-shadow: 0 8px 30px rgba(43,122,107,0.12); }
+    .service-img {
+      height: 140px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 40px;
+    }
+    .service-body { padding: 20px; }
+    .service-tag {
+      font-size: 10px; letter-spacing: 0.1em; color: var(--primary);
+      background: var(--primary-bg); padding: 3px 8px;
+      border-radius: 3px; display: inline-block; margin-bottom: 8px;
+    }
+    .service-name { font-size: 16px; font-weight: 700; margin-bottom: 6px; color: var(--text); }
+    .service-desc { font-size: 12px; color: var(--muted); line-height: 1.8; margin-bottom: 12px; }
+    .service-price {
+      font-size: 13px; font-weight: 500; color: var(--primary);
+      border-top: 1px solid var(--border); padding-top: 10px;
+    }
+
+    /* ===== FLOW ===== */
+    .flow-steps {
+      display: flex; gap: 0;
+      counter-reset: step;
+    }
+    .flow-step {
+      flex: 1; position: relative;
+      background: var(--white); border: 1px solid var(--border);
+      padding: 28px 20px 24px;
+      text-align: center;
+    }
+    .flow-step:not(:last-child)::after {
+      content: '›';
+      position: absolute; right: -14px; top: 50%;
+      transform: translateY(-50%);
+      font-size: 24px; color: var(--primary);
+      z-index: 1; background: var(--light); padding: 0 4px;
+    }
+    .flow-num {
+      width: 36px; height: 36px;
+      background: var(--primary); color: #fff;
+      border-radius: 50%;
+      font-size: 16px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 12px;
+    }
+    .flow-title { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+    .flow-desc { font-size: 12px; color: var(--muted); line-height: 1.7; }
+
+    /* ===== STAFF ===== */
+    .staff-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+    .staff-card {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 10px; overflow: hidden; text-align: center;
+    }
+    .staff-avatar {
+      height: 180px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 64px;
+    }
+    .staff-body { padding: 20px; }
+    .staff-role { font-size: 10px; letter-spacing: 0.15em; color: var(--primary); margin-bottom: 4px; text-transform: uppercase; }
+    .staff-name { font-family: 'Noto Serif JP', serif; font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+    .staff-desc { font-size: 12px; color: var(--muted); line-height: 1.8; }
+
+    /* ===== FAQ ===== */
+    .faq-list { max-width: 760px; margin: 0 auto; }
+    .faq-item { border-bottom: 1px solid var(--border); }
+    .faq-q {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 20px 0; cursor: pointer;
+    }
+    .faq-q-icon {
+      width: 24px; height: 24px; border-radius: 50%;
+      background: var(--primary); color: #fff;
+      font-size: 12px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .faq-q-text { font-size: 15px; font-weight: 500; flex: 1; }
+    .faq-a {
+      display: flex; gap: 14px;
+      padding: 0 0 20px;
+    }
+    .faq-a-icon {
+      width: 24px; height: 24px; border-radius: 50%;
+      background: var(--accent); color: #fff;
+      font-size: 12px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .faq-a-text { font-size: 14px; color: var(--muted); line-height: 1.9; }
+
+    /* ===== BOOKING ===== */
+    .booking-section {
+      background: linear-gradient(135deg, var(--primary) 0%, #236357 100%);
+      padding: 80px 0;
+    }
+    .booking-section .section-title { color: #fff; }
+    .booking-section .section-en { color: rgba(255,255,255,0.6); }
+    .booking-section .divider { background: rgba(255,255,255,0.4); }
+    .booking-section .section-lead { color: rgba(255,255,255,0.7); }
+    .booking-form {
+      max-width: 640px; margin: 0 auto;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 12px;
+      padding: 40px;
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-label { font-size: 12px; color: rgba(255,255,255,0.8); letter-spacing: 0.05em; }
+    .form-input, .form-select, .form-textarea {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 4px;
+      padding: 12px 14px;
+      color: #fff;
+      font-size: 14px; font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-input::placeholder, .form-textarea::placeholder { color: rgba(255,255,255,0.4); }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: rgba(255,255,255,0.5); }
+    .form-select option { background: var(--primary); color: #fff; }
+    .form-textarea { resize: vertical; min-height: 90px; }
+    .form-note { font-size: 11px; color: rgba(255,255,255,0.5); margin-bottom: 16px; line-height: 1.7; }
+    .form-submit {
+      width: 100%;
+      background: #fff; color: var(--primary);
+      border: none; border-radius: 4px;
+      padding: 14px;
+      font-size: 14px; font-weight: 700; letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .form-submit:hover { background: var(--accent); color: #fff; transform: translateY(-1px); }
+
+    /* ===== INFO ===== */
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+    .info-table { width: 100%; border-collapse: collapse; }
+    .info-table th, .info-table td { padding: 14px 0; border-bottom: 1px solid var(--border); font-size: 14px; vertical-align: top; }
+    .info-table th { width: 100px; color: var(--primary); font-weight: 500; white-space: nowrap; }
+    .info-table td { color: var(--text); line-height: 1.8; }
+    .map-placeholder {
+      background: var(--primary-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      height: 260px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 8px;
+    }
+    .map-placeholder svg { width: 40px; height: 40px; stroke: var(--primary); stroke-width: 1.5; fill: none; }
+    .map-placeholder p { font-size: 13px; color: var(--muted); }
+
+    /* ===== NOTICE BAR ===== */
+    .notice-bar {
+      background: var(--accent);
+      padding: 12px 40px;
+      display: flex; align-items: center; justify-content: center; gap: 20px;
+      flex-wrap: wrap;
+    }
+    .notice-item { font-size: 13px; font-weight: 500; color: #fff; display: flex; align-items: center; gap: 6px; }
+    .notice-sep { color: rgba(255,255,255,0.5); }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      background: #1A2E28; color: rgba(255,255,255,0.7);
+      padding: 48px 0 24px;
+    }
+    .footer-inner { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+    .footer-brand-name { font-family: 'Noto Serif JP', serif; font-size: 18px; color: #fff; font-weight: 600; margin-bottom: 8px; }
+    .footer-brand-desc { font-size: 13px; line-height: 1.9; }
+    .footer-col-title { font-size: 12px; letter-spacing: 0.15em; color: rgba(255,255,255,0.9); text-transform: uppercase; margin-bottom: 14px; font-weight: 500; }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-links li a { font-size: 13px; transition: color 0.2s; }
+    .footer-links li a:hover { color: #fff; }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 24px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-copy { font-size: 12px; }
+    .wp-badge {
+      font-size: 10px; letter-spacing: 0.1em;
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+      padding: 4px 10px; border-radius: 3px; color: rgba(255,255,255,0.5);
+    }
+
+    /* ===== SENKODE BADGE ===== */
+    .senkode-badge {
+      position: fixed; bottom: 20px; right: 20px; z-index: 200;
+      background: #080808; border: 1px solid rgba(201,168,76,0.4);
+      color: rgba(201,168,76,0.9); font-size: 10px; letter-spacing: 0.1em;
+      padding: 6px 12px; border-radius: 4px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    }
+
+    /* ===== REVEAL ===== */
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-image { min-height: 240px; }
+      .features-grid, .services-grid, .staff-grid { grid-template-columns: 1fr 1fr; }
+      .flow-steps { flex-direction: column; }
+      .flow-step:not(:last-child)::after { display: none; }
+      .info-grid, .footer-inner { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .hero-content { padding: 40px 20px; }
+      .hero-title { font-size: 26px; }
+      .container { padding: 0 20px; }
+      .features-grid, .services-grid, .staff-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-logo">
+      <div class="nav-logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round">
+          <path d="M12 2a4 4 0 0 1 4 4c0 4-4 6-4 9-0 3 4 5 4 9a4 4 0 0 1-8 0c0-4 4-6 4-9 0-3-4-5-4-9a4 4 0 0 1 4-4z"/>
+        </svg>
+      </div>
+      <div>
+        <div class="nav-logo-text">さくら歯科クリニック</div>
+        <div class="nav-logo-sub">SAKURA DENTAL CLINIC</div>
+      </div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#features">当院の特徴</a></li>
+      <li><a href="#services">診療案内</a></li>
+      <li><a href="#flow">初診の流れ</a></li>
+      <li><a href="#staff">スタッフ紹介</a></li>
+      <li><a href="#faq">よくある質問</a></li>
+      <li><a href="#info">アクセス</a></li>
+    </ul>
+    <a href="#booking" class="nav-cta">Web予約はこちら</a>
+  </nav>
+
+  <!-- NOTICE BAR -->
+  <div class="notice-bar" style="margin-top:68px;">
+    <div class="notice-item">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      本日の診療：9:00〜18:00
+    </div>
+    <span class="notice-sep">|</span>
+    <div class="notice-item">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.68 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.59 1.17h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.88a16 16 0 0 0 5.53 5.53l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.27 15.4z"/></svg>
+      03-XXXX-XXXX
+    </div>
+    <span class="notice-sep">|</span>
+    <div class="notice-item">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      恵比寿駅 徒歩3分
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">恵比寿・渋谷区の歯科医院</div>
+      <h1 class="hero-title">
+        <span>歯を守る</span>ことが、<br>
+        あなたの人生を守ること。
+      </h1>
+      <p class="hero-subtitle">
+        痛みに配慮した治療と、丁寧なカウンセリングで<br>
+        お子さまからご年配まで、地域の皆さまの「健口」を支えます。
+      </p>
+      <div class="hero-actions">
+        <a href="#booking" class="btn-primary">Web予約（24時間受付）</a>
+        <a href="#services" class="btn-outline">診療案内を見る</a>
+      </div>
+    </div>
+    <div class="hero-image">
+      <div class="hero-cross"></div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-num">12<span style="font-size:16px;">年</span></div>
+          <div class="hero-stat-label">地域での実績</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">4.8<span style="font-size:16px;">★</span></div>
+          <div class="hero-stat-label">Google評価</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">5,200<span style="font-size:14px;">+</span></div>
+          <div class="hero-stat-label">累計来院数</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">0<span style="font-size:14px;">円</span></div>
+          <div class="hero-stat-label">初診カウンセリング</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-strip">
+    <div class="marquee-inner">
+      <span class="marquee-item">虫歯治療</span><span class="marquee-dot">·</span>
+      <span class="marquee-item">歯周病治療</span><span class="marquee-dot">·</span>
+      <span class="marquee-item">ホワイトニング</span><span class="marquee-dot">·</span>
+      <span class="marquee-item">小児歯科</span><span class="marquee-dot">·</span>
+      <span class="marquee-item">マウスピース矯正</span><span class="marquee-dot">·</span>
+      <span class="marquee-item">入れ歯・義歯</span><span class="marquee-dot">·</span>
+      <span class="marquee-item">予防歯科</span><span class="marquee-dot">·</span>
+      <span class="marquee-item">インプラント相談</span><span class="marquee-dot">·</span>
+      <span class="marquee-item">審美歯科</span><span class="marquee-dot">·</span>
+      <span class="marquee-item">口腔外科</span><span class="marquee-dot">·</span>
+      <!-- Duplicate for seamless loop -->
+      <span class="marquee-item">虫歯治療</span><span class="marquee-dot">·</span>
+      <span class="marquee-item">歯周病治療</span><span class="marquee-dot">·</span>
+      <span class="marquee-item">ホワイトニング</span><span class="marquee-dot">·</span>
+      <span class="marquee-item">小児歯科</span><span class="marquee-dot">·</span>
+      <span class="marquee-item">マウスピース矯正</span><span class="marquee-dot">·</span>
+      <span class="marquee-item">入れ歯・義歯</span><span class="marquee-dot">·</span>
+      <span class="marquee-item">予防歯科</span><span class="marquee-dot">·</span>
+      <span class="marquee-item">インプラント相談</span><span class="marquee-dot">·</span>
+      <span class="marquee-item">審美歯科</span><span class="marquee-dot">·</span>
+      <span class="marquee-item">口腔外科</span><span class="marquee-dot">·</span>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <section class="section" id="features">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="section-en">Our Features</p>
+        <h2 class="section-title">さくら歯科が選ばれる3つの理由</h2>
+        <div class="divider"></div>
+        <p class="section-lead">患者さまの不安を取り除き、最良の治療をご提供するために<br>スタッフ一同、日々研鑽を続けています。</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card reveal" style="transition-delay:0.1s;">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </div>
+          <h3 class="feature-title">痛みに配慮した治療</h3>
+          <p class="feature-desc">表面麻酔の使用・細い注射針・ゆっくりとした薬液投与で、麻酔の痛みを最小限に。治療への恐怖を感じる方もご安心ください。</p>
+        </div>
+        <div class="feature-card reveal" style="transition-delay:0.2s;">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+          </div>
+          <h3 class="feature-title">待ち時間ゼロを目指す予約制</h3>
+          <p class="feature-desc">完全予約制を採用し、ご予約時間通りに診察を開始。お仕事の休憩時間や送り迎えの合間でも受診しやすい体制を整えています。</p>
+        </div>
+        <div class="feature-card reveal" style="transition-delay:0.3s;">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <h3 class="feature-title">子どもから大人まで対応</h3>
+          <p class="feature-desc">小児歯科から矯正・義歯まで幅広く対応。家族全員がかかりつけ医として通えるワンストップのクリニックです。キッズスペース完備。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="section section-bg" id="services">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="section-en">Services</p>
+        <h2 class="section-title">診療案内</h2>
+        <div class="divider"></div>
+        <p class="section-lead">虫歯・歯周病の治療から予防歯科・審美歯科まで、幅広く対応します。</p>
+      </div>
+      <div class="services-grid">
+        <div class="service-card reveal" style="transition-delay:0.05s;">
+          <div class="service-img" style="background:linear-gradient(135deg,#EDF7F5,#D4EBE6);">🦷</div>
+          <div class="service-body">
+            <span class="service-tag">一般歯科</span>
+            <h3 class="service-name">虫歯治療</h3>
+            <p class="service-desc">初期虫歯から神経治療まで対応。できる限り歯を残す、保存的治療を優先します。</p>
+            <p class="service-price">初診相談：無料 / 保険適用</p>
+          </div>
+        </div>
+        <div class="service-card reveal" style="transition-delay:0.1s;">
+          <div class="service-img" style="background:linear-gradient(135deg,#FFF3ED,#FFE4D4);">🔬</div>
+          <div class="service-body">
+            <span class="service-tag">歯周病</span>
+            <h3 class="service-name">歯周病治療</h3>
+            <p class="service-desc">歯周病は全身疾患とも関わります。歯科衛生士による丁寧なクリーニングと治療計画を立案。</p>
+            <p class="service-price">保険適用 / 定期検診あり</p>
+          </div>
+        </div>
+        <div class="service-card reveal" style="transition-delay:0.15s;">
+          <div class="service-img" style="background:linear-gradient(135deg,#FFFBEA,#FFF3B0);">✨</div>
+          <div class="service-body">
+            <span class="service-tag">審美歯科</span>
+            <h3 class="service-name">ホワイトニング</h3>
+            <p class="service-desc">オフィスホワイトニング・ホームホワイトニングに対応。歯の白さで、笑顔の自信を取り戻せます。</p>
+            <p class="service-price">オフィス ¥22,000〜 / ホーム ¥18,000〜</p>
+          </div>
+        </div>
+        <div class="service-card reveal" style="transition-delay:0.2s;">
+          <div class="service-img" style="background:linear-gradient(135deg,#EDF7F5,#C8E6E1);">🧒</div>
+          <div class="service-body">
+            <span class="service-tag">小児歯科</span>
+            <h3 class="service-name">お子さまの歯科治療</h3>
+            <p class="service-desc">歯医者を「怖い場所」と思わないよう、段階を踏んで慣れてもらう診療スタイル。フッ素塗布も実施。</p>
+            <p class="service-price">保険適用 / キッズスペースあり</p>
+          </div>
+        </div>
+        <div class="service-card reveal" style="transition-delay:0.25s;">
+          <div class="service-img" style="background:linear-gradient(135deg,#EEF2FF,#DDE4FF);">😁</div>
+          <div class="service-body">
+            <span class="service-tag">矯正歯科</span>
+            <h3 class="service-name">マウスピース矯正</h3>
+            <p class="service-desc">目立たない透明マウスピースで歯並びを改善。取り外し可能なので食事・歯磨きもしやすい。</p>
+            <p class="service-price">¥350,000〜（分割払い可）</p>
+          </div>
+        </div>
+        <div class="service-card reveal" style="transition-delay:0.3s;">
+          <div class="service-img" style="background:linear-gradient(135deg,#F0FDF4,#DCFCE7);">🌱</div>
+          <div class="service-body">
+            <span class="service-tag">予防歯科</span>
+            <h3 class="service-name">定期検診・クリーニング</h3>
+            <p class="service-desc">3〜6ヶ月ごとのプロケアで虫歯・歯周病を予防。歯を長く健康に保つ最善の方法です。</p>
+            <p class="service-price">保険適用 / 約¥3,000/回</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FLOW -->
+  <section class="section" id="flow">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="section-en">First Visit Flow</p>
+        <h2 class="section-title">初診の流れ</h2>
+        <div class="divider"></div>
+        <p class="section-lead">はじめての方もご安心ください。受付からお帰りまで丁寧にご案内します。</p>
+      </div>
+      <div class="flow-steps">
+        <div class="flow-step reveal" style="transition-delay:0.05s;">
+          <div class="flow-num">1</div>
+          <div class="flow-title">Web予約</div>
+          <div class="flow-desc">24時間いつでもWebから予約。希望日時・診療内容を入力するだけ。</div>
+        </div>
+        <div class="flow-step reveal" style="transition-delay:0.1s;">
+          <div class="flow-num">2</div>
+          <div class="flow-title">受付・問診票</div>
+          <div class="flow-desc">受付で問診票をご記入。現在の症状や過去の治療歴をお聞きします。</div>
+        </div>
+        <div class="flow-step reveal" style="transition-delay:0.15s;">
+          <div class="flow-num">3</div>
+          <div class="flow-title">検査・カウンセリング</div>
+          <div class="flow-desc">口腔内検査・レントゲン撮影後、結果を分かりやすく説明します。</div>
+        </div>
+        <div class="flow-step reveal" style="transition-delay:0.2s;">
+          <div class="flow-num">4</div>
+          <div class="flow-title">治療計画の説明</div>
+          <div class="flow-desc">治療の流れ・費用・期間を事前にご説明。ご納得のうえで治療を開始します。</div>
+        </div>
+        <div class="flow-step reveal" style="transition-delay:0.25s;">
+          <div class="flow-num">5</div>
+          <div class="flow-title">治療・会計</div>
+          <div class="flow-desc">丁寧な治療後、次回予約もその場でご案内。疑問はいつでもご質問ください。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STAFF -->
+  <section class="section section-bg" id="staff">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="section-en">Our Staff</p>
+        <h2 class="section-title">スタッフ紹介</h2>
+        <div class="divider"></div>
+      </div>
+      <div class="staff-grid">
+        <div class="staff-card reveal" style="transition-delay:0.1s;">
+          <div class="staff-avatar" style="background:linear-gradient(135deg,#EDF7F5,#C8E6E1);">👨‍⚕️</div>
+          <div class="staff-body">
+            <p class="staff-role">院長 / 歯科医師</p>
+            <h3 class="staff-name">田中 誠一</h3>
+            <p class="staff-desc">東京歯科大学卒。12年間、地域の歯科医療に従事。「怖くない歯医者」をモットーに日々診療しています。日本歯科保存学会会員。</p>
+          </div>
+        </div>
+        <div class="staff-card reveal" style="transition-delay:0.2s;">
+          <div class="staff-avatar" style="background:linear-gradient(135deg,#FFF0F5,#FFD6E7);">👩‍⚕️</div>
+          <div class="staff-body">
+            <p class="staff-role">副院長 / 歯科医師</p>
+            <h3 class="staff-name">山田 早紀</h3>
+            <p class="staff-desc">小児歯科・矯正を専門。「子どもが笑顔で帰れる歯医者」を大切に。3歳のお子さまから対応できます。日本小児歯科学会認定医。</p>
+          </div>
+        </div>
+        <div class="staff-card reveal" style="transition-delay:0.3s;">
+          <div class="staff-avatar" style="background:linear-gradient(135deg,#EDF7F5,#B2DFDB);">👩</div>
+          <div class="staff-body">
+            <p class="staff-role">歯科衛生士</p>
+            <h3 class="staff-name">佐藤 あかり</h3>
+            <p class="staff-desc">歯周病のプロフェッショナルとして、丁寧なクリーニングと生活習慣指導を担当。患者さまの「歯を残す」をサポートします。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section" id="faq">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="section-en">FAQ</p>
+        <h2 class="section-title">よくあるご質問</h2>
+        <div class="divider"></div>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item reveal">
+          <div class="faq-q">
+            <div class="faq-q-icon">Q</div>
+            <p class="faq-q-text">初診でどのくらい時間がかかりますか？</p>
+          </div>
+          <div class="faq-a">
+            <div class="faq-a-icon">A</div>
+            <p class="faq-a-text">初診は問診・検査・説明を含めて1時間〜1時間半ほどいただいています。お時間に余裕をもってご来院ください。検査内容によっては次回から治療開始となる場合もあります。</p>
+          </div>
+        </div>
+        <div class="faq-item reveal" style="transition-delay:0.05s;">
+          <div class="faq-q">
+            <div class="faq-q-icon">Q</div>
+            <p class="faq-q-text">子どもはいつから通えますか？</p>
+          </div>
+          <div class="faq-a">
+            <div class="faq-a-icon">A</div>
+            <p class="faq-a-text">乳歯が生え始めた頃（1歳前後）から対応しています。最初は歯医者に慣れることを目的に、器具を見せるところからスタートします。キッズスペースもあり、お子さまが楽しく通える環境を整えています。</p>
+          </div>
+        </div>
+        <div class="faq-item reveal" style="transition-delay:0.1s;">
+          <div class="faq-q">
+            <div class="faq-q-icon">Q</div>
+            <p class="faq-q-text">歯が痛くなくても通う必要がありますか？</p>
+          </div>
+          <div class="faq-a">
+            <div class="faq-a-icon">A</div>
+            <p class="faq-a-text">はい、ぜひ「痛くなる前」にご来院ください。虫歯・歯周病は初期段階では自覚症状がほとんどありません。3〜6ヶ月に一度の定期検診とクリーニングで、治療費を大幅に節約できます。</p>
+          </div>
+        </div>
+        <div class="faq-item reveal" style="transition-delay:0.15s;">
+          <div class="faq-q">
+            <div class="faq-q-icon">Q</div>
+            <p class="faq-q-text">保険は使えますか？クレジットカードは？</p>
+          </div>
+          <div class="faq-a">
+            <div class="faq-a-icon">A</div>
+            <p class="faq-a-text">一般歯科の治療は保険適用です。審美歯科・ホワイトニング・矯正は自費診療となります。お支払いは現金・各種クレジットカード・交通系ICカードに対応しています。高額な自費治療はデンタルローン（分割払い）もご利用いただけます。</p>
+          </div>
+        </div>
+        <div class="faq-item reveal" style="transition-delay:0.2s;">
+          <div class="faq-q">
+            <div class="faq-q-icon">Q</div>
+            <p class="faq-q-text">急に歯が痛くなった場合、当日診てもらえますか？</p>
+          </div>
+          <div class="faq-a">
+            <div class="faq-a-icon">A</div>
+            <p class="faq-a-text">急患は可能な限り当日対応しています。まずはお電話かWebフォームからご連絡ください。痛みを和らげる応急処置を行い、本格的な治療は次回ご予約いただく形になる場合もあります。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOKING -->
+  <section class="booking-section" id="booking">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="section-en">Web Booking</p>
+        <h2 class="section-title">Web予約（24時間受付）</h2>
+        <div class="divider"></div>
+        <p class="section-lead">お気軽にご予約ください。確認メールを送らせていただきます。</p>
+      </div>
+      <form class="booking-form reveal">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">お名前</label>
+            <input type="text" class="form-input" placeholder="山田 太郎">
+          </div>
+          <div class="form-group">
+            <label class="form-label">電話番号</label>
+            <input type="tel" class="form-input" placeholder="090-0000-0000">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">メールアドレス</label>
+            <input type="email" class="form-input" placeholder="example@email.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">ご希望の診療内容</label>
+            <select class="form-select">
+              <option value="">選択してください</option>
+              <option>初診・相談</option>
+              <option>虫歯治療</option>
+              <option>歯周病治療</option>
+              <option>ホワイトニング</option>
+              <option>小児歯科</option>
+              <option>マウスピース矯正</option>
+              <option>定期検診・クリーニング</option>
+              <option>その他</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">ご希望の日付</label>
+            <input type="date" class="form-input">
+          </div>
+          <div class="form-group">
+            <label class="form-label">ご希望の時間帯</label>
+            <select class="form-select">
+              <option value="">選択してください</option>
+              <option>午前（9:00〜12:00）</option>
+              <option>昼（12:00〜14:00）</option>
+              <option>午後（14:00〜18:00）</option>
+              <option>夜間（18:00〜20:00）</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group full">
+            <label class="form-label">ご質問・ご要望（任意）</label>
+            <textarea class="form-textarea" placeholder="症状やご不安なことがあればお聞かせください。"></textarea>
+          </div>
+        </div>
+        <p class="form-note">ご入力いただいた情報は予約確認・診療にのみ使用します。返信が2営業日以内に届かない場合はお電話でお問い合わせください。</p>
+        <button type="submit" class="form-submit">予約を申し込む →</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- INFO -->
+  <section class="section" id="info">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="section-en">Access & Info</p>
+        <h2 class="section-title">アクセス・診療時間</h2>
+        <div class="divider"></div>
+      </div>
+      <div class="info-grid">
+        <div>
+          <table class="info-table">
+            <tr><th>医院名</th><td>さくら歯科クリニック</td></tr>
+            <tr><th>住所</th><td>東京都渋谷区恵比寿南1-XX-XX<br>○○ビル 2F</td></tr>
+            <tr><th>アクセス</th><td>JR恵比寿駅 東口 徒歩3分<br>東急東横線 代官山駅 徒歩8分</td></tr>
+            <tr><th>電話</th><td>03-XXXX-XXXX</td></tr>
+            <tr>
+              <th>診療時間</th>
+              <td>
+                月〜金：9:00〜18:00（最終受付17:30）<br>
+                土：9:00〜17:00（最終受付16:30）<br>
+                ※夜間診療（火・木）：19:00〜21:00
+              </td>
+            </tr>
+            <tr><th>休診日</th><td>日曜・祝日（不定休あり）</td></tr>
+            <tr><th>駐車場</th><td>なし（近隣コインパーキングあり）</td></tr>
+          </table>
+        </div>
+        <div class="map-placeholder reveal">
+          <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <p>Google マップで確認する</p>
+          <a href="#" style="font-size:12px;color:var(--primary);border:1px solid var(--border);padding:8px 16px;border-radius:4px;margin-top:8px;display:inline-block;">地図を開く</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <div class="footer-brand-name">さくら歯科クリニック</div>
+          <p class="footer-brand-desc">東京都渋谷区恵比寿の歯科医院。地域の皆さまの「健口」を守り続けます。痛みに配慮した治療・小児歯科・予防歯科まで幅広く対応。</p>
+        </div>
+        <div>
+          <p class="footer-col-title">診療案内</p>
+          <ul class="footer-links">
+            <li><a href="#services">虫歯治療</a></li>
+            <li><a href="#services">歯周病治療</a></li>
+            <li><a href="#services">ホワイトニング</a></li>
+            <li><a href="#services">小児歯科</a></li>
+            <li><a href="#services">マウスピース矯正</a></li>
+            <li><a href="#services">定期検診</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="footer-col-title">クリニック情報</p>
+          <ul class="footer-links">
+            <li><a href="#features">当院の特徴</a></li>
+            <li><a href="#flow">初診の流れ</a></li>
+            <li><a href="#staff">スタッフ紹介</a></li>
+            <li><a href="#faq">よくある質問</a></li>
+            <li><a href="#info">アクセス</a></li>
+            <li><a href="#booking">Web予約</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2024 さくら歯科クリニック. All rights reserved.</p>
+        <span class="wp-badge">WordPress対応制作 · Powered by Senkode</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SENKODE BADGE -->
+  <div class="senkode-badge">WordPress Demo — Senkode</div>
+
+  <script>
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+    reveals.forEach(el => observer.observe(el));
+
+    // Form submit
+    document.querySelector('.booking-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const btn = e.target.querySelector('.form-submit');
+      btn.textContent = '送信完了しました ✓';
+      btn.style.background = '#2B7A6B';
+      btn.style.color = '#fff';
+      btn.disabled = true;
+    });
+  </script>
+</body>
+</html>
