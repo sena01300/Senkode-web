@@ -486,6 +486,242 @@
     .footer-sns a { display:flex; align-items:center; justify-content:center; width:32px; height:32px; color:var(--muted); transition:color 0.3s; }
     .footer-sns a:hover { color:var(--gold); }
 
+    /* ===== HAMBURGER MENU ===== */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      cursor: pointer;
+      padding: 8px;
+      background: none;
+      border: none;
+      z-index: 200;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 22px;
+      height: 1.5px;
+      background: var(--gold);
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    .nav-hamburger.active span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .nav-hamburger.active span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .nav-hamburger.active span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    .nav-mobile {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: rgba(8,8,8,0.97);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      z-index: 99;
+      flex-direction: column;
+      padding: 16px 24px 24px;
+      gap: 4px;
+      transform: translateY(-8px);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), opacity 0.3s;
+    }
+    .nav-mobile.open {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: all;
+    }
+    .nav-mobile-link {
+      font-size: 13px;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 14px 8px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: color 0.3s;
+      min-height: 48px;
+    }
+    .nav-mobile-link:last-of-type { border-bottom: none; }
+    .nav-mobile-link:hover, .nav-mobile-link.active { color: var(--white); }
+    .nav-mobile-link-ja { font-size: 10px; color: var(--gold); letter-spacing: 0.1em; }
+    .nav-mobile-cta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 12px;
+      padding: 14px 24px;
+      background: var(--gold);
+      color: var(--black);
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      font-weight: 700;
+      text-decoration: none;
+      min-height: 48px;
+      transition: opacity 0.2s;
+    }
+    .nav-mobile-cta:hover { opacity: 0.85; }
+
+    /* ===== BACK TO TOP ===== */
+    .back-top {
+      position: fixed;
+      bottom: 32px; right: 32px;
+      width: 44px; height: 44px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--gold);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      z-index: 500;
+      opacity: 0; transform: translateY(8px);
+      transition: opacity 0.3s, transform 0.3s, border-color 0.3s;
+      pointer-events: none;
+    }
+    .back-top.visible { opacity: 1; transform: translateY(0); pointer-events: all; }
+    .back-top:hover { border-color: var(--gold-alpha-40); }
+
+    /* ===== BREADCRUMB ===== */
+    .breadcrumb {
+      padding: 16px 60px;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      z-index: 1;
+      background: var(--off-black);
+    }
+    .breadcrumb-inner {
+      max-width: 1100px;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+    }
+    .breadcrumb-link {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .breadcrumb-link:hover { color: var(--gold); }
+    .breadcrumb-sep { color: var(--border); }
+    .breadcrumb-current { color: var(--white); }
+
+    /* ===== CATEGORY SECTION HEADERS ===== */
+    .cat-section-header {
+      grid-column: 1 / -1;
+      padding: 60px 0 40px;
+      border-top: 1px solid var(--border);
+      margin-top: 24px;
+      position: relative;
+    }
+    .cat-section-header:first-child { border-top: none; margin-top: 0; padding-top: 0; }
+    .cat-section-header::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 48px; height: 3px;
+      background: var(--gold);
+    }
+    .cat-section-header:first-child::after { display: none; }
+    .cat-section-title-en {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 11px;
+      letter-spacing: 0.4em;
+      color: var(--gold);
+      display: block;
+      margin-bottom: 8px;
+      opacity: 0.8;
+    }
+    .cat-section-title-ja {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 700;
+      font-size: clamp(22px, 3vw, 32px);
+      color: var(--white);
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+    }
+    .cat-section-desc {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.8;
+      max-width: 600px;
+    }
+    .cat-section-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      border: 1px solid var(--gold-alpha-40);
+      padding: 4px 12px;
+      margin-top: 12px;
+    }
+
+    /* ===== WORK LINK as button ===== */
+    .work-link {
+      opacity: 1 !important;
+      border: 1px solid var(--gold-alpha-30);
+      padding: 8px 14px;
+      min-height: 36px;
+      transition: background 0.3s, border-color 0.3s !important;
+    }
+    .work-card:hover .work-link { background: var(--gold-hover); border-color: var(--gold-alpha-50); }
+    a.work-link { text-decoration: none; }
+
+    /* ===== CATEGORY OVERVIEW ===== */
+    .cat-overview {
+      background: var(--off-black);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      z-index: 1;
+    }
+    .cat-overview-inner {
+      max-width: 1100px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 60px;
+    }
+    .cat-nav {
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .cat-nav::-webkit-scrollbar { display: none; }
+    .cat-nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 28px;
+      text-decoration: none;
+      border-right: 1px solid var(--border);
+      transition: background 0.3s;
+      white-space: nowrap;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+    .cat-nav-item:first-child { border-left: 1px solid var(--border); }
+    .cat-nav-item:hover { background: var(--gold-glow-soft); }
+    .cat-nav-num {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--white);
+      letter-spacing: 0.05em;
+    }
+    .cat-nav-label {
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      opacity: 0.8;
+    }
+
     /* ===== TABLET ===== */
     @media (min-width: 769px) and (max-width: 1024px) {
       .nav { padding: 20px 40px; }
@@ -509,6 +745,16 @@
       .works-grid { grid-template-columns: minmax(0, 1fr); }
       .cta { padding: 80px 24px; }
       .footer { padding: 20px 24px; flex-direction: column; gap: 8px; text-align: center; }
+      .nav { position: relative; }
+      .nav-hamburger { display: flex; }
+      .nav-links { display: none !important; }
+      .nav-mobile { display: flex; }
+      .breadcrumb { padding: 14px 24px; }
+      .cat-section-header { padding: 40px 0 28px; }
+      .back-top { bottom: 20px; right: 20px; }
+      .cat-overview-inner { padding: 0; }
+      .cat-nav { padding: 0 16px; }
+      .cat-nav-item { padding: 16px 20px; }
     }
   </style>
 </head>
@@ -552,6 +798,20 @@
       <a href="about.html" class="nav-link">ABOUT</a>
       <a href="contact.html" class="nav-cta">無料相談 CONTACT</a>
     </div>
+    <!-- Hamburger (mobile only) -->
+    <button class="nav-hamburger" id="navHamburger" aria-label="メニューを開く" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <!-- Mobile nav -->
+    <div class="nav-mobile" id="navMobile">
+      <a href="services.html" class="nav-mobile-link">SERVICES <span class="nav-mobile-link-ja">サービス</span></a>
+      <a href="works.html" class="nav-mobile-link active">WORKS <span class="nav-mobile-link-ja">制作実績</span></a>
+      <a href="articles/index.html" class="nav-mobile-link">ARTICLES <span class="nav-mobile-link-ja">記事</span></a>
+      <a href="about.html" class="nav-mobile-link">ABOUT <span class="nav-mobile-link-ja">概要</span></a>
+      <a href="contact.html" class="nav-mobile-cta">無料相談 CONTACT</a>
+    </div>
   </nav>
 
   <!-- Page Hero -->
@@ -560,6 +820,43 @@
       <p class="page-label">PORTFOLIO — 制作実績一覧</p>
       <h1 class="page-title">Works</h1>
       <p class="page-sub">実績 — LP・Webサイト・SEO記事・自動化ツール・提案書 全 39 件以上</p>
+    </div>
+  </section>
+
+  <!-- Breadcrumb -->
+  <nav class="breadcrumb" aria-label="パンくずリスト">
+    <div class="breadcrumb-inner">
+      <a href="index.html" class="breadcrumb-link">HOME</a>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-current">WORKS — 制作実績</span>
+    </div>
+  </nav>
+
+  <!-- Category Overview -->
+  <section class="cat-overview">
+    <div class="cat-overview-inner">
+      <div class="cat-nav">
+        <a href="#" class="cat-nav-item" data-jump="web">
+          <span class="cat-nav-num">LP・HP</span>
+          <span class="cat-nav-label">Web制作</span>
+        </a>
+        <a href="#" class="cat-nav-item" data-jump="automation">
+          <span class="cat-nav-num">自動化</span>
+          <span class="cat-nav-label">業務効率化</span>
+        </a>
+        <a href="#" class="cat-nav-item" data-jump="writing">
+          <span class="cat-nav-num">記事</span>
+          <span class="cat-nav-label">SEOライティング</span>
+        </a>
+        <a href="#" class="cat-nav-item" data-jump="consulting">
+          <span class="cat-nav-num">提案書</span>
+          <span class="cat-nav-label">コンサルティング</span>
+        </a>
+        <a href="#" class="cat-nav-item" data-jump="video">
+          <span class="cat-nav-num">動画</span>
+          <span class="cat-nav-label">映像制作</span>
+        </a>
+      </div>
     </div>
   </section>
 
@@ -579,6 +876,17 @@
   <section class="works-section">
     <div class="works-inner">
       <div class="works-grid">
+
+        <!-- Writing Category Header -->
+        <div class="cat-section-header" style="border-top:none; margin-top:0; padding-top:0;">
+          <span class="cat-section-title-en">WRITING / SEO ARTICLES</span>
+          <h2 class="cat-section-title-ja">SEOライティング / 記事執筆</h2>
+          <p class="cat-section-desc">現役管理職の一次情報を活かした、物流・DX・AI領域の専門記事を執筆します。</p>
+          <span class="cat-section-badge">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 2h6M2 5h4M2 8h5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>
+            SEO Writing / White Paper / Report
+          </span>
+        </div>
 
         <!-- Card 01: 物流AI記事 -->
         <div class="work-card reveal" style="--delay:0s" data-category="writing">
@@ -696,11 +1004,15 @@
           </div>
         </div>
 
-        <!-- Automation Section Divider -->
-        <div class="works-divider reveal" style="--delay:0.48s">
-          <span class="works-divider-label">AUTOMATION TOOLS</span>
-          <div class="works-divider-line"></div>
-          <span class="works-divider-sub">自社開発 — 実運用中</span>
+        <!-- Automation Category Header -->
+        <div class="cat-section-header" data-cat="automation">
+          <span class="cat-section-title-en">AUTOMATION DEVELOPMENT</span>
+          <h2 class="cat-section-title-ja">業務自動化開発</h2>
+          <p class="cat-section-desc">GAS・Claude API・Make.comを活用し、繰り返し業務をゼロ工数化するシステムを構築します。</p>
+          <span class="cat-section-badge">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 1L8 4H6V8H4V4H2L5 1Z" stroke="currentColor" stroke-width="1" fill="none"/></svg>
+            GAS × Claude API × Make.com
+          </span>
         </div>
 
         <!-- Card 07: X投稿自動化システム -->
@@ -1249,6 +1561,46 @@
           </div>
         </div>
 
+        <!-- Card 39: Instagram自動投稿システム（自社実運用） -->
+        <div class="work-card reveal" style="--delay:3.4s" data-category="automation">
+          <div class="work-thumb" style="background:linear-gradient(135deg,#0A0510 0%,#140A1E 50%,#1E0F30 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden;">
+            <span class="work-thumb-label">39</span>
+            <div style="font-size:10px;letter-spacing:3px;color:rgba(232,121,249,0.8);">SELF-MADE / 実運用中</div>
+            <div style="font-size:14px;font-weight:700;color:#FDF4FF;letter-spacing:1px;">INSTAGRAM AUTO</div>
+            <div style="font-size:9px;color:rgba(253,244,255,0.35);letter-spacing:2px;">GAS × Make × Meta API</div>
+            <div style="margin-top:6px;display:flex;gap:6px;">
+              <span style="background:rgba(217,70,239,0.15);border:1px solid rgba(217,70,239,0.3);color:rgba(240,171,252,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">完全稼働中</span>
+              <span style="background:rgba(139,92,246,0.12);border:1px solid rgba(139,92,246,0.3);color:rgba(196,181,253,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">月¥0運用</span>
+            </div>
+          </div>
+          <div class="work-body">
+            <div class="work-meta"><span class="work-tag">Automation / Instagram</span><span class="work-date">2026.05</span></div>
+            <h3 class="work-title">Instagram自動投稿システム — GAS × Make.com × Meta Graph API（自社実運用）</h3>
+            <p class="work-desc">@senkodeno にて完全稼働中の自社製自動投稿システム。GASでコンテンツを生成・Make.comがWebhookで受け取りMeta Graph API経由でInstagramに自動投稿。月¥0・完全無人運用。クライアント向け商品化済み。</p>
+            <a href="lp-instagram-auto.html" class="work-link">VIEW LP →</a>
+          </div>
+        </div>
+
+        <!-- Card 40: Senkode LINE × Claude AI Bot（自社実運用） -->
+        <div class="work-card reveal" style="--delay:3.5s" data-category="automation">
+          <div class="work-thumb" style="background:linear-gradient(135deg,#041008 0%,#061A0A 50%,#08240E 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden;">
+            <span class="work-thumb-label">40</span>
+            <div style="font-size:10px;letter-spacing:3px;color:rgba(74,222,128,0.8);">SELF-MADE / 実運用中</div>
+            <div style="font-size:14px;font-weight:700;color:#F0FDF4;letter-spacing:1px;">LINE AI BOT</div>
+            <div style="font-size:9px;color:rgba(240,253,244,0.35);letter-spacing:2px;">LINE × Claude API</div>
+            <div style="margin-top:6px;display:flex;gap:6px;">
+              <span style="background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);color:rgba(134,239,172,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">24h自動応答</span>
+              <span style="background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.3);color:rgba(52,211,153,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">GAS実装</span>
+            </div>
+          </div>
+          <div class="work-body">
+            <div class="work-meta"><span class="work-tag">Automation / LINE Bot</span><span class="work-date">2026.05</span></div>
+            <h3 class="work-title">Senkode LINE公式 × Claude AI自動応答Bot（自社実運用）</h3>
+            <p class="work-desc">LINE公式アカウントにClaudeを接続した24時間AI応答システム。GAS + LINE Messaging API + Claude Haiku API構成。問い合わせ→AI即回答で営業機会を逃さない。GAS実装・初期費用0円・月¥数百の低コスト運用。クライアント向け導入代行サービスとして提供中。</p>
+            <a href="lp-line-bot.html" class="work-link">VIEW LP →</a>
+          </div>
+        </div>
+
         <!-- Card 23: H-W004 AI失敗白書2026 -->
         <div class="work-card reveal" style="--delay:1.84s" data-category="writing" onclick="window.open('articles/005-ai-failure-report.html','_blank')">
           <div class="work-thumb" style="background:linear-gradient(135deg,#080610 0%,#100A1C 50%,#180E2A 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden;">
@@ -1465,6 +1817,13 @@
     <span class="footer-tag">閃光 — Flash of Light</span>
   </footer>
 
+  <!-- Back to top -->
+  <button class="back-top" id="backTop" aria-label="ページトップへ">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M8 12V4M4 8l4-4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
   <script>
     // Custom cursor
     const cursorDot  = document.querySelector('.cursor-dot');
@@ -1520,9 +1879,58 @@
         workCards.forEach(card => {
           card.style.display = (filter === 'all' || card.dataset.category === filter) ? '' : 'none';
         });
-        document.querySelectorAll('.works-divider').forEach(div => {
-          div.style.display = (filter === 'all' || filter === 'automation') ? '' : 'none';
+        document.querySelectorAll('.cat-section-header').forEach(header => {
+          if (filter === 'all') {
+            header.style.display = '';
+          } else {
+            header.style.display = (header.dataset.cat === filter) ? '' : 'none';
+          }
         });
+      });
+    });
+
+    // Hamburger menu
+    const hamburger = document.getElementById('navHamburger');
+    const navMobile = document.getElementById('navMobile');
+    if (hamburger && navMobile) {
+      hamburger.addEventListener('click', () => {
+        const isOpen = navMobile.classList.toggle('open');
+        hamburger.classList.toggle('active', isOpen);
+        hamburger.setAttribute('aria-expanded', isOpen);
+      });
+      navMobile.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          navMobile.classList.remove('open');
+          hamburger.classList.remove('active');
+        });
+      });
+      document.addEventListener('click', (e) => {
+        if (!hamburger.contains(e.target) && !navMobile.contains(e.target)) {
+          navMobile.classList.remove('open');
+          hamburger.classList.remove('active');
+        }
+      });
+    }
+
+    // Back to top
+    const backTop = document.getElementById('backTop');
+    if (backTop) {
+      window.addEventListener('scroll', () => {
+        backTop.classList.toggle('visible', window.scrollY > 400);
+      }, { passive: true });
+      backTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    }
+
+    // Category nav jump (scroll to first card of category)
+    document.querySelectorAll('.cat-nav-item').forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        const cat = item.dataset.jump;
+        // Find the filter button and click it
+        const btn = document.querySelector(`.filter-btn[data-filter="${cat}"]`);
+        if (btn) btn.click();
+        // Scroll to filter bar
+        document.querySelector('.filter-bar').scrollIntoView({ behavior: 'smooth' });
       });
     });
   </script>

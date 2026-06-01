@@ -99,11 +99,16 @@
       margin-bottom: 64px;
     }
     .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
       font-size: 10px;
       letter-spacing: 0.35em;
       color: var(--gold);
-      margin-bottom: 12px;
+      margin-bottom: 16px;
       font-weight: 100;
+      border: 1px solid var(--gold-alpha-40);
+      padding: 5px 14px;
     }
     .section-title {
       font-family: 'Noto Sans JP', sans-serif;
@@ -113,32 +118,49 @@
       color: var(--white);
     }
 
+    /* ===== SECTION DIVIDER ===== */
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: 0.3;
+    }
+
     /* ===== SHARED BUTTONS ===== */
     .btn-primary {
-      display: inline-block;
-      padding: 14px 32px;
-      border: 1px solid var(--gold);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 16px 36px;
+      background: var(--gold);
+      color: var(--black);
+      text-decoration: none;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      font-weight: 700;
+      transition: opacity 0.2s, transform 0.2s;
+      cursor: pointer;
+      box-shadow: 0 2px 12px rgba(201,168,76,0.15);
+    }
+    .btn-primary:hover { opacity: 0.85; transform: translateY(-1px); }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 16px 36px;
+      border: 1px solid var(--gold-alpha-40);
       color: var(--gold);
       text-decoration: none;
       font-size: 11px;
       letter-spacing: 0.2em;
-      transition: background 0.3s;
-    }
-    .btn-primary:hover { background: var(--gold-hover); }
-
-    .btn-secondary {
-      display: inline-block;
-      padding: 14px 32px;
-      border: 1px solid var(--white-faint);
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 11px;
-      letter-spacing: 0.2em;
-      transition: border-color 0.3s, color 0.3s;
+      transition: background 0.3s, transform 0.2s;
+      cursor: pointer;
     }
     .btn-secondary:hover {
-      border-color: var(--white-dim);
-      color: var(--white);
+      background: var(--gold-hover);
+      transform: translateY(-1px);
     }
 
     /* ===== CURSOR ===== */
@@ -220,13 +242,15 @@
     .nav-cta {
       font-size: 10px;
       letter-spacing: 0.2em;
-      color: var(--gold);
+      color: var(--black);
       text-decoration: none;
-      border: 1px solid var(--gold-alpha-40);
-      padding: 8px 16px;
-      transition: background 0.3s;
+      background: var(--gold);
+      padding: 10px 20px;
+      font-weight: 700;
+      transition: opacity 0.2s;
+      cursor: pointer;
     }
-    .nav-cta:hover { background: var(--gold-hover); }
+    .nav-cta:hover { opacity: 0.85; }
 
     /* ===== ANIMATED ICON ===== */
     @keyframes outerGlow {
@@ -443,16 +467,39 @@
       position: relative;
       overflow: hidden;
       transition-delay: var(--delay, 0s);
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+      transition: border-color 0.3s, transform 0.2s;
+    }
+    .service-card:hover {
+      border-color: var(--gold-alpha-40);
+      transform: translateY(-2px);
     }
     .service-card::before {
       content: '';
       position: absolute;
-      top: 0; left: -100%;
-      width: 100%; height: 2px;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
       background: var(--gold);
-      transition: left 0.5s ease;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
     }
-    .service-card:hover::before { left: 100%; }
+    .service-card:hover::before { transform: scaleX(1); }
+    .service-card-arrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      margin-top: 20px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .service-card:hover .service-card-arrow { opacity: 1; }
     .service-num {
       display: block;
       font-size: 11px;
@@ -961,6 +1008,9 @@
       display: inline-flex;
       align-items: center;
       gap: 4px;
+      min-height: 44px;
+      border: 1px solid var(--gold-alpha-30);
+      padding: 8px 16px;
     }
     /* work thumb needs position for inner elements */
     .work-thumb {
@@ -1018,6 +1068,253 @@
       font-weight: normal;
     }
 
+    /* ===== HAMBURGER MENU ===== */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      cursor: pointer;
+      padding: 8px;
+      background: none;
+      border: none;
+      z-index: 200;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 22px;
+      height: 1.5px;
+      background: var(--gold);
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    .nav-hamburger.active span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .nav-hamburger.active span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .nav-hamburger.active span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    .nav-mobile {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: rgba(8,8,8,0.97);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      z-index: 99;
+      flex-direction: column;
+      padding: 16px 24px 24px;
+      gap: 4px;
+      transform: translateY(-8px);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), opacity 0.3s;
+    }
+    .nav-mobile.open {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: all;
+    }
+    .nav-mobile-link {
+      font-size: 13px;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 14px 8px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: color 0.3s;
+      min-height: 48px;
+    }
+    .nav-mobile-link:last-of-type { border-bottom: none; }
+    .nav-mobile-link:hover, .nav-mobile-link.active { color: var(--white); }
+    .nav-mobile-link-ja { font-size: 10px; color: var(--gold); letter-spacing: 0.1em; }
+    .nav-mobile-cta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 12px;
+      padding: 14px 24px;
+      background: var(--gold);
+      color: var(--black);
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      font-weight: 700;
+      text-decoration: none;
+      min-height: 48px;
+      transition: opacity 0.2s;
+    }
+    .nav-mobile-cta:hover { opacity: 0.85; }
+
+    /* ===== Japanese-first section titles ===== */
+    .section-title-ja {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 700;
+      font-size: clamp(24px, 3.5vw, 40px);
+      letter-spacing: 0.08em;
+      color: var(--white);
+      line-height: 1.3;
+      margin-bottom: 8px;
+    }
+    .section-title-en {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 13px;
+      letter-spacing: 0.4em;
+      color: var(--gold);
+      opacity: 0.7;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    /* ===== BACK TO TOP ===== */
+    .back-top {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      width: 44px; height: 44px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 500;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.3s, transform 0.3s, border-color 0.3s;
+      pointer-events: none;
+    }
+    .back-top.visible { opacity: 1; transform: translateY(0); pointer-events: all; }
+    .back-top:hover { border-color: var(--gold-alpha-40); }
+
+    /* ===== FAQ ===== */
+    .faq {
+      padding: 120px 60px;
+      background: var(--off-black);
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border);
+    }
+    .faq-inner { max-width: 800px; width: 100%; margin: 0 auto; }
+    .faq-list { display: flex; flex-direction: column; gap: 0; }
+    .faq-item { border-bottom: 1px solid var(--border); }
+    .faq-q {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 0;
+      background: none;
+      border: none;
+      color: var(--white);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 14px;
+      font-weight: 300;
+      letter-spacing: 0.04em;
+      text-align: left;
+      cursor: pointer;
+      gap: 16px;
+      min-height: 44px;
+      transition: color 0.3s;
+      word-break: keep-all;
+    }
+    .faq-q:hover { color: var(--gold); }
+    .faq-icon {
+      flex-shrink: 0;
+      color: var(--gold);
+      transition: transform 0.3s;
+    }
+    .faq-q[aria-expanded="true"] .faq-icon { transform: rotate(180deg); }
+    .faq-a {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.9;
+      letter-spacing: 0.03em;
+      padding: 0 0 24px 0;
+      display: none;
+      word-break: keep-all;
+    }
+    .faq-a.open { display: block; }
+
+    /* ===== SERVICE COMPARISON ===== */
+    .service-compare {
+      padding: 120px 60px;
+      background: var(--black);
+      position: relative;
+      z-index: 1;
+    }
+    .service-compare-inner { max-width: 1200px; width: 100%; margin: 0 auto; }
+    .compare-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 2px;
+    }
+    .compare-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 36px 28px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s, transform 0.2s;
+    }
+    .compare-card:hover {
+      border-color: var(--gold-alpha-40);
+      transform: translateY(-2px);
+    }
+    .compare-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .compare-card:hover::before { transform: scaleX(1); }
+    .compare-icon {
+      width: 44px; height: 44px;
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+    .compare-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 8px;
+      letter-spacing: 0.05em;
+    }
+    .compare-desc {
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+    .compare-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .compare-features li {
+      font-size: 11px;
+      color: var(--muted);
+      padding-left: 16px;
+      position: relative;
+    }
+    .compare-features li::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 50%;
+      transform: translateY(-50%);
+      width: 6px; height: 6px;
+      border: 1px solid var(--gold);
+    }
+
     /* ===== TABLET (769px〜1024px) ===== */
     @media (min-width: 769px) and (max-width: 1024px) {
       .nav { padding: 20px 40px; }
@@ -1038,6 +1335,9 @@
       .commitment { padding: 80px 40px; }
       .cta { padding: 100px 40px; }
       .footer { padding: 28px 40px; }
+      .service-compare { padding: 100px 40px; }
+      .compare-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .faq { padding: 100px 40px; }
     }
 
     /* ===== MOBILE (768px以下) ===== */
@@ -1050,9 +1350,12 @@
       .flash-line { display: none; }
 
       /* Navigation */
-      .nav { padding: 16px 24px; }
+      .nav { padding: 16px 24px; position: relative; }
       .nav-links { gap: 16px; }
       .nav-link { display: none; }
+      .nav-hamburger { display: flex; }
+      .nav-links { display: none !important; }
+      .nav-mobile { display: flex; }
 
       /* Hero */
       .hero { padding: 80px 24px; min-height: auto; }
@@ -1111,6 +1414,17 @@
 
       /* Footer */
       .footer { padding: 20px 24px; flex-direction: column; gap: 8px; text-align: center; }
+
+      /* FAQ */
+      .faq { padding: 80px 24px; }
+      .faq-q { font-size: 13px; }
+
+      /* Service compare */
+      .service-compare { padding: 80px 24px; }
+      .compare-grid { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+
+      /* Back to top */
+      .back-top { bottom: 20px; right: 20px; }
     }
   </style>
 </head>
@@ -1166,6 +1480,20 @@
       <a href="articles/index.html" class="nav-link">ARTICLES<span class="nav-link-ja">記事</span></a>
       <a href="about.html" class="nav-link">ABOUT<span class="nav-link-ja">概要</span></a>
       <a href="contact.html" class="nav-cta">無料相談 CONTACT</a>
+    </div>
+    <!-- Hamburger button (mobile only) -->
+    <button class="nav-hamburger" id="navHamburger" aria-label="メニューを開く" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <!-- Mobile nav dropdown -->
+    <div class="nav-mobile" id="navMobile">
+      <a href="services.html" class="nav-mobile-link">SERVICES <span class="nav-mobile-link-ja">サービス</span></a>
+      <a href="works.html" class="nav-mobile-link">WORKS <span class="nav-mobile-link-ja">制作実績</span></a>
+      <a href="articles/index.html" class="nav-mobile-link">ARTICLES <span class="nav-mobile-link-ja">記事</span></a>
+      <a href="about.html" class="nav-mobile-link">ABOUT <span class="nav-mobile-link-ja">概要</span></a>
+      <a href="contact.html" class="nav-mobile-cta">無料相談 CONTACT</a>
     </div>
   </nav>
 
@@ -1290,6 +1618,8 @@
     </div>
   </section>
 
+  <div class="section-divider"></div>
+
   <!-- Vision -->
   <section class="vision">
     <div class="reveal">
@@ -1395,43 +1725,56 @@
     </div>
   </section>
 
+  <div class="section-divider"></div>
+
   <!-- Services -->
   <section class="services" id="services">
     <div class="section-header reveal">
       <p class="section-label">WHAT WE DO — サービス紹介</p>
-      <h2 class="section-title">サービス</h2>
+      <span class="section-title-en">SERVICES</span>
+      <h2 class="section-title-ja">サービス</h2>
     </div>
     <div class="services-grid">
-      <div class="service-card reveal">
+      <a class="service-card reveal" href="services.html">
         <span class="service-num">01</span>
         <h3 class="service-name">AI DIRECTION</h3>
         <p class="service-desc">Web・コンテンツ・動画——あらゆる制作をAIでディレクション。速度と品質を同時に引き上げます。</p>
-      </div>
-      <div class="service-card reveal" style="--delay:0.1s">
+        <span class="service-card-arrow">詳しく見る →</span>
+      </a>
+      <a class="service-card reveal" href="services.html" style="--delay:0.1s">
         <span class="service-num">02</span>
         <h3 class="service-name">SEO WRITING</h3>
         <p class="service-desc">現場10年の一次情報 × AIの高速生成。上位表示から収益化まで一貫設計します。</p>
-      </div>
-      <div class="service-card reveal" style="--delay:0.2s">
+        <span class="service-card-arrow">詳しく見る →</span>
+      </a>
+      <a class="service-card reveal" href="services.html" style="--delay:0.2s">
         <span class="service-num">03</span>
         <h3 class="service-name">WEB CODING</h3>
         <p class="service-desc">PageSpeed 96+の高速表示とブランドデザインを両立。コーディングから運用まで一気通貫です。</p>
-      </div>
-      <div class="service-card reveal" style="--delay:0.3s">
+        <span class="service-card-arrow">詳しく見る →</span>
+      </a>
+      <a class="service-card reveal" href="services.html" style="--delay:0.3s">
         <span class="service-num">04</span>
         <h3 class="service-name">VIDEO DIRECTION</h3>
         <p class="service-desc">Runway・HeyGenによるAI動画ディレクション。撮影ゼロで、SNS・広告・説明動画を高速納品。</p>
-      </div>
-      <div class="service-card reveal" style="--delay:0.4s">
+        <span class="service-card-arrow">詳しく見る →</span>
+      </a>
+      <a class="service-card reveal" href="services.html" style="--delay:0.4s">
         <span class="service-num">05</span>
         <h3 class="service-name">AI AUTOMATION</h3>
         <p class="service-desc">Claude API × GAS × Notionで業務を完全自動化。SNS投稿生成・日次レポート・データ集計を毎日自動実行。</p>
-      </div>
-      <div class="service-card reveal" style="--delay:0.5s">
+        <span class="service-card-arrow">詳しく見る →</span>
+      </a>
+      <a class="service-card reveal" href="services.html" style="--delay:0.5s">
         <span class="service-num">06</span>
         <h3 class="service-name">APP DEVELOPMENT</h3>
         <p class="service-desc">AI搭載Webアプリを高品質で開発。採用ツール・問診システム・不動産査定など、業務を変えるプロダクトを設計から納品まで。</p>
-      </div>
+        <span class="service-card-arrow">詳しく見る →</span>
+      </a>
+    </div>
+    <div class="section-inline-cta reveal" style="text-align:center; margin-top: 48px;">
+      <p style="font-size:12px; color:var(--muted); margin-bottom:16px; letter-spacing:0.05em;">どのサービスが合っているか迷ったら</p>
+      <a href="contact.html" class="btn-primary" style="min-height:44px; display:inline-flex; align-items:center; justify-content:center;">無料相談で確認する →</a>
     </div>
   </section>
 
@@ -1448,11 +1791,14 @@
     </div>
   </section>
 
+  <div class="section-divider"></div>
+
   <!-- Works -->
   <section class="works" id="works">
     <div class="section-header reveal">
       <p class="section-label">PORTFOLIO — 制作実績</p>
-      <h2 class="section-title">制作実績</h2>
+      <span class="section-title-en">WORKS</span>
+      <h2 class="section-title-ja">制作実績</h2>
       <p class="works-count-note">LP・Web・記事・自動化ツール・提案書 全 <span class="works-count-num">38</span> 件以上を公開中</p>
     </div>
     <div class="works-grid">
@@ -1551,11 +1897,109 @@
     </div>
   </section>
 
+  <!-- Section divider -->
+  <div class="section-divider"></div>
+
+  <!-- Service Comparison -->
+  <section class="service-compare" id="service-compare">
+    <div class="service-compare-inner reveal">
+      <div class="section-header">
+        <span class="section-label">WHAT WE DO — できること一覧</span>
+        <span class="section-title-en">OUR SERVICES AT A GLANCE</span>
+        <h2 class="section-title-ja">Senkodeでできること</h2>
+      </div>
+      <div class="compare-grid">
+        <div class="compare-card">
+          <div class="compare-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+          </div>
+          <h3 class="compare-name">LP制作</h3>
+          <p class="compare-desc">集客・CVに特化したランディングページ</p>
+          <ul class="compare-features">
+            <li>コンセプト設計</li>
+            <li>コピーライティング</li>
+            <li>デザイン・実装</li>
+            <li>フォーム設置</li>
+          </ul>
+        </div>
+        <div class="compare-card">
+          <div class="compare-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </div>
+          <h3 class="compare-name">HP制作</h3>
+          <p class="compare-desc">企業・ブランドのコーポレートサイト</p>
+          <ul class="compare-features">
+            <li>多ページ構成</li>
+            <li>スマホ完全対応</li>
+            <li>SEO基本設定</li>
+            <li>問い合わせフォーム</li>
+          </ul>
+        </div>
+        <div class="compare-card">
+          <div class="compare-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          </div>
+          <h3 class="compare-name">AI開発</h3>
+          <p class="compare-desc">Claude API・GPT APIを使った AI ツール</p>
+          <ul class="compare-features">
+            <li>チャットボット開発</li>
+            <li>文章生成AI</li>
+            <li>画像解析AI</li>
+            <li>要件定義〜実装</li>
+          </ul>
+        </div>
+        <div class="compare-card">
+          <div class="compare-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          </div>
+          <h3 class="compare-name">業務自動化</h3>
+          <p class="compare-desc">GAS・Make.com・APIで業務をゼロ工数化</p>
+          <ul class="compare-features">
+            <li>SNS投稿自動化</li>
+            <li>レポート自動生成</li>
+            <li>経費精算自動化</li>
+            <li>見積書自動作成</li>
+          </ul>
+        </div>
+        <div class="compare-card">
+          <div class="compare-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          </div>
+          <h3 class="compare-name">SEOライティング</h3>
+          <p class="compare-desc">一次情報×AI活用で検索上位を狙う記事</p>
+          <ul class="compare-features">
+            <li>キーワード選定</li>
+            <li>構成・執筆</li>
+            <li>一次情報挿入</li>
+            <li>物流・DX専門</li>
+          </ul>
+        </div>
+        <div class="compare-card">
+          <div class="compare-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01M12 6h.01M16 6h.01M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01"/></svg>
+          </div>
+          <h3 class="compare-name">アプリ開発</h3>
+          <p class="compare-desc">要件定義〜設計・開発の一気通貫対応</p>
+          <ul class="compare-features">
+            <li>要件定義書作成</li>
+            <li>UI/UX設計</li>
+            <li>プロトタイプ制作</li>
+            <li>開発ディレクション</li>
+          </ul>
+        </div>
+      </div>
+      <div style="text-align:center; margin-top: 48px;">
+        <a href="services.html" class="btn-secondary">サービス詳細・料金を見る →</a>
+      </div>
+    </div>
+  </section>
+
   <!-- Divisions -->
   <section class="divisions" id="divisions">
     <div class="section-header reveal">
       <p class="section-label">DIVISIONS — 業界特化事業部</p>
-      <h2 class="section-title">9つの業界特化事業部</h2>
+      <span class="section-title-en">DIVISIONS</span>
+      <h2 class="section-title-ja">9つの業界特化事業部</h2>
     </div>
     <div class="divisions-grid">
       <div class="division-card reveal">
@@ -1606,6 +2050,54 @@
     </div>
     <div class="divisions-footer reveal">
       <a href="organization.html" class="btn-secondary">VIEW ALL DIVISIONS →</a>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq" id="faq">
+    <div class="faq-inner reveal">
+      <div class="section-header">
+        <span class="section-label">FAQ — よくある質問</span>
+        <span class="section-title-en">FREQUENTLY ASKED QUESTIONS</span>
+        <h2 class="section-title-ja">よくある質問</h2>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">
+            <span>費用はどのくらいかかりますか？</span>
+            <svg class="faq-icon" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>
+          <div class="faq-a">LP制作：5万円〜／HPリニューアル：10万円〜／AI・自動化開発：8万円〜／SEO記事：1本3,000円〜 を目安にお考えください。プロジェクトの規模・期間・要件によって変動します。まずは無料相談でご予算をお聞かせください。</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">
+            <span>納期はどのくらいですか？</span>
+            <svg class="faq-icon" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>
+          <div class="faq-a">LP制作：1〜2週間／HPリニューアル：2〜4週間／AI・自動化開発：2〜6週間が目安です。急ぎの場合もご相談ください。スピード対応プランもございます。</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">
+            <span>相談だけでも可能ですか？</span>
+            <svg class="faq-icon" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>
+          <div class="faq-a">はい、もちろんです。無料相談では現状の課題をヒアリングし、最適な施策をご提案します。ご依頼が前提ではありませんのでお気軽にどうぞ。24時間以内にご返信いたします。</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">
+            <span>納品後の保守対応はありますか？</span>
+            <svg class="faq-icon" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>
+          <div class="faq-a">納品後30日以内の軽微な修正は無償対応いたします。継続的な保守・運用サポートは月額保守プランもご用意しています。長期的なパートナーとしてお付き合いいただけます。</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">
+            <span>AIや自動化について詳しくないのですが大丈夫ですか？</span>
+            <svg class="faq-icon" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>
+          <div class="faq-a">まったく問題ありません。「何を自動化したいか」だけ教えていただければ、技術面はSenkodeが全て設計・実装します。専門知識ゼロからでも、業務効率化を実現できます。</div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -1672,6 +2164,13 @@
     </div>
     <span class="footer-tag">閃光 — Flash of Light</span>
   </footer>
+
+  <!-- Back to top -->
+  <button class="back-top" id="backTop" aria-label="ページトップへ">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M8 12V4M4 8l4-4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
 
   <script>
     // Custom cursor
@@ -1752,6 +2251,58 @@
       });
     }, { threshold: 0.1 });
     reveals.forEach(el => revealObserver.observe(el));
+
+    // Hamburger menu
+    const hamburger = document.getElementById('navHamburger');
+    const navMobile = document.getElementById('navMobile');
+    if (hamburger && navMobile) {
+      hamburger.addEventListener('click', () => {
+        const isOpen = navMobile.classList.toggle('open');
+        hamburger.classList.toggle('active', isOpen);
+        hamburger.setAttribute('aria-expanded', isOpen);
+      });
+      // Close on nav link click
+      navMobile.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          navMobile.classList.remove('open');
+          hamburger.classList.remove('active');
+        });
+      });
+      // Close on outside click
+      document.addEventListener('click', (e) => {
+        if (!hamburger.contains(e.target) && !navMobile.contains(e.target)) {
+          navMobile.classList.remove('open');
+          hamburger.classList.remove('active');
+        }
+      });
+    }
+
+    // FAQ accordion
+    document.querySelectorAll('.faq-q').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const answer = btn.nextElementSibling;
+        const isOpen = btn.getAttribute('aria-expanded') === 'true';
+        // Close all
+        document.querySelectorAll('.faq-q').forEach(b => {
+          b.setAttribute('aria-expanded', 'false');
+          b.nextElementSibling.classList.remove('open');
+        });
+        // Open clicked (if was closed)
+        if (!isOpen) {
+          btn.setAttribute('aria-expanded', 'true');
+          answer.classList.add('open');
+        }
+      });
+    });
+
+    // Back to top
+    const backTop = document.getElementById('backTop');
+    if (backTop) {
+      window.addEventListener('scroll', () => {
+        backTop.classList.toggle('visible', window.scrollY > 400);
+      }, { passive: true });
+      backTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    }
   </script>
 </body>
 </html>
