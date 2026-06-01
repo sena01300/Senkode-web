@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Instagram自動投稿代行 — Senkode</title>
+  <meta name="description" content="AIがキャプションを自動生成。フォーム入力だけでInstagramに自動投稿。中小企業・飲食・美容院向けSNS運用代行サービス。月額30,000円〜。">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital@1&family=Noto+Sans+JP:wght@100;200;300;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold:       #C9A84C;
+      --gold-light: #E8C97A;
+      --gold-dim:   #6B5420;
+      --black:      #080808;
+      --off-black:  #0F0F0F;
+      --card:       #111111;
+      --white:      #F4F1EC;
+      --muted:      rgba(244,241,236,0.35);
+      --border:     rgba(201,168,76,0.1);
+      --gold-hover:    rgba(201,168,76,0.1);
+      --gold-alpha-40: rgba(201,168,76,0.4);
+      --gold-alpha-20: rgba(201,168,76,0.2);
+      --gold-grid:     rgba(201,168,76,0.03);
+      --nav-bg:        rgba(8,8,8,0.92);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      word-break: keep-all;
+      overflow-wrap: break-word;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--gold-grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--gold-grid) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dim); }
+
+    /* NAV */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 60px;
+      background: var(--nav-bg);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .nav-wordmark {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 20px;
+      letter-spacing: 0.25em;
+      color: var(--white);
+    }
+    .nav-cta {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      text-decoration: none;
+      border: 1px solid var(--gold-alpha-40);
+      padding: 8px 18px;
+      transition: background 0.3s;
+    }
+    .nav-cta:hover { background: var(--gold-hover); }
+
+    /* HERO */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 0 60px;
+      overflow: hidden;
+    }
+
+    .hero-bg-circle {
+      position: absolute;
+      width: 700px;
+      height: 700px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%);
+      right: -100px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 700px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--gold-alpha-40);
+      padding: 6px 14px;
+      margin-bottom: 40px;
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      color: var(--gold);
+    }
+    .hero-badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: var(--gold);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .hero-label {
+      font-size: 11px;
+      letter-spacing: 0.35em;
+      color: var(--gold);
+      margin-bottom: 24px;
+      font-weight: 100;
+    }
+
+    .hero-title {
+      font-family: 'Bebas Neue', cursive;
+      font-size: clamp(56px, 8vw, 96px);
+      line-height: 1;
+      letter-spacing: 0.04em;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+    .hero-title span {
+      color: var(--gold);
+    }
+
+    .hero-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 22px;
+      color: var(--muted);
+      margin-bottom: 32px;
+      letter-spacing: 0.05em;
+    }
+
+    .hero-desc {
+      font-size: 15px;
+      line-height: 2;
+      color: rgba(244,241,236,0.7);
+      margin-bottom: 48px;
+      max-width: 520px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      padding: 16px 40px;
+      background: var(--gold);
+      color: var(--black);
+      text-decoration: none;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      font-weight: 700;
+      transition: opacity 0.3s;
+    }
+    .btn-primary:hover { opacity: 0.85; }
+
+    .btn-ghost {
+      display: inline-block;
+      padding: 16px 40px;
+      border: 1px solid var(--gold-alpha-40);
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      transition: background 0.3s;
+    }
+    .btn-ghost:hover { background: var(--gold-hover); }
+
+    .hero-right {
+      position: absolute;
+      right: 60px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .flow-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 20px 28px;
+      min-width: 240px;
+      position: relative;
+      transition: border-color 0.3s;
+    }
+    .flow-card:hover { border-color: var(--gold-alpha-40); }
+    .flow-card-num {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+    .flow-card-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+    .flow-card-desc {
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .flow-arrow {
+      text-align: center;
+      color: var(--gold);
+      font-size: 18px;
+    }
+
+    /* PROBLEM */
+    .section {
+      position: relative;
+      padding: 120px 60px;
+      z-index: 1;
+    }
+
+    .section-label {
+      font-size: 10px;
+      letter-spacing: 0.35em;
+      color: var(--gold);
+      margin-bottom: 16px;
+      font-weight: 100;
+    }
+
+    .section-title {
+      font-family: 'Bebas Neue', cursive;
+      font-size: clamp(36px, 5vw, 64px);
+      line-height: 1.1;
+      letter-spacing: 0.05em;
+      color: var(--white);
+      margin-bottom: 24px;
+    }
+
+    .section-title em {
+      color: var(--gold);
+      font-style: normal;
+    }
+
+    .section-desc {
+      font-size: 14px;
+      line-height: 2;
+      color: rgba(244,241,236,0.65);
+      max-width: 560px;
+      margin-bottom: 64px;
+    }
+
+    /* PAIN POINTS */
+    .pain-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin-top: 64px;
+    }
+
+    .pain-item {
+      background: var(--card);
+      padding: 40px 32px;
+      border-top: 2px solid var(--border);
+      transition: border-color 0.3s;
+    }
+    .pain-item:hover { border-top-color: var(--gold); }
+
+    .pain-icon {
+      margin-bottom: 20px;
+    }
+    .pain-icon svg { stroke: var(--gold); }
+
+    .pain-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 12px;
+    }
+
+    .pain-desc {
+      font-size: 12px;
+      line-height: 1.9;
+      color: var(--muted);
+    }
+
+    /* SOLUTION */
+    .solution-bg {
+      background: var(--off-black);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .solution-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .solution-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .solution-step {
+      display: flex;
+      gap: 24px;
+      padding: 32px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .solution-step:last-child { border-bottom: none; }
+
+    .step-num {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 48px;
+      color: var(--gold);
+      opacity: 0.3;
+      line-height: 1;
+      min-width: 56px;
+    }
+
+    .step-body {}
+    .step-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+    .step-desc {
+      font-size: 12px;
+      line-height: 1.9;
+      color: var(--muted);
+    }
+
+    .solution-visual {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 48px;
+      position: relative;
+    }
+
+    .visual-title {
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      color: var(--gold);
+      margin-bottom: 32px;
+    }
+
+    .flow-diagram {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .flow-node {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 18px;
+      background: var(--off-black);
+      border: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--white);
+    }
+
+    .flow-node-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--gold-alpha-20);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .flow-node-icon svg { stroke: var(--gold); }
+
+    .flow-node-arrow {
+      text-align: center;
+      color: var(--gold);
+      font-size: 14px;
+      opacity: 0.6;
+      padding: 2px 0;
+    }
+
+    .flow-highlight {
+      border-color: var(--gold-alpha-40);
+      background: rgba(201,168,76,0.04);
+    }
+
+    .badge-auto {
+      margin-left: auto;
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      color: var(--gold);
+      border: 1px solid var(--gold-alpha-40);
+      padding: 3px 8px;
+    }
+
+    /* PRICING */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin-top: 64px;
+    }
+
+    .price-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 48px 36px;
+      position: relative;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .price-card:hover {
+      border-color: var(--gold-alpha-40);
+      transform: translateY(-4px);
+    }
+    .price-card.featured {
+      border-color: var(--gold);
+      background: linear-gradient(180deg, rgba(201,168,76,0.06) 0%, var(--card) 60%);
+    }
+
+    .price-featured-badge {
+      position: absolute;
+      top: -1px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--gold);
+      color: var(--black);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      font-weight: 700;
+      padding: 4px 16px;
+    }
+
+    .price-plan {
+      font-size: 10px;
+      letter-spacing: 0.35em;
+      color: var(--gold);
+      margin-bottom: 24px;
+    }
+
+    .price-amount {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 56px;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .price-unit {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 32px;
+    }
+
+    .price-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 40px;
+    }
+
+    .price-features li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 12px;
+      color: rgba(244,241,236,0.75);
+      line-height: 1.7;
+    }
+
+    .check-icon {
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .check-icon svg { stroke: var(--gold); }
+
+    /* FAQ */
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      max-width: 720px;
+      margin-top: 64px;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .faq-q {
+      padding: 28px 0;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--white);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .faq-q:hover { color: var(--gold); }
+
+    .faq-icon {
+      flex-shrink: 0;
+      transition: transform 0.3s;
+    }
+    .faq-item.open .faq-icon { transform: rotate(45deg); }
+
+    .faq-a {
+      font-size: 13px;
+      line-height: 2;
+      color: var(--muted);
+      padding: 0 0 28px;
+      display: none;
+    }
+    .faq-item.open .faq-a { display: block; }
+
+    /* CTA SECTION */
+    .cta-section {
+      position: relative;
+      padding: 120px 60px;
+      text-align: center;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .cta-bg {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(201,168,76,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .cta-title {
+      font-family: 'Bebas Neue', cursive;
+      font-size: clamp(40px, 6vw, 80px);
+      line-height: 1.05;
+      letter-spacing: 0.04em;
+      color: var(--white);
+      margin-bottom: 24px;
+      position: relative;
+    }
+    .cta-title em { color: var(--gold); font-style: normal; }
+
+    .cta-desc {
+      font-size: 14px;
+      line-height: 2;
+      color: var(--muted);
+      margin-bottom: 48px;
+      position: relative;
+    }
+
+    .cta-actions {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      position: relative;
+    }
+
+    .cta-note {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 20px;
+      position: relative;
+    }
+
+    /* RESULTS BAR */
+    .results-bar {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--off-black);
+      padding: 40px 60px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .result-item {
+      text-align: center;
+    }
+
+    .result-num {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 48px;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .result-label {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+
+    /* WHO */
+    .who-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2px;
+      margin-top: 64px;
+    }
+
+    .who-card {
+      background: var(--card);
+      padding: 40px 36px;
+      border-left: 2px solid transparent;
+      transition: border-color 0.3s;
+    }
+    .who-card:hover { border-left-color: var(--gold); }
+
+    .who-industry {
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+
+    .who-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 12px;
+    }
+
+    .who-desc {
+      font-size: 12px;
+      line-height: 1.9;
+      color: var(--muted);
+    }
+
+    /* FOOTER */
+    .footer {
+      padding: 48px 60px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .footer-copy {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-link {
+      font-size: 11px;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.1em;
+      transition: color 0.3s;
+    }
+    .footer-link:hover { color: var(--gold); }
+
+    /* REVEAL */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .nav { padding: 16px 24px; }
+      .hero { padding: 80px 24px; min-height: auto; flex-direction: column; }
+      .hero-right { position: static; transform: none; margin-top: 60px; width: 100%; }
+      .flow-card { min-width: auto; }
+      .section { padding: 80px 24px; }
+      .pain-grid { grid-template-columns: 1fr; }
+      .solution-grid { grid-template-columns: 1fr; gap: 48px; }
+      .pricing-grid { grid-template-columns: 1fr; }
+      .who-grid { grid-template-columns: 1fr; }
+      .results-bar { padding: 40px 24px; }
+      .cta-section { padding: 80px 24px; }
+      .footer { padding: 40px 24px; flex-direction: column; align-items: flex-start; }
+    }
+  
+    /* ===== FLOATING BUTTONS (Home + Top) ===== */
+    .float-btns {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 600;
+    }
+    .float-btn {
+      width: 44px; height: 44px;
+      background: var(--card, #111111);
+      border: 1px solid var(--border, rgba(201,168,76,0.1));
+      color: var(--gold, #C9A84C);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      text-decoration: none;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .float-btn:hover {
+      border-color: rgba(201,168,76,0.4);
+      background: rgba(201,168,76,0.1);
+    }
+    .float-top {
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.3s, transform 0.3s, border-color 0.3s, background 0.3s;
+      pointer-events: none;
+      background: none;
+      border-color: var(--border, rgba(201,168,76,0.1));
+    }
+    .float-top.visible { opacity: 1; transform: translateY(0); pointer-events: all; }
+    @media (max-width: 768px) {
+      .float-btns { bottom: 20px; right: 20px; }
+    }
+
+    </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="/index.html" class="nav-logo">
+      <svg width="24" height="24" viewBox="0 0 32 32" fill="none">
+        <defs>
+          <linearGradient id="g" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#E8C97A"/>
+            <stop offset="100%" stop-color="#C9A84C"/>
+          </linearGradient>
+        </defs>
+        <path d="M6 8 L20 8 L26 16 L20 24 L6 24 L12 16 Z" fill="none" stroke="url(#g)" stroke-width="1.5"/>
+        <path d="M12 16 L26 16" stroke="url(#g)" stroke-width="1.5"/>
+      </svg>
+      <span class="nav-wordmark">SENKODE</span>
+    </a>
+    <a href="#contact" class="nav-cta">無料相談する</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">AI POWERED SNS AUTOMATION</div>
+      <p class="hero-label">INSTAGRAM AUTO POST</p>
+      <h1 class="hero-title">
+        INSTAGRAM<br>
+        <span>自動投稿</span><br>
+        代行
+      </h1>
+      <p class="hero-sub">フォーム入力だけで、毎日投稿が完結する。</p>
+      <p class="hero-desc">
+        AIがキャプションを自動生成し、Instagramに自動投稿。<br>
+        SNS担当者不要。撮影した写真を送るだけで、集客コンテンツが量産される。
+      </p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-primary">無料相談する</a>
+        <a href="#pricing" class="btn-ghost">料金を見る</a>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="flow-card">
+        <div class="flow-card-num">STEP 01</div>
+        <div class="flow-card-title">写真 + テーマを送る</div>
+        <div class="flow-card-desc">Googleフォームに入力するだけ</div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-card">
+        <div class="flow-card-num">STEP 02</div>
+        <div class="flow-card-title">AIがキャプション生成</div>
+        <div class="flow-card-desc">Claude APIが集客文章を自動作成</div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-card">
+        <div class="flow-card-num">STEP 03</div>
+        <div class="flow-card-title">Instagramに自動投稿</div>
+        <div class="flow-card-desc">ハッシュタグ付きで即日公開</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTS BAR -->
+  <div class="results-bar reveal">
+    <div class="result-item">
+      <div class="result-num">0円</div>
+      <div class="result-label">追加ツール費用</div>
+    </div>
+    <div class="result-item">
+      <div class="result-num">3分</div>
+      <div class="result-label">1投稿あたりの作業時間</div>
+    </div>
+    <div class="result-item">
+      <div class="result-num">24h</div>
+      <div class="result-label">稼働時間（自動）</div>
+    </div>
+    <div class="result-item">
+      <div class="result-num">月30+</div>
+      <div class="result-label">最大投稿数</div>
+    </div>
+  </div>
+
+  <!-- PAIN POINTS -->
+  <section class="section">
+    <div class="section-label">PROBLEM</div>
+    <h2 class="section-title">こんな悩み、<em>ありませんか</em></h2>
+    <p class="section-desc">Instagram集客は効果的とわかっていても、続けることが難しい。その理由はほぼ共通しています。</p>
+
+    <div class="pain-grid">
+      <div class="pain-item reveal">
+        <div class="pain-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+        </div>
+        <div class="pain-title">投稿が続かない</div>
+        <div class="pain-desc">毎日投稿しようと決意しても、3日で止まる。本業が忙しくなるとSNSは後回しになってしまう。</div>
+      </div>
+      <div class="pain-item reveal">
+        <div class="pain-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+          </svg>
+        </div>
+        <div class="pain-title">何を書けばいいかわからない</div>
+        <div class="pain-desc">毎回キャプションを考えるのに30分以上かかる。センスがないと感じて投稿をためらう。</div>
+      </div>
+      <div class="pain-item reveal">
+        <div class="pain-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+        </div>
+        <div class="pain-title">外注すると高すぎる</div>
+        <div class="pain-desc">SNS運用代行を頼むと月10〜30万円。小規模ビジネスには費用対効果が合わないことが多い。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOLUTION -->
+  <section class="section solution-bg">
+    <div class="solution-grid">
+      <div>
+        <div class="section-label">SOLUTION</div>
+        <h2 class="section-title">AI が<em>全部</em><br>やってくれる</h2>
+        <p class="section-desc">
+          Senkodeが構築した自動投稿システムは、写真とテーマを送るだけで残りを全自動で処理します。キャプション作成・ハッシュタグ選定・投稿まですべてAIが担当。
+        </p>
+
+        <div class="solution-steps">
+          <div class="solution-step reveal">
+            <div class="step-num">01</div>
+            <div class="step-body">
+              <div class="step-title">写真とテーマをフォームで送信</div>
+              <div class="step-desc">スマホから30秒で完了。「今日の日替わりランチ」「新メニュー追加」などテーマを一言書くだけ。</div>
+            </div>
+          </div>
+          <div class="solution-step reveal">
+            <div class="step-num">02</div>
+            <div class="step-body">
+              <div class="step-title">Claude AIがキャプションを自動生成</div>
+              <div class="step-desc">業種・ターゲット・トーンに合わせたキャプションをAIが生成。ハッシュタグも自動で最適化。</div>
+            </div>
+          </div>
+          <div class="solution-step reveal">
+            <div class="step-num">03</div>
+            <div class="step-body">
+              <div class="step-title">Instagramに自動投稿</div>
+              <div class="step-desc">承認不要でそのまま投稿。投稿完了の通知がLINEに届きます。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="solution-visual reveal">
+        <div class="visual-title">SYSTEM ARCHITECTURE</div>
+        <div class="flow-diagram">
+          <div class="flow-node">
+            <div class="flow-node-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+              </svg>
+            </div>
+            Googleフォーム（写真URL + テーマ入力）
+            <span class="badge-auto">手動</span>
+          </div>
+          <div class="flow-node-arrow">↓</div>
+          <div class="flow-node flow-highlight">
+            <div class="flow-node-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+              </svg>
+            </div>
+            Google Apps Script（トリガー検知）
+            <span class="badge-auto">自動</span>
+          </div>
+          <div class="flow-node-arrow">↓</div>
+          <div class="flow-node flow-highlight">
+            <div class="flow-node-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/>
+              </svg>
+            </div>
+            Claude API（キャプション生成）
+            <span class="badge-auto">自動</span>
+          </div>
+          <div class="flow-node-arrow">↓</div>
+          <div class="flow-node flow-highlight">
+            <div class="flow-node-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 2H3v16h5l3 3 3-3h7V2z"/>
+              </svg>
+            </div>
+            Make.com（Instagram API連携）
+            <span class="badge-auto">自動</span>
+          </div>
+          <div class="flow-node-arrow">↓</div>
+          <div class="flow-node flow-highlight">
+            <div class="flow-node-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/>
+              </svg>
+            </div>
+            Instagram 自動投稿完了
+            <span class="badge-auto">完了</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHO -->
+  <section class="section">
+    <div class="section-label">FOR WHOM</div>
+    <h2 class="section-title">こんな業種に<em>最適</em>です</h2>
+
+    <div class="who-grid">
+      <div class="who-card reveal">
+        <div class="who-industry">RESTAURANT / CAFE</div>
+        <div class="who-title">飲食店・カフェ</div>
+        <div class="who-desc">日替わりランチ、新メニュー、季節限定品など投稿ネタは毎日ある。写真を撮るだけで集客投稿が完成する。</div>
+      </div>
+      <div class="who-card reveal">
+        <div class="who-industry">BEAUTY / SALON</div>
+        <div class="who-title">美容院・ネイル・エステ</div>
+        <div class="who-desc">施術写真さえ撮れば投稿は自動化。ビフォーアフター投稿で新規顧客を獲得し続ける仕組みが作れる。</div>
+      </div>
+      <div class="who-card reveal">
+        <div class="who-industry">HEALTHCARE / CLINIC</div>
+        <div class="who-title">整体院・クリニック</div>
+        <div class="who-desc">健康情報・症例紹介をAIが読みやすい文章に変換。専門家としての信頼性を継続的に発信できる。</div>
+      </div>
+      <div class="who-card reveal">
+        <div class="who-industry">RETAIL / EC</div>
+        <div class="who-title">小売・EC・アパレル</div>
+        <div class="who-desc">新商品、在庫情報、コーディネート提案を毎日自動投稿。フォロワーが購買意欲を持ち続ける設計になる。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="section solution-bg" id="pricing">
+    <div class="section-label">PRICING</div>
+    <h2 class="section-title">シンプルな<em>3プラン</em></h2>
+    <p class="section-desc">最小限の投資で最大限の自動化を。初期費用0円で始められるプランから、フル自動化まで対応します。</p>
+
+    <div class="pricing-grid">
+      <div class="price-card reveal">
+        <div class="price-plan">LITE</div>
+        <div class="price-amount">¥50K</div>
+        <div class="price-unit">初期設定のみ（月額なし）</div>
+        <ul class="price-features">
+          <li>
+            <span class="check-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            自動投稿システム構築・設定
+          </li>
+          <li>
+            <span class="check-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            操作マニュアル納品
+          </li>
+          <li>
+            <span class="check-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            1ヶ月サポート付き
+          </li>
+          <li>
+            <span class="check-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            自社運用への移行支援
+          </li>
+        </ul>
+        <a href="#contact" class="btn-ghost" style="width:100%;text-align:center;">相談する</a>
+      </div>
+
+      <div class="price-card featured reveal">
+        <div class="price-featured-badge">MOST POPULAR</div>
+        <div class="price-plan">STANDARD</div>
+        <div class="price-amount">¥30K</div>
+        <div class="price-unit">/ 月（月10〜15投稿）</div>
+        <ul class="price-features">
+          <li>
+            <span class="check-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            月10〜15投稿の自動投稿代行
+          </li>
+          <li>
+            <span class="check-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            AIキャプション自動生成
+          </li>
+          <li>
+            <span class="check-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            月次レポート（フォロワー推移）
+          </li>
+          <li>
+            <span class="check-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            ハッシュタグ最適化
+          </li>
+          <li>
+            <span class="check-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            LINEサポート対応
+          </li>
+        </ul>
+        <a href="#contact" class="btn-primary" style="width:100%;text-align:center;">相談する</a>
+      </div>
+
+      <div class="price-card reveal">
+        <div class="price-plan">PREMIUM</div>
+        <div class="price-amount">¥50K</div>
+        <div class="price-unit">/ 月（毎日投稿 + 画像制作込み）</div>
+        <ul class="price-features">
+          <li>
+            <span class="check-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            月30投稿（毎日投稿）
+          </li>
+          <li>
+            <span class="check-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            AI画像生成・加工込み
+          </li>
+          <li>
+            <span class="check-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            プロフィール・bio最適化
+          </li>
+          <li>
+            <span class="check-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            週次インサイト分析レポート
+          </li>
+          <li>
+            <span class="check-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            戦略ミーティング（月1回）
+          </li>
+        </ul>
+        <a href="#contact" class="btn-ghost" style="width:100%;text-align:center;">相談する</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section">
+    <div class="section-label">FAQ</div>
+    <h2 class="section-title">よくある<em>質問</em></h2>
+
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Instagram Business Accountがなくても大丈夫ですか？
+          <span class="faq-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </span>
+        </div>
+        <div class="faq-a">初期設定に含まれます。Instagram Business Accountの作成・Facebookページとの連携まで対応します。既存のアカウントがある場合はそのまま移行可能です。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          投稿内容の確認・修正はできますか？
+          <span class="faq-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </span>
+        </div>
+        <div class="faq-a">STANDARDプラン以上は投稿前に確認フローを設定できます。LINEで投稿案を事前確認し、OKを出してから投稿する運用も可能です。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          動画（Reels）にも対応していますか？
+          <span class="faq-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </span>
+        </div>
+        <div class="faq-a">現在は静止画投稿が対象です。Reels対応は2026年内に順次対応予定です。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          解約はいつでもできますか？
+          <span class="faq-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </span>
+        </div>
+        <div class="faq-a">翌月末で解約できます。最低契約期間は3ヶ月です。解約後もシステムはそのまま自社でご利用いただけます。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          AIが作るキャプションの品質は大丈夫ですか？
+          <span class="faq-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </span>
+        </div>
+        <div class="faq-a">業種・ターゲット・ブランドトーンに合わせたプロンプトを最初に設計します。最初の1ヶ月は調整期間として品質を担保します。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section" id="contact">
+    <div class="cta-bg"></div>
+    <h2 class="cta-title">まず、<em>話してみる</em><br>だけでいい。</h2>
+    <p class="cta-desc">無料相談30分。現在のInstagram運用状況をヒアリングし、最適なプランをご提案します。</p>
+    <div class="cta-actions">
+      <a href="mailto:contact@senkode.jp" class="btn-primary">メールで相談する</a>
+      <a href="/contact.html" class="btn-ghost">お問い合わせフォーム</a>
+    </div>
+    <p class="cta-note">返信は24時間以内。無理な売り込みは一切しません。</p>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-copy">© 2026 Senkode. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="/index.html" class="footer-link">TOP</a>
+      <a href="/services.html" class="footer-link">SERVICES</a>
+      <a href="/works.html" class="footer-link">WORKS</a>
+      <a href="/contact.html" class="footer-link">CONTACT</a>
+    </div>
+  </footer>
+
+  <script>
+    // SCROLL REVEAL
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+
+    // FAQ TOGGLE
+    function toggleFaq(el) {
+      const item = el.parentElement;
+      item.classList.toggle('open');
+    }
+  
+    // Float buttons
+    (function(){
+      var btn = document.getElementById('floatTop');
+      if(!btn) return;
+      window.addEventListener('scroll', function(){
+        btn.classList.toggle('visible', window.scrollY > 400);
+      }, {passive:true});
+      btn.addEventListener('click', function(){
+        window.scrollTo({top:0,behavior:'smooth'});
+      });
+    })();
+</script>
+  <!-- Floating: Home + Back to Top -->
+  <div class="float-btns">
+    <a href="/index.html" class="float-btn float-home" aria-label="ホームへ戻る" title="ホームへ戻る">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 6.5L8 2L14 6.5V14H10V10H6V14H2V6.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg>
+    </a>
+    <button class="float-btn float-top" id="floatTop" aria-label="ページトップへ" title="ページトップへ">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 12V4M4 8l4-4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+</body>
+</html>

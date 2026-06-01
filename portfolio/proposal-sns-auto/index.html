@@ -837,7 +837,47 @@
       .doc-nav { display: none; }
       .back-link { top: 16px; left: 16px; }
     }
-  </style>
+  
+    /* ===== FLOATING BUTTONS (Home + Top) ===== */
+    .float-btns {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 600;
+    }
+    .float-btn {
+      width: 44px; height: 44px;
+      background: var(--card, #111111);
+      border: 1px solid var(--border, rgba(201,168,76,0.1));
+      color: var(--gold, #C9A84C);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      text-decoration: none;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .float-btn:hover {
+      border-color: rgba(201,168,76,0.4);
+      background: rgba(201,168,76,0.1);
+    }
+    .float-top {
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.3s, transform 0.3s, border-color 0.3s, background 0.3s;
+      pointer-events: none;
+      background: none;
+      border-color: var(--border, rgba(201,168,76,0.1));
+    }
+    .float-top.visible { opacity: 1; transform: translateY(0); pointer-events: all; }
+    @media (max-width: 768px) {
+      .float-btns { bottom: 20px; right: 20px; }
+    }
+
+    </style>
 </head>
 <body>
 
@@ -1534,6 +1574,27 @@
   }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
 
   slides.forEach(s => obs.observe(s));
+
+    // Float buttons
+    (function(){
+      var btn = document.getElementById('floatTop');
+      if(!btn) return;
+      window.addEventListener('scroll', function(){
+        btn.classList.toggle('visible', window.scrollY > 400);
+      }, {passive:true});
+      btn.addEventListener('click', function(){
+        window.scrollTo({top:0,behavior:'smooth'});
+      });
+    })();
 </script>
+  <!-- Floating: Home + Back to Top -->
+  <div class="float-btns">
+    <a href="/index.html" class="float-btn float-home" aria-label="ホームへ戻る" title="ホームへ戻る">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 6.5L8 2L14 6.5V14H10V10H6V14H2V6.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg>
+    </a>
+    <button class="float-btn float-top" id="floatTop" aria-label="ページトップへ" title="ページトップへ">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 12V4M4 8l4-4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
 </body>
 </html>
