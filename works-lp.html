@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LP & Web Design — Senkode Works</title>
+  <meta name="description" content="Senkodeのランディングページ・Web制作実績。ジム・医療・SaaS・不動産・教育など多業種16件。">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital@1&family=Noto+Sans+JP:wght@100;200;300;700&display=swap" rel="stylesheet">
+  <style>
+    [class*="grid"] > *, [class*="inner"] > *, [class*="wrap"] > * { min-width: 0; }
+    img, video, iframe { max-width: 100%; height: auto; }
+    html { overflow-x: hidden; }
+
+    :root {
+      --gold: #C9A84C; --gold-light: #E8C97A; --gold-dim: #6B5420;
+      --black: #080808; --off-black: #0F0F0F; --card: #111111;
+      --white: #F4F1EC; --muted: rgba(244,241,236,0.35);
+      --border: rgba(201,168,76,0.1); --gold-hover: rgba(201,168,76,0.1);
+      --gold-alpha-40: rgba(201,168,76,0.4); --gold-alpha-30: rgba(201,168,76,0.3);
+      --gold-alpha-50: rgba(201,168,76,0.5); --white-dim: rgba(244,241,236,0.4);
+      --white-faint: rgba(244,241,236,0.2); --gold-glow-soft: rgba(201,168,76,0.08);
+      --gold-grid: rgba(201,168,76,0.03); --nav-bg: rgba(15,15,15,0.85);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--black); color: var(--white);
+      font-family: 'Noto Sans JP', sans-serif; font-weight: 300;
+      overflow-x: hidden; cursor: none;
+      overflow-wrap: break-word; text-wrap: pretty;
+    }
+    h1, h2, h3 { text-wrap: balance; }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dim); }
+
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      background-image: linear-gradient(var(--gold-grid) 1px, transparent 1px), linear-gradient(90deg, var(--gold-grid) 1px, transparent 1px);
+      background-size: 80px 80px; pointer-events: none; z-index: 0;
+    }
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    .cursor-dot { position: fixed; width: 8px; height: 8px; background: var(--gold); border-radius: 50%; transform: translate(-50%,-50%); pointer-events: none; z-index: 9999; mix-blend-mode: difference; }
+    .cursor-ring { position: fixed; width: 32px; height: 32px; border: 1px solid var(--gold-alpha-50); border-radius: 50%; transform: translate(-50%,-50%); pointer-events: none; z-index: 9998; transition: width 0.3s, height 0.3s; }
+    .cursor-ring.expanded { width: 48px; height: 48px; }
+    .noise { position: fixed; inset: 0; pointer-events: none; z-index: 500; opacity: 0.025; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); background-size: 200px 200px; }
+
+    .nav { position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 20px 60px; background: var(--nav-bg); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-wordmark { font-family: 'Bebas Neue', cursive; font-size: 22px; letter-spacing: 0.25em; color: var(--white); }
+    .nav-links { display: flex; align-items: center; gap: 32px; }
+    .nav-link { font-size: 11px; letter-spacing: 0.2em; color: var(--muted); text-decoration: none; transition: color 0.3s; }
+    .nav-link:hover, .nav-link.active { color: var(--white); }
+    .nav-cta { font-size: 10px; letter-spacing: 0.2em; color: var(--gold); text-decoration: none; border: 1px solid var(--gold-alpha-40); padding: 8px 16px; transition: background 0.3s; }
+    .nav-cta:hover { background: var(--gold-hover); }
+
+    /* PAGE HEADER */
+    .page-header {
+      padding: 20px 60px 22px;
+      border-bottom: 1px solid var(--border);
+      position: relative; z-index: 1;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .breadcrumb-back {
+      font-size: 10px; letter-spacing: 0.2em; color: var(--muted);
+      text-decoration: none; transition: color 0.3s;
+    }
+    .breadcrumb-back:hover { color: var(--gold); }
+    .page-header-right { display: flex; align-items: center; gap: 24px; }
+    .page-header-cat { font-size: 10px; letter-spacing: 0.25em; color: var(--gold); font-weight: 100; }
+    .page-header-count { font-size: 10px; letter-spacing: 0.2em; color: var(--muted); }
+
+    /* WORKS GRID */
+    .works-section { padding: 48px 60px 140px; position: relative; z-index: 1; }
+    .works-inner { max-width: 1100px; margin: 0 auto; }
+    .works-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2px; }
+
+    .work-card { background: var(--card); border: 1px solid var(--border); overflow: hidden; transition-delay: var(--delay, 0s); position: relative; cursor: pointer; }
+    .work-card::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 2px; background: var(--gold); transition: left 0.5s ease; z-index: 2; }
+    .work-card:hover::before { left: 100%; }
+
+    .work-thumb { height: 180px; position: relative; overflow: hidden; }
+    .work-thumb-label { position: absolute; bottom: 16px; left: 20px; font-family: 'Bebas Neue', cursive; font-size: 36px; letter-spacing: 0.1em; color: rgba(201,168,76,0.15); line-height: 1; user-select: none; }
+    .work-thumb-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); opacity: 0.6; }
+    .work-body { padding: 24px 28px 28px; }
+    .work-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .work-tag { font-size: 9px; letter-spacing: 0.2em; color: var(--gold); border: 1px solid var(--gold-alpha-30); padding: 3px 10px; }
+    .work-date { font-size: 9px; letter-spacing: 0.15em; color: var(--muted); }
+    .work-title { font-size: 13px; font-weight: 700; color: var(--white); margin-bottom: 10px; letter-spacing: 0.03em; line-height: 1.6; }
+    .work-desc { font-size: 11px; color: var(--muted); line-height: 1.8; margin-bottom: 16px; }
+    .work-link { font-size: 10px; letter-spacing: 0.2em; color: var(--gold); text-decoration: none; opacity: 0; transition: opacity 0.3s; display: inline-flex; align-items: center; gap: 6px; }
+    .work-card:hover .work-link { opacity: 1; }
+
+    /* THUMBNAIL STYLES */
+    .work-thumb--web { background: linear-gradient(135deg, #050505 0%, #1a1a1a 50%, var(--gold-dim) 100%); }
+    .work-thumb--lp-gym { background: linear-gradient(135deg, var(--black) 0%, #0a1a0a 50%, #1a3320 100%); }
+    .work-thumb--lp-fukugyou { background: linear-gradient(135deg, var(--black) 0%, #120d1a 50%, #2a1a3a 100%); }
+    .work-thumb--void-tokyo { background: #080808; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 4px; }
+    .work-thumb--void-tokyo .void-label-outline { font-family: 'Bebas Neue', cursive; font-size: 28px; letter-spacing: -1px; color: transparent; -webkit-text-stroke: 1px #f0f0f0; line-height: 0.9; }
+    .work-thumb--void-tokyo .void-label-solid { font-family: 'Bebas Neue', cursive; font-size: 28px; letter-spacing: -1px; color: #f0f0f0; line-height: 0.9; }
+    .work-thumb--void-tokyo .void-bar { width: 36px; height: 2px; background: #ff0000; margin-top: 4px; }
+    .work-thumb--lp-clinic { background: linear-gradient(160deg, #ffffff 0%, #fde8e8 50%, #f5c8c8 100%); display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 6px; }
+    .work-thumb--lp-clinic .clinic-logo { font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-size: 20px; font-weight: 300; color: #c9a0a0; letter-spacing: 3px; }
+    .work-thumb--lp-clinic .clinic-bar { width: 28px; height: 1px; background: #c9a0a0; }
+    .work-thumb--lp-clinic .clinic-sub { font-size: 8px; letter-spacing: 4px; color: #c9a0a0; }
+    .work-thumb--lp-saas { background: #050D05; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 4px; }
+    .work-thumb--lp-saas .saas-logo { font-family: 'Courier New', monospace; font-size: 14px; font-weight: 700; letter-spacing: 2px; color: #00FF88; text-shadow: 0 0 12px rgba(0,255,136,0.5); }
+    .work-thumb--lp-saas .saas-cmd { font-family: 'Courier New', monospace; font-size: 9px; color: rgba(0,255,136,0.5); letter-spacing: 1px; }
+    .work-thumb--cafe-matin { background: linear-gradient(135deg, #F5EDE0 0%, #C4956A 60%, #3D2B1F 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; }
+    .cafe-matin-logo { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 22px; color: #FDFAF6; letter-spacing: 2px; }
+    .cafe-matin-sub { font-size: 9px; letter-spacing: 4px; color: rgba(253,250,246,0.6); }
+    .cafe-matin-dots { display: flex; gap: 6px; margin-top: 4px; }
+    .cafe-matin-dots span { width: 6px; height: 6px; border-radius: 50%; background: #E2C4A0; }
+    .work-thumb--koumuten { background: linear-gradient(135deg, #F3EFE6 0%, #A9885F 55%, #545E43 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; }
+    .koumuten-logo { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 21px; color: #FBFAF6; letter-spacing: 1px; }
+    .koumuten-sub { font-size: 9px; letter-spacing: 4px; color: rgba(251,250,246,0.65); }
+
+    .btn-primary { display: inline-block; padding: 14px 32px; border: 1px solid var(--gold); color: var(--gold); text-decoration: none; font-size: 11px; letter-spacing: 0.2em; transition: background 0.3s; }
+    .btn-primary:hover { background: var(--gold-hover); }
+
+    .footer { padding: 24px 60px; background: var(--black); border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 1; }
+    .footer-copy { font-size: 10px; letter-spacing: 0.25em; color: var(--muted); }
+    .footer-tag  { font-size: 9px; letter-spacing: 0.15em; color: var(--white-faint); }
+    .footer-sns  { display: flex; gap: 20px; align-items: center; }
+    .footer-sns a { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; color: var(--muted); transition: color 0.3s; text-decoration: none; }
+    .footer-sns a:hover { color: var(--gold); }
+
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .nav { padding: 20px 40px; }
+      .page-header { padding: 20px 40px 22px; }
+      .works-section { padding: 48px 40px 100px; }
+      .works-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+      .footer { padding: 24px 40px; }
+    }
+    @media (max-width: 768px) {
+      body { cursor: auto; }
+      .cursor-dot, .cursor-ring { display: none; }
+      .nav { padding: 16px 24px; }
+      .nav-link { display: none; }
+      .page-header { padding: 14px 24px 16px; flex-direction: column; align-items: flex-start; gap: 6px; }
+      .page-header-right { gap: 12px; }
+      .works-section { padding: 32px 24px 80px; }
+      .works-grid { grid-template-columns: minmax(0, 1fr); }
+      .footer { padding: 20px 24px; flex-direction: column; gap: 8px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+  <div class="noise"></div>
+
+  <nav class="nav">
+    <a href="https://senkode.jp/" class="nav-logo">
+      <svg width="44" height="44" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="logoGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#6B5420"/>
+            <stop offset="50%" stop-color="#E8C97A"/>
+            <stop offset="100%" stop-color="#C9A84C"/>
+          </linearGradient>
+          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <path id="logoCircle" d="M30,5 A25,25,0,1,1,29.999,5" fill="none"/>
+        </defs>
+        <circle cx="30" cy="30" r="28" fill="none" stroke="#C9A84C" stroke-width="0.5" opacity="0.4"/>
+        <circle cx="30" cy="30" r="20" fill="none" stroke="#C9A84C" stroke-width="0.3" opacity="0.2"/>
+        <g transform="translate(-6,-4.4) scale(0.36)">
+          <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="url(#logoGrad)" style="filter: url(#glow)"/>
+        </g>
+        <text font-family="'Bebas Neue','Noto Sans JP',sans-serif" font-size="5" fill="#C9A84C" opacity="0.78">
+          <textPath href="#logoCircle" startOffset="0%" letter-spacing="2.5">Senkode · 閃光 · Senkode · 閃光 ·</textPath>
+        </text>
+      </svg>
+      <span class="nav-wordmark">SENKODE</span>
+    </a>
+    <div class="nav-links">
+      <a href="https://senkode.jp/services.html" class="nav-link">SERVICES</a>
+      <a href="https://senkode.jp/works.html" class="nav-link active">WORKS</a>
+      <a href="https://senkode.jp/articles/index.html" class="nav-link">ARTICLES</a>
+      <a href="https://senkode.jp/about.html" class="nav-link">ABOUT</a>
+      <a href="https://senkode.jp/contact.html" class="nav-cta">無料相談 CONTACT</a>
+    </div>
+  </nav>
+
+  <div class="page-header">
+    <a href="https://senkode.jp/works.html" class="breadcrumb-back">← WORKS</a>
+    <div class="page-header-right">
+      <span class="page-header-cat">01 — LP & WEB DESIGN</span>
+      <span class="page-header-count">17 works</span>
+    </div>
+  </div>
+
+  <section class="works-section">
+    <div class="works-inner">
+      <div class="works-grid">
+
+        <!-- Senkode.jp -->
+        <div class="work-card reveal" style="--delay:0s" onclick="window.open('https://senkode.jp/','_blank')">
+          <div class="work-thumb work-thumb--web">
+            <span class="work-thumb-label">01</span>
+            <svg class="work-thumb-icon" width="48" height="48" viewBox="0 0 200 200" fill="none">
+              <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="#C9A84C" opacity="0.5"/>
+            </svg>
+          </div>
+          <div class="work-body">
+            <div class="work-meta"><span class="work-tag">Web Production</span><span class="work-date">2026.04</span></div>
+            <h3 class="work-title">Senkode.jp — コンサルティングファーム コーポレートサイト</h3>
+            <p class="work-desc">ブランドコンセプト「閃光」をゼロから設計・実装。ゴールド×ブラックのラグジュアリーデザイン。カスタムカーソル・スクロールアニメーション実装。</p>
+            <span class="work-link">VIEW SITE →</span>
+          </div>
+        </div>
+
+        <!-- APEX GYM LP -->
+        <div class="work-card reveal" style="--delay:0.08s" onclick="window.open('https://apex-gym-senkode.vercel.app/','_blank')">
+          <div class="work-thumb work-thumb--lp-gym">
+            <span class="work-thumb-label">02</span>
+            <svg class="work-thumb-icon" width="48" height="48" viewBox="0 0 200 200" fill="none">
+              <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="#C9A84C" opacity="0.5"/>
+            </svg>
+          </div>
+          <div class="work-body">
+            <div class="work-meta"><span class="work-tag">LP Design</span><span class="work-date">2026.04</span></div>
+            <h3 class="work-title">APEX GYM — パーソナルジム向け ラグジュアリーLP</h3>
+            <p class="work-desc">高単価パーソナルジム向けのコンバージョン特化LP。高級感と信頼感を両立したデザインで、体験申し込みへの動線を最適化。</p>
+            <span class="work-link">VIEW LP →</span>
+          </div>
+        </div>
+
+        <!-- 副業LP -->
+        <div class="work-card reveal" style="--delay:0.16s" onclick="window.open('https://senkode.jp/portfolio/lp-fukugyou/index.html','_blank')">
+          <div class="work-thumb work-thumb--lp-fukugyou">
+            <span class="work-thumb-label">03</span>
+            <svg class="work-thumb-icon" width="48" height="48" viewBox="0 0 200 200" fill="none">
+              <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="#C9A84C" opacity="0.5"/>
+            </svg>
+          </div>
+          <div class="work-body">
+            <div class="work-meta"><span class="work-tag">LP Design</span><span class="work-date">2026.04</span></div>
+            <h3 class="work-title">副業スクール向け サービス紹介LP</h3>
+            <p class="work-desc">副業・スキルアップを訴求するサービスLP。ターゲットの不安と期待に応えるコピーとCTA設計で、問い合わせ率向上を重視。</p>
+            <span class="work-link">VIEW LP →</span>
+          </div>
+        </div>
+
+        <!-- VOID TOKYO LP -->
+        <div class="work-card reveal" style="--delay:0.24s" onclick="window.open('https://void-tokyo-lp.vercel.app/','_blank')">
+          <div class="work-thumb work-thumb--void-tokyo">
+            <span class="void-label-outline">VOID</span>
+            <span class="void-label-solid">TOKYO</span>
+            <div class="void-bar"></div>
+          </div>
+          <div class="work-body">
+            <div class="work-meta"><span class="work-tag">LP / Fashion</span><span class="work-date">2026.05</span></div>
+            <h3 class="work-title">VOID TOKYO — ストリートウェアブランドLP</h3>
+            <p class="work-desc">黒×白×レッド。Supreme型センタータイポグラフィ・CSSマーキーアニメーション・アウトラインテキストを用いたファッションブランドLP。</p>
+            <span class="work-link">VIEW LP →</span>
+          </div>
+        </div>
+
+        <!-- CLINIQUE BLANC 美容クリニックLP（公開済み） -->
+        <div class="work-card reveal" style="--delay:0.32s" onclick="window.open('https://clinique-blanc-lp.vercel.app/','_blank')">
+          <div class="work-thumb work-thumb--lp-clinic">
+            <span class="clinic-logo">CLINIQUE BLANC</span>
+            <div class="clinic-bar"></div>
+            <span class="clinic-sub">PREMIUM AESTHETIC</span>
+          </div>
+          <div class="work-body">
+            <div class="work-meta"><span class="work-tag">LP / Medical Beauty</span><span class="work-date">2026.07</span></div>
+            <h3 class="work-title">CLINIQUE BLANC — プレミアム美容クリニックLP</h3>
+            <p class="work-desc">「美しさは、静けさの中にある。」クリーム×ローズの上品トーン。院内空間で信頼を伝え、景表法・privacyに配慮した医療美容LP。実写級イメージ4点を制作。</p>
+            <span class="work-link">VIEW LP →</span>
+          </div>
+        </div>
+
+        <!-- SaaS/AI LP -->
+        <div class="work-card reveal" style="--delay:0.4s" onclick="window.open('https://senkode.jp/portfolio/lp-saas/index.html','_blank')">
+          <div class="work-thumb work-thumb--lp-saas">
+            <span class="saas-logo">FLOWSYNC</span>
+            <span class="saas-cmd">$ npm run scale</span>
+          </div>
+          <div class="work-body">
+            <div class="work-meta"><span class="work-tag">LP / SaaS</span><span class="work-date">2026.05</span></div>
+            <h3 class="work-title">SaaS / AIプロダクト向け ランディングページ</h3>
+            <p class="work-desc">BtoB SaaSプロダクト向けのテック系LP。ターミナル風UI・グリーン×ブラックの開発者向けデザイン。料金プラン・FAQ・トライアルCTAを一体化。</p>
+            <span class="work-link">VIEW LP →</span>
+          </div>
+        </div>
+
+        <!-- CAFÉ MATIN（公開済み） -->
+        <div class="work-card reveal" style="--delay:0.48s" onclick="window.open('https://cafe-matin-lp.vercel.app/','_blank')">
+          <div class="work-thumb work-thumb--cafe-matin">
+            <span class="cafe-matin-logo">Café Matin</span>
+            <span class="cafe-matin-sub">MORNING CAFÉ</span>
+            <div class="cafe-matin-dots"><span></span><span></span><span></span></div>
+          </div>
+          <div class="work-body">
+            <div class="work-meta"><span class="work-tag">Web / Café</span><span class="work-date">2026.07</span></div>
+            <h3 class="work-title">CAFÉ MATIN — 朝カフェ・ベーカリー ホームページ</h3>
+            <p class="work-desc">下北沢の朝専門カフェ。ウォームブラウン×朝の斜光で「丁寧な暮らし」を訴求。自家製パン・スペシャルティコーヒーの実写級イメージ8点を制作し、脱ストックで世界観を統一。</p>
+            <span class="work-link">VIEW SITE →</span>
+          </div>
+        </div>
+
+        <!-- 杜の栖工房 注文住宅LP（公開済み） -->
+        <div class="work-card reveal" style="--delay:0.52s" onclick="window.open('https://lp-koumuten.vercel.app/','_blank')">
+          <div class="work-thumb work-thumb--koumuten">
+            <span class="koumuten-logo">Morino Sumika</span>
+            <span class="koumuten-sub">NATURAL MATERIAL HOUSE</span>
+          </div>
+          <div class="work-body">
+            <div class="work-meta"><span class="work-tag">Web / 注文住宅</span><span class="work-date">2026.08</span></div>
+            <h3 class="work-title">杜の栖工房 — 自然素材の注文住宅 ブランドLP</h3>
+            <p class="work-desc">湘南・茅ヶ崎の工務店ブランドLP。無垢の木と漆喰の「木のぬくもり」を、人物を排し光と小物で見せる住宅雑誌級の実写7点で表現。施工事例フィルター・脱AI感のトーンで信頼と世界観を両立。</p>
+            <span class="work-link">VIEW SITE →</span>
+          </div>
+        </div>
+
+        <!-- 税理士事務所 LP -->
+        <div class="work-card reveal" style="--delay:0.56s" onclick="window.open('https://senkode.jp/portfolio/lp-tax/index.html','_blank')">
+          <div class="work-thumb" style="background:linear-gradient(135deg,#0D1B2A 0%,#1A2E44 50%,#2563EB 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;">
+            <span class="work-thumb-label">08</span>
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#93C5FD" stroke-width="1.5"><rect x="4" y="4" width="16" height="16" rx="2"/><line x1="8" y1="9" x2="16" y2="9"/><line x1="8" y1="13" x2="13" y2="13"/></svg>
+          </div>
+          <div class="work-body">
+            <div class="work-meta"><span class="work-tag">LP / Tax Office</span><span class="work-date">2026.05</span></div>
+            <h3 class="work-title">税理士事務所 新規顧客獲得LP</h3>
+            <p class="work-desc">中小企業経営者向けの税理士事務所LP。「記帳・確定申告の不安を取り除く」訴求で、無料相談への導線を最適化。ネイビー×ホワイトの信頼感設計。</p>
+            <span class="work-link">VIEW LP →</span>
+          </div>
+        </div>
+
+        <!-- 整骨院 LP -->
+        <div class="work-card reveal" style="--delay:0.64s" onclick="window.open('https://senkode.jp/portfolio/lp-seikotsu/index.html','_blank')">
+          <div class="work-thumb" style="background:linear-gradient(135deg,#F0F9FF 0%,#BAE6FD 50%,#0891B2 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;">
+            <span class="work-thumb-label" style="color:rgba(8,145,178,0.2);">09</span>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0891B2" stroke-width="1.5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M12 8v4l3 3"/></svg>
+          </div>
+          <div class="work-body">
+            <div class="work-meta"><span class="work-tag">LP / Medical</span><span class="work-date">2026.05</span></div>
+            <h3 class="work-title">整骨院・接骨院 新患獲得LP</h3>
+            <p class="work-desc">腰痛・肩こりに悩む30〜50代向けの整骨院LP。悩み別アプローチ・施術の流れ・口コミ構成で、電話予約CVを最大化。ライトブルーの清潔感設計。</p>
+            <span class="work-link">VIEW LP →</span>
+          </div>
+        </div>
+
+        <!-- 採用ページ -->
+        <div class="work-card reveal" style="--delay:0.72s" onclick="window.open('https://senkode.jp/portfolio/lp-recruit/index.html','_blank')">
+          <div class="work-thumb" style="background:linear-gradient(135deg,#080808 0%,#1A0A00 50%,#2D1200 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden;">
+            <span class="work-thumb-label">10</span>
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(201,168,76,0.6)" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg>
+          </div>
+          <div class="work-body">
+            <div class="work-meta"><span class="work-tag">LP / Recruit</span><span class="work-date">2026.05</span></div>
+            <h3 class="work-title">採用ランディングページ — 物流×DX人材向け</h3>
+            <p class="work-desc">物流DX推進を担う人材向け採用LP。仕事の意義・職場環境・キャリアパスを訴求し、エントリーへの意思決定を加速する構成。</p>
+            <span class="work-link">VIEW LP →</span>
+          </div>
+        </div>
+
+        <!-- 製造業DX研修 LP -->
+        <div class="work-card reveal" style="--delay:0.8s" onclick="window.open('https://senkode.jp/portfolio/lp-dx-training/index.html','_blank')">
+          <div class="work-thumb" style="background:linear-gradient(135deg,#060A12 0%,#0A0F1C 50%,#0E1A30 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden;">
+            <span class="work-thumb-label">11</span>
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(99,179,237,0.6)" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          </div>
+          <div class="work-body">
+            <div class="work-meta"><span class="work-tag">LP / BtoB</span><span class="work-date">2026.05</span></div>
+            <h3 class="work-title">製造業DX研修 BtoB向けランディングページ</h3>
+            <p class="work-desc">製造業の管理職・経営層向けDX研修サービスLP。ROI訴求・導入事例・カリキュラムを整理し、問い合わせ転換率を最大化。</p>
+            <span class="work-link">VIEW LP →</span>
+          </div>
+        </div>
+
+        <!-- 不動産売却 LP -->
+        <div class="work-card reveal" style="--delay:0.88s" onclick="window.open('https://seijitsu-realestate-lp.vercel.app/','_blank')">
+          <div class="work-thumb" style="background:linear-gradient(135deg,#0C0906 0%,#151009 50%,#1C1510 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden;">
+            <span class="work-thumb-label">12</span>
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(201,168,76,0.5)" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+          </div>
+          <div class="work-body">
+            <div class="work-meta"><span class="work-tag">LP / Real Estate</span><span class="work-date">2026.05</span></div>
+            <h3 class="work-title">不動産売却査定 問い合わせ獲得LP</h3>
+            <p class="work-desc">不動産売却を検討する40〜60代向けLP。査定の流れ・信頼要素・よくある不安の解消を軸に構成し、無料査定依頼へのCVを設計。</p>
+            <span class="work-link">VIEW LP →</span>
+          </div>
+        </div>
+
+        <!-- 学習塾 LP -->
+        <div class="work-card reveal" style="--delay:0.96s" onclick="window.open('https://senkode.jp/portfolio/lp-juku/index.html','_blank')">
+          <div class="work-thumb" style="background:linear-gradient(135deg,#070912 0%,#0A0D1A 50%,#0F1228 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden;">
+            <span class="work-thumb-label">13</span>
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(167,139,250,0.6)" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          </div>
+          <div class="work-body">
+            <div class="work-meta"><span class="work-tag">LP / Education</span><span class="work-date">2026.05</span></div>
+            <h3 class="work-title">学習塾・個別指導 入塾問い合わせLP</h3>
+            <p class="work-desc">中高生の保護者向け学習塾LP。成績向上の実績・授業の流れ・講師の質を訴求し、無料体験申し込みへの動線を構築。</p>
+            <span class="work-link">VIEW LP →</span>
+          </div>
+        </div>
+
+        <!-- 保険代理店 LP -->
+        <div class="work-card reveal" style="--delay:1.04s" onclick="window.open('https://senkode.jp/portfolio/lp-insurance/index.html','_blank')">
+          <div class="work-thumb" style="background:linear-gradient(135deg,#05080F 0%,#080C18 50%,#0C1122 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden;">
+            <span class="work-thumb-label">14</span>
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(96,165,250,0.6)" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div class="work-body">
+            <div class="work-meta"><span class="work-tag">LP / Insurance</span><span class="work-date">2026.05</span></div>
+            <h3 class="work-title">保険代理店 相談問い合わせ獲得LP</h3>
+            <p class="work-desc">保険見直しを検討する30〜50代向け保険代理店LP。安心感・中立性・相談のしやすさを訴求し、無料相談申し込みへのCVを最大化。</p>
+            <span class="work-link">VIEW LP →</span>
+          </div>
+        </div>
+
+        <!-- 歯科医院 LP -->
+        <div class="work-card reveal" style="--delay:1.12s" onclick="window.open('https://senkode.jp/portfolio/lp-dental/index.html','_blank')">
+          <div class="work-thumb" style="background:linear-gradient(135deg,#0A0407 0%,#110508 50%,#180809 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden;">
+            <span class="work-thumb-label">15</span>
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(251,113,133,0.6)" stroke-width="1.5"><path d="M12 2C8.5 2 5 5 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-4-3.5-7-7-7z"/></svg>
+          </div>
+          <div class="work-body">
+            <div class="work-meta"><span class="work-tag">LP / Dental</span><span class="work-date">2026.05</span></div>
+            <h3 class="work-title">歯科医院 新患獲得LP</h3>
+            <p class="work-desc">初診患者獲得に特化した歯科クリニックLP。「痛くない・怖くない」訴求と、予約の手軽さを前面に出したCTA設計。清潔感と温かみを両立。</p>
+            <span class="work-link">VIEW LP →</span>
+          </div>
+        </div>
+
+        <!-- Anthroom LP -->
+        <div class="work-card reveal" style="--delay:1.28s" onclick="window.open('https://anthroom-lp.vercel.app/','_blank')">
+          <div class="work-thumb" style="background:linear-gradient(135deg,#0D0810 0%,#150D1A 50%,#1E1225 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;position:relative;overflow:hidden;">
+            <span class="work-thumb-label">16</span>
+            <span style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:22px;letter-spacing:4px;color:rgba(216,191,216,0.7);">Anthroom</span>
+            <span style="font-size:8px;letter-spacing:5px;color:rgba(216,191,216,0.35);">SASEBO</span>
+          </div>
+          <div class="work-body">
+            <div class="work-meta"><span class="work-tag">LP / Wellness</span><span class="work-date">2026.05</span></div>
+            <h3 class="work-title">Anthroom — セラピスト講座体験LP</h3>
+            <p class="work-desc">佐世保のセラピストスクール体験講座LP。¥3,300 の低単価CTA で申込ハードルを下げ、個別相談へ誘導する設計。地域密着×体験型コンテンツ構成。</p>
+            <span class="work-link">VIEW LP →</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span class="footer-copy">Senkode © 2026</span>
+    <div class="footer-sns">
+      <a href="https://note.com/sena01300" target="_blank" rel="noopener" aria-label="note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><path d="M5 4h14a2 2 0 0 1 2 2v13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a2 2 0 0 1 2-2z"/><line x1="8" y1="9" x2="16" y2="9"/><line x1="8" y1="13" x2="13" y2="13"/></svg>
+      </a>
+      <a href="https://x.com/senkode1006" target="_blank" rel="noopener" aria-label="X">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.402 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.256 5.63 5.908-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+    </div>
+    <span class="footer-tag">閃光 — Flash of Light</span>
+  </footer>
+
+  <script>
+    const cursorDot = document.querySelector('.cursor-dot');
+    const cursorRing = document.querySelector('.cursor-ring');
+    let mouseX=0,mouseY=0,ringX=0,ringY=0;
+    document.addEventListener('mousemove',(e)=>{mouseX=e.clientX;mouseY=e.clientY;cursorDot.style.left=mouseX+'px';cursorDot.style.top=mouseY+'px';});
+    (function animate(){const dx=mouseX-ringX,dy=mouseY-ringY;ringX+=dx*0.15;ringY+=dy*0.15;cursorRing.style.left=ringX+'px';cursorRing.style.top=ringY+'px';requestAnimationFrame(animate);})();
+    document.querySelectorAll('.work-card,.btn-primary,.nav-cta').forEach(el=>{el.addEventListener('mouseenter',()=>cursorRing.classList.add('expanded'));el.addEventListener('mouseleave',()=>cursorRing.classList.remove('expanded'));});
+    const obs=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){const d=e.target.style.getPropertyValue('--delay')||'0s';setTimeout(()=>e.target.classList.add('visible'),parseFloat(d)*1000);obs.unobserve(e.target);}});},{threshold:0.1});
+    document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+  </script>
+</body>
+</html>
