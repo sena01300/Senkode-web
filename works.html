@@ -41,7 +41,7 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     p, li, h1, h2, h3, h4, span, div, td, dt, dd, label {
-      word-break: keep-all;
+      word-break: normal;
       overflow-wrap: break-word;
       line-break: strict;
     }
@@ -53,7 +53,7 @@
       font-weight: 300;
       overflow-x: hidden;
       cursor: none;
-      word-break: keep-all;
+      word-break: normal;
       overflow-wrap: break-word;
       line-break: strict;
     }
@@ -795,8 +795,13 @@
     @media (max-width: 768px) {
       .float-btns { bottom: 20px; right: 20px; }
     }
-
-    </style>
+/* ===== 日本語 改行レシピ（2026-06-12確定／predeploy-check必須・keep-all禁止） ===== */
+    @supports (word-break: auto-phrase) {
+      p, li, span, h1, h2, h3, h4, h5, h6, div, td, dt, dd, label { word-break: auto-phrase; }
+    }
+    h1, h2, h3, h4 { text-wrap: balance; }
+    p, blockquote, figcaption { text-wrap: pretty; }
+  </style>
 </head>
 <body>
 
@@ -859,7 +864,7 @@
     <div class="page-hero-inner">
       <p class="page-label">PORTFOLIO — 制作実績一覧</p>
       <h1 class="page-title">Works</h1>
-      <p class="page-sub">実績 — LP・Webサイト・SEO記事・自動化ツール・提案書 全 42 件以上</p>
+      <p class="page-sub">実績 — LP・Webサイト・SEO記事・自動化ツール・提案書 全 45 件以上</p>
     </div>
   </section>
 
@@ -982,6 +987,75 @@
             <h3 class="work-title">Senkode.jp — コンサルティングファーム コーポレートサイト</h3>
             <p class="work-desc">ブランドコンセプト「閃光」をゼロから設計・実装。ゴールド×ブラックのラグジュアリーデザイン。カスタムカーソル・スクロールアニメーション実装。</p>
             <a href="index.html" class="work-link">VIEW SITE →</a>
+          </div>
+        </div>
+
+        <!-- Card NEW-A: hair atelier NAGI ヘアサロンLP -->
+        <div class="work-card reveal" style="--delay:0.2s" data-category="web" onclick="window.open('https://lp-hairsalon.vercel.app/','_blank')">
+          <div class="work-thumb" style="background:linear-gradient(135deg,#1A1A1A 0%,#3A3A3A 50%,#9A9A9A 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden;">
+            <span class="work-thumb-label">NEW</span>
+            <div style="font-size:10px;letter-spacing:3px;color:rgba(255,255,255,0.7);">HAIR SALON LP</div>
+            <div style="font-size:14px;font-weight:700;color:#FBFBFB;letter-spacing:1px;">hair atelier NAGI</div>
+            <div style="font-size:9px;color:rgba(251,251,251,0.4);letter-spacing:2px;">モード・モノトーン</div>
+            <div style="margin-top:6px;display:flex;gap:6px;">
+              <span style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.3);color:rgba(255,255,255,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">実写7点</span>
+              <span style="background:rgba(154,154,154,0.15);border:1px solid rgba(154,154,154,0.35);color:rgba(230,230,230,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">事例フィルター</span>
+            </div>
+          </div>
+          <div class="work-body">
+            <div class="work-meta">
+              <span class="work-tag">LP / Beauty</span>
+              <span class="work-date">2026.08</span>
+            </div>
+            <h3 class="work-title">hair atelier NAGI（凪） — モード・モノトーンの大人ヘアサロンLP</h3>
+            <p class="work-desc">東京・自由が丘の大人女性向けヘアサロン ブランドLP。オフホワイト×チャコール×黒×メタルシルバーのモード・モノトーンで都会的に。コンクリ・ガラス・大きな鏡のミニマル空間に、凛としたモデルと施術シーンの実写7点。事例フィルター付き。</p>
+            <span class="work-link">VIEW SITE →</span>
+          </div>
+        </div>
+
+        <!-- Card NEW-B: 杜の栖工房 注文住宅LP -->
+        <div class="work-card reveal" style="--delay:0.22s" data-category="web" onclick="window.open('https://lp-koumuten.vercel.app/','_blank')">
+          <div class="work-thumb" style="background:linear-gradient(135deg,#E8E2D5 0%,#A89878 50%,#3E4A3A 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden;">
+            <span class="work-thumb-label">NEW</span>
+            <div style="font-size:10px;letter-spacing:3px;color:rgba(255,255,255,0.75);">CUSTOM HOME LP</div>
+            <div style="font-size:14px;font-weight:700;color:#FBFBFB;letter-spacing:1px;">杜の栖工房</div>
+            <div style="font-size:9px;color:rgba(251,251,251,0.5);letter-spacing:2px;">注文住宅 / 工務店</div>
+            <div style="margin-top:6px;display:flex;gap:6px;">
+              <span style="background:rgba(62,74,58,0.35);border:1px solid rgba(255,255,255,0.3);color:rgba(255,255,255,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">住宅雑誌級</span>
+              <span style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.35);color:rgba(255,255,255,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">施工事例7点</span>
+            </div>
+          </div>
+          <div class="work-body">
+            <div class="work-meta">
+              <span class="work-tag">LP / 建築</span>
+              <span class="work-date">2026.08</span>
+            </div>
+            <h3 class="work-title">杜の栖工房 — 注文住宅・工務店ブランドLP</h3>
+            <p class="work-desc">生成りベージュ×木×モスグリーンで住宅雑誌級の世界観を構築した注文住宅LP。人物を排し、自然光と木・土・緑の質感で「AI感ゼロ」の実写7点（吹き抜けリビング・造作キッチン・和室・薪ストーブ等）。施工事例フィルター付き。</p>
+            <span class="work-link">VIEW SITE →</span>
+          </div>
+        </div>
+
+        <!-- Card NEW-C: 運行日報レーダー 自社AIツール -->
+        <div class="work-card reveal" style="--delay:0.24s" data-category="automation">
+          <div class="work-thumb" style="background:linear-gradient(135deg,#0A0F14 0%,#0E1A22 50%,#123040 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden;">
+            <span class="work-thumb-label">NEW</span>
+            <div style="font-size:10px;letter-spacing:3px;color:rgba(45,212,191,0.8);">SELF PRODUCT</div>
+            <div style="font-size:14px;font-weight:700;color:#E8F4F4;letter-spacing:1px;">運行日報レーダー</div>
+            <div style="font-size:9px;color:rgba(232,244,244,0.4);letter-spacing:2px;">運送業×AI分析</div>
+            <div style="margin-top:6px;display:flex;gap:6px;">
+              <span style="background:rgba(20,184,166,0.12);border:1px solid rgba(20,184,166,0.3);color:rgba(45,212,191,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">仮名化3ゲート</span>
+              <span style="background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.3);color:rgba(147,197,253,0.9);font-size:8px;letter-spacing:1px;padding:3px 8px;">22/22 test</span>
+            </div>
+          </div>
+          <div class="work-body">
+            <div class="work-meta">
+              <span class="work-tag">Self Product / 運送×AI</span>
+              <span class="work-date">2026.08</span>
+            </div>
+            <h3 class="work-title">運行日報レーダー — 運行日報をAIが自動分析する自社ツール</h3>
+            <p class="work-desc">運送業の運行日報CSVを取り込み、仮名化してからClaude APIが傾向・リスクを分析するNode.js製の自社プロダクト。外部AIへ送る前に実名残存・PII・電話番号を検知する3ゲートで機密を守る設計（テスト22/22）。生データはローカルのみで扱う非公開ツール。</p>
+            <span class="work-link">自社プロダクト（非公開）</span>
           </div>
         </div>
 
