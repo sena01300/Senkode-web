@@ -26,9 +26,10 @@
     ::-webkit-scrollbar-track{background:var(--black)}
     ::-webkit-scrollbar-thumb{background:var(--gold-dim)}
     body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(var(--gold-grid) 1px,transparent 1px),linear-gradient(90deg,var(--gold-grid) 1px,transparent 1px);background-size:80px 80px;pointer-events:none;z-index:0}
-    .cursor-dot{position:fixed;width:8px;height:8px;background:var(--gold);border-radius:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:9999;mix-blend-mode:difference}
-    .cursor-ring{position:fixed;width:32px;height:32px;border:1px solid var(--gold-alpha-50);border-radius:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:9998;transition:width .3s,height .3s}
-    .cursor-ring.expanded{width:48px;height:48px}
+    .cursor-dot{position:fixed;width:5px;height:5px;background:var(--gold);border-radius:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:9999;transition:width .25s,height .25s,opacity .25s}
+    .cursor-ring{position:fixed;width:28px;height:28px;border:1px solid var(--gold-alpha-50);border-radius:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:9998;transition:width .3s,height .3s,border-color .3s,background .3s}
+    .cursor-ring.expanded{width:44px;height:44px;border-color:var(--gold);background:rgba(201,168,76,.06)}
+    *,*::before,*::after{cursor:none !important}
     .noise{position:fixed;inset:0;pointer-events:none;z-index:500;opacity:.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-repeat:repeat;background-size:200px 200px}
     .nav{position:sticky;top:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:20px 60px;background:var(--nav-bg);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
     .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}

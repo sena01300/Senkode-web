@@ -38,10 +38,15 @@
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
+    /* 日本語の自然な改行：文節(auto-phrase)で区切り、禁則処理で句読点の孤立を防ぐ。
+       keep-all は使わない（塊化→端で1文字ずつ折れて「。」だけ孤立する原因） */
     p, li, h1, h2, h3, h4, span, div, td, dt, dd, label {
-      word-break: keep-all;
+      word-break: normal;
       overflow-wrap: break-word;
       line-break: strict;
+    }
+    @supports (word-break: auto-phrase) {
+      p, li, h1, h2, h3, h4, span, div, td, dt, dd, label { word-break: auto-phrase; }
     }
 
     body {
@@ -51,7 +56,7 @@
       font-weight: 300;
       overflow-x: hidden;
       cursor: none;
-      word-break: keep-all;
+      word-break: normal;
       overflow-wrap: break-word;
       line-break: strict;
     }
@@ -79,17 +84,19 @@
 
     /* CURSOR */
     .cursor-dot {
-      position: fixed; width: 8px; height: 8px; background: var(--gold);
+      position: fixed; width: 5px; height: 5px; background: var(--gold);
       border-radius: 50%; transform: translate(-50%,-50%);
-      pointer-events: none; z-index: 9999; mix-blend-mode: difference;
+      pointer-events: none; z-index: 9999;
+      transition: width 0.25s, height 0.25s, opacity 0.25s;
     }
     .cursor-ring {
-      position: fixed; width: 32px; height: 32px;
+      position: fixed; width: 28px; height: 28px;
       border: 1px solid var(--gold-alpha-50); border-radius: 50%;
       transform: translate(-50%,-50%); pointer-events: none;
-      z-index: 9998; transition: width 0.3s, height 0.3s;
+      z-index: 9998; transition: width 0.3s, height 0.3s, border-color 0.3s, background 0.3s;
     }
-    .cursor-ring.expanded { width: 48px; height: 48px; }
+    .cursor-ring.expanded { width: 44px; height: 44px; border-color: var(--gold); background: rgba(201,168,76,0.06); }
+    *, *::before, *::after { cursor: none !important; }
 
     /* NOISE */
     .noise {
@@ -162,11 +169,13 @@
       font-weight: 700; font-size: clamp(22px, 3vw, 32px);
       letter-spacing: 0.06em; color: var(--white);
       line-height: 1.5; margin-bottom: 32px;
+      text-wrap: balance;
     }
     .block-title span { color: var(--gold); }
     .block-body {
       font-size: 13px; color: var(--muted);
       line-height: 2.2; font-weight: 200;
+      text-wrap: pretty;
     }
     .block-body p { margin-bottom: 20px; }
     .block-body p:last-child { margin-bottom: 0; }
@@ -182,6 +191,7 @@
       border-left: 2px solid var(--gold);
       padding-left: 28px;
       margin: 40px 0;
+      text-wrap: pretty;
     }
     .pull-quote span { color: var(--gold); }
 
@@ -247,6 +257,7 @@
       font-family: 'Bebas Neue', cursive;
       font-size: clamp(36px, 6vw, 72px);
       letter-spacing: 0.06em; color: var(--white); line-height: 1;
+      text-wrap: balance;
     }
     .vision-title span { color: var(--gold); }
     .vision-sub { font-size: 12px; color: var(--muted); letter-spacing: 0.15em; margin-top: 12px; }
@@ -541,13 +552,13 @@
       <div class="vision-header reveal">
         <p class="section-label">GROWTH VISION</p>
         <h2 class="vision-title">目標は<span>年商100億円</span>。</h2>
-        <p class="vision-sub">今日のPhase 0が、未来の100億への土台になる</p>
+        <p class="vision-sub">今日積み上げる一案件が、未来の100億への土台になる</p>
       </div>
       <div class="phase-list">
         <div class="phase-item current reveal">
           <p class="phase-num">PHASE 0</p>
-          <p class="phase-scale">副業水準</p>
-          <p class="phase-desc">クラウドワークスで最初の実績を作る通過点</p>
+          <p class="phase-scale">創業期</p>
+          <p class="phase-desc">AIを武器に制作・コンサルの実績と信頼を確立する</p>
         </div>
         <div class="phase-item reveal" style="--delay:0.05s">
           <p class="phase-num">PHASE 1</p>

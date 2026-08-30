@@ -41,7 +41,7 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     p, li, h1, h2, h3, h4, span, div, td, dt, dd, label {
-      word-break: keep-all;
+      word-break: normal;
       overflow-wrap: break-word;
       line-break: strict;
     }
@@ -52,7 +52,7 @@
       font-weight: 300;
       overflow-x: hidden;
       cursor: none;
-      word-break: keep-all;
+      word-break: normal;
       overflow-wrap: break-word;
       line-break: strict;
     }
@@ -121,25 +121,28 @@
     /* ===== CURSOR ===== */
     .cursor-dot {
       position: fixed;
-      width: 8px; height: 8px;
+      width: 5px; height: 5px;
       background: var(--gold);
       border-radius: 50%;
       pointer-events: none;
       transform: translate(-50%, -50%);
       z-index: 9999;
-      mix-blend-mode: difference;
+      transition: width 0.25s, height 0.25s, opacity 0.25s;
     }
     .cursor-ring {
       position: fixed;
-      width: 32px; height: 32px;
+      width: 28px; height: 28px;
       border: 1px solid var(--gold-alpha-50);
       border-radius: 50%;
       pointer-events: none;
       transform: translate(-50%, -50%);
       z-index: 9998;
-      transition: width 0.2s, height 0.2s, border-color 0.2s;
+      transition: width 0.3s, height 0.3s, border-color 0.3s, background 0.3s;
     }
-    .cursor-ring.expanded { width: 48px; height: 48px; }
+    .cursor-ring.expanded { width: 44px; height: 44px; border-color: var(--gold); background: rgba(201,168,76,0.06); }
+    /* おしゃれカーソル統一＋指カーソル全廃（フォーム入力はテキストカーソル維持） */
+    *, *::before, *::after { cursor: none !important; }
+    input, textarea, select { cursor: text !important; }
 
     /* ===== NAV ===== */
     .nav {
@@ -505,8 +508,13 @@
     @media (max-width: 768px) {
       .float-btns { bottom: 20px; right: 20px; }
     }
-
-    </style>
+/* ===== 日本語 改行レシピ（2026-06-12確定／predeploy-check必須・keep-all禁止） ===== */
+    @supports (word-break: auto-phrase) {
+      p, li, span, h1, h2, h3, h4, h5, h6, div, td, dt, dd, label { word-break: auto-phrase; }
+    }
+    h1, h2, h3, h4 { text-wrap: balance; }
+    p, blockquote, figcaption { text-wrap: pretty; }
+  </style>
 </head>
 <body>
 

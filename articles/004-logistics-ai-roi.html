@@ -58,20 +58,21 @@
 
     /* CURSOR */
     .cursor-dot {
-      position: fixed; width: 6px; height: 6px;
+      position: fixed; width: 5px; height: 5px;
       background: var(--gold); border-radius: 50%;
       pointer-events: none; z-index: 9999;
       transform: translate(-50%,-50%);
-      transition: opacity 0.2s;
+      transition: width 0.25s, height 0.25s, opacity 0.25s;
     }
     .cursor-ring {
       position: fixed; width: 28px; height: 28px;
-      border: 1px solid var(--gold-alpha-40); border-radius: 50%;
+      border: 1px solid var(--gold-alpha-50); border-radius: 50%;
       pointer-events: none; z-index: 9998;
       transform: translate(-50%,-50%);
-      transition: width 0.3s, height 0.3s, border-color 0.3s;
+      transition: width 0.3s, height 0.3s, border-color 0.3s, background 0.3s;
     }
-    .cursor-ring.expanded { width: 44px; height: 44px; border-color: var(--gold-alpha-30); }
+    .cursor-ring.expanded { width: 44px; height: 44px; border-color: var(--gold); background: rgba(201,168,76,0.06); }
+    *, *::before, *::after { cursor: none !important; }
 
     /* NOISE */
     .noise {
