@@ -8,7 +8,7 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital@1&family=Noto+Sans+JP:wght@100;200;300;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital@1&family=Noto+Sans+JP:wght@100;200;300;700&family=Shippori+Mincho:wght@400;500&display=swap" rel="stylesheet">
   <style>
     [class*="grid"] > *, [class*="inner"] > *, [class*="wrap"] > * { min-width: 0; }
 
@@ -58,7 +58,7 @@
       font-weight: 300;
       overflow-x: hidden;
       cursor: none;
-      word-break: keep-all;
+      word-break: normal;
       overflow-wrap: break-word;
       line-break: strict;
     }
@@ -166,28 +166,27 @@
     /* ===== CURSOR ===== */
     .cursor-dot {
       position: fixed;
-      width: 8px;
-      height: 8px;
+      width: 5px;
+      height: 5px;
       background: var(--gold);
       border-radius: 50%;
       transform: translate(-50%, -50%);
       pointer-events: none;
       z-index: 9999;
-      mix-blend-mode: difference;
-      transition: transform 0.1s;
+      transition: width 0.25s, height 0.25s, opacity 0.25s;
     }
     .cursor-ring {
       position: fixed;
-      width: 32px;
-      height: 32px;
+      width: 28px;
+      height: 28px;
       border: 1px solid var(--gold-alpha-50);
       border-radius: 50%;
       transform: translate(-50%, -50%);
       pointer-events: none;
       z-index: 9998;
-      transition: width 0.3s, height 0.3s;
+      transition: width 0.3s, height 0.3s, border-color 0.3s, background 0.3s;
     }
-    .cursor-ring.expanded { width: 48px; height: 48px; }
+    .cursor-ring.expanded { width: 44px; height: 44px; border-color: var(--gold); background: rgba(201,168,76,0.06); }
 
     /* ===== NOISE ===== */
     .noise {
@@ -318,15 +317,16 @@
       font-weight: 100;
     }
     .hero-title {
-      font-family: 'Noto Sans JP', sans-serif;
-      font-weight: 700;
-      font-size: clamp(28px, 4vw, 52px);
-      line-height: 1.3;
-      letter-spacing: 0.05em;
+      font-family: 'Shippori Mincho', serif;
+      font-weight: 500;
+      font-size: clamp(19px, 2.1vw, 28px);
+      line-height: 1.9;
+      letter-spacing: 0.08em;
       color: var(--white);
-      margin-bottom: 16px;
+      margin: 4px 0 20px;
     }
     .hero-highlight { color: var(--gold); }
+    .hero-title .ph { display: inline-block; white-space: nowrap; }
     .hero-sub {
       font-family: 'Cormorant Garamond', serif;
       font-style: italic;
@@ -933,11 +933,21 @@
     }
     .division-name {
       font-family: 'Noto Sans JP', sans-serif;
-      font-weight: 300;
-      font-size: 17px;
+      font-weight: 500;
+      font-size: 20px;
       color: var(--white);
+      margin-bottom: 6px;
+      letter-spacing: 0.04em;
+      line-height: 1.35;
+    }
+    .division-target {
+      display: block;
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: 0.12em;
+      color: var(--gold);
+      opacity: 0.75;
       margin-bottom: 12px;
-      letter-spacing: 0.05em;
     }
     .division-suite {
       font-size: 10px;
@@ -950,7 +960,7 @@
 
     /* ===== WORD BREAK — Japanese text ===== */
     p, li, h1, h2, h3, h4, span, div, td, dt, dd, label {
-      word-break: keep-all;
+      word-break: normal;
       overflow-wrap: break-word;
       line-break: strict;
     }
@@ -1218,7 +1228,7 @@
       gap: 16px;
       min-height: 44px;
       transition: color 0.3s;
-      word-break: keep-all;
+      word-break: normal;
     }
     .faq-q:hover { color: var(--gold); }
     .faq-icon {
@@ -1234,7 +1244,7 @@
       letter-spacing: 0.03em;
       padding: 0 0 24px 0;
       display: none;
-      word-break: keep-all;
+      word-break: normal;
     }
     .faq-a.open { display: block; }
 
@@ -1466,7 +1476,132 @@
       .float-btns { bottom: 20px; right: 20px; }
     }
 
-    </style>
+    /* ===== HERO SCALE STRIP ===== */
+    .hero-scale {
+      display: flex; justify-content: center; flex-wrap: wrap; gap: 0;
+      margin: 40px auto 0; max-width: 660px;
+      border: 1px solid var(--border); border-radius: 2px;
+      background: rgba(15,15,15,0.4);
+    }
+    .hero-scale-item {
+      flex: 1 1 auto; min-width: 130px; padding: 16px 12px;
+      text-align: center; border-right: 1px solid var(--border);
+    }
+    .hero-scale-item:last-child { border-right: none; }
+    .hero-scale-num {
+      font-family: 'Bebas Neue', cursive; font-size: clamp(24px, 3vw, 34px);
+      color: var(--gold); line-height: 1; letter-spacing: 0.04em;
+    }
+    .hero-scale-label {
+      font-size: 10px; letter-spacing: 0.18em; color: var(--muted); margin-top: 6px;
+    }
+
+    /* ===== TWO PILLARS（主体：作る × 変える） ===== */
+    .two-pillar { padding: 140px 60px; background: var(--black); position: relative; z-index: 1; }
+    .pillar-grid {
+      display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr);
+      align-items: stretch; gap: 0; max-width: 1100px; margin: 48px auto 0;
+    }
+    .pillar-card {
+      padding: 48px 40px; border: 1px solid var(--border); background: var(--card);
+      position: relative; overflow: hidden; min-width: 0;
+    }
+    .pillar-card::before {
+      content:''; position:absolute; top:0; left:-100%;
+      width:100%; height:2px; background:var(--gold); transition:left .5s;
+    }
+    .pillar-card:hover::before { left:100%; }
+    .pillar-tag {
+      font-family:'Bebas Neue',cursive; font-size: 13px; letter-spacing:0.25em;
+      color:var(--gold); display:block; margin-bottom: 14px;
+    }
+    .pillar-name {
+      font-family:'Noto Sans JP',sans-serif; font-weight:700;
+      font-size: clamp(22px,2.4vw,30px); color:var(--white); margin-bottom: 14px; line-height:1.3;
+    }
+    .pillar-name span { color: var(--gold); }
+    .pillar-desc {
+      font-size: 14px; line-height: 1.9; color: rgba(244,241,236,0.6);
+      font-weight: 300; margin-bottom: 24px;
+    }
+    .pillar-list { list-style:none; display:flex; flex-wrap:wrap; gap:8px; }
+    .pillar-list li {
+      font-size: 12px; color: var(--white); font-weight:300;
+      padding: 6px 12px; border:1px solid var(--border); border-radius:2px;
+      background: rgba(201,168,76,0.04);
+    }
+    .pillar-vs {
+      display:flex; align-items:center; justify-content:center; padding: 0 8px;
+      font-family:'Cormorant Garamond',serif; font-style:italic; font-size: 28px; color: var(--gold);
+    }
+
+    /* ===== PROCESS（一気通貫の工程） ===== */
+    .process {
+      padding: 140px 60px; background: var(--off-black); position: relative; z-index:1;
+      border-top:1px solid var(--border);
+    }
+    .process-flow {
+      display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr);
+      align-items: stretch; max-width: 1150px; margin: 56px auto 0;
+    }
+    .process-stage { border:1px solid var(--border); background: var(--card); padding: 40px 28px; min-width:0; }
+    .stage-num { font-family:'Bebas Neue',cursive; font-size: 40px; color: var(--gold-dim); line-height:1; }
+    .stage-en { font-family:'Bebas Neue',cursive; font-size: 13px; letter-spacing:0.2em; color: var(--gold); margin-top: 10px; display:block; }
+    .stage-name { font-family:'Noto Sans JP',sans-serif; font-weight:700; font-size: 19px; color: var(--white); margin: 4px 0 14px; }
+    .stage-desc { font-size: 13px; line-height:1.85; color: rgba(244,241,236,0.55); font-weight:300; margin-bottom: 20px; }
+    .stage-skills { list-style:none; display:flex; flex-direction:column; gap:8px; }
+    .stage-skills li { font-size: 12.5px; color: var(--white); font-weight:300; padding-left: 16px; position:relative; }
+    .stage-skills li::before {
+      content:''; position:absolute; left:0; top:7px; width:7px; height:7px; background: var(--gold); opacity:0.7;
+      clip-path: polygon(60% 0,10% 60%,45% 60%,40% 100%,90% 40%,55% 40%);
+    }
+    .process-arrow { display:flex; align-items:center; justify-content:center; color: var(--gold); opacity:0.5; padding: 0 6px; }
+
+    /* ===== DIVISION AREA LINE ===== */
+    .division-area { display:block; font-size:11px; color: rgba(244,241,236,0.45); font-weight:300; margin-top: 8px; line-height:1.5; }
+
+    /* ===== ORGANIZATION（組織体制） ===== */
+    .org { padding: 140px 60px; background: var(--black); position:relative; z-index:1; }
+    .org-note { text-align:center; max-width: 660px; margin: 0 auto 48px; font-size: 13px; line-height:1.9; color: rgba(244,241,236,0.5); font-weight:300; }
+    .org-grid { display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 2px; max-width: 1100px; margin: 0 auto; }
+    .org-dept { border:1px solid var(--border); background: var(--card); padding: 32px 28px; min-width:0; }
+    .org-code { font-family:'Bebas Neue',cursive; font-size:12px; letter-spacing:0.2em; color: var(--gold); display:block; margin-bottom:10px; }
+    .org-name { font-family:'Noto Sans JP',sans-serif; font-weight:400; font-size: 16px; color: var(--white); margin-bottom: 6px; }
+    .org-role { font-size: 12px; line-height:1.7; color: rgba(244,241,236,0.5); font-weight:300; }
+    .org-footer { text-align:center; margin-top: 48px; }
+
+    /* ===== NEW SECTIONS — TABLET ===== */
+    @media (min-width:769px) and (max-width:1024px) {
+      .two-pillar, .process, .org { padding: 100px 40px; }
+    }
+    /* ===== NEW SECTIONS — MOBILE ===== */
+    @media (max-width: 768px) {
+      .two-pillar, .process, .org { padding: 80px 24px; }
+      .hero-scale { max-width: 100%; }
+      .hero-scale-item { flex: 1 1 40%; min-width: 40%; border-bottom:1px solid var(--border); }
+      .pillar-grid { grid-template-columns: minmax(0,1fr); gap: 16px; }
+      .pillar-vs { padding: 4px 0; }
+      .pillar-card { padding: 32px 24px; }
+      .process-flow { grid-template-columns: minmax(0,1fr); gap: 12px; }
+      .process-arrow { transform: rotate(90deg); padding: 6px 0; }
+      .org-grid { grid-template-columns: minmax(0,1fr); }
+    }
+    /* ===== JUN 2026-08-30: おしゃれカーソルで全ページ統一＋指カーソル全廃 ===== */
+    *, *::before, *::after { cursor: none !important; }
+    /* カード全体をリンク化（下線・色は継承） ===== */
+    a.pillar-card, a.process-stage, a.division-card, a.org-dept {
+      display: block; text-decoration: none; color: inherit;
+    }
+    a.pillar-card:hover, a.process-stage:hover, a.division-card:hover, a.org-dept:hover {
+      border-color: rgba(201,168,76,0.35);
+    }
+/* ===== 日本語 改行レシピ（2026-06-12確定／predeploy-check必須・keep-all禁止） ===== */
+    @supports (word-break: auto-phrase) {
+      p, li, span, h1, h2, h3, h4, h5, h6, div, td, dt, dd, label { word-break: auto-phrase; }
+    }
+    h1, h2, h3, h4 { text-wrap: balance; }
+    p, blockquote, figcaption { text-wrap: pretty; }
+  </style>
 </head>
 <body>
 
@@ -1648,12 +1783,20 @@
       </div>
       <!-- Brand name -->
       <p class="hero-brand-name">SENKODE</p>
-      <p class="hero-label">AI DIRECTION / WEB / WRITING / AUTOMATION</p>
+      <p class="hero-label">AI DIRECTION FIRM — 作る × 変える</p>
+      <h1 class="hero-title"><span class="ph">作る力と、</span><span class="ph"><span class="hero-highlight">変える力。</span></span><br><span class="ph">AIで、</span><span class="ph">あらゆる業界の</span><span class="ph">事業を動かす</span><span class="ph">総合ファーム。</span></h1>
       <p class="hero-sub">AI Direction. Speed of Light.</p>
-      <p style="font-size:12px;color:var(--muted);letter-spacing:0.12em;margin-bottom:36px;font-family:'Noto Sans JP',sans-serif;font-weight:100;">AIで制作を加速する。Web・記事・動画・自動化ツール一気通貫。</p>
+      <p style="font-size:12px;color:var(--muted);letter-spacing:0.12em;margin-bottom:36px;font-family:'Noto Sans JP',sans-serif;font-weight:100;">Web・記事・動画・アプリ制作から、業務の自動化・仕組み化まで一気通貫。</p>
       <div class="hero-btns">
         <a href="contact.html" class="btn-primary">無料相談はこちら →</a>
         <a href="works.html" class="btn-secondary">制作実績を見る（38件+）</a>
+      </div>
+      <!-- Scale strip: 5秒で規模を掴ませる -->
+      <div class="hero-scale">
+        <div class="hero-scale-item"><div class="hero-scale-num">2</div><div class="hero-scale-label">事業の柱</div></div>
+        <div class="hero-scale-item"><div class="hero-scale-num">5</div><div class="hero-scale-label">専門部署</div></div>
+        <div class="hero-scale-item"><div class="hero-scale-num">9</div><div class="hero-scale-label">業界事業部</div></div>
+        <div class="hero-scale-item"><div class="hero-scale-num">38+</div><div class="hero-scale-label">累計制作</div></div>
       </div>
     </div>
   </section>
@@ -1675,6 +1818,42 @@
         Senkodeは、その変化の最前線であなたに伴走し続けます。
       </p>
       <span class="vision-tag">Senkode AI Direction</span>
+    </div>
+  </section>
+
+  <!-- Two Pillars（主体：作る × 変える） -->
+  <section class="two-pillar" id="pillars">
+    <div class="section-header reveal">
+      <p class="section-label">WHAT WE ARE — 2つの事業の柱</p>
+      <span class="section-title-en">TWO PILLARS</span>
+      <h2 class="section-title-ja">「作る」と「変える」の両輪</h2>
+    </div>
+    <div class="pillar-grid">
+      <a class="pillar-card reveal" href="services.html">
+        <span class="pillar-tag">PILLAR 01 — CREATION</span>
+        <h3 class="pillar-name"><span>制作</span>事業</h3>
+        <p class="pillar-desc">Web・記事・動画・アプリを、AIで一気通貫に作り切る。設計からデザイン・実装・公開まで、外注管理なしでスピードと品質を両立します。</p>
+        <ul class="pillar-list">
+          <li>LP・HP制作</li>
+          <li>アプリ開発</li>
+          <li>SEO記事</li>
+          <li>AI動画</li>
+          <li>ブランドデザイン</li>
+        </ul>
+      </a>
+      <div class="pillar-vs reveal">×</div>
+      <a class="pillar-card reveal" href="services.html" style="--delay:0.1s">
+        <span class="pillar-tag">PILLAR 02 — TRANSFORMATION</span>
+        <h3 class="pillar-name"><span>変革</span>事業</h3>
+        <p class="pillar-desc">あなたの業務を、AIで自動化・仕組み化する。作って終わりではなく、事業の回り方そのものを変える伴走型の変革パートナーです。</p>
+        <ul class="pillar-list">
+          <li>業務自動化</li>
+          <li>AI導入コンサル</li>
+          <li>社内ツール構築</li>
+          <li>データ集計・レポート</li>
+          <li>運用・保守</li>
+        </ul>
+      </a>
     </div>
   </section>
 
@@ -1751,8 +1930,8 @@
         <div class="stat-label">PROJECTS<span class="stat-label-ja">累計制作件数</span></div>
       </div>
       <div class="stat-item">
-        <div class="stat-number" data-target="340" data-suffix="%">0</div>
-        <div class="stat-label">TRAFFIC GROWTH<span class="stat-label-ja">流入増加実績</span></div>
+        <div class="stat-number" data-target="9" data-suffix="">0</div>
+        <div class="stat-label">DIVISIONS<span class="stat-label-ja">専門支援領域</span></div>
       </div>
       <div class="stat-item">
         <div class="stat-number" data-target="96" data-suffix="">0</div>
@@ -1767,10 +1946,63 @@
 
   <div class="section-divider"></div>
 
+  <!-- Process（一気通貫の工程） -->
+  <section class="process" id="process">
+    <div class="section-header reveal">
+      <p class="section-label">HOW WE WORK — 一気通貫の工程</p>
+      <span class="section-title-en">END-TO-END PROCESS</span>
+      <h2 class="section-title-ja">戦略から運用まで、ひとつのチームで</h2>
+    </div>
+    <div class="process-flow">
+      <a class="process-stage reveal" href="services.html">
+        <div class="stage-num">01</div>
+        <span class="stage-en">STRATEGY</span>
+        <h3 class="stage-name">戦略設計</h3>
+        <p class="stage-desc">課題を診断し、成果から逆算して設計する。作る前に「勝てる形」を定義します。</p>
+        <ul class="stage-skills">
+          <li>ヒアリング・現状分析</li>
+          <li>要件定義</li>
+          <li>コンセプト・KPI設計</li>
+          <li>業界別の勝ちパターン適用</li>
+        </ul>
+      </a>
+      <div class="process-arrow reveal">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </div>
+      <a class="process-stage reveal" href="services.html" style="--delay:0.1s">
+        <div class="stage-num">02</div>
+        <span class="stage-en">CREATION</span>
+        <h3 class="stage-name">制作（作る）</h3>
+        <p class="stage-desc">AIで一気通貫に作り切る。設計・デザイン・実装・公開まで、外注管理なしで高速納品します。</p>
+        <ul class="stage-skills">
+          <li>LP・HP・アプリ開発</li>
+          <li>SEO記事・コピー</li>
+          <li>AI動画ディレクション</li>
+          <li>ブランドデザイン</li>
+        </ul>
+      </a>
+      <div class="process-arrow reveal">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </div>
+      <a class="process-stage reveal" href="services.html" style="--delay:0.2s">
+        <div class="stage-num">03</div>
+        <span class="stage-en">OPERATION</span>
+        <h3 class="stage-name">運用・自動化（変える）</h3>
+        <p class="stage-desc">作って終わりにしない。業務そのものをAIで自動化し、事業の回り方を継続的に改善します。</p>
+        <ul class="stage-skills">
+          <li>業務自動化・社内ツール</li>
+          <li>データ集計・レポート</li>
+          <li>SNS運用・保守改善</li>
+          <li>AI導入の伴走支援</li>
+        </ul>
+      </a>
+    </div>
+  </section>
+
   <!-- Services -->
   <section class="services" id="services">
     <div class="section-header reveal">
-      <p class="section-label">WHAT WE DO — サービス紹介</p>
+      <p class="section-label">SERVICE MENU — 6つの専門サービス</p>
       <span class="section-title-en">SERVICES</span>
       <h2 class="section-title-ja">サービス</h2>
     </div>
@@ -1937,159 +2169,121 @@
     </div>
   </section>
 
-  <!-- Section divider -->
-  <div class="section-divider"></div>
-
-  <!-- Service Comparison -->
-  <section class="service-compare" id="service-compare">
-    <div class="service-compare-inner reveal">
-      <div class="section-header">
-        <span class="section-label">WHAT WE DO — できること一覧</span>
-        <span class="section-title-en">OUR SERVICES AT A GLANCE</span>
-        <h2 class="section-title-ja">Senkodeでできること</h2>
-      </div>
-      <div class="compare-grid">
-        <div class="compare-card">
-          <div class="compare-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
-          </div>
-          <h3 class="compare-name">LP制作</h3>
-          <p class="compare-desc">集客・CVに特化したランディングページ</p>
-          <ul class="compare-features">
-            <li>コンセプト設計</li>
-            <li>コピーライティング</li>
-            <li>デザイン・実装</li>
-            <li>フォーム設置</li>
-          </ul>
-        </div>
-        <div class="compare-card">
-          <div class="compare-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-          </div>
-          <h3 class="compare-name">HP制作</h3>
-          <p class="compare-desc">企業・ブランドのコーポレートサイト</p>
-          <ul class="compare-features">
-            <li>多ページ構成</li>
-            <li>スマホ完全対応</li>
-            <li>SEO基本設定</li>
-            <li>問い合わせフォーム</li>
-          </ul>
-        </div>
-        <div class="compare-card">
-          <div class="compare-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-          </div>
-          <h3 class="compare-name">AI開発</h3>
-          <p class="compare-desc">Claude API・GPT APIを使った AI ツール</p>
-          <ul class="compare-features">
-            <li>チャットボット開発</li>
-            <li>文章生成AI</li>
-            <li>画像解析AI</li>
-            <li>要件定義〜実装</li>
-          </ul>
-        </div>
-        <div class="compare-card">
-          <div class="compare-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-          </div>
-          <h3 class="compare-name">業務自動化</h3>
-          <p class="compare-desc">GAS・Make.com・APIで業務をゼロ工数化</p>
-          <ul class="compare-features">
-            <li>SNS投稿自動化</li>
-            <li>レポート自動生成</li>
-            <li>経費精算自動化</li>
-            <li>見積書自動作成</li>
-          </ul>
-        </div>
-        <div class="compare-card">
-          <div class="compare-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-          </div>
-          <h3 class="compare-name">SEOライティング</h3>
-          <p class="compare-desc">一次情報×AI活用で検索上位を狙う記事</p>
-          <ul class="compare-features">
-            <li>キーワード選定</li>
-            <li>構成・執筆</li>
-            <li>一次情報挿入</li>
-            <li>物流・DX専門</li>
-          </ul>
-        </div>
-        <div class="compare-card">
-          <div class="compare-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01M12 6h.01M16 6h.01M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01"/></svg>
-          </div>
-          <h3 class="compare-name">アプリ開発</h3>
-          <p class="compare-desc">要件定義〜設計・開発の一気通貫対応</p>
-          <ul class="compare-features">
-            <li>要件定義書作成</li>
-            <li>UI/UX設計</li>
-            <li>プロトタイプ制作</li>
-            <li>開発ディレクション</li>
-          </ul>
-        </div>
-      </div>
-      <div style="text-align:center; margin-top: 48px;">
-        <a href="services.html" class="btn-secondary">サービス詳細・料金を見る →</a>
-      </div>
-    </div>
-  </section>
 
   <!-- Divisions -->
   <section class="divisions" id="divisions">
     <div class="section-header reveal">
-      <p class="section-label">DIVISIONS — 業界特化事業部</p>
+      <p class="section-label">DIVISIONS — 提供する支援領域</p>
       <span class="section-title-en">DIVISIONS</span>
-      <h2 class="section-title-ja">9つの業界特化事業部</h2>
+      <h2 class="section-title-ja">9つの専門支援領域</h2>
     </div>
     <div class="divisions-grid">
-      <div class="division-card reveal">
+      <a class="division-card reveal" href="works.html">
         <span class="division-code">DIVISION 01</span>
-        <p class="division-name">医療・クリニック</p>
+        <p class="division-name">集患・集客支援</p>
+        <span class="division-target">医療・クリニック向け</span>
+        <span class="division-area">集患LP・予約導線・問診AI</span>
         <span class="division-suite">CMO管轄</span>
-      </div>
-      <div class="division-card reveal" style="--delay:0.05s">
+      </a>
+      <a class="division-card reveal" href="works.html" style="--delay:0.05s">
         <span class="division-code">DIVISION 02</span>
-        <p class="division-name">不動産・建設</p>
+        <p class="division-name">Web制作・サイト構築</p>
+        <span class="division-target">不動産・建設向け</span>
+        <span class="division-area">物件LP・査定AI・施工実績サイト</span>
         <span class="division-suite">CPO管轄</span>
-      </div>
-      <div class="division-card reveal" style="--delay:0.1s">
+      </a>
+      <a class="division-card reveal" href="works.html" style="--delay:0.1s">
         <span class="division-code">DIVISION 03</span>
-        <p class="division-name">EC・D2C</p>
+        <p class="division-name">販促・CRM支援</p>
+        <span class="division-target">EC・D2C向け</span>
+        <span class="division-area">商品LP・広告運用・CRM自動化</span>
         <span class="division-suite">CMO管轄</span>
-      </div>
-      <div class="division-card reveal" style="--delay:0.15s">
+      </a>
+      <a class="division-card reveal" href="works.html" style="--delay:0.15s">
         <span class="division-code">DIVISION 04</span>
-        <p class="division-name">士業・コンサル</p>
+        <p class="division-name">Web制作・信頼設計</p>
+        <span class="division-target">士業・コンサル向け</span>
+        <span class="division-area">信頼設計HP・相談導線・書類自動化</span>
         <span class="division-suite">CSO管轄</span>
-      </div>
-      <div class="division-card reveal" style="--delay:0.2s">
+      </a>
+      <a class="division-card reveal" href="works.html" style="--delay:0.2s">
         <span class="division-code">DIVISION 05</span>
-        <p class="division-name">人材・採用</p>
+        <p class="division-name">採用Web支援</p>
+        <span class="division-target">人材・採用向け</span>
+        <span class="division-area">採用LP・応募フォーム・選考自動化</span>
         <span class="division-suite">CSO管轄</span>
-      </div>
-      <div class="division-card reveal" style="--delay:0.25s">
+      </a>
+      <a class="division-card reveal" href="works.html" style="--delay:0.25s">
         <span class="division-code">DIVISION 06</span>
-        <p class="division-name">飲食・ホテル・観光</p>
+        <p class="division-name">集客・予約支援</p>
+        <span class="division-target">飲食・ホテル・観光向け</span>
+        <span class="division-area">予約サイト・多言語対応・MEO</span>
         <span class="division-suite">CMO管轄</span>
-      </div>
-      <div class="division-card reveal" style="--delay:0.3s">
+      </a>
+      <a class="division-card reveal" href="works.html" style="--delay:0.3s">
         <span class="division-code">DIVISION 07</span>
-        <p class="division-name">IT・SaaS</p>
+        <p class="division-name">開発・アプリ制作</p>
+        <span class="division-target">IT・SaaS向け</span>
+        <span class="division-area">プロダクトLP・アプリ開発・API連携</span>
         <span class="division-suite">CTO管轄</span>
-      </div>
-      <div class="division-card reveal" style="--delay:0.35s">
+      </a>
+      <a class="division-card reveal" href="works.html" style="--delay:0.35s">
         <span class="division-code">DIVISION 08</span>
-        <p class="division-name">ウェルネス・美容</p>
+        <p class="division-name">ブランド・マーケ支援</p>
+        <span class="division-target">ウェルネス・美容向け</span>
+        <span class="division-area">ブランドLP・予約×CRM・SNS運用</span>
         <span class="division-suite">CPO管轄</span>
-      </div>
-      <div class="division-card reveal" style="--delay:0.4s">
+      </a>
+      <a class="division-card reveal" href="works.html" style="--delay:0.4s">
         <span class="division-code">DIVISION 09</span>
-        <p class="division-name">Webデザイン（専門）</p>
+        <p class="division-name">Webデザイン・UI/UX</p>
+        <span class="division-target">全業種対応</span>
+        <span class="division-area">UI/UX設計・ブランディング・実装</span>
         <span class="division-suite">CPO管轄</span>
-      </div>
+      </a>
     </div>
     <div class="divisions-footer reveal">
       <a href="organization.html" class="btn-secondary">VIEW ALL DIVISIONS →</a>
+    </div>
+  </section>
+
+  <!-- Organization（組織体制） -->
+  <section class="org" id="organization">
+    <div class="section-header reveal">
+      <p class="section-label">ORGANIZATION — チーム体制</p>
+      <span class="section-title-en">HOW WE OPERATE</span>
+      <h2 class="section-title-ja">5つの専門部署が、案件ごとにチームを組む</h2>
+    </div>
+    <p class="org-note reveal">Senkodeは、少人数のコアチームが<strong style="color:var(--white);font-weight:400;">AIを部下として指揮する</strong>新種のファームです。5つの専門部署が案件ごとに最適なチームを編成し、大手級の制作量を高速・低コストで動かします。</p>
+    <div class="org-grid">
+      <a class="org-dept reveal" href="organization.html">
+        <span class="org-code">DEPT 01</span>
+        <p class="org-name">戦略コンサルティング部</p>
+        <p class="org-role">CST／診断・戦略設計。案件の「勝てる形」を最初に定義する司令塔。</p>
+      </a>
+      <a class="org-dept reveal" href="organization.html" style="--delay:0.05s">
+        <span class="org-code">DEPT 02</span>
+        <p class="org-name">マーケティング営業部</p>
+        <p class="org-role">CMO（集客）／CSO（受注）。流入から成約までの導線を設計する。</p>
+      </a>
+      <a class="org-dept reveal" href="organization.html" style="--delay:0.1s">
+        <span class="org-code">DEPT 03</span>
+        <p class="org-name">クリエイティブ制作部</p>
+        <p class="org-role">CCO（品質）／CW（ライティング）／WP（Web）。作り切る実働部隊。</p>
+      </a>
+      <a class="org-dept reveal" href="organization.html" style="--delay:0.15s">
+        <span class="org-code">DEPT 04</span>
+        <p class="org-name">プロダクト技術部</p>
+        <p class="org-role">CPO（設計）／CTO（実装）。アプリ・AIツール・自動化を構築する。</p>
+      </a>
+      <a class="org-dept reveal" href="organization.html" style="--delay:0.2s">
+        <span class="org-code">DEPT 05</span>
+        <p class="org-name">経営管理部</p>
+        <p class="org-role">CFO（財務）／CLO（法務）。見積・契約・コンプライアンスを守る。</p>
+      </a>
+    </div>
+    <div class="org-footer reveal">
+      <a href="organization.html" class="btn-secondary">組織図・体制の詳細を見る →</a>
     </div>
   </section>
 
@@ -2242,7 +2436,7 @@
     }
 
     // Expand ring on card/button hover
-    const hoverTargets = document.querySelectorAll('.service-card, .work-card, .btn-primary, .btn-secondary, .nav-cta');
+    const hoverTargets = document.querySelectorAll('.service-card, .work-card, .btn-primary, .btn-secondary, .nav-cta, a, .pillar-card, .process-stage, .division-card, .org-dept, .nav-link, .faq-question');
     hoverTargets.forEach(el => {
       el.addEventListener('mouseenter', () => cursorRing.classList.add('expanded'));
       el.addEventListener('mouseleave', () => cursorRing.classList.remove('expanded'));

@@ -36,7 +36,7 @@
     html { scroll-behavior: smooth; }
 
     p, li, h1, h2, h3, h4, span, div, td, dt, dd, label {
-      word-break: keep-all;
+      word-break: normal;
       overflow-wrap: break-word;
       line-break: strict;
     }
@@ -47,7 +47,7 @@
       font-weight: 300;
       overflow-x: hidden;
       cursor: none;
-      word-break: keep-all;
+      word-break: normal;
       overflow-wrap: break-word;
       line-break: strict;
     }
@@ -75,17 +75,19 @@
 
     /* CURSOR */
     .cursor-dot {
-      position: fixed; width: 8px; height: 8px; background: var(--gold);
+      position: fixed; width: 5px; height: 5px; background: var(--gold);
       border-radius: 50%; transform: translate(-50%,-50%);
-      pointer-events: none; z-index: 9999; mix-blend-mode: difference;
+      pointer-events: none; z-index: 9999;
+      transition: width 0.25s, height 0.25s, opacity 0.25s;
     }
     .cursor-ring {
-      position: fixed; width: 32px; height: 32px;
+      position: fixed; width: 28px; height: 28px;
       border: 1px solid var(--gold-alpha-50); border-radius: 50%;
       transform: translate(-50%,-50%); pointer-events: none;
-      z-index: 9998; transition: width 0.3s, height 0.3s;
+      z-index: 9998; transition: width 0.3s, height 0.3s, border-color 0.3s, background 0.3s;
     }
-    .cursor-ring.expanded { width: 48px; height: 48px; }
+    .cursor-ring.expanded { width: 44px; height: 44px; border-color: var(--gold); background: rgba(201,168,76,0.06); }
+    *, *::before, *::after { cursor: none !important; }
 
     /* NOISE */
     .noise {
@@ -264,8 +266,12 @@
     }
     .div-biz {
       font-family: 'Noto Sans JP', sans-serif;
-      font-weight: 300; font-size: 18px;
-      color: var(--white); letter-spacing: 0.04em;
+      font-weight: 500; font-size: 19px;
+      color: var(--white); letter-spacing: 0.04em; line-height: 1.35;
+    }
+    .div-target {
+      display: block; font-size: 11px; font-weight: 300;
+      letter-spacing: 0.12em; color: var(--gold); opacity: 0.75; margin-top: 5px;
     }
     .div-body { }
     .div-desc {
@@ -437,8 +443,13 @@
     @media (max-width: 768px) {
       .float-btns { bottom: 20px; right: 20px; }
     }
-
-    </style>
+/* ===== 日本語 改行レシピ（2026-06-12確定／predeploy-check必須・keep-all禁止） ===== */
+    @supports (word-break: auto-phrase) {
+      p, li, span, h1, h2, h3, h4, h5, h6, div, td, dt, dd, label { word-break: auto-phrase; }
+    }
+    h1, h2, h3, h4 { text-wrap: balance; }
+    p, blockquote, figcaption { text-wrap: pretty; }
+  </style>
 </head>
 <body>
   <div class="cursor-dot"></div>
@@ -550,13 +561,14 @@
   <section class="org-divisions">
     <div class="org-divisions-header reveal">
       <p class="section-label">DIVISIONS</p>
-      <h2 class="section-title">9つの業界特化事業部</h2>
+      <h2 class="section-title">9つの専門支援領域</h2>
     </div>
     <div class="div-list">
       <div class="div-row reveal">
         <div class="div-code-block">
           <span class="div-num">DIVISION 01</span>
-          <p class="div-biz">医療・クリニック</p>
+          <p class="div-biz">集患・集客支援</p>
+          <span class="div-target">医療・クリニック向け</span>
         </div>
         <div class="div-body">
           <p class="div-desc">クリニック・病院・美容医療のAI制作ディレクション。E-E-A-T基準のSEOから患者目線のLPまで一貫対応。</p>
@@ -571,7 +583,8 @@
       <div class="div-row reveal" style="--delay:0.04s">
         <div class="div-code-block">
           <span class="div-num">DIVISION 02</span>
-          <p class="div-biz">不動産・建設</p>
+          <p class="div-biz">Web制作・サイト構築</p>
+          <span class="div-target">不動産・建設向け</span>
         </div>
         <div class="div-body">
           <p class="div-desc">不動産・建設・リノベーション業向けLP・SEO・会社案内。信頼と実績を前面に押し出すコンテンツ設計。</p>
@@ -586,7 +599,8 @@
       <div class="div-row reveal" style="--delay:0.08s">
         <div class="div-code-block">
           <span class="div-num">DIVISION 03</span>
-          <p class="div-biz">EC・D2C</p>
+          <p class="div-biz">販促・CRM支援</p>
+          <span class="div-target">EC・D2C向け</span>
         </div>
         <div class="div-body">
           <p class="div-desc">EC・D2C・オンラインショップ向けの商品LP・SEO・SNS動画。購買転換率を最大化するコンテンツを高速制作。</p>
@@ -601,7 +615,8 @@
       <div class="div-row reveal" style="--delay:0.12s">
         <div class="div-code-block">
           <span class="div-num">DIVISION 04</span>
-          <p class="div-biz">士業・コンサル</p>
+          <p class="div-biz">Web制作・信頼設計</p>
+          <span class="div-target">士業・コンサル向け</span>
         </div>
         <div class="div-body">
           <p class="div-desc">弁護士・税理士・社労士・コンサルタント向けのサイト制作・専門SEO・信頼コンテンツ。専門性と権威性を訴求。</p>
@@ -616,7 +631,8 @@
       <div class="div-row reveal" style="--delay:0.16s">
         <div class="div-code-block">
           <span class="div-num">DIVISION 05</span>
-          <p class="div-biz">人材・採用</p>
+          <p class="div-biz">採用Web支援</p>
+          <span class="div-target">人材・採用向け</span>
         </div>
         <div class="div-body">
           <p class="div-desc">採用LP・会社案内・採用動画の一気通貫制作。求職者に刺さるコンテンツで採用コストを削減。</p>
@@ -631,7 +647,8 @@
       <div class="div-row reveal" style="--delay:0.2s">
         <div class="div-code-block">
           <span class="div-num">DIVISION 06</span>
-          <p class="div-biz">飲食・ホテル・観光</p>
+          <p class="div-biz">集客・予約支援</p>
+          <span class="div-target">飲食・ホテル・観光向け</span>
         </div>
         <div class="div-body">
           <p class="div-desc">レストラン・ホテル・観光業向け集客LP・グルメSEO・PR動画。予約・来店を直接促すコンテンツ設計。</p>
@@ -646,7 +663,8 @@
       <div class="div-row reveal" style="--delay:0.24s">
         <div class="div-code-block">
           <span class="div-num">DIVISION 07</span>
-          <p class="div-biz">IT・SaaS</p>
+          <p class="div-biz">開発・アプリ制作</p>
+          <span class="div-target">IT・SaaS向け</span>
         </div>
         <div class="div-body">
           <p class="div-desc">IT企業・SaaS・スタートアップ向けの技術コンテンツ・SaaS LP・ピッチ動画。開発者にも刺さる技術的訴求。</p>
@@ -661,7 +679,8 @@
       <div class="div-row reveal" style="--delay:0.28s">
         <div class="div-code-block">
           <span class="div-num">DIVISION 08</span>
-          <p class="div-biz">ウェルネス・美容</p>
+          <p class="div-biz">ブランド・マーケ支援</p>
+          <span class="div-target">ウェルネス・美容向け</span>
         </div>
         <div class="div-body">
           <p class="div-desc">ジム・エステ・美容サロン・スパ向けのLP・SEO・体験動画。ライフスタイルブランドとしての世界観を訴求。</p>
@@ -676,7 +695,8 @@
       <div class="div-row reveal" style="--delay:0.32s">
         <div class="div-code-block">
           <span class="div-num">DIVISION 09</span>
-          <p class="div-biz">Webデザイン（専門）</p>
+          <p class="div-biz">Webデザイン・UI/UX</p>
+          <span class="div-target">全業種対応</span>
         </div>
         <div class="div-body">
           <p class="div-desc">UI/UXデザイン・HTML/CSS/JSコーディング・PageSpeed最適化の専門事業部。他部署の制作品質を技術面から支える。</p>
