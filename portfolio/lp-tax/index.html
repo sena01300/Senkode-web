@@ -137,7 +137,8 @@
       transition: border-color 0.3s;
     }
     .pain-card:hover { border-top-color: var(--accent); }
-    .pain-icon { font-size: 28px; margin-bottom: 16px; }
+    .pain-icon { margin-bottom: 16px; line-height: 0; }
+    .pain-icon svg { width: 32px; height: 32px; stroke: var(--accent); stroke-width: 1.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
     .pain-title { font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 10px; line-height: 1.5; }
     .pain-text { font-size: 13px; color: var(--gray); line-height: 1.9; }
 
@@ -299,52 +300,74 @@
       .footer { flex-direction: column; gap: 12px; text-align: center; }
     }
   
-    /* ===== FLOATING BUTTONS (Home + Top) ===== */
-    .float-btns {
-      position: fixed;
-      bottom: 32px;
-      right: 32px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      z-index: 600;
-    }
-    .float-btn {
-      width: 44px; height: 44px;
-      background: var(--card, #111111);
-      border: 1px solid var(--border, rgba(201,168,76,0.1));
-      color: var(--gold, #C9A84C);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
+    /* ===== SENKODE PORTFOLIO BADGE ===== */
+    .snk-badge {
+      position: fixed; bottom: 24px; left: 24px; z-index: 9999;
+      display: flex; align-items: center; gap: 10px;
       text-decoration: none;
+      background: rgba(8,8,8,0.88);
+      border: 1px solid rgba(201,168,76,0.25);
+      padding: 8px 14px 8px 8px;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       transition: border-color 0.3s, background 0.3s;
+      cursor: pointer;
     }
-    .float-btn:hover {
-      border-color: rgba(201,168,76,0.4);
-      background: rgba(201,168,76,0.1);
+    .snk-badge:hover {
+      border-color: rgba(201,168,76,0.7);
+      background: rgba(8,8,8,0.97);
     }
-    .float-top {
-      opacity: 0;
-      transform: translateY(8px);
-      transition: opacity 0.3s, transform 0.3s, border-color 0.3s, background 0.3s;
-      pointer-events: none;
-      background: none;
-      border-color: var(--border, rgba(201,168,76,0.1));
+    .snk-badge-label {
+      display: flex; flex-direction: column; gap: 1px;
     }
-    .float-top.visible { opacity: 1; transform: translateY(0); pointer-events: all; }
+    .snk-badge-back {
+      font-family: 'Bebas Neue', 'Noto Sans JP', sans-serif;
+      font-size: 10px; letter-spacing: 3px;
+      color: rgba(201,168,76,0.55);
+      line-height: 1;
+      transition: color 0.3s;
+    }
+    .snk-badge:hover .snk-badge-back { color: #C9A84C; }
+    .snk-badge-name {
+      font-family: 'Bebas Neue', 'Noto Sans JP', sans-serif;
+      font-size: 13px; letter-spacing: 4px;
+      color: rgba(201,168,76,0.85);
+      line-height: 1;
+      transition: color 0.3s;
+    }
+    .snk-badge:hover .snk-badge-name { color: #E8C97A; }
     @media (max-width: 768px) {
-      .float-btns { bottom: 20px; right: 20px; }
+      .snk-badge { bottom: 16px; left: 16px; padding: 6px 10px 6px 6px; }
+      .snk-badge svg { width: 28px; height: 28px; }
     }
-
     </style>
 </head>
 <body>
 
   <!-- Header -->
   <header class="header">
-    <div class="logo">田中税理士事務所<span>｜AI記帳</span></div>
+    <div class="logo" style="display:flex;align-items:center;gap:10px;"><svg width="40" height="40" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="hdrLogo" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#6B5420"/>
+          <stop offset="50%" stop-color="#E8C97A"/>
+          <stop offset="100%" stop-color="#C9A84C"/>
+        </linearGradient>
+        <filter id="hdrGlow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <path id="hdrCircle" d="M30,5 A25,25,0,1,1,29.999,5" fill="none"/>
+      </defs>
+      <circle cx="30" cy="30" r="28" fill="none" stroke="#C9A84C" stroke-width="0.5" opacity="0.4"/>
+      <circle cx="30" cy="30" r="20" fill="none" stroke="#C9A84C" stroke-width="0.3" opacity="0.2"/>
+      <g transform="translate(-6,-4.4) scale(0.36)">
+        <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="url(#hdrLogo)" style="filter:url(#hdrGlow)"/>
+      </g>
+      <text font-family="'Bebas Neue','Noto Sans JP',sans-serif" font-size="5" fill="#C9A84C" opacity="0.75">
+        <textPath href="#hdrCircle" startOffset="0%" letter-spacing="2.5">Senkode · 閃光 · Senkode · 閃光 ·</textPath>
+      </text>
+    </svg><span>田中税理士事務所<span>｜AI記帳</span></span></div>
     <a href="#contact" class="header-cta">無料相談を予約する</a>
   </header>
 
@@ -357,9 +380,7 @@
         あなたの不安は、税理士が聞く。
       </h1>
       <p class="hero-sub">
-        領収書の山を前に固まっていませんか。<br>
-        AIが書類を読み込み、税理士が判断する——新しい体制で、<br>
-        確定申告の「面倒くさい」を、丸ごと引き受けます。
+        領収書の山を前に固まっていませんか。AIが書類を読み込み、税理士が判断する——新しい体制で、確定申告の「面倒くさい」を、丸ごと引き受けます。
       </p>
       <div class="hero-cta-wrap">
         <a href="#contact" class="btn-primary">無料相談を予約する（30分）</a>
@@ -389,17 +410,17 @@
       <h2 class="section-title">こんな状況、心当たりありませんか。</h2>
       <div class="pain-grid">
         <div class="pain-card">
-          <div class="pain-icon">📂</div>
+          <div class="pain-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v2H3z"/><path d="M3 11h18l-1.4 7.2A2 2 0 0 1 17.6 20H6.4a2 2 0 0 1-2-1.8z"/></svg></div>
           <div class="pain-title">領収書が1年分、封筒に突っ込んだまま</div>
           <p class="pain-text">「いつか整理しよう」が3月まで続く。気づいたら青色申告の締め切りが目の前で、毎年同じ後悔をしている。</p>
         </div>
         <div class="pain-card">
-          <div class="pain-icon">💸</div>
+          <div class="pain-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8.7 8l3.3 4 3.3-4M12 12v5M9 13h6M9 15.2h6"/></svg></div>
           <div class="pain-title">経費で落とせるものが、実はよくわからない</div>
           <p class="pain-text">「これって経費になる？」と毎回迷う。結局よくわからないから申告しない。知らないうちに税金を余分に払っている可能性がある。</p>
         </div>
         <div class="pain-card">
-          <div class="pain-icon">😰</div>
+          <div class="pain-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.4-3 7.6-7 8.8C8 18.6 5 15.4 5 11V6z"/><path d="M12 9.2c1.4 0 2 .9 2 1.7 0 1.3-1.6 1.4-1.6 2.6"/><path d="M12 16h.01"/></svg></div>
           <div class="pain-title">税理士に頼みたいが、料金が不透明で怖い</div>
           <p class="pain-text">問い合わせたら何十万も請求されそう、という思い込みで動けない。フリーランスに向いた税理士がどこにいるかもわからない。</p>
         </div>
@@ -537,7 +558,7 @@
   <section class="cta-section" id="contact">
     <span class="section-label">FREE CONSULTATION</span>
     <h2 class="section-title">まず、話すだけでいい。</h2>
-    <p class="cta-lead">30分の無料相談で、あなたの状況を聞かせてください。<br>その場でプランの提案と、だいたいの費用をお伝えします。</p>
+    <p class="cta-lead">30分の無料相談で、あなたの状況を聞かせてください。その場でプランの提案と、だいたいの費用をお伝えします。</p>
     <div class="form-wrap">
       <form action="https://formspree.io/f/meevvdrl" method="POST">
         <div class="form-row">
@@ -594,27 +615,36 @@
         if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
     });
-  
-    // Float buttons
-    (function(){
-      var btn = document.getElementById('floatTop');
-      if(!btn) return;
-      window.addEventListener('scroll', function(){
-        btn.classList.toggle('visible', window.scrollY > 400);
-      }, {passive:true});
-      btn.addEventListener('click', function(){
-        window.scrollTo({top:0,behavior:'smooth'});
-      });
-    })();
-</script>
-  <!-- Floating: Home + Back to Top -->
-  <div class="float-btns">
-    <a href="/index.html" class="float-btn float-home" aria-label="ホームへ戻る" title="ホームへ戻る">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 6.5L8 2L14 6.5V14H10V10H6V14H2V6.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg>
-    </a>
-    <button class="float-btn float-top" id="floatTop" aria-label="ページトップへ" title="ページトップへ">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 12V4M4 8l4-4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-  </div>
+  </script>
+
+  <!-- Senkode Portfolio Badge — canonical logo, links back to works -->
+  <a href="https://senkode.jp/works-lp.html" target="_blank" rel="noopener" class="snk-badge" title="Senkode ポートフォリオへ戻る">
+    <svg width="34" height="34" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="snkLogo" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#6B5420"/>
+          <stop offset="50%" stop-color="#E8C97A"/>
+          <stop offset="100%" stop-color="#C9A84C"/>
+        </linearGradient>
+        <filter id="snkGlow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <path id="snkCircle" d="M30,5 A25,25,0,1,1,29.999,5" fill="none"/>
+      </defs>
+      <circle cx="30" cy="30" r="28" fill="none" stroke="#C9A84C" stroke-width="0.5" opacity="0.4"/>
+      <circle cx="30" cy="30" r="20" fill="none" stroke="#C9A84C" stroke-width="0.3" opacity="0.2"/>
+      <g transform="translate(-6,-4.4) scale(0.36)">
+        <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="url(#snkLogo)" style="filter:url(#snkGlow)"/>
+      </g>
+      <text font-family="'Bebas Neue','Noto Sans JP',sans-serif" font-size="5" fill="#C9A84C" opacity="0.75">
+        <textPath href="#snkCircle" startOffset="0%" letter-spacing="2.5">Senkode · 閃光 · Senkode · 閃光 ·</textPath>
+      </text>
+    </svg>
+    <div class="snk-badge-label">
+      <span class="snk-badge-back">← WORKS</span>
+      <span class="snk-badge-name">Senkode</span>
+    </div>
+  </a>
 </body>
 </html>
