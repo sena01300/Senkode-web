@@ -89,12 +89,14 @@
     }
     .reveal.visible { opacity:1;transform:none; }
 
-    /* ── HERO ── */
+    /* ── HERO — FACTORY FLOW ── */
     .hero {
       position:relative;z-index:2;
-      min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
-      padding:120px 60px 80px;text-align:center;
+      min-height:90vh;
+      display:grid;grid-template-columns:2fr 3fr;align-items:center;gap:60px;
+      padding:120px 60px 80px;
     }
+    .hero-text { display:flex;flex-direction:column;align-items:flex-start; }
     .hero-badge {
       display:inline-flex;align-items:center;gap:8px;
       border:1px solid var(--orange-bd);padding:6px 16px;margin-bottom:32px;
@@ -107,29 +109,47 @@
 
     .hero-title {
       font-family:'Bebas Neue',sans-serif;
-      font-size:clamp(44px,8vw,96px);line-height:1;
+      font-size:clamp(28px,3.5vw,44px);line-height:1.1;
       letter-spacing:0.04em;margin-bottom:16px;
     }
     .hero-title .accent { color:var(--blue); }
     .hero-title .warn   { color:var(--orange); }
 
     .hero-sub {
-      font-size:clamp(13px,2vw,17px);font-weight:200;
-      color:var(--text-mid);max-width:640px;
-      width: 100%;line-height:2;margin:0 auto 48px;
+      font-size:clamp(13px,1.6vw,15px);font-weight:200;
+      color:var(--text-mid);max-width:520px;
+      width: 100%;line-height:2;margin:0 0 40px;
     }
 
     .hero-stat-row {
-      display:flex;gap:48px;justify-content:center;flex-wrap:wrap;margin-bottom:52px;
+      display:flex;gap:32px;justify-content:flex-start;flex-wrap:wrap;margin-bottom:44px;
     }
-    .hero-stat { text-align:center; }
+    .hero-stat { text-align:left; }
     .hero-stat-num {
-      font-family:'Bebas Neue',sans-serif;font-size:52px;line-height:1;
+      font-family:'Bebas Neue',sans-serif;font-size:44px;line-height:1;
       color:var(--blue);letter-spacing:0.02em;display:block;
     }
     .hero-stat-label { font-size:10px;letter-spacing:0.15em;color:var(--text-faint);margin-top:4px;display:block; }
 
-    .hero-cta-row { display:flex;gap:16px;justify-content:center;flex-wrap:wrap; }
+    .hero-cta-row { display:flex;gap:16px;justify-content:flex-start;flex-wrap:wrap; }
+
+    /* ── HERO VISUAL — FACTORY FLOW ── */
+    .hero-visual { display:flex;align-items:center;justify-content:center; }
+    .flow-diagram { width:100%;max-width:460px; }
+    .flow-step { padding:10px 14px;border:1px solid;font-size:11px;letter-spacing:0.05em;text-align:center;flex:1; }
+    .flow-step--before { border-color:rgba(249,115,22,0.3);color:rgba(249,115,22,0.8);background:rgba(249,115,22,0.04); }
+    .flow-step--after  { border-color:rgba(34,197,94,0.3);color:rgba(34,197,94,0.9);background:rgba(34,197,94,0.04); }
+    .flow-arrow-down { width:1px;height:16px;background:currentColor;margin:0 auto; }
+    .flow-result {
+      background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.3);
+      padding:12px 16px;text-align:center;margin-top:4px;
+    }
+    .flow-result-num {
+      font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--green);
+      display:block;line-height:1;
+    }
+    .flow-result-label { font-size:9px;letter-spacing:0.2em;color:rgba(34,197,94,0.6); }
+
     .btn-primary {
       font-size:12px;letter-spacing:0.15em;padding:16px 40px;
       background:var(--blue);color:#fff;text-decoration:none;
@@ -142,6 +162,42 @@
       transition:background 0.2s;display:inline-block;
     }
     .btn-ghost:hover { background:var(--blue-glow); }
+
+    /* ── HERO VISUAL ── */
+    .hero-visual { display:flex;align-items:center;justify-content:center; }
+    .dx-visual {
+      background:var(--card);border:1px solid var(--blue-bd);
+      padding:32px 28px;width:100%;max-width:360px;position:relative;
+    }
+    .dx-visual::before {
+      content:'';position:absolute;top:0;left:0;right:0;height:2px;
+      background:linear-gradient(90deg, var(--orange), var(--blue));
+    }
+    .dv-header { font-size:10px;letter-spacing:.3em;color:var(--text-faint);margin-bottom:24px; }
+    .dv-cols { display:grid;grid-template-columns:1fr 1fr;gap:12px; }
+    .dv-col { padding:16px 14px;border:1px solid; }
+    .dv-col--before { border-color:rgba(249,115,22,0.3);background:rgba(249,115,22,0.04); }
+    .dv-col--after  { border-color:var(--blue-bd);background:var(--blue-glow); }
+    .dv-col-label { font-size:9px;letter-spacing:.2em;display:block;margin-bottom:14px;font-weight:400; }
+    .dv-col--before .dv-col-label { color:var(--orange); }
+    .dv-col--after  .dv-col-label { color:var(--blue-lt); }
+    .dv-icon-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px; }
+    .dv-icon {
+      aspect-ratio:1;display:flex;align-items:center;justify-content:center;
+      border:1px solid;border-radius:2px;
+    }
+    .dv-col--before .dv-icon { border-color:rgba(249,115,22,0.2);background:rgba(249,115,22,0.06); }
+    .dv-col--after  .dv-icon { border-color:var(--blue-bd);background:rgba(59,130,246,0.08); }
+    .dv-icon svg { width:14px;height:14px; }
+    .dv-col-sub { font-size:9px;color:var(--text-faint);line-height:1.6; }
+    .dv-col--before .dv-col-sub { color:rgba(249,115,22,0.6); }
+    .dv-col--after  .dv-col-sub { color:var(--blue-lt); }
+    .dv-result {
+      border-top:1px solid var(--bd);margin-top:16px;padding-top:14px;
+      display:flex;align-items:center;justify-content:space-between;
+    }
+    .dv-result-label { font-size:9px;letter-spacing:.15em;color:var(--text-faint); }
+    .dv-result-num { font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--green);letter-spacing:.02em; }
 
     /* ── PAIN SECTION ── */
     .section { position:relative;z-index:2;padding:100px 60px; }
@@ -165,7 +221,8 @@
       font-family:'Bebas Neue',sans-serif;font-size:72px;
       color:rgba(249,115,22,0.08);line-height:1;position:absolute;top:16px;right:20px;
     }
-    .pain-icon { font-size:28px;margin-bottom:16px;display:block; }
+    .pain-icon { margin-bottom:16px;display:block;line-height:0; }
+    .pain-icon svg { width:32px;height:32px;stroke:var(--blue);stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round; }
     .pain-title { font-size:15px;font-weight:400;margin-bottom:12px;letter-spacing:0.02em; }
     .pain-body  { font-size:13px;line-height:2;color:var(--text-mid); }
     .pain-quote {
@@ -345,7 +402,11 @@
       nav { padding:14px 20px; }
       .nav-links { gap:12px; }
       .nav-link  { display:none; }
-      .hero,.section,.program-wrap,.cta-section { padding:80px 24px; }
+      .hero { grid-template-columns:minmax(0,1fr);padding:80px 24px 60px; }
+      .hero-text { align-items:flex-start; }
+      .hero-visual { display:none; }
+      .flow-diagram { max-width:100%; }
+      .section,.program-wrap,.cta-section { padding:80px 24px; }
       .hero-stat-row { gap:24px; }
       .pain-grid,.phase-row,.price-grid { grid-template-columns:minmax(0, 1fr); }
       .result-grid { grid-template-columns:minmax(0, 1fr) minmax(0, 1fr); }
@@ -354,45 +415,46 @@
       footer { padding:20px 24px;flex-direction:column;gap:8px;text-align:center; }
     }
   
-    /* ===== FLOATING BUTTONS (Home + Top) ===== */
-    .float-btns {
-      position: fixed;
-      bottom: 32px;
-      right: 32px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      z-index: 600;
-    }
-    .float-btn {
-      width: 44px; height: 44px;
-      background: var(--card, #111111);
-      border: 1px solid var(--border, rgba(201,168,76,0.1));
-      color: var(--gold, #C9A84C);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
+    /* ===== SENKODE PORTFOLIO BADGE ===== */
+    .snk-badge {
+      position: fixed; bottom: 24px; left: 24px; z-index: 9999;
+      display: flex; align-items: center; gap: 10px;
       text-decoration: none;
+      background: rgba(8,8,8,0.88);
+      border: 1px solid rgba(201,168,76,0.25);
+      padding: 8px 14px 8px 8px;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       transition: border-color 0.3s, background 0.3s;
+      cursor: pointer;
     }
-    .float-btn:hover {
-      border-color: rgba(201,168,76,0.4);
-      background: rgba(201,168,76,0.1);
+    .snk-badge:hover {
+      border-color: rgba(201,168,76,0.7);
+      background: rgba(8,8,8,0.97);
     }
-    .float-top {
-      opacity: 0;
-      transform: translateY(8px);
-      transition: opacity 0.3s, transform 0.3s, border-color 0.3s, background 0.3s;
-      pointer-events: none;
-      background: none;
-      border-color: var(--border, rgba(201,168,76,0.1));
+    .snk-badge-label {
+      display: flex; flex-direction: column; gap: 1px;
     }
-    .float-top.visible { opacity: 1; transform: translateY(0); pointer-events: all; }
+    .snk-badge-back {
+      font-family: 'Bebas Neue', 'Noto Sans JP', sans-serif;
+      font-size: 10px; letter-spacing: 3px;
+      color: rgba(201,168,76,0.55);
+      line-height: 1;
+      transition: color 0.3s;
+    }
+    .snk-badge:hover .snk-badge-back { color: #C9A84C; }
+    .snk-badge-name {
+      font-family: 'Bebas Neue', 'Noto Sans JP', sans-serif;
+      font-size: 13px; letter-spacing: 4px;
+      color: rgba(201,168,76,0.85);
+      line-height: 1;
+      transition: color 0.3s;
+    }
+    .snk-badge:hover .snk-badge-name { color: #E8C97A; }
     @media (max-width: 768px) {
-      .float-btns { bottom: 20px; right: 20px; }
+      .snk-badge { bottom: 16px; left: 16px; padding: 6px 10px 6px 6px; }
+      .snk-badge svg { width: 28px; height: 28px; }
     }
-
     </style>
 </head>
 <body>
@@ -402,6 +464,28 @@
 
 <nav>
   <a href="#" class="nav-logo">
+    <svg width="40" height="40" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="hdrLogo" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#6B5420"/>
+          <stop offset="50%" stop-color="#E8C97A"/>
+          <stop offset="100%" stop-color="#C9A84C"/>
+        </linearGradient>
+        <filter id="hdrGlow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <path id="hdrCircle" d="M30,5 A25,25,0,1,1,29.999,5" fill="none"/>
+      </defs>
+      <circle cx="30" cy="30" r="28" fill="none" stroke="#C9A84C" stroke-width="0.5" opacity="0.4"/>
+      <circle cx="30" cy="30" r="20" fill="none" stroke="#C9A84C" stroke-width="0.3" opacity="0.2"/>
+      <g transform="translate(-6,-4.4) scale(0.36)">
+        <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="url(#hdrLogo)" style="filter:url(#hdrGlow)"/>
+      </g>
+      <text font-family="'Bebas Neue','Noto Sans JP',sans-serif" font-size="5" fill="#C9A84C" opacity="0.75">
+        <textPath href="#hdrCircle" startOffset="0%" letter-spacing="2.5">Senkode · 閃光 · Senkode · 閃光 ·</textPath>
+      </text>
+    </svg>
     <div>
       <div class="nav-brand">DX ACADEMY</div>
       <div class="nav-sub">製造業専門 DX研修</div>
@@ -418,33 +502,80 @@
 
 <!-- ── HERO ── -->
 <section class="hero">
-  <div class="hero-badge">MANUFACTURING DX SPECIALIST</div>
-  <p class="hero-eyebrow">現場を知らない講師が教える「DX」を、もう買わなくていい</p>
-  <h1 class="hero-title reveal">
-    DX研修の<span class="warn">9割</span>が<br>
-    現場に<span class="accent">定着しない</span>
-  </h1>
-  <p class="hero-sub reveal">
-    研修後3ヶ月で元の業務フローに戻る——その繰り返しに、いくら費やしましたか。<br>
-    製造業DXは「知識のインプット」ではなく「現場プロセスの再設計」です。
-  </p>
-  <div class="hero-stat-row reveal">
-    <div class="hero-stat">
-      <span class="hero-stat-num">312<span style="font-size:0.5em;color:var(--text-mid)">社</span></span>
-      <span class="hero-stat-label">製造業への支援実績</span>
+  <div class="hero-text">
+    <div class="hero-badge">MANUFACTURING DX SPECIALIST</div>
+    <p class="hero-eyebrow">現場を知らない講師が教える「DX」を、もう買わなくていい</p>
+    <h1 class="hero-title reveal">
+      DX研修の<span class="warn">9割</span>が現場に<span class="accent">定着しない</span>
+    </h1>
+    <p class="hero-sub reveal">
+      研修後3ヶ月で元の業務フローに戻る——その繰り返しに、いくら費やしましたか。製造業DXは「知識のインプット」ではなく「現場プロセスの再設計」です。
+    </p>
+    <div class="hero-stat-row reveal">
+      <div class="hero-stat">
+        <span class="hero-stat-num">312<span style="font-size:0.5em;color:var(--text-mid)">社</span></span>
+        <span class="hero-stat-label">製造業への支援実績</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">87<span style="font-size:0.5em;color:var(--text-mid)">%</span></span>
+        <span class="hero-stat-label">研修後6ヶ月定着率</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">2.4<span style="font-size:0.5em;color:var(--text-mid)">倍</span></span>
+        <span class="hero-stat-label">業務処理速度の平均向上率</span>
+      </div>
     </div>
-    <div class="hero-stat">
-      <span class="hero-stat-num">87<span style="font-size:0.5em;color:var(--text-mid)">%</span></span>
-      <span class="hero-stat-label">研修後6ヶ月定着率</span>
-    </div>
-    <div class="hero-stat">
-      <span class="hero-stat-num">2.4<span style="font-size:0.5em;color:var(--text-mid)">倍</span></span>
-      <span class="hero-stat-label">業務処理速度の平均向上率</span>
+    <div class="hero-cta-row reveal">
+      <a href="#cta" class="btn-primary">無料診断を受ける</a>
+      <a href="#program" class="btn-ghost">プログラム詳細</a>
     </div>
   </div>
-  <div class="hero-cta-row reveal">
-    <a href="#cta" class="btn-primary">無料診断を受ける</a>
-    <a href="#program" class="btn-ghost">プログラム詳細</a>
+
+  <!-- FACTORY FLOW visual -->
+  <div class="hero-visual reveal">
+    <div class="flow-diagram">
+      <!-- Header labels -->
+      <div style="display:flex;gap:16px;margin-bottom:12px;">
+        <div style="flex:1;text-align:center;font-size:9px;letter-spacing:0.3em;color:rgba(249,115,22,0.6);">BEFORE</div>
+        <div style="width:72px;"></div>
+        <div style="flex:1;text-align:center;font-size:9px;letter-spacing:0.3em;color:rgba(34,197,94,0.6);">AFTER</div>
+      </div>
+      <!-- Row 1 -->
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:6px;">
+        <div class="flow-step flow-step--before">紙・手書き入力</div>
+        <div style="text-align:center;flex-shrink:0;width:72px;font-size:16px;color:rgba(255,255,255,0.15);">→</div>
+        <div class="flow-step flow-step--after">タブレット入力</div>
+      </div>
+      <!-- Connector -->
+      <div style="display:flex;gap:16px;margin-bottom:6px;">
+        <div style="flex:1;display:flex;justify-content:center;"><div class="flow-arrow-down" style="background:rgba(249,115,22,0.25);height:14px;width:1px;"></div></div>
+        <div style="width:72px;"></div>
+        <div style="flex:1;display:flex;justify-content:center;"><div class="flow-arrow-down" style="background:rgba(34,197,94,0.25);height:14px;width:1px;"></div></div>
+      </div>
+      <!-- Row 2 -->
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:6px;">
+        <div class="flow-step flow-step--before">転記・集計作業</div>
+        <div style="text-align:center;flex-shrink:0;width:72px;"></div>
+        <div class="flow-step flow-step--after">AI自動集計</div>
+      </div>
+      <!-- Connector -->
+      <div style="display:flex;gap:16px;margin-bottom:6px;">
+        <div style="flex:1;display:flex;justify-content:center;"><div class="flow-arrow-down" style="background:rgba(249,115,22,0.25);height:14px;width:1px;"></div></div>
+        <div style="width:72px;"></div>
+        <div style="flex:1;display:flex;justify-content:center;"><div class="flow-arrow-down" style="background:rgba(34,197,94,0.25);height:14px;width:1px;"></div></div>
+      </div>
+      <!-- Row 3 -->
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">
+        <div class="flow-step flow-step--before">長い承認待ち</div>
+        <div style="text-align:center;flex-shrink:0;width:72px;"></div>
+        <div class="flow-step flow-step--after">即時ダッシュボード</div>
+      </div>
+      <!-- Result badge -->
+      <div class="flow-result">
+        <span class="flow-result-num">+2.4倍</span>
+        <span class="flow-result-label">生産性向上（3ヶ月後）</span>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -459,21 +590,21 @@
     <div class="pain-grid">
       <div class="pain-card reveal">
         <div class="pain-num">01</div>
-        <span class="pain-icon">🏭</span>
+        <span class="pain-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20h18M4 20V10l5 3V10l5 3V6l6 3v11"/><path d="M8 20v-4h3v4"/></svg></span>
         <h3 class="pain-title">現場の「なぜやるのか」が腹落ちしていない</h3>
         <p class="pain-body">経営層は「DX推進」を号令するが、現場には「今でも回っている」という感覚がある。導入の意義が伝わらないまま研修が始まると、終了後に確実に元に戻る。</p>
         <div class="pain-quote">「研修でツールの使い方は覚えた。でも何のために使うのかがわからない」（製造業 現場主任）</div>
       </div>
       <div class="pain-card reveal">
         <div class="pain-num">02</div>
-        <span class="pain-icon">📊</span>
+        <span class="pain-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="6"/><rect x="12" y="8" width="3" height="10"/><rect x="17" y="5" width="3" height="13"/></svg></span>
         <h3 class="pain-title">業務フローを変えずにツールだけ入れた</h3>
         <p class="pain-body">SFAを入れたが営業は相変わらずExcelで管理。ERPを導入したが現場の紙帳票がなくならない。ツールの導入はDXではなく「ツール追加」に過ぎない。</p>
         <div class="pain-quote">「システムが増えただけで、入力が2重になって余計に手間がかかっている」（品質管理 担当者）</div>
       </div>
       <div class="pain-card reveal">
         <div class="pain-num">03</div>
-        <span class="pain-icon">🎓</span>
+        <span class="pain-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 8l10-4 10 4-10 4z"/><path d="M6 10.5V15c0 1.5 2.7 3 6 3s6-1.5 6-3v-4.5"/><path d="M22 8v5"/></svg></span>
         <h3 class="pain-title">研修会社が「製造業の現場」を知らない</h3>
         <p class="pain-body">3S・4M・ポカヨケ・工程管理——製造業には固有の業務文脈がある。それを知らない講師が一般論でDXを教えても、現場に響く言葉にならない。</p>
         <div class="pain-quote">「講師の言っていることは正しいんだろうけど、うちの現場の話じゃない気がした」（工場長）</div>
@@ -765,8 +896,7 @@
   <p class="section-label reveal">GET STARTED</p>
   <h2 class="cta-title reveal">まず、現場を<span style="color:var(--blue)">診断</span>してください</h2>
   <p class="cta-sub reveal">
-    60分の無料相談で「どこから手をつけるべきか」を明確にします。<br>
-    補助金活用の可否、費用感、期間——すべてこの場でお伝えします。
+    60分の無料相談で「どこから手をつけるべきか」を明確にします。補助金活用の可否、費用感、期間——すべてこの場でお伝えします。
   </p>
   <a href="#" class="btn-primary reveal">無料診断を申し込む（60分）</a>
   <p class="cta-note reveal">※ 営業電話はしません。相談後の継続は完全にお客様の判断に委ねます</p>
@@ -808,27 +938,36 @@
       if(!isOpen) item.classList.add('open');
     });
   });
-
-    // Float buttons
-    (function(){
-      var btn = document.getElementById('floatTop');
-      if(!btn) return;
-      window.addEventListener('scroll', function(){
-        btn.classList.toggle('visible', window.scrollY > 400);
-      }, {passive:true});
-      btn.addEventListener('click', function(){
-        window.scrollTo({top:0,behavior:'smooth'});
-      });
-    })();
 </script>
-  <!-- Floating: Home + Back to Top -->
-  <div class="float-btns">
-    <a href="/index.html" class="float-btn float-home" aria-label="ホームへ戻る" title="ホームへ戻る">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 6.5L8 2L14 6.5V14H10V10H6V14H2V6.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg>
-    </a>
-    <button class="float-btn float-top" id="floatTop" aria-label="ページトップへ" title="ページトップへ">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 12V4M4 8l4-4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-  </div>
+
+  <!-- Senkode Portfolio Badge — canonical logo, links back to works -->
+  <a href="https://senkode.jp/works-lp.html" target="_blank" rel="noopener" class="snk-badge" title="Senkode ポートフォリオへ戻る">
+    <svg width="34" height="34" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="snkLogo" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#6B5420"/>
+          <stop offset="50%" stop-color="#E8C97A"/>
+          <stop offset="100%" stop-color="#C9A84C"/>
+        </linearGradient>
+        <filter id="snkGlow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <path id="snkCircle" d="M30,5 A25,25,0,1,1,29.999,5" fill="none"/>
+      </defs>
+      <circle cx="30" cy="30" r="28" fill="none" stroke="#C9A84C" stroke-width="0.5" opacity="0.4"/>
+      <circle cx="30" cy="30" r="20" fill="none" stroke="#C9A84C" stroke-width="0.3" opacity="0.2"/>
+      <g transform="translate(-6,-4.4) scale(0.36)">
+        <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="url(#snkLogo)" style="filter:url(#snkGlow)"/>
+      </g>
+      <text font-family="'Bebas Neue','Noto Sans JP',sans-serif" font-size="5" fill="#C9A84C" opacity="0.75">
+        <textPath href="#snkCircle" startOffset="0%" letter-spacing="2.5">Senkode · 閃光 · Senkode · 閃光 ·</textPath>
+      </text>
+    </svg>
+    <div class="snk-badge-label">
+      <span class="snk-badge-back">← WORKS</span>
+      <span class="snk-badge-name">Senkode</span>
+    </div>
+  </a>
 </body>
 </html>
