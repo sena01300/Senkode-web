@@ -1279,45 +1279,46 @@
       .back-link { top: 68px; font-size: 10px; padding: 6px 12px; }
     }
   
-    /* ===== FLOATING BUTTONS (Home + Top) ===== */
-    .float-btns {
-      position: fixed;
-      bottom: 32px;
-      right: 32px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      z-index: 600;
-    }
-    .float-btn {
-      width: 44px; height: 44px;
-      background: var(--card, #111111);
-      border: 1px solid var(--border, rgba(201,168,76,0.1));
-      color: var(--gold, #C9A84C);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
+    /* ===== SENKODE PORTFOLIO BADGE ===== */
+    .snk-badge {
+      position: fixed; bottom: 24px; left: 24px; z-index: 9999;
+      display: flex; align-items: center; gap: 10px;
       text-decoration: none;
+      background: rgba(8,8,8,0.88);
+      border: 1px solid rgba(201,168,76,0.25);
+      padding: 8px 14px 8px 8px;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       transition: border-color 0.3s, background 0.3s;
+      cursor: pointer;
     }
-    .float-btn:hover {
-      border-color: rgba(201,168,76,0.4);
-      background: rgba(201,168,76,0.1);
+    .snk-badge:hover {
+      border-color: rgba(201,168,76,0.7);
+      background: rgba(8,8,8,0.97);
     }
-    .float-top {
-      opacity: 0;
-      transform: translateY(8px);
-      transition: opacity 0.3s, transform 0.3s, border-color 0.3s, background 0.3s;
-      pointer-events: none;
-      background: none;
-      border-color: var(--border, rgba(201,168,76,0.1));
+    .snk-badge-label {
+      display: flex; flex-direction: column; gap: 1px;
     }
-    .float-top.visible { opacity: 1; transform: translateY(0); pointer-events: all; }
+    .snk-badge-back {
+      font-family: 'Bebas Neue', 'Noto Sans JP', sans-serif;
+      font-size: 10px; letter-spacing: 3px;
+      color: rgba(201,168,76,0.55);
+      line-height: 1;
+      transition: color 0.3s;
+    }
+    .snk-badge:hover .snk-badge-back { color: #C9A84C; }
+    .snk-badge-name {
+      font-family: 'Bebas Neue', 'Noto Sans JP', sans-serif;
+      font-size: 13px; letter-spacing: 4px;
+      color: rgba(201,168,76,0.85);
+      line-height: 1;
+      transition: color 0.3s;
+    }
+    .snk-badge:hover .snk-badge-name { color: #E8C97A; }
     @media (max-width: 768px) {
-      .float-btns { bottom: 20px; right: 20px; }
+      .snk-badge { bottom: 16px; left: 16px; padding: 6px 10px 6px 6px; }
+      .snk-badge svg { width: 28px; height: 28px; }
     }
-
     </style>
 </head>
 <body>
@@ -1327,9 +1328,28 @@
 <!-- ===== NAV ===== -->
 <header class="nav">
   <a class="nav-logo" href="#">
-    <div class="nav-logo-mark">
-      <div class="nav-logo-cross"></div>
-    </div>
+    <svg width="40" height="40" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="hdrLogo" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#6B5420"/>
+          <stop offset="50%" stop-color="#E8C97A"/>
+          <stop offset="100%" stop-color="#C9A84C"/>
+        </linearGradient>
+        <filter id="hdrGlow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <path id="hdrCircle" d="M30,5 A25,25,0,1,1,29.999,5" fill="none"/>
+      </defs>
+      <circle cx="30" cy="30" r="28" fill="none" stroke="#C9A84C" stroke-width="0.5" opacity="0.4"/>
+      <circle cx="30" cy="30" r="20" fill="none" stroke="#C9A84C" stroke-width="0.3" opacity="0.2"/>
+      <g transform="translate(-6,-4.4) scale(0.36)">
+        <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="url(#hdrLogo)" style="filter:url(#hdrGlow)"/>
+      </g>
+      <text font-family="'Bebas Neue','Noto Sans JP',sans-serif" font-size="5" fill="#C9A84C" opacity="0.75">
+        <textPath href="#hdrCircle" startOffset="0%" letter-spacing="2.5">Senkode · 閃光 · Senkode · 閃光 ·</textPath>
+      </text>
+    </svg>
     <div>
       <div class="nav-logo-text">芝浦整骨院</div>
       <div class="nav-logo-sub">SHIBAURA SEIKOTSU-IN</div>
@@ -1359,8 +1379,7 @@
       </h1>
       <p class="hero-tagline">芝浦整骨院 — 地域に根ざす、根本改善の専門院</p>
       <p class="hero-desc">
-        腰痛・肩こりで何年も悩んでいる方、交通事故後の痛みが続いている方。<br>
-        「整体に行っても一時的にしか楽にならない」——その原因は、<strong>表面だけを治療していることにあります。</strong>
+        腰痛・肩こりで何年も悩んでいる方、交通事故後の痛みが続いている方。「整体に行っても一時的にしか楽にならない」——その原因は、<strong>表面だけを治療していることにあります。</strong>
       </p>
       <div class="hero-actions">
         <a href="#reserve" class="btn-primary">
@@ -1432,7 +1451,7 @@
   <div class="section-inner">
     <div class="section-label">SYMPTOMS</div>
     <h2 class="section-title">対応症状</h2>
-    <p class="section-sub">こんな痛みや不調にお悩みの方へ。<br>一時的な緩和ではなく、原因から改善します。</p>
+    <p class="section-sub">こんな痛みや不調にお悩みの方へ。一時的な緩和ではなく、原因から改善します。</p>
 
     <div class="symptom-grid">
       <div class="symptom-card">
@@ -1682,11 +1701,9 @@
         <div class="doctor-text-label">DIRECTOR MESSAGE</div>
         <h2 class="doctor-name">田中 誠一</h2>
         <p class="doctor-title">柔道整復師 / 鍼灸師 — 芝浦整骨院 院長</p>
-        <p class="doctor-message">
-          整骨院に8年間携わってきて、いちばん多く受ける言葉は「もっと早く来ればよかった」です。<br><br>
-          多くの方が痛みを抱えたまま「忙しいから」「大したことないから」と我慢を続けています。でも慢性的な痛みは放置するほど、治療に時間がかかるようになります。<br><br>
-          当院は「1回で楽になった」より「3ヶ月後に痛みがなくなった」を目指しています。根本から変えることで、リバウンドしない体をつくります。
-        </p>
+        <p class="doctor-message">整骨院に8年間携わってきて、いちばん多く受ける言葉は「もっと早く来ればよかった」です。</p>
+        <p class="doctor-message">多くの方が痛みを抱えたまま「忙しいから」「大したことないから」と我慢を続けています。でも慢性的な痛みは放置するほど、治療に時間がかかるようになります。</p>
+        <p class="doctor-message">当院は「1回で楽になった」より「3ヶ月後に痛みがなくなった」を目指しています。根本から変えることで、リバウンドしない体をつくります。</p>
         <div class="doctor-quals">
           <span class="doctor-qual">柔道整復師（国家資格）</span>
           <span class="doctor-qual">鍼灸師（国家資格）</span>
@@ -1883,27 +1900,35 @@
   <div class="footer-copy">© 2026 芝浦整骨院. All rights reserved.</div>
 </footer>
 
-  <!-- Floating: Home + Back to Top -->
-  <div class="float-btns">
-    <a href="/index.html" class="float-btn float-home" aria-label="ホームへ戻る" title="ホームへ戻る">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 6.5L8 2L14 6.5V14H10V10H6V14H2V6.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg>
-    </a>
-    <button class="float-btn float-top" id="floatTop" aria-label="ページトップへ" title="ページトップへ">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 12V4M4 8l4-4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-  </div>
-<script>
-    // Float buttons
-    (function(){
-      var btn = document.getElementById('floatTop');
-      if(!btn) return;
-      window.addEventListener('scroll', function(){
-        btn.classList.toggle('visible', window.scrollY > 400);
-      }, {passive:true});
-      btn.addEventListener('click', function(){
-        window.scrollTo({top:0,behavior:'smooth'});
-      });
-    })();
-</script>
+
+  <!-- Senkode Portfolio Badge — canonical logo, links back to works -->
+  <a href="https://senkode.jp/works-lp.html" target="_blank" rel="noopener" class="snk-badge" title="Senkode ポートフォリオへ戻る">
+    <svg width="34" height="34" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="snkLogo" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#6B5420"/>
+          <stop offset="50%" stop-color="#E8C97A"/>
+          <stop offset="100%" stop-color="#C9A84C"/>
+        </linearGradient>
+        <filter id="snkGlow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <path id="snkCircle" d="M30,5 A25,25,0,1,1,29.999,5" fill="none"/>
+      </defs>
+      <circle cx="30" cy="30" r="28" fill="none" stroke="#C9A84C" stroke-width="0.5" opacity="0.4"/>
+      <circle cx="30" cy="30" r="20" fill="none" stroke="#C9A84C" stroke-width="0.3" opacity="0.2"/>
+      <g transform="translate(-6,-4.4) scale(0.36)">
+        <path d="M 121,40 L 69,100 H 94 L 79,151 L 131,91 H 106 L 121,40Z" fill="url(#snkLogo)" style="filter:url(#snkGlow)"/>
+      </g>
+      <text font-family="'Bebas Neue','Noto Sans JP',sans-serif" font-size="5" fill="#C9A84C" opacity="0.75">
+        <textPath href="#snkCircle" startOffset="0%" letter-spacing="2.5">Senkode · 閃光 · Senkode · 閃光 ·</textPath>
+      </text>
+    </svg>
+    <div class="snk-badge-label">
+      <span class="snk-badge-back">← WORKS</span>
+      <span class="snk-badge-name">Senkode</span>
+    </div>
+  </a>
 </body>
 </html>
